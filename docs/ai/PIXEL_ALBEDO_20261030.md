@@ -419,3 +419,22 @@ Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reser
 - Play0회, 캡처 호출0회, 옵션변경0회, Native backup/capture state 파일 없음. 별도 읽기 전용 Post72는 정상 응답했다. GPU 자원/빌린 버퍼를 생성·해제하지 않았고 Assets import/재컴파일/정리/우회도 하지 않았다. 새 GPU 데이터가 없으므로 눈 연결 검증도 미수행이다.
 
 현재 blocker는 사용자 승인 부재가 아니라 **SDK의 승인 상호작용을 현재 MCP가 지원하지 않는 것**이다. File.Move를 다른 파일 API/Reflection으로 바꾸어 우회하지 않았다. 다음 선택은 승인 상호작용을 지원하는 정식 통로 또는 이름 변경 없이 새 파일만 쓰는 별도 완료-marker 프로토콜의 사전 검토다. 후자는 이번에 구현·실행하지 않았으며 reader/consumer 계약과 실패 복구를 먼저 검토해야 한다. 사용자 화면 제어 없이 이 문제를 해결하기 전에는 Capture72를 실행하지 않는다. 이번 커밋은 이 절과 외부 준비 코드/차단 증거만 포함하며 제품 통합·미술 성공이 아니다.
+
+## 눈 관찰기73 — 신규 파일·완료 marker로 실제 1회 캡처/원복
+
+경로 `experiments/pixel-pipeline/2026-11-01-eye-observer73/INDEX.html`, 커밋은 이 절을 추가한 Git 이력 참조. 제품·씬·Assets·31/34 도구는 변경하지 않았다.
+
+- `EyeReadback73.cs:Readback.Complete/CompletedPath`: 데이터는 최초 생성한 `.partial` 이름을 그대로 유지한다. 전체 기록·Flush·SHA256/크기·source/view/frame/serial 검사 후 `ok-{SHA256}-{bytes}.complete` 빈 파일을 CreateNew로 마지막 생성한다. 소비자는 marker 존재만 보지 않고 실제 데이터 해시/길이/헤더/행 인덱스/EOF를 검증한다. 이동·삭제·기존 파일 덮어쓰기가 없으며, 소프트웨어 실패·취소·프레임 변경 때 완료 marker가 없는13개 오프라인 검사를 통과했다. OS crash 내구성 시험을 뜻하지 않는다. 상태 기록도 `STATE73-NNNN-stage.json`으로 새 파일만 생성한다.
+- `build73.py`, `Compile73.cs`: 설치 SDK가 기대하는 단일 outer namespace 안에 전체 의존성을 넣었다. 실제 Unity 외부 runner 전체 동적 컴파일 통과 후 실행했다. 패키지/승인 설정/Assets import/프로젝트 재컴파일은 없었다.
+- `Capture73.cs:Execute/Tick/Capture/Finish`: 승인된 Play1회, 정상 Gameplay history의 실제 frame94/serial1, sourceId `eye73-20261101T071040550Z-a7d96049` 한 프레임. eye ROI top-left(212,49,16,8)→GPU(212,215,16,8), counts48byte256개/records256byte128개를 행별로 읽었다. 데이터 파일12,673/33,038bytes, payload12,288/32,768bytes. 한 행 최대4,096bytes. counts producer 실제 실행, UseIrisSurface582=false/UseLashRegion583=false를 함께 기록했다. source/view/frame/serial 및 모든 companion plane identity 일치.
+- `NativeSnapshot73.Backup/Compare`: 실행 전 현재29dirty 자산과 로드된 설정을 직렬화·스트리밍 해시로 외부 백업했다. 종료 후 기존29dirty 내용 모두 ExactUTF8, PlayerSettings 전체25,590bytes도 동일. 전체45대상 중44동일이고 **비dirty AssetImporter 1개**(ProjectSettings.asset,145bytes)는 종료 후 객체가 조회되지 않아 미확인이다. 처음 경로만 보고 PlayerSettings 차이라고 보고했으나 본체 차이는 없었다. importer를 강제 재생성하거나 dirty를 지우지 않았다. 원본 native snapshot에는 민감 설정이 포함될 수 있어 Git에는 넣지 않고 로컬에만 보존했다.
+- `analyse73.py:read/main`: SHA marker·2눈 counts 전체ROI·records ROI의 실제 전역 인덱스/64float순서/finite/EOF를 검증한다. IrisAllocated19의 float32 면적 누적·반올림·정렬을 동결 packet으로 재현했다. stableId2는6개 양의 홍채 후보/면적2.3759196셀→2셀(216,52/53), stableId1은5개/2.1628428셀→2셀(224,52/53). GPU visible iris도 각각 정확히 이2셀이고 allocator 이후 추가 소실0이다. record RGB와 같은 head source-final ROI의 선형RGB 최대차0, 실제 iris pigment role=1. Own의 template 좌표/role provenance는 있지만 TemplateRGBA/TemplateRole 원본 bank 자체는 별도 읽지 않았으므로 원색 bank 완전 검증은 아니다.
+- `RESULT73.json`, `VERIFICATION73.json`: 정상 Play종료/observer 제거, background와 PlayerSettings.runInBackground, Play옵션 false/None, pause/time/pipeline, scene clean/dirty29identity 유지, Shader global getter 불일치0, 디스크31파일 SHA 동일. RT30→437→30. Unity GetTotalAllocatedMemoryLong 전후+33.2156MiB, ready→readback 해제 후+.6591MiB. physical RAM 수치가 아니며 누수 유무 확정이 아니다. Console 조회 errorCount0. 추가 Play·강제GC·정리 없음.
+
+원배율/nearest20 눈, 진단 feature 지도, 전체 PNG를 실제로 열어 확인했다. 이번 결과는 **데이터 누락 해결 및 현재 allocator 연결 검증**이다. 새 눈 보정은 제품/GPU에 적용하지 않았다. source 후보가 많아도 면적 반올림/순위가2셀을 결정하는 현 경로가 확인됐으며, 현재 출력의 미술 성공이나 움직임 안정화를 뜻하지 않는다. 과거 frame100/101·실제 회전·blink 반례 재현은 아니며, counts 합계에는 개별 subsample 가림 원인이 남지 않는 한계가 있다. 고밀도 헤어 패스도 실행하지 않았다. `VALIDATED_CAPTURE73.json`은 이 제한을 유지한 한 프레임 데이터 검증 marker다.
+
+### 승인 반복 원인 — 설치본 읽기 근거, 설정 변경 없음
+
+설치 Unity Assistant2.18.0-pre.2의 `ToolPermissions.CodeExecution.cs:CheckCodeExecution/GetCodeExecutionPermission`, `ToolPermissions.State.cs:SaveState/TryLoadState`에는 AllowOnce/AllowAlways와 범주별 임시 승인 상태가 있고 EditorPrefs 저장으로 domain reload를 넘겨 유지한다. 정확한 만료 범위·다른 클라이언트까지의 보장은 이 코드만으로 확정하지 않는다. `McpToolApprovalHandler.RequestApprovalAsync/Complete`는 활성 ACP 세션의 Allow/Always Allow 응답을 클라이언트에 반환하지만, 현재 외부 relay 클라이언트가 이를 어떻게 저장하는지까지 확인하지는 않았다.
+
+이 경로는 `RunCommandTool`의 별도 unsafe-command 승인과 다르다. `UnsafeCommandApprovalInteraction`은 매번 새로운 interaction이며 `ShowScope=false`; `NoOpToolInteractions.WaitForUser`는 외부 MCP의 상호작용을 지원하지 않는다. 따라서 일반 승인 기억 기능이 File.Move 차단을 해소한다고 말할 수 없다.73은 사용자 승인대로 이동 없는 새 출력 계약을 구현하여 이 불필요한 위험 연산 자체를 없앴다. 이미 승인된 동일 범위의 컴파일/읽기/정상 종료·원복을 단계마다 다시 허가받을 필요는 없지만, Play1회 승인을 추가 Play/제품 변경/보안 변경까지 확대하지 않는다. 승인 검사·full-auto·허용목록·보안 설정은 변경하지 않았고 우회도 하지 않았다. 관련 설치 소스 경로/해시는 `APPROVAL_SOURCE73.json`에 있다.

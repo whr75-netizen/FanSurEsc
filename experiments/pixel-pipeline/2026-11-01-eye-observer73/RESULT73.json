@@ -1,0 +1,604 @@
+{
+  "sourceId": "eye73-20261101T071040550Z-a7d96049",
+  "frameIndex": 94,
+  "renderSerial": 1,
+  "PlayEntries": 1,
+  "normalHistoryResetRequested": false,
+  "sameFrameReadback": true,
+  "counts": {
+    "identity": {
+      "sourceId": "eye73-20261101T071040550Z-a7d96049",
+      "viewId": "head",
+      "frameIndex": 94,
+      "renderSerial": 1
+    },
+    "roi": [
+      212,
+      215,
+      16,
+      8
+    ],
+    "stride": 48,
+    "bytes": 12673,
+    "dataSHA256": "d04aea4b5247509fe6173a51b31050207c841962ac218699dd0313e0450caf09",
+    "marker": "ok-d04aea4b5247509fe6173a51b31050207c841962ac218699dd0313e0450caf09-12673.complete"
+  },
+  "records": {
+    "identity": {
+      "sourceId": "eye73-20261101T071040550Z-a7d96049",
+      "viewId": "head",
+      "frameIndex": 94,
+      "renderSerial": 1
+    },
+    "roi": [
+      212,
+      215,
+      16,
+      8
+    ],
+    "stride": 256,
+    "bytes": 33038,
+    "dataSHA256": "9d178b1ce6b967b43528a1d941fbf910ac96f8689468561cc244f893b3959798",
+    "marker": "ok-9d178b1ce6b967b43528a1d941fbf910ac96f8689468561cc244f893b3959798-33038.complete"
+  },
+  "countsProducerRan": true,
+  "modeFlags": {
+    "UseClosedLash590": true,
+    "UseIrisSurface582": false,
+    "UseLashRegion583": false,
+    "layeredSurface": true,
+    "motionMode": 2,
+    "oldLayerMode19GetterAvailable": false,
+    "phaseIndex": 0,
+    "poseBins": 320,
+    "shadeLayer": true,
+    "styleEnabled": true,
+    "surfaceSteps": 2
+  },
+  "eyes": [
+    {
+      "eyeIndex": 0,
+      "stableId": 2,
+      "visibleSourceIrisAreaCells": 2.3759195804595947,
+      "roundedAllocationTarget": 2,
+      "positiveSourceCandidateCells": 6,
+      "allocatedCellsTopLeft": [
+        [
+          216,
+          53
+        ],
+        [
+          216,
+          52
+        ]
+      ],
+      "actualVisibleIrisCellsTopLeft": [
+        [
+          216,
+          53
+        ],
+        [
+          216,
+          52
+        ]
+      ],
+      "allocatedButNotFinalIris": 0,
+      "unallocatedButFinalIris": 0
+    },
+    {
+      "eyeIndex": 1,
+      "stableId": 1,
+      "visibleSourceIrisAreaCells": 2.1628427505493164,
+      "roundedAllocationTarget": 2,
+      "positiveSourceCandidateCells": 5,
+      "allocatedCellsTopLeft": [
+        [
+          224,
+          53
+        ],
+        [
+          224,
+          52
+        ]
+      ],
+      "actualVisibleIrisCellsTopLeft": [
+        [
+          224,
+          53
+        ],
+        [
+          224,
+          52
+        ]
+      ],
+      "allocatedButNotFinalIris": 0,
+      "unallocatedButFinalIris": 0
+    }
+  ],
+  "candidateRows": [
+    {
+      "eyeIndex": 0,
+      "stableId": 2,
+      "xyTopLeft": [
+        216,
+        53
+      ],
+      "irisSamples": 14.0,
+      "rank": 0,
+      "allocated": true,
+      "actualVisibleFeature": 3,
+      "actualEyeId": 2,
+      "actualWinSamples": 14.0,
+      "representativeIndex": 5.0,
+      "owner": [
+        2.0,
+        2.0,
+        13.72158145904541,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        9.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.2259960174560547,
+        0.3016808331012726,
+        9.0,
+        3.0
+      ],
+      "pigmentProvenance": [
+        213.0,
+        79.0,
+        1.0,
+        1.0
+      ],
+      "reason": "iris-visible"
+    },
+    {
+      "eyeIndex": 0,
+      "stableId": 2,
+      "xyTopLeft": [
+        216,
+        52
+      ],
+      "irisSamples": 8.0,
+      "rank": 1,
+      "allocated": true,
+      "actualVisibleFeature": 4,
+      "actualEyeId": 2,
+      "actualWinSamples": 8.0,
+      "representativeIndex": 5.0,
+      "owner": [
+        2.0,
+        2.0,
+        13.711844444274902,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.226423442363739,
+        0.5489020347595215,
+        171.0,
+        3.0
+      ],
+      "pigmentProvenance": [
+        213.0,
+        78.0,
+        1.0,
+        1.0
+      ],
+      "reason": "iris-visible"
+    },
+    {
+      "eyeIndex": 0,
+      "stableId": 2,
+      "xyTopLeft": [
+        215,
+        52
+      ],
+      "irisSamples": 5.9882354736328125,
+      "rank": 2,
+      "allocated": false,
+      "actualVisibleFeature": 1,
+      "actualEyeId": 2,
+      "actualWinSamples": 4.0117645263671875,
+      "representativeIndex": 5.0,
+      "owner": [
+        5.0,
+        2.0,
+        13.731094360351562,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        2.0,
+        1.0,
+        0.0
+      ],
+      "support": [
+        0.1398468017578125,
+        0.3891182541847229,
+        77.0,
+        2.0
+      ],
+      "pigmentProvenance": [
+        212.0,
+        78.0,
+        4.0,
+        1.0
+      ],
+      "reason": "not-allocated"
+    },
+    {
+      "eyeIndex": 0,
+      "stableId": 2,
+      "xyTopLeft": [
+        217,
+        53
+      ],
+      "irisSamples": 7.0,
+      "rank": 3,
+      "allocated": false,
+      "actualVisibleFeature": 1,
+      "actualEyeId": 2,
+      "actualWinSamples": 6.0,
+      "representativeIndex": 6.0,
+      "owner": [
+        5.0,
+        2.0,
+        13.722919464111328,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        2.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.3441794216632843,
+        0.32083001732826233,
+        238.0,
+        2.0
+      ],
+      "pigmentProvenance": [
+        215.0,
+        79.0,
+        4.0,
+        1.0
+      ],
+      "reason": "not-allocated"
+    },
+    {
+      "eyeIndex": 0,
+      "stableId": 2,
+      "xyTopLeft": [
+        217,
+        52
+      ],
+      "irisSamples": 2.0,
+      "rank": 4,
+      "allocated": false,
+      "actualVisibleFeature": 1,
+      "actualEyeId": 2,
+      "actualWinSamples": 3.0,
+      "representativeIndex": 5.0,
+      "owner": [
+        5.0,
+        2.0,
+        13.719956398010254,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.3105757236480713,
+        0.4400203824043274,
+        219.0,
+        2.0
+      ],
+      "pigmentProvenance": [
+        215.0,
+        78.0,
+        4.0,
+        1.0
+      ],
+      "reason": "not-allocated"
+    },
+    {
+      "eyeIndex": 0,
+      "stableId": 2,
+      "xyTopLeft": [
+        215,
+        53
+      ],
+      "irisSamples": 1.0264768600463867,
+      "rank": 5,
+      "allocated": false,
+      "actualVisibleFeature": 6,
+      "actualEyeId": 2,
+      "actualWinSamples": 7.0,
+      "representativeIndex": 5.0,
+      "owner": [
+        4.0,
+        2.0,
+        13.727025032043457,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        7.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.302580863237381,
+        0.4217759966850281,
+        2065.0,
+        1.0
+      ],
+      "pigmentProvenance": [
+        0.0,
+        0.0,
+        3.0,
+        3.0
+      ],
+      "reason": "not-allocated"
+    },
+    {
+      "eyeIndex": 1,
+      "stableId": 1,
+      "xyTopLeft": [
+        224,
+        52
+      ],
+      "irisSamples": 14.0,
+      "rank": 0,
+      "allocated": true,
+      "actualVisibleFeature": 2,
+      "actualEyeId": 1,
+      "actualWinSamples": 14.0,
+      "representativeIndex": 5.0,
+      "owner": [
+        2.0,
+        1.0,
+        13.717489242553711,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.7583455443382263,
+        0.48170793056488037,
+        262.0,
+        3.0
+      ],
+      "pigmentProvenance": [
+        221.0,
+        79.0,
+        1.0,
+        1.0
+      ],
+      "reason": "iris-visible"
+    },
+    {
+      "eyeIndex": 1,
+      "stableId": 1,
+      "xyTopLeft": [
+        224,
+        53
+      ],
+      "irisSamples": 8.0,
+      "rank": 1,
+      "allocated": true,
+      "actualVisibleFeature": 3,
+      "actualEyeId": 1,
+      "actualWinSamples": 8.0,
+      "representativeIndex": 9.0,
+      "owner": [
+        2.0,
+        1.0,
+        13.724316596984863,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        8.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.7579585313796997,
+        0.30146583914756775,
+        214.0,
+        3.0
+      ],
+      "pigmentProvenance": [
+        221.0,
+        79.0,
+        1.0,
+        1.0
+      ],
+      "reason": "iris-visible"
+    },
+    {
+      "eyeIndex": 1,
+      "stableId": 1,
+      "xyTopLeft": [
+        223,
+        53
+      ],
+      "irisSamples": 5.0,
+      "rank": 2,
+      "allocated": false,
+      "actualVisibleFeature": 1,
+      "actualEyeId": 1,
+      "actualWinSamples": 4.0,
+      "representativeIndex": 9.0,
+      "owner": [
+        5.0,
+        1.0,
+        13.725850105285645,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        2.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.6654289960861206,
+        0.31915539503097534,
+        471.0,
+        2.0
+      ],
+      "pigmentProvenance": [
+        220.0,
+        80.0,
+        4.0,
+        1.0
+      ],
+      "reason": "not-allocated"
+    },
+    {
+      "eyeIndex": 1,
+      "stableId": 1,
+      "xyTopLeft": [
+        225,
+        52
+      ],
+      "irisSamples": 3.605483055114746,
+      "rank": 3,
+      "allocated": false,
+      "actualVisibleFeature": 1,
+      "actualEyeId": 1,
+      "actualWinSamples": 4.007046699523926,
+      "representativeIndex": 9.0,
+      "owner": [
+        5.0,
+        1.0,
+        13.736019134521484,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        6.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.8587178587913513,
+        0.37323009967803955,
+        342.0,
+        2.0
+      ],
+      "pigmentProvenance": [
+        222.0,
+        79.0,
+        4.0,
+        1.0
+      ],
+      "reason": "not-allocated"
+    },
+    {
+      "eyeIndex": 1,
+      "stableId": 1,
+      "xyTopLeft": [
+        223,
+        52
+      ],
+      "irisSamples": 4.0,
+      "rank": 4,
+      "allocated": false,
+      "actualVisibleFeature": 1,
+      "actualEyeId": 1,
+      "actualWinSamples": 5.0,
+      "representativeIndex": 5.0,
+      "owner": [
+        5.0,
+        1.0,
+        13.722921371459961,
+        1.0
+      ],
+      "audit": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "support": [
+        0.6742210388183594,
+        0.4147912561893463,
+        481.0,
+        2.0
+      ],
+      "pigmentProvenance": [
+        219.0,
+        79.0,
+        4.0,
+        1.0
+      ],
+      "reason": "not-allocated"
+    }
+  ],
+  "recordVsSourceFinalRGBMaxAbsLinear": 0.0,
+  "actualIrisPigmentRoles": [
+    1.0
+  ],
+  "stateChecks": {
+    "dirty": true,
+    "scenes": true,
+    "domain": true,
+    "options": true,
+    "optionsEnabled": true,
+    "timeScale": true,
+    "captureDeltaTime": true,
+    "graphicsPipelinePath": true,
+    "qualityPipelinePath": true,
+    "runInBackground": true,
+    "playerRunInBackground": true,
+    "playing": true,
+    "paused": true,
+    "compiling": true,
+    "updating": true
+  },
+  "nativeExactComparisons": 44,
+  "nativeUnverified": [
+    {
+      "equal": null,
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "status": "Unavailable",
+      "type": "UnityEditor.AssetImporter"
+    }
+  ],
+  "shaderGlobalRestoreErrors": [],
+  "disk31Changed": [],
+  "RTbefore": 30,
+  "RTafter": 30,
+  "internalAllocatedDeltaMiB": 33.21560287475586,
+  "captureReadbackReleaseDeltaMiB": 0.659088134765625,
+  "completionProtocol": "Per-buffer data validated by SHA256/byte-count zero-byte CreateNew marker. No move/delete/overwrite. Bundle completion is withheld unless independent packet/state validation passes.",
+  "limits": [
+    "One frozen current normal pose; not old frame100/101 or motion/blink reproduction",
+    "Counts store per-cell feature weights, not individual per-subsample support/occluder decisions",
+    "Own template coordinate/role provenance captured in records, but exact TemplateRGBA/TemplateRole bank pixels were not separately read; no full pigment-source equality claim",
+    "Native AssetImporter object at ProjectSettings/ProjectSettings.asset unavailable after Play; PlayerSettings object itself and44 available snapshots ExactUTF8",
+    "No eye candidate/product integration or aesthetic success claimed"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "installedVersion": "2.18.0-pre.2",
+  "settingsChanged": false,
+  "clientCredentialOrEditorPrefsValuesRead": false,
+  "sources": [
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Runtime\\FunctionCalling\\Permissions\\ToolPermissions.CodeExecution.cs",
+      "sha256": "2b06f7fa66147f4434f3c90f1fe5a3a8bd21f5fd0e9bd9f7241ada5e17f95397"
+    },
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Runtime\\FunctionCalling\\Permissions\\ToolPermissions.State.cs",
+      "sha256": "70106dc9ef5d298ced6246991fab5089809aebf0e889e4a54657bd56155572a1"
+    },
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Runtime\\FunctionCalling\\Permissions\\PermissionUserAnswer.cs",
+      "sha256": "1be6fefddb4e0f8b185312ab3714a3ef310f25bb39e2a0392d7ffbe68607885e"
+    },
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Editor\\Assistant\\Acp\\McpToolApprovalHandler.cs",
+      "sha256": "fcb8d2344f163d73b3baf9e00c6e498fc39a52abb36907463d405a2fab9314db"
+    },
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Modules\\Unity.AI.Assistant.Tools\\Interactions\\UnsafeCommandApprovalInteraction.cs",
+      "sha256": "53856ca7f7ec403df02a2c68ecd448523aa6467b72ab13e524f6d530399d7269"
+    },
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Runtime\\FunctionCalling\\Interactions\\NoOpToolInteractions.cs",
+      "sha256": "b32b1fc4ee5f55238d65ed27dc0a3118c1636d65689dd393066ca76e7965e1a4"
+    },
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Runtime\\FunctionCalling\\Context\\ToolExecutionContextFactory.cs",
+      "sha256": "eff8aa4cfa8851580367477571d248fbeefb9acd479ee8b909c9b46fd15071f9"
+    },
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Modules\\Unity.AI.Assistant.Tools\\Scripting\\RunCommandTool.cs",
+      "sha256": "894fd21a99cf8c4874071d6415a8e83785404d4ceb9453e1dc4d7ae856a193c3"
+    },
+    {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Editor\\Assistant\\RunCommand\\RunCommandCodeAnalyzer.cs",
+      "sha256": "bca08e4435c4a646acfa13addf6d3776a9d5f0e0eb5bf8d190e6f5c68395feca"
+    }
+  ],
+  "findings": [
+    "CodeExecution AllowOnce/AllowAlways and category override state persisted via EditorPrefs across domain reload; expiry beyond that not proven.",
+    "ACP MCP tool approval exposes Allow/Always Allow but raw relay client persistence not established from available source.",
+    "UnsafeCommandApprovalInteraction has ShowScope=false and is separately created; NoOpToolInteractions cannot wait for user over MCP.",
+    "User-authorized CreateNew-only protocol removes unnecessary move operation; no permissions weakening or alternative file move API.",
+    "Same authorized scope can proceed without reasking at every read/compile step. Further Play or other scope extension is not authorized by a single-play approval."
+  ]
+}

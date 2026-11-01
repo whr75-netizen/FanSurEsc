@@ -1,0 +1,14 @@
+PASS actual shader struct sizes
+PASS ROI top-left converts to GPU origin exactly once
+PASS counts both eyes exact floats and indices
+PASS records eye ROI exact global indices and256byte fields
+PASS duplicate result never overwritten or read again
+PASS wrong stride count ROI full-grid budget rejected before read
+PASS read failure retains partial and no completed packet
+PASS frame advance aborts before another row
+PASS source view or serial mismatch rejected before read
+PASS cancellation stops own operation without cleanup of borrowed resources
+PASS unrelated output path rejected
+PASS no marker on incomplete read/frame/cancel
+PASS marker detects later byte corruption without overwriting input
+RESULT passed=13 UnityCalls=0 GPUCalls=0

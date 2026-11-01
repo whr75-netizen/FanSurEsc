@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><title>입력 smoke80 · 움직임 관찰81/82</title><style>body{font:16px/1.7 system-ui;max-width:960px;margin:36px auto;background:#14191f;color:#e8edf2}a{color:#8bd2ff}code{color:#ffcb89}li{margin:8px 0}</style>
+<h1>입력 smoke 통과 · 눈 움직임 이미지 검증 차단</h1>
+<p>제품77 유지. 이번 변경은 외부 관찰기이며 제품/Assets/재질/원본 모델을 수정하지 않았습니다. 유효한 새 눈 이미지가 0장이므로 미관이나 눈 시간 안정성 성공을 주장하지 않습니다.</p>
+<ul><li>Smoke80: 정상 Dynamic 12프레임, Up/Right/Release 두 주기. 실제 키→action→이동 및 회전 반응 일치. 이동량 최대 오차 5.96e-8m, 방향 내적 최솟값1, 해제 수평 이동0.</li>
+<li>81/82: 원래 pose 방향에 맞춘 S 입력이 준비5프레임과 검사프레임에서 0. 82의 장치는 enabled/current이지만 S key false, action0. 관찰기 pause를 제거해도 재현돼 pause 단독 원인설은 미확정입니다. 첫 유효 이미지 전에 정상 종료했습니다.</li>
+<li>상태 복원: 세 Play 모두 같은 InputSettings native ID/22필드/장치/옵션 보존. 사용자 dirty29, 자산45개 내용 동일, RT30→30. 전체 PlayerSettings는 즉시 비교 시 일시 unavailable이었으나 별도 공개 getter 조회에서45/45 exact 확인.</li>
+<li>진단 오류도 보존: Verify80 wrapper cast를 고쳐 읽기 비교 성공. Capture82 첫 호출은 생성 경로 오류로 Play0회; 새 경로 Capture82Fixed로 실행한82는 Play1회. 실패를 완료 캡처로 취급하지 않았습니다.</li></ul>
+<p><a href="VALIDATION80_82.json">수치/제한</a> · <a href="COMMAND_OUTCOMES.json">실제 호출/실패 기록</a> · <a href="MANIFEST.json">파일 해시</a></p>
+<p>코드: <a href="Smoke80.cs">Smoke80: StartInput/Queue/AfterInput/Tick/ReleaseInput/Finish</a>, <a href="motion/FAILED_TESTED_MotionScope82.cs">실패한 MotionScope82</a>, <a href="motion/FAILED_TESTED_Capture82Fixed.cs">실패한 관찰기 호출순서</a>.</p>
+<p>다음 최소 관측은 소유한 가상 장치 하나의 queue timestamp/실제 수신 event/장치 reset/정상 Dynamic 전후를 기록해 event 유실과 state reset을 구분하는 것입니다. <a href="motion/PREPARED_ONLY_InputEventProbe83.cs">Probe83</a>은 준비만 했고 컴파일·실행하지 않았습니다. 새 장치 종류/설정 추정 변경이나 반복 이미지 캡처는 하지 않았습니다.</p>

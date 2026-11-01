@@ -1,0 +1,240 @@
+[
+  {
+    "mode": "Read80",
+    "request": {
+      "utc": "2026-11-01T10:08:54.834072+00:00",
+      "pid": 35364,
+      "sourceSHA256": "4e37674b204945de929ae92b88ceb5abf8efb0efed9d16cdbc99c4c405400ec1"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Compile80",
+    "request": {
+      "utc": "2026-11-01T10:10:07.308951+00:00",
+      "pid": 35364,
+      "sourceSHA256": "8e919e18824c97ab3d4aa22cb7cba1e293cb8326ee008e01f223c8d33b95a2d4"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 80 full smoke runner compiled only; no Play or mutation"
+  },
+  {
+    "mode": "Smoke80",
+    "request": {
+      "utc": "2026-11-01T10:10:21.872260+00:00",
+      "pid": 35364,
+      "sourceSHA256": "07e49ab34e6fab252c36d05e3acd5c098d6d4dbcc3b1037b7a10d093c7a12660"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 80 normal-input smoke armed; settings pointer preserved; observer exits/restores"
+  },
+  {
+    "mode": "Post80",
+    "request": {
+      "utc": "2026-11-01T10:10:50.552011+00:00",
+      "pid": 35364,
+      "sourceSHA256": "ffecf8c7bef7df770d4d7bbadb3b193dd72922319c719855b21421ee21fadc53"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Verify80",
+    "request": {
+      "utc": "2026-11-01T10:11:13.837127+00:00",
+      "pid": 35364,
+      "sourceSHA256": "a7847f611dd34af0f943a264878ff52c82404b635a9260682942a31f578b3753"
+    },
+    "success": false,
+    "error": "UNEXPECTED_ERROR: Command was executed partially, but reported warnings or errors:\n[Error] System.InvalidCastException: Specified cast is not valid.\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.NativeSnapshot73.Compare (System.String root, Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.Arr58 rows) [0x00025] in <ec0eaa2a873b488cba8b3fa8f9a4233e>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult result) [0x00136] in <ec0eaa2a873b488cba8b3fa8f9a4233e>:0 \r\n  at Unity.AI.Assistant.Editor.RunCommand.AgentRunCommand.Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult& executionResult, System.String title) [0x00019] in .\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Editor\\Assistant\\RunCommand\\AgentRunCommand.cs:56 \nConsider reverting changes that may have happened if you retry.",
+    "compiled": null,
+    "executed": null,
+    "compilationLogs": null,
+    "executionLogs": null
+  },
+  {
+    "mode": "VerifyContent80",
+    "request": {
+      "utc": "2026-11-01T10:11:27.750576+00:00",
+      "pid": 35364,
+      "sourceSHA256": "d83fb479650156392d117a109ebbd64b1d2caf362896f8a0e06f660da9cf8550"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 80 separate read-only settings/native content verification"
+  },
+  {
+    "mode": "Compile81",
+    "request": {
+      "utc": "2026-11-01T10:12:10.503751+00:00",
+      "pid": 35364,
+      "sourceSHA256": "dfa62fe01c06a8434a3a56ce8da202682847f432d14d2f29d6ac7c48bfe871d8"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 81 full normal-motion observer compiled only; no mutation"
+  },
+  {
+    "mode": "Read81",
+    "request": {
+      "utc": "2026-11-01T10:12:18.708708+00:00",
+      "pid": 35364,
+      "sourceSHA256": "66431f1b1a042b86a9aca012e7398907c696353930d5c8075fa7335492cd4375"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Capture81",
+    "request": {
+      "utc": "2026-11-01T10:12:26.124471+00:00",
+      "pid": 35364,
+      "sourceSHA256": "fb4c53d3f41a6ad18f231fababe71cb27ea89a71a1fe3beb964425a40e51b4d9"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 67 single normal Play armed; observer owns normal exit/restore, no repeated rendering"
+  },
+  {
+    "mode": "Post81",
+    "request": {
+      "utc": "2026-11-01T10:12:47.092489+00:00",
+      "pid": 35364,
+      "sourceSHA256": "157c7c8550065d0ff46b71f9a79cb41819dce4cda15b5c4f35d34683504b0272"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Verify81",
+    "request": {
+      "utc": "2026-11-01T10:13:50.683072+00:00",
+      "pid": 35364,
+      "sourceSHA256": "5f1f5b148cf1ecd1ed15a42bd63acfc35b37732c530ac3c5573b0074d0f3a3c4"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 80 separate read-only settings/native content verification"
+  },
+  {
+    "mode": "Compile82",
+    "request": {
+      "utc": "2026-11-01T10:13:39.048114+00:00",
+      "pid": 35364,
+      "sourceSHA256": "952f502d03c04babe1ed457713d1ab083dbe8f71b18bf023a9521f47918c9472"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 82 no-pause normal-input motion observer compiled only"
+  },
+  {
+    "mode": "Read82",
+    "request": {
+      "utc": "2026-11-01T10:13:58.160872+00:00",
+      "pid": 35364,
+      "sourceSHA256": "78670c873bc4c8e5f470c57ba78762103c49d5743deabc8745e72535379234aa"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Capture82",
+    "request": {
+      "utc": "2026-11-01T10:14:06.625849+00:00",
+      "pid": 35364,
+      "sourceSHA256": "a895eb61637da416cbb2716a2245e02b883a169d3c7dedbeb4941dbcdf64dc3e"
+    },
+    "success": false,
+    "error": "UNEXPECTED_ERROR: Command was executed partially, but reported warnings or errors:\n[Error] System.IO.DirectoryNotFoundException: Could not find a part of the path \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\eye-motion82\\run82\\CAPTURE_STARTED76.json\".\r\n  at System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share, System.Int32 bufferSize, System.Boolean anonymous, System.IO.FileOptions options) [0x00164] in <816f70bc2a9c4332b0bd119906a8d40e>:0 \r\n  at System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share) [0x00000] in <816f70bc2a9c4332b0bd119906a8d40e>:0 \r\n  at (wrapper remoting-invoke-with-check) System.IO.FileStream..ctor(string,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CreateOnly73.Text (System.String path, System.String text) [0x00001] in <82d4d8e6a56e423d8631795a0191cba7>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult result) [0x00033] in <82d4d8e6a56e423d8631795a0191cba7>:0 \r\n  at Unity.AI.Assistant.Editor.RunCommand.AgentRunCommand.Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult& executionResult, System.String title) [0x00019] in .\\Library\\PackageCache\\com.unity.ai.assistant@c0127625258e\\Editor\\Assistant\\RunCommand\\AgentRunCommand.cs:56 \nConsider reverting changes that may have happened if you retry.",
+    "compiled": null,
+    "executed": null,
+    "compilationLogs": null,
+    "executionLogs": null
+  },
+  {
+    "mode": "Capture82Fixed",
+    "request": {
+      "utc": "2026-11-01T10:14:31.985529+00:00",
+      "pid": 35364,
+      "sourceSHA256": "165c98b49c7395209867f8b23e60a576bd3645c66699664dcfd179460d6be02f"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 67 single normal Play armed; observer owns normal exit/restore, no repeated rendering"
+  },
+  {
+    "mode": "Post82",
+    "request": {
+      "utc": "2026-11-01T10:15:17.745064+00:00",
+      "pid": 35364,
+      "sourceSHA256": "9de793ae475fca67a9c381e476f328378a8414bbe95bb8a6df845acea1a9fac4"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Verify82",
+    "request": {
+      "utc": "2026-11-01T10:15:28.874549+00:00",
+      "pid": 35364,
+      "sourceSHA256": "85374af5313b7d087c43c7656e2686b473484610b2abe6be88fd5879b67b3f08"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 80 separate read-only settings/native content verification"
+  }
+]

@@ -1,0 +1,253 @@
+{
+  "status": "INPUT_SMOKE_PASSED_VISUAL_MOTION_BLOCKED",
+  "actualSmokeFrames": 12,
+  "scriptCycles": 2,
+  "movementAndReleasePass": true,
+  "normalDynamicOnly": true,
+  "resolvedKeys": [
+    "W",
+    "D"
+  ],
+  "repeatedMapping": [
+    {
+      "step": 0,
+      "input": [
+        0,
+        1
+      ],
+      "displacementLengthDifference": 1.4901161193847656e-08,
+      "facingAngleDifference": 0.0
+    },
+    {
+      "step": 1,
+      "input": [
+        0,
+        1
+      ],
+      "displacementLengthDifference": 4.470348358154297e-08,
+      "facingAngleDifference": 0.0
+    },
+    {
+      "step": 2,
+      "input": [
+        1,
+        0
+      ],
+      "displacementLengthDifference": 1.4901161193847656e-08,
+      "facingAngleDifference": 0.0
+    },
+    {
+      "step": 3,
+      "input": [
+        1,
+        0
+      ],
+      "displacementLengthDifference": 0.0,
+      "facingAngleDifference": 0.0
+    },
+    {
+      "step": 4,
+      "input": [
+        0,
+        0
+      ],
+      "displacementLengthDifference": 0,
+      "facingAngleDifference": 0
+    },
+    {
+      "step": 5,
+      "input": [
+        0,
+        0
+      ],
+      "displacementLengthDifference": 0,
+      "facingAngleDifference": 0
+    }
+  ],
+  "maximumMoveStepErrorMetres": 5.960464477539063e-08,
+  "minimumMovementDirectionDot": 1,
+  "releasedHorizontalDisplacement": 0,
+  "smokeRT": [
+    30,
+    30
+  ],
+  "settingsId": "568105589213679894",
+  "settingsSHA": "ca3f68bea248d3f95f9daef0889228a710740dd1efc8867ffda63b97b07f4286",
+  "settingsObjectCounts": [
+    1,
+    1
+  ],
+  "restoration": {
+    "PlayExited": true,
+    "actionAssetSame": true,
+    "actionBindingsSame": true,
+    "background": true,
+    "deviceEnabledStatesSame": true,
+    "devicesSame": true,
+    "observerRemoved": true,
+    "options": true,
+    "pipeline": true,
+    "previousKeyboardCurrent": true,
+    "settingsReferenceAliveContentHideFlags": true,
+    "timePause": true
+  },
+  "exactNativeContents": 45,
+  "dirtyAssets": 29,
+  "failedVisualRuns": [
+    {
+      "attempt": "81",
+      "PlayEntries": 1,
+      "validPackets": 0,
+      "failure": "First actual game input differed from requested Down/S after5 warmup frames",
+      "restored": true,
+      "exactNativeContents": 45,
+      "settingsId": "568105589213679894",
+      "RTbefore": 30,
+      "RTafter": 30,
+      "dynamicTrace": [],
+      "pauseRemoved": false
+    },
+    {
+      "attempt": "82",
+      "PlayEntries": 1,
+      "validPackets": 0,
+      "failure": "First actual game input differed from requested Down/S after5 warmup frames",
+      "restored": true,
+      "exactNativeContents": 45,
+      "settingsId": "568105589213679894",
+      "RTbefore": 30,
+      "RTafter": 30,
+      "dynamicTrace": [
+        {
+          "actual": [
+            0,
+            0
+          ],
+          "current": true,
+          "enabled": true,
+          "frame": 95,
+          "keys": [
+            {
+              "key": "S",
+              "pressed": false
+            }
+          ],
+          "requested": [
+            0,
+            -1
+          ]
+        },
+        {
+          "actual": [
+            0,
+            0
+          ],
+          "current": true,
+          "enabled": true,
+          "frame": 96,
+          "keys": [
+            {
+              "key": "S",
+              "pressed": false
+            }
+          ],
+          "requested": [
+            0,
+            -1
+          ]
+        },
+        {
+          "actual": [
+            0,
+            0
+          ],
+          "current": true,
+          "enabled": true,
+          "frame": 97,
+          "keys": [
+            {
+              "key": "S",
+              "pressed": false
+            }
+          ],
+          "requested": [
+            0,
+            -1
+          ]
+        },
+        {
+          "actual": [
+            0,
+            0
+          ],
+          "current": true,
+          "enabled": true,
+          "frame": 98,
+          "keys": [
+            {
+              "key": "S",
+              "pressed": false
+            }
+          ],
+          "requested": [
+            0,
+            -1
+          ]
+        },
+        {
+          "actual": [
+            0,
+            0
+          ],
+          "current": true,
+          "enabled": true,
+          "frame": 99,
+          "keys": [
+            {
+              "key": "S",
+              "pressed": false
+            }
+          ],
+          "requested": [
+            0,
+            -1
+          ]
+        },
+        {
+          "actual": [
+            0,
+            0
+          ],
+          "current": true,
+          "enabled": true,
+          "frame": 100,
+          "keys": [
+            {
+              "key": "S",
+              "pressed": false
+            }
+          ],
+          "requested": [
+            0,
+            -1
+          ]
+        }
+      ],
+      "pauseRemoved": true
+    }
+  ],
+  "noPlayPathFailure": "Capture82 failed on first CreateNew due generated directory substitution; no options/Play were changed; corrected source is Capture82Fixed.cs",
+  "diagnosticParserCorrection": "Verify80 failed before comparison on Json58->Obj58 cast; explicit rows fixed in VerifyContent80, no state mutation",
+  "causalStatus": {
+    "old78ManualUpdate": "Possible cause, not proven by these different input cohorts",
+    "pauseHypothesis": "Not sufficient: removing observer pause in82 did not restore S key delivery",
+    "confirmed": "Up/Right/release normal smoke works; initial held S in movement observer remainsfalse in6 Dynamic updates even enabled/current; whether event delivery/reset/timestamp caused it was not captured"
+  },
+  "visualResults": {
+    "validImages": 0,
+    "movementAesthetics": "NOT_VALIDATED",
+    "temporalEyeStability": "NOT_VALIDATED",
+    "productChanges": 0
+  },
+  "nextMinimumEvidence": "Track only owned queue/event timestamp+type/key payload, onBefore/After Dynamic and owned device reset/removal; distinguish queue receipt and state reset in a small smoke before any eye readback. Do not change settings pointer, bindings or device types."
+}

@@ -11,6 +11,7 @@ using UnityEngine.Rendering;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using System.Collections;
 namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor { public sealed class CommandScript : IRunCommand { public void Execute(ExecutionResult result) { global::Prefix24.Prefix24Host.Start(3,message=>result.Log(message)); } } }
 
 namespace Prefix24 {
@@ -106,6 +107,7 @@ public static class Protocol24 {
  public static string StagePath(string runRoot,int stage){if(stage<1||stage>4)throw new ArgumentOutOfRangeException(nameof(stage));return Path.Combine(runRoot,"stage-"+stage.ToString("D2"));}
  public static Receipt24 Previous(Case24 c,string caseHash,string runRoot,int stage){
   if(stage<=1||stage>4)throw new ArgumentOutOfRangeException(nameof(stage));var dir=StagePath(runRoot,stage-1);var bytes=ReadBounded(Path.Combine(dir,"COMPLETE.json"),65536);
+  if(File.Exists(Path.Combine(dir,"FAILED.json"))||Directory.EnumerateFiles(dir,"PENDING-*.json").Any())throw new IOException("Failed/pending predecessor is never complete");
   var r=Parse<Receipt24>(bytes);CheckReceipt(c,caseHash,stage-1,r,"gpu-prefix");
   foreach(var row in r.Outputs){var data=ReadBounded(Child(dir,row.File),MaxBlobBytes);if(data.Length!=row.Bytes||Hash(data)!=row.Sha256)throw new IOException("Previous output corrupt");ValidateOutput(c,stage-1,row.Name,data);}
   return r;
@@ -120,6 +122,7 @@ public static class Protocol24 {
   if(Path.GetFileName(runRoot)!=c.RunId)throw new IOException("Run identity mismatch");
   if(stage>1)Previous(c,caseHash,runRoot,stage);
   string dir=StagePath(runRoot,stage);Directory.CreateDirectory(dir);
+  if(Directory.EnumerateFileSystemEntries(dir).Any())throw new IOException("Stage already has intent, submission, pending or output evidence; no replay");
   // CreateNew is the single-use claim; even an uncertain prior attempt blocks replay.
   Create(Path.Combine(dir,"INTENT.json"),Json(new Receipt24{ExecutionKind="intent",RunId=c.RunId,Stage=stage,CaseSha256=caseHash,SourceId=c.SourceId,ShaderSha256=c.ShaderSha256}));
   return dir;
@@ -188,8 +191,8 @@ public sealed class Prefix24Host {
  }
  static void Stable(){if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required");}
  public static void Start(int requestedStage,Action<string> logger){
-  Protocol24.Encode=value=>Encoding.UTF8.GetBytes(JsonUtility.ToJson(value));
-  Protocol24.Decode=(bytes,type)=>JsonUtility.FromJson(Encoding.UTF8.GetString(bytes),type);
+  Protocol24.Encode=value=>value is Receipt24?PrefixMetadata24.ReceiptBytes((Receipt24)value):Encoding.UTF8.GetBytes(JsonUtility.ToJson(value));
+  Protocol24.Decode=PrefixMetadata24.Decode;
   var job=new Prefix24Host{stage=requestedStage,log=logger??(_=>{})};job.Begin();
  }
  void Begin(){
@@ -283,4 +286,86 @@ public sealed class Prefix24Host {
   log("Prefix24 stage"+stage+" terminal; success="+receipt.Success+", no next submission");
  }
 }
+}
+
+namespace Prefix24 {
+// Offline66 candidate. Historical58 source is unchanged; loaded Unity code is unchanged.
+// Small dependency-free JSON boundary for the existing RunCommand reference set.
+// No reflection, package loading, runtime serialization of arbitrary objects.
+
+public class Json58 : IEnumerable<Json58>
+{
+    protected Dictionary<string,Json58> fields;protected List<Json58> items;protected object value;
+    public Json58 this[string key] {get {Json58 v;return fields!=null&&fields.TryGetValue(key,out v)?v:null;}set {fields[key]=value;}}
+    public Json58 this[int i] {get {return items[i];}}
+    public int Count {get {return items!=null?items.Count:fields!=null?fields.Count:0;}}
+    public void Add(Json58 v) {items.Add(v);}
+    public IEnumerable<T> Values<T>() {return this.Select(v=>(T)Convert.ChangeType(v.value,typeof(T),CultureInfo.InvariantCulture));}
+    public IEnumerator<Json58> GetEnumerator() {return (items??(fields==null?new List<Json58>():fields.Values.ToList())).GetEnumerator();}
+    IEnumerator IEnumerable.GetEnumerator() {return GetEnumerator();}
+    public static implicit operator Json58(string v) {return v==null?null:new Json58{value=v};}
+    public static implicit operator Json58(int v) {return new Json58{value=v};}
+    public static implicit operator Json58(long v) {return new Json58{value=v};}
+    public static implicit operator Json58(float v) {return new Json58{value=(double)v};}
+    public static implicit operator Json58(double v) {return new Json58{value=v};}
+    public static implicit operator Json58(bool v) {return new Json58{value=v};}
+    public static explicit operator string(Json58 v) {return v==null?null:Convert.ToString(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator int(Json58 v) {return Convert.ToInt32(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator long(Json58 v) {return Convert.ToInt64(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator double(Json58 v) {return Convert.ToDouble(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator bool(Json58 v) {return Convert.ToBoolean(v.value,CultureInfo.InvariantCulture);}
+    public static Json58 Wrap(object v) {
+        if(v==null)return null;if(v is Json58)return(Json58)v;if(v is string)return(string)v;if(v is bool)return(bool)v;
+        if(v is double)return(double)v;if(v is float)return(float)v;if(v is int)return(int)v;if(v is long)return(long)v;
+        if(v is IEnumerable){var a=new Arr58();foreach(var x in(IEnumerable)v)a.Add(Wrap(x));return a;}
+        throw new ArgumentException("Unsupported JSON boundary value: "+v.GetType().Name);
+    }
+    static string Quote(string text) {
+        var b=new StringBuilder("\"");foreach(char c in text){switch(c){case '"':b.Append("\\\"");break;case '\\':b.Append("\\\\");break;case '\b':b.Append("\\b");break;case '\f':b.Append("\\f");break;case '\n':b.Append("\\n");break;case '\r':b.Append("\\r");break;case '\t':b.Append("\\t");break;default:if(c<32)b.Append("\\u"+((int)c).ToString("x4"));else b.Append(c);break;}}return b.Append('"').ToString();
+    }
+    public override string ToString() {
+        if(fields!=null)return "{"+string.Join(",",fields.OrderBy(p=>p.Key,StringComparer.Ordinal).Select(p=>Quote(p.Key)+":"+(p.Value==null?"null":p.Value.ToString())))+"}";
+        if(items!=null)return "["+string.Join(",",items.Select(v=>v==null?"null":v.ToString()))+"]";
+        if(value==null)return "null";if(value is string)return Quote((string)value);if(value is bool)return(bool)value?"true":"false";
+        if(value is double){double x=(double)value;if(double.IsNaN(x)||double.IsInfinity(x))throw new ArgumentException("Nonfinite JSON number");return x.ToString("R",CultureInfo.InvariantCulture);}
+        return Convert.ToString(value,CultureInfo.InvariantCulture);
+    }
+    public static bool DeepEquals(Json58 a,Json58 b) {return a==null?b==null:b!=null&&a.ToString()==b.ToString();}
+    public const int MaxInputChars66=65536;
+    public static Json58 Parse(string text) {if(text.Length>MaxInputChars66)throw new ArgumentException("Small JSON budget exceeded; use streaming verification");int p=0;var result=ParseValue(text,ref p,0);Space(text,ref p);if(p!=text.Length)throw new ArgumentException("Trailing JSON data");return result;}
+    static void Space(string s,ref int p) {while(p<s.Length&&char.IsWhiteSpace(s[p]))p++;}
+    static string ParseString(string s,ref int p) {
+        if(s[p++]!='"')throw new ArgumentException("JSON string expected");var b=new StringBuilder();
+        while(p<s.Length){char c=s[p++];if(c=='"')return b.ToString();if(c=='\\'){char e=s[p++];switch(e){case '"':case '\\':case '/':b.Append(e);break;case 'b':b.Append('\b');break;case 'f':b.Append('\f');break;case 'n':b.Append('\n');break;case 'r':b.Append('\r');break;case 't':b.Append('\t');break;case 'u':b.Append((char)int.Parse(s.Substring(p,4),NumberStyles.HexNumber,CultureInfo.InvariantCulture));p+=4;break;default:throw new ArgumentException("JSON escape");}}else{if(c<32)throw new ArgumentException("JSON control character");b.Append(c);}}
+        throw new ArgumentException("Unterminated JSON string");
+    }
+    static Json58 ParseValue(string s,ref int p,int depth) {
+        if(depth>128)throw new ArgumentException("JSON nesting limit");Space(s,ref p);if(p>=s.Length)throw new ArgumentException("JSON value expected");char c=s[p];
+        if(c=='"')return ParseString(s,ref p);
+        if(c=='{'||c=='['){bool obj=c=='{';p++;Json58 result=obj?(Json58)new Obj58():new Arr58();Space(s,ref p);if(p<s.Length&&s[p]==(obj?'}':']')){p++;return result;}
+            while(true){Space(s,ref p);string key=null;if(obj){key=ParseString(s,ref p);if(result.fields.ContainsKey(key))throw new ArgumentException("Duplicate JSON member");Space(s,ref p);if(s[p++]!=':')throw new ArgumentException("JSON colon");}var v=ParseValue(s,ref p,depth+1);if(obj)result[key]=v;else result.Add(v);Space(s,ref p);char end=s[p++];if(end==(obj?'}':']'))break;if(end!=',')throw new ArgumentException("JSON separator");}return result;}
+        foreach(string word in new[]{"true","false","null"})if(p+word.Length<=s.Length&&string.CompareOrdinal(s,p,word,0,word.Length)==0){p+=word.Length;return word=="null"?null:(Json58)(word=="true");}
+        int start=p;while(p<s.Length&&"-+0123456789.eE".IndexOf(s[p])>=0)p++;if(start==p)throw new ArgumentException("JSON token");return double.Parse(s.Substring(start,p-start),CultureInfo.InvariantCulture);
+    }
+}
+public sealed class Obj58 : Json58 {public Obj58(){fields=new Dictionary<string,Json58>(StringComparer.Ordinal);}public new static Obj58 Parse(string text){return(Obj58)Json58.Parse(text);}}
+public sealed class Arr58 : Json58 {public Arr58(params object[] values){items=new List<Json58>();if(values.Length==1&&values[0] is IEnumerable&&!(values[0] is string)&&!(values[0] is Json58)){foreach(var v in(IEnumerable)values[0])Add(Wrap(v));}else foreach(var v in values)Add(Wrap(v));}}
+
+}
+
+// Explicit mapping for the two nested-array metadata shapes. No reflection or Unity.
+// Json58 is the existing bounded linear66 reader, not the historical58 parser.
+namespace Prefix24 {
+ public static class PrefixMetadata24 {
+  static Json58 Need(Json58 j,string key){var x=j[key];if(x==null)throw new IOException("Missing metadata field "+key);return x;}
+  static Blob24 Blob(Json58 j){return new Blob24{Name=(string)Need(j,"Name"),File=(string)Need(j,"File"),Stage=(int)Need(j,"Stage"),Bytes=(int)Need(j,"Bytes"),Sha256=(string)Need(j,"Sha256")};}
+  static Obj58 BlobJson(Blob24 b){return new Obj58{["Name"]=b.Name,["File"]=b.File,["Stage"]=b.Stage,["Bytes"]=b.Bytes,["Sha256"]=b.Sha256};}
+  public static object Decode(byte[] bytes,Type type){
+   if(bytes.Length>65536)throw new IOException("Small metadata budget");var j=Json58.Parse(Encoding.UTF8.GetString(bytes));
+   if(type==typeof(Case24))return new Case24{Schema=(string)Need(j,"Schema"),SourceId=(string)Need(j,"SourceId"),RunId=(string)Need(j,"RunId"),ShaderAssetPath=(string)Need(j,"ShaderAssetPath"),ShaderSha256=(string)Need(j,"ShaderSha256"),ShaderGuid=(string)Need(j,"ShaderGuid"),SourceFrame=(int)Need(j,"SourceFrame"),SourceSerial=(int)Need(j,"SourceSerial"),Width=(int)Need(j,"Width"),Height=(int)Need(j,"Height"),Owner=(int)Need(j,"Owner"),InputFiles=Need(j,"InputFiles").Select(Blob).ToArray(),Globals=Need(j,"Globals").Select(g=>new Global24{Name=(string)Need(g,"Name"),Type=(string)Need(g,"Type")}).ToArray()};
+   if(type==typeof(Receipt24))return new Receipt24{Schema=(string)Need(j,"Schema"),ExecutionKind=(string)Need(j,"ExecutionKind"),RunId=(string)Need(j,"RunId"),CaseSha256=(string)Need(j,"CaseSha256"),SourceId=(string)Need(j,"SourceId"),ShaderSha256=(string)Need(j,"ShaderSha256"),Stage=(int)Need(j,"Stage"),DispatchCalls=(int)Need(j,"DispatchCalls"),Success=(bool)Need(j,"Success"),StateEqual=(bool)Need(j,"StateEqual"),ResourcesReleased=(bool)Need(j,"ResourcesReleased"),BeforeStateSha256=(string)Need(j,"BeforeStateSha256"),AfterStateSha256=(string)Need(j,"AfterStateSha256"),Error=(string)j["Error"],Outputs=Need(j,"Outputs").Select(Blob).ToArray()};
+   throw new IOException("Unapproved nested metadata type");
+  }
+  public static byte[] ReceiptBytes(Receipt24 r){return Encoding.UTF8.GetBytes(new Obj58{["Schema"]=r.Schema,["ExecutionKind"]=r.ExecutionKind,["RunId"]=r.RunId,["CaseSha256"]=r.CaseSha256,["SourceId"]=r.SourceId,["ShaderSha256"]=r.ShaderSha256,["Stage"]=r.Stage,["DispatchCalls"]=r.DispatchCalls,["Success"]=r.Success,["StateEqual"]=r.StateEqual,["ResourcesReleased"]=r.ResourcesReleased,["BeforeStateSha256"]=r.BeforeStateSha256,["AfterStateSha256"]=r.AfterStateSha256,["Error"]=r.Error,["Outputs"]=r.Outputs==null?null:new Arr58(r.Outputs.Select(BlobJson))}.ToString());}
+ }
 }

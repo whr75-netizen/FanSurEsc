@@ -31,10 +31,13 @@ def main():
           'uavs':len(bindings),'allocatedStructuredBytes':[591616,3671040,3145824,68448][i],
           'readbackBytes':[4096,1536,48,9216][i],'privateArrays':0})
     commands=read('COMMANDS.json')
+    for name,digest in commands['dependencies'].items():assert sha(H/name)==digest,name
     assert host.count('shader.Dispatch(')==1 and host.count('AsyncGPUReadback.Request(')==1
     for c in commands['commands']:
         text=(H/c['file']).read_text(encoding='utf-8')
         assert sha(H/c['file'])==c['SHA256'] and not c['submitted'] and not c['autoNextStage']
+        assert 'Protocol24.Decode=PrefixMetadata24.Decode;'in text and 'value is Receipt24?PrefixMetadata24.ReceiptBytes'in text
+        assert 'JsonUtility.FromJson('not in text
         assert 'Prefix24Host.Start('+str(c['stage'])+','in text
         assert re.search(r'namespace\s+([\w.]+)',text)[1]=='Unity.AI.Assistant.Agent.Dynamic.Extension.Editor'
         for bad in ['EvaluateForm115','BoundRun115','Forward115','RegionDriver115','AfterCanvas','EditorApplication.update','EditorApplication.delayCall','Shader.SetGlobal','WaitForCompletion','EnterPlaymode','ExitPlaymode','SaveAssets','ImportAsset','InputSystem.settings =','File.Move','File.Delete','System.Reflection','System.Runtime.InteropServices','using System.Runtime.Serialization','DataContractJsonSerializer','System.Diagnostics','System.Net']:
@@ -47,21 +50,23 @@ def main():
     assert any(x['name']=='Stage1MonoReferences'for x in cs['compilations'])
     for c in cs['compilations']:
         assert not c['warnings'].strip() and not c['executedOutput']
-        for name,digest in c['sources'].items():assert sha(H/name)==digest,(c['name'],name)
+        for name,digest in c['sources'].items():
+            paths=[Path(x)for x in c['arguments']if not x.startswith('/')and Path(x).name==name]
+            assert len(paths)==1 and sha(paths[0])==digest,(c['name'],name)
     tests=read('CPU_TEST_LATEST.json')['summary']
-    assert tests['Passed']==17 and not tests['ProductionRunRootCreated'] and not tests['HostAssemblyExecuted'] and not tests['GPUDeviceCreated'] and not tests['GPUDriverModules']
+    assert tests['Passed']==28 and not tests['ProductionRunRootCreated'] and tests['ProductionRunBytesPreserved'] and tests['ActualGpuPredecessorValidated'] and not tests['HostAssemblyExecuted'] and not tests['GPUDeviceCreated'] and not tests['GPUDriverModules']
     for f in case['InputFiles']:
         p=H/'fixture'/f['File'];assert p.stat().st_size==f['Bytes'] and sha(p)==f['Sha256']
     lock=(H/'CaseLock24.cs').read_text(encoding='utf-8')
     assert sha(H/'CASE.json')in lock and case['RunId']in lock
-    assert not(H/'runs'/case['RunId']).exists()
-    result={'sourcePreparationComplete':True,'GPUOrUnityCalls':0,'GPUHostExecuted':False,'AssetsImported':False,
-      'CPUCompilations':{'HLSL':4,'CSharp':7,'CSharpWarnings':0,'existingHlslSignedUnsignedWarning':'X3203 (original Enumerate expression; fixed eye0 fixture)'},
+    assert (H/'runs'/case['RunId']/'stage-01/COMPLETE.json').exists() and not(H/'runs'/case['RunId']/'stage-02').exists()
+    result={'scope':'Current command-source CPU validation; prior actual GPU stage1 evidence read only','sourcePreparationComplete':True,'GPUOrUnityCalls':0,'GPUHostExecutedThisCheck':False,'AssetsImportedThisCheck':False,'currentCommandVersionsSubmitted':False,'priorActualGpuStage1Validated':True,
+      'CPUCompilations':{'HLSLPreviouslyCompiledSameSource':4,'CSharp':7,'CSharpWarnings':0,'existingHlslSignedUnsignedWarning':'X3203 (original Enumerate expression; fixed eye0 fixture)'},
       'CPUTestGroups':tests['Passed'],'stages':rows,
       'lifetime':'One stage owns clone/buffers. No auto-next. All issued readbacks settled before release. Unknown submission/request retains ownership and blocks completion/replay.',
       'state':'Read-only before/after public Editor/options/scene/pipeline/time/input/devices/dirty/global summary; this host changes none of those. Any mismatch blocks completion; no guessed restoration.',
       'notIntegrated':['16-subsample depth transport','socket-diameter normalization','curve midpoint recovery','renderer final composition','product77'],
-      'remainingConditions':['Fresh Editor/process/project/native/input preflight before any future Unity action','Review/import ONLY the new four-entry compute asset; no C# Assets import','Check actual imported variant and normal command policy/approval at action time','Explicitly submit stage1 only; inspect complete CPU-equal bytes/state/release before considering stage2','Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence'],
+      'remainingConditions':['Next GPU stage has not been approved; no Unity/GPU calls in this check','The existing shader was imported in f919290b; its source has not changed in this metadata fix','Fresh Editor/process/project/native/input preflight before any future Unity action','Completed stage1 cannot be replayed; stage2 must validate actual complete receipt/output bytes and absence of FAILED/PENDING','Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence'],
       'caseSHA256':sha(H/'CASE.json'),'shaderSHA256':sha(H/'Prefix24.compute')}
     (H/'PREFIX24_CHECK.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(result,indent=2))

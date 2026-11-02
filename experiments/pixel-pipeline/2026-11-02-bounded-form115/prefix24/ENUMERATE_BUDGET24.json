@@ -1,0 +1,159 @@
+{
+  "scope": "CPU source-level audit; no GPU-time inference",
+  "UnityOrGPUCalls": 0,
+  "actualStage1SourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+  "actualStage1OutputsSHA256": {
+    "subsets-I": "7413473ca3432492fce7caaa6b4f52a59b30a1e079dbef15958e3826896002e6",
+    "subsets-W": "8896521c70856e5236a3551f7d788d97431965c68119c436b4be739d6b8a55af"
+  },
+  "header": [
+    9,
+    5,
+    6,
+    0
+  ],
+  "currentStage2": {
+    "dispatches": 1,
+    "groups": [
+      32,
+      1,
+      1
+    ],
+    "threadsPerGroup": 64,
+    "threads": 2048,
+    "states": 2048,
+    "validSubsetFlagPairs": 1078,
+    "nonOverlappingEligibleStates": 680,
+    "groupOutputs": 32,
+    "outputBytes": 1536,
+    "ownedStructuredBytes": 3671040,
+    "uavs": 3,
+    "groupsharedBytesPerGroup": 3072,
+    "privateArrays": 0,
+    "BVHVisits": 0,
+    "pointOrCurveLoops": 0,
+    "perLaneGroupReductionRounds": 6,
+    "barriersPerGroup": 7,
+    "groupBarrierPoints": 224,
+    "laneBarrierArrivals": 14336,
+    "totalGroupMergeCalls": 2016,
+    "maxLessCallsPerMerge": 2,
+    "maxScorePositionsPerLess": 4,
+    "maxScorePositionChecksInMerges": 16128,
+    "frameRecordIndices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "subsetReadIndexRanges": [
+      [
+        0,
+        31
+      ],
+      [
+        4096,
+        4159
+      ]
+    ],
+    "groupWriteIndexRange": [
+      0,
+      31
+    ],
+    "allocatedSubsetElements": 16384,
+    "allocatedGroupElements": 65536
+  },
+  "cpuWholeGroupsSHA256": "98adf829086820b9cbfd16c34ea85fec498ee29a68e2e34565f1844cc422b2b9",
+  "matchesPriorCpuOracleGroups": true,
+  "partitions": [
+    {
+      "groupsPerHypotheticalDispatch": 1,
+      "dispatches": 32,
+      "threadsPerFullChunk": 64,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    },
+    {
+      "groupsPerHypotheticalDispatch": 2,
+      "dispatches": 16,
+      "threadsPerFullChunk": 128,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    },
+    {
+      "groupsPerHypotheticalDispatch": 3,
+      "dispatches": 11,
+      "threadsPerFullChunk": 192,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    },
+    {
+      "groupsPerHypotheticalDispatch": 4,
+      "dispatches": 8,
+      "threadsPerFullChunk": 256,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    },
+    {
+      "groupsPerHypotheticalDispatch": 5,
+      "dispatches": 7,
+      "threadsPerFullChunk": 320,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    },
+    {
+      "groupsPerHypotheticalDispatch": 8,
+      "dispatches": 4,
+      "threadsPerFullChunk": 512,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    },
+    {
+      "groupsPerHypotheticalDispatch": 16,
+      "dispatches": 2,
+      "threadsPerFullChunk": 1024,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    },
+    {
+      "groupsPerHypotheticalDispatch": 31,
+      "dispatches": 2,
+      "threadsPerFullChunk": 1984,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    },
+    {
+      "groupsPerHypotheticalDispatch": 32,
+      "dispatches": 1,
+      "threadsPerFullChunk": 2048,
+      "byteEqual": true,
+      "offsetAndIndexedOutputModelRequired": true
+    }
+  ],
+  "naiveTwo16GroupDispatchesWithoutOffset": {
+    "equivalent": false,
+    "changedGroups": 12,
+    "reason": "SV_GroupID restarts at zero and writes groups0..15 twice; groups16..31 are omitted"
+  },
+  "minimalUnchangedShaderPrefixProbe": {
+    "groups": [
+      1,
+      1,
+      1
+    ],
+    "threads": 64,
+    "actualGroupOutputBytes": 48,
+    "group0CpuExpectedSHA256": "92fb80628637e473123a1d7412b0951f5fadacc633ac06637846555606d4a0e7",
+    "onlyGroup": 0,
+    "completeStage2": false,
+    "currentHostSupportsThisVariant": false,
+    "submitted": false
+  },
+  "fullSplitCondition": "Add one explicit group-base uniform for state index and destination index, retaining the original within-group reduction tree and all seven barriers; validate complete non-overlapping32-group coverage in receipt protocol. Not implemented/imported/executed here.",
+  "limits": [
+    "CPU model of a proposed group-base change is not GPU bytecode validation",
+    "Current full stage2 command is2048threads, not the full runtime4194304thread enumeration",
+    "A bounded workload or successful prior BuildSubsets does not resolve previous TDR cause",
+    "No next GPU stage is approved or submitted"
+  ]
+}

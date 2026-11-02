@@ -19,7 +19,7 @@ def main():
         managed=EDITOR/'Managed/UnityEngine';scripts=Path(r'C:\Users\15352\Documents\work\Fantasy Survival Escape Game\Library\ScriptAssemblies')
         refs=[REF,EDITOR/'NetStandard/compat/2.1.0/shims/netfx/mscorlib.dll',OUT/'Prefix24Protocol.dll',managed/'UnityEngine.CoreModule.dll',managed/'UnityEditor.CoreModule.dll',managed/'UnityEngine.JSONSerializeModule.dll',scripts/'Unity.InputSystem.dll']
         if(H/'Entry24.cs').exists():refs+=[scripts/'Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.dll']
-        sources=[H/'Prefix24Host.cs',H/'CaseLock24.cs']+([H/'Entry24.cs']if(H/'Entry24.cs').exists()else[])
+        sources=[H/'Prefix24Host.cs',H/'CaseLock24.cs',H/'PrefixMetadata24.cs',H/'metadata24/Json58Linear24.cs']+([H/'Entry24.cs']if(H/'Entry24.cs').exists()else[])
         rows.append(compile_one('Prefix24Host',sources,refs))
         if(H/'COMMANDS.json').exists():
             # Exact future command units compile as ONE assembly; they do not

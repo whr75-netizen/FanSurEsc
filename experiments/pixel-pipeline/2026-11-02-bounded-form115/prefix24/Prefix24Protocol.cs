@@ -97,6 +97,7 @@ public static class Protocol24 {
  public static string StagePath(string runRoot,int stage){if(stage<1||stage>4)throw new ArgumentOutOfRangeException(nameof(stage));return Path.Combine(runRoot,"stage-"+stage.ToString("D2"));}
  public static Receipt24 Previous(Case24 c,string caseHash,string runRoot,int stage){
   if(stage<=1||stage>4)throw new ArgumentOutOfRangeException(nameof(stage));var dir=StagePath(runRoot,stage-1);var bytes=ReadBounded(Path.Combine(dir,"COMPLETE.json"),65536);
+  if(File.Exists(Path.Combine(dir,"FAILED.json"))||Directory.EnumerateFiles(dir,"PENDING-*.json").Any())throw new IOException("Failed/pending predecessor is never complete");
   var r=Parse<Receipt24>(bytes);CheckReceipt(c,caseHash,stage-1,r,"gpu-prefix");
   foreach(var row in r.Outputs){var data=ReadBounded(Child(dir,row.File),MaxBlobBytes);if(data.Length!=row.Bytes||Hash(data)!=row.Sha256)throw new IOException("Previous output corrupt");ValidateOutput(c,stage-1,row.Name,data);}
   return r;
@@ -111,6 +112,7 @@ public static class Protocol24 {
   if(Path.GetFileName(runRoot)!=c.RunId)throw new IOException("Run identity mismatch");
   if(stage>1)Previous(c,caseHash,runRoot,stage);
   string dir=StagePath(runRoot,stage);Directory.CreateDirectory(dir);
+  if(Directory.EnumerateFileSystemEntries(dir).Any())throw new IOException("Stage already has intent, submission, pending or output evidence; no replay");
   // CreateNew is the single-use claim; even an uncertain prior attempt blocks replay.
   Create(Path.Combine(dir,"INTENT.json"),Json(new Receipt24{ExecutionKind="intent",RunId=c.RunId,Stage=stage,CaseSha256=caseHash,SourceId=c.SourceId,ShaderSha256=c.ShaderSha256}));
   return dir;

@@ -3,11 +3,19 @@
   "noUnauthorizedNamespaceUsageInLiveCommand": true,
   "interopOnlyInExternalCpuAbiTest": true,
   "UnityCalls": 0,
+  "nestedMetadataBoundary": "PrefixMetadata24.Decode/ReceiptBytes + bounded Json58Linear66",
+  "dependencies": {
+    "Prefix24Protocol.cs": "c961cd4ab362359da1a4917e85cb5837aa82fa18f1064ec4c730d6c4e87b197e",
+    "CaseLock24.cs": "ac44cf95c196ba6f36fb7442809ecda15bc4b504185f861a74072de158390902",
+    "Prefix24Host.cs": "edbfcbc10cf5ca9854d3a1fb694cfecc435ada02b60c6e9e536c066e7de6adf0",
+    "metadata24/Json58Linear24.cs": "2f9d6a761d8754625df8474489f37f0252e03bdbad561afdb3ed62b31a5de93f",
+    "PrefixMetadata24.cs": "4d33e93b8532bcc9e8d9ae77d4cf5c9c0663df4849cb83a042f6d60755eb60b0"
+  },
   "commands": [
     {
       "stage": 1,
       "file": "STAGE1.command.cs.txt",
-      "SHA256": "e2aba08aac7c1667900842787a894c8e5863f6e4a9c26a547184ea619433e401",
+      "SHA256": "694e886342928c87a20f63212dcf01a612ae446ba36efb58b803e40f9ca394ce",
       "dispatchSites": 1,
       "autoNextStage": false,
       "submitted": false
@@ -15,7 +23,7 @@
     {
       "stage": 2,
       "file": "STAGE2.command.cs.txt",
-      "SHA256": "6d83f551ff4d63b7553a2b7a984c1585a07f8d0de3a724b410a2166ee588114e",
+      "SHA256": "ca7a34e83540712ba7fa326526ab9c7753546041f28c1974bc5b06b64ed24a44",
       "dispatchSites": 1,
       "autoNextStage": false,
       "submitted": false
@@ -23,7 +31,7 @@
     {
       "stage": 3,
       "file": "STAGE3.command.cs.txt",
-      "SHA256": "3479e4187e05b1f02421ee3e0883e3159dd824c06940108527e9525c4f502fb1",
+      "SHA256": "b55a8ea0b2a9e5f72fbf147b419d9d39224c2f3b831e5fc2fb0caf574871a1bc",
       "dispatchSites": 1,
       "autoNextStage": false,
       "submitted": false
@@ -31,10 +39,12 @@
     {
       "stage": 4,
       "file": "STAGE4.command.cs.txt",
-      "SHA256": "7b1b8c0e5af383c5695757b0cecd8aee37cb15ea533ff75ffd4b391b1068bbc7",
+      "SHA256": "79453c074f9d2968a9178cac46146a31358436f46419c1bb02aacef5daead44c",
       "dispatchSites": 1,
       "autoNextStage": false,
       "submitted": false
     }
-  ]
+  ],
+  "existingActualStage1Evidence": "runs/prefix24-6344598354174e7d93b5ac1590cfd2ae/stage-01/COMPLETE.json",
+  "newSourcesSubmitted": false
 }

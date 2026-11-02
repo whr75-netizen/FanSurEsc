@@ -1,15 +1,18 @@
 {
+  "scope": "Current command-source CPU validation; prior actual GPU stage1 evidence read only",
   "sourcePreparationComplete": true,
   "GPUOrUnityCalls": 0,
-  "GPUHostExecuted": false,
-  "AssetsImported": false,
+  "GPUHostExecutedThisCheck": false,
+  "AssetsImportedThisCheck": false,
+  "currentCommandVersionsSubmitted": false,
+  "priorActualGpuStage1Validated": true,
   "CPUCompilations": {
-    "HLSL": 4,
+    "HLSLPreviouslyCompiledSameSource": 4,
     "CSharp": 7,
     "CSharpWarnings": 0,
     "existingHlslSignedUnsignedWarning": "X3203 (original Enumerate expression; fixed eye0 fixture)"
   },
-  "CPUTestGroups": 17,
+  "CPUTestGroups": 28,
   "stages": [
     {
       "stage": 1,
@@ -74,10 +77,10 @@
     "product77"
   ],
   "remainingConditions": [
+    "Next GPU stage has not been approved; no Unity/GPU calls in this check",
+    "The existing shader was imported in f919290b; its source has not changed in this metadata fix",
     "Fresh Editor/process/project/native/input preflight before any future Unity action",
-    "Review/import ONLY the new four-entry compute asset; no C# Assets import",
-    "Check actual imported variant and normal command policy/approval at action time",
-    "Explicitly submit stage1 only; inspect complete CPU-equal bytes/state/release before considering stage2",
+    "Completed stage1 cannot be replayed; stage2 must validate actual complete receipt/output bytes and absence of FAILED/PENDING",
     "Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence"
   ],
   "caseSHA256": "0bd1a3c7fbc3e30791cbcaa000854a6fafd79598f34a730b8a7e2e2c0559027b",

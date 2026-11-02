@@ -57,8 +57,8 @@ public sealed class Prefix24Host {
  }
  static void Stable(){if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required");}
  public static void Start(int requestedStage,Action<string> logger){
-  Protocol24.Encode=value=>Encoding.UTF8.GetBytes(JsonUtility.ToJson(value));
-  Protocol24.Decode=(bytes,type)=>JsonUtility.FromJson(Encoding.UTF8.GetString(bytes),type);
+  Protocol24.Encode=value=>value is Receipt24?PrefixMetadata24.ReceiptBytes((Receipt24)value):Encoding.UTF8.GetBytes(JsonUtility.ToJson(value));
+  Protocol24.Decode=PrefixMetadata24.Decode;
   var job=new Prefix24Host{stage=requestedStage,log=logger??(_=>{})};job.Begin();
  }
  void Begin(){

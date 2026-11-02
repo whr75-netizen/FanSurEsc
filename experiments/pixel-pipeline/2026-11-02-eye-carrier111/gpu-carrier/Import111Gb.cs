@@ -1,0 +1,9 @@
+using System;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+internal class CommandScript:IRunCommand{public void Execute(ExecutionResult r){
+ if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required for shader-only import");
+ string p="Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/NativeCarrier111.shader";int domain=AppDomain.CurrentDomain.Id;AssetDatabase.ImportAsset(p,ImportAssetOptions.ForceSynchronousImport|ImportAssetOptions.ForceUpdate);var s=AssetDatabase.LoadAssetAtPath<Shader>(p);var errors=s?ShaderUtil.GetShaderMessages(s).Where(m=>m.severity.ToString()=="Error").Select(m=>m.message).ToArray():new[]{"Shader asset unavailable"};
+ CreateOnly73.Text(@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\aperture-runtime111\gpu-carrier\IMPORT111Gb.json",new Obj58{["shader"]=p,["supported"]=s&&s.isSupported,["errors"]=new Arr58(errors),["domainSame"]=AppDomain.CurrentDomain.Id==domain,["playing"]=EditorApplication.isPlaying,["compiling"]=EditorApplication.isCompiling,["CSharpAssetsImported"]=0}.ToString());if(!s||!s.isSupported||errors.Length>0||AppDomain.CurrentDomain.Id!=domain)throw new InvalidOperationException("Geometry carrier shader import failed");r.Log("111 shader-only geometry carrier imported; no Play or default binding changes");}}

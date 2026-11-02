@@ -1,0 +1,18 @@
+{
+  "purpose": "Resolve Close75 source-key versus destination carrier/visibility, not add guessed white pixels",
+  "PlayPlanned": 1,
+  "expectedCapturedStates": 12,
+  "expectedSourceMorphChecks": "existing owned BakeMesh comparison <=2e-6",
+  "AssetsImport": 0,
+  "product77Changes": 0,
+  "InputSettingsReplacement": false,
+  "sourceIdPolicy": "new unique sourceId per frame",
+  "sourceAdded": [
+    "actual dense8x iris/white rest, UV, bank RGBA",
+    "evaluated current world/rest/UV/indices/material table from OWNED CPU arrays",
+    "exact current head/canonical/physical transforms",
+    "bank-independent native carrier fields and existing GPU face visibility/evidence"
+  ],
+  "readbackMaxSingleBytes": 2097152,
+  "runtimeAllocatorProductApplied": false
+}

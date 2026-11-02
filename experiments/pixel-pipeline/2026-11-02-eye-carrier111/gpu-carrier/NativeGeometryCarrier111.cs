@@ -1,0 +1,73 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering;
+using UnityEngine.Experimental.Rendering;
+using Unity.Collections;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering.RenderGraphModule;
+
+// Explicit runtime view/owned materials/owned RTs. Never writes globals, borrowed
+// source geometry, original shaders/materials, InputSettings or product output.
+public sealed class NativeGeometryCarrier111:IDisposable{
+ public const string SurfaceAsset="Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/NativeCarrier111.shader";
+ public const string SkinAsset="Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/NativeSkin89.shader";
+ readonly bool diagnostics;readonly EyeFeature348 eye;readonly UnityEngine.Mesh sourceMesh;readonly Material[] materials=new Material[8];
+ readonly int[] parts={3,1,4,6};readonly Dictionary<int,Vector4[]> projection=new Dictionary<int,Vector4[]>();
+ readonly Dictionary<int,Vector2> anchors=new Dictionary<int,Vector2>();
+ public RenderTexture[][] layers;public RenderTexture[] depths;public Obj58 Info{get;private set;}
+ public bool Disposed{get;private set;}public int currentWidth,currentHeight;int controlConvention=-1;float screenSign=-1;
+ // Json58 has int and double conversion operators but no float operator.
+ // A direct (float)Json58 selects its int conversion and rounds the source.
+ static float F(Json58 number)=>(float)(double)number;
+ public NativeGeometryCarrier111(EyeFeature348 e,string registrationFile,string diagnosticFile,bool fullDiagnostics=false){diagnostics=fullDiagnostics;
+  eye=e;sourceMesh=e.sampleFace;if(!eye||!eye.full||!sourceMesh||EditorUtility.IsPersistent(eye))throw new InvalidOperationException("Live prepared source view required");
+  var reg=Json58.Parse(File.ReadAllText(registrationFile));
+  foreach(var row in reg["eyes"]){int owner=(int)row["eye"];var P=row["nativeToAuthoredProjection"];projection[owner]=new[]{new Vector4(F(P[0][0]),F(P[1][0]),F(P[2][0]),F(P[3][0])),new Vector4(F(P[0][1]),F(P[1][1]),F(P[2][1]),F(P[3][1]))};var cells=reg["cells"].Where(c=>(int)c["eye"]==owner).ToArray();float minX=cells.Min(c=>F(c["sourceXY"][0])),maxX=cells.Max(c=>F(c["sourceXY"][0])),minY=cells.Min(c=>F(c["sourceXY"][1])),maxY=cells.Max(c=>F(c["sourceXY"][1]));anchors[owner]=new Vector2(Mathf.Floor((minX+maxX)/2)+.5f,Mathf.Floor((minY+maxY)/2)+.5f);}
+  var rest=new List<Vector3>();sourceMesh.GetUVs(1,rest);float error=0;var measured=new Arr58();
+  foreach(var row in reg["eyes"]){int owner=(int)row["eye"];var ids=row["nativeRingVertexIds"];for(int i=0;i<ids.Count;i++){var v=rest[(int)ids[i]];var q=new Vector4(v.x,v.y,v.z,1);var target=row["authoredParent"][i];var actual=new Vector2(Vector4.Dot(q,projection[owner][0]),Vector4.Dot(q,projection[owner][1]));error=Mathf.Max(error,Vector2.Distance(actual,new Vector2(F(target[0]),F(target[1]))));measured.Add(new Obj58{["owner"]=owner,["ringIndex"]=i,["vertex"]=(int)ids[i],["rest"]=new Arr58(v.x,v.y,v.z),["projected"]=new Arr58(actual.x,actual.y),["target"]=target});}}
+  CreateOnly73.Text(diagnosticFile,new Obj58{["maxError"]=error,["headBoneIndex"]=eye.headBoneIndex,["sourceTopology"]=eye.modelTopologySHA256,["sourceMesh"]=sourceMesh.name,["sourceMeshId"]=sourceMesh.GetEntityId().ToString(),["uv1Count"]=rest.Count,["sourceToRestHead"]=new Arr58(Enumerable.Range(0,16).Select(i=>(double)eye.sourceToRestHead[i])),["projection"]=new Arr58(projection.Select(p=>new Obj58{["owner"]=p.Key,["x"]=new Arr58(p.Value[0].x,p.Value[0].y,p.Value[0].z,p.Value[0].w),["y"]=new Arr58(p.Value[1].x,p.Value[1].y,p.Value[1].z,p.Value[1].w)})),["measurements"]=measured}.ToString());
+  if(error>1e-3)throw new InvalidOperationException("Current source rest/boundary registration mismatch "+error);
+  try{for(int i=0;i<8;i++){int role=parts[i/2];var src=role==3?eye.skinMaterial:eye.materials[4+role];var shader=AssetDatabase.LoadAssetAtPath<Shader>(role==3?SkinAsset:SurfaceAsset);if(!src||!shader||!shader.isSupported)throw new InvalidOperationException("Retarget source shader/material unavailable");var keywords=src.shaderKeywords;materials[i]=new Material(src){shader=shader,hideFlags=HideFlags.DontSave,name="95 owned native source part "+role+" eye-slot "+(i%2)};materials[i].shaderKeywords=keywords;}}
+  catch{Dispose();throw;}
+  Info=new Obj58{["registrationMaxPixels"]=error,["sourceMeshId"]=sourceMesh.GetEntityId().ToString(),["borrowedMeshMutated"]=false,["globalWrites"]=0,["productBindingsChanged"]=false};
+ }
+ RenderTexture Colour(int w,int h,string name){var d=new RenderTextureDescriptor(w,h){graphicsFormat=GraphicsFormat.R32G32B32A32_SFloat,depthStencilFormat=GraphicsFormat.None,msaaSamples=1,sRGB=false};var t=new RenderTexture(d){filterMode=FilterMode.Point,hideFlags=HideFlags.DontSave,name=name};if(!t.Create()){UnityEngine.Object.DestroyImmediate(t);throw new InvalidOperationException("Own colour RT creation failed");}return t;}
+ RenderTexture Depth(int w,int h){var d=new RenderTextureDescriptor(w,h){graphicsFormat=GraphicsFormat.None,depthStencilFormat=GraphicsFormat.D32_SFloat,msaaSamples=1};var t=new RenderTexture(d){filterMode=FilterMode.Point,hideFlags=HideFlags.DontSave,name="89 owned depth"};if(!t.Create()){UnityEngine.Object.DestroyImmediate(t);throw new InvalidOperationException("Own depth RT creation failed");}return t;}
+ void ReleaseTargets(){ReleaseWrappers();if(layers!=null)foreach(var a in layers)if(a!=null)foreach(var t in a)if(t){t.Release();UnityEngine.Object.DestroyImmediate(t);}if(depths!=null)foreach(var t in depths)if(t){t.Release();UnityEngine.Object.DestroyImmediate(t);}layers=null;depths=null;}
+ void Targets(int w,int h){if(layers!=null&&w==currentWidth&&h==currentHeight)return;ReleaseTargets();currentWidth=w;currentHeight=h;layers=new RenderTexture[4][];depths=new RenderTexture[4];try{for(int i=0;i<4;i++){layers[i]=new RenderTexture[5];for(int ch=0;ch<5;ch++)layers[i][ch]=Colour(w,h,"89 source "+parts[i]+" channel "+ch);depths[i]=Depth(w,h);}}catch{ReleaseTargets();throw;}}
+ Matrix4x4 Clip(bool gpu){var cam=eye.full.motion.camera;return(gpu?GL.GetGPUProjectionMatrix(eye.cropProjection,true):eye.cropProjection)*cam.worldToCameraMatrix;}
+ // Homography335 stores a 3x3 projective transform in a Matrix4x4 whose
+ // fourth row/column are zero. Embed the independent homogeneous dimension
+ // before inversion; Matrix4x4.inverse on the original singular 4x4 is invalid.
+ static Matrix4x4 Forward(Matrix4x4 inverse){inverse.m33=1;if(Mathf.Abs(inverse.determinant)<1e-12f)throw new InvalidOperationException("Native source homography singular");return inverse.inverse;}
+ void Bind(Material mat,int layer,int owner,Vector2 anchor,Matrix4x4 canonical,int control,bool gpu){
+  var f=eye.full;var cam=f.motion.camera;mat.SetInt("_Control89",control);mat.SetInt("_UseBank89",0);mat.SetInt("_CarrierGeometryOnly111",1);mat.SetInt("_SelectedOwner89",owner);mat.SetMatrix("_PhysicalCropGPUVP89",Clip(gpu));mat.SetMatrix("_PhysicalView89",cam.worldToCameraMatrix);mat.SetMatrix("_WorldToHead348",eye.headMatrix.inverse);mat.SetVector("_PhysicalCamera89",new Vector4(cam.transform.position.x,cam.transform.position.y,cam.transform.position.z,cam.orthographic?1:0));mat.SetVector("_PhysicalForward89",cam.transform.forward);mat.SetVector("_SourcePhysicalROI89",new Vector4(eye.roi.x,272-eye.roi.y-eye.roi.height,eye.roi.width,eye.roi.height));mat.SetVector("_SourcePhysicalSize89",new Vector4(eye.roi.width*4,eye.roi.height*4,0,0));mat.SetVector("_CanonicalAnchor89",anchor);mat.SetMatrix("_CanonicalGPUProjection89",canonical);mat.SetInt("_SupportKind348",layer);mat.SetVector("_Profile333",f.motion.animation.shadeProfile);mat.SetVector("_SurfaceInvRaster335",new Vector4(1f/480,1f/272,0,0));mat.SetFloat("_SurfaceOwnShade335",f.motion.animation.shadeProfile.x);mat.SetFloat("_ShadeLayer335",f.shadeLayer?1:0);mat.SetFloat("_SurfaceShadeSteps335",f.surfaceShadeSteps);mat.SetTexture("_FeatureBankRGB89",f.templateRGBA);mat.SetTexture("_FeatureBankRole89",f.templateRole);
+  mat.SetInt("_SupportKind348",layer==1?2:layer==2?1:layer);if(owner>0){int i=Array.FindIndex(eye.centres,c=>Mathf.RoundToInt(c.w)==owner);mat.SetVector("_NativeSourceX89",projection[owner][0]);mat.SetVector("_NativeSourceY89",projection[owner][1]);mat.SetMatrix("_AuthoredToHead89",Forward(f.eyeInverse[i]));}
+ }
+
+ public RTHandle[][] Handles96=>wrappers;
+ public Vector2 Anchor96{get;private set;}public Vector4 Bounds96{get;private set;}
+ RTHandle[][] wrappers;RTHandle[] depthWrappers;RTHandle[] controlHandles;RTHandle controlDepth;Material controlMaterial;
+ public RenderTexture[] controlFields;public int RenderedFrame{get;private set;}=-1;public int ControlFrame{get;private set;}=-1;
+ sealed class Data{public NativeGeometryCarrier111 owner;public int part;}
+ void ReleaseWrappers(){if(wrappers!=null)foreach(var a in wrappers)foreach(var x in a)x?.Release();if(depthWrappers!=null)foreach(var x in depthWrappers)x?.Release();wrappers=null;depthWrappers=null;}
+ void Wrap(){if(wrappers!=null)return;wrappers=layers.Select(a=>a.Select(t=>RTHandles.Alloc(t,transferOwnership:false)).ToArray()).ToArray();depthWrappers=depths.Select(t=>RTHandles.Alloc(t,transferOwnership:false)).ToArray();}
+ void ControlTargets(){int w=eye.roi.width*4,h=eye.roi.height*4;if(controlHandles!=null&&controlFields[0].width==w&&controlFields[0].height==h)return;if(controlHandles!=null)foreach(var t in controlHandles)t?.Release();controlDepth?.Release();controlHandles=new RTHandle[5];controlFields=new RenderTexture[5];for(int i=0;i<5;i++){controlHandles[i]=RTHandles.Alloc(w,h,colorFormat:GraphicsFormat.R32G32B32A32_SFloat,filterMode:FilterMode.Point,name:"95 source projected-coordinate control");controlFields[i]=controlHandles[i].rt;}controlDepth=RTHandles.Alloc(w,h,depthBufferBits:DepthBits.Depth32);if(!controlMaterial){var src=eye.materials[10];controlMaterial=new Material(src){shader=AssetDatabase.LoadAssetAtPath<Shader>(SurfaceAsset),hideFlags=HideFlags.DontSave};controlMaterial.shaderKeywords=src.shaderKeywords;}}
+ public void RecordGraph(RenderGraph graph,UniversalResourceData resources){
+  if(Disposed||!eye||eye.sampleFace!=sourceMesh)throw new InvalidOperationException("95 source/view lifetime changed");
+  var f=eye.full;var current=new Vector2[2];var all=new List<Vector2>();for(int i=0;i<2;i++){int owner=Mathf.RoundToInt(eye.centres[i].w);var h=Forward(f.eyeInverse[i]);Vector2 Project(Vector2 p){var q=h*new Vector4(p.x,p.y,1,0);return new Vector2(q.x/q.z,q.y/q.z);}current[i]=Project(anchors[owner]);foreach(var p in f.contours.eyes[i].parent)all.Add(Project(p));}
+  var anchor=(current[0]+current[1])*.5f;var min=new Vector2(Mathf.Floor(all.Min(p=>p.x)-anchor.x)-2,Mathf.Floor(all.Min(p=>p.y)-anchor.y)-2);var max=new Vector2(Mathf.Ceil(all.Max(p=>p.x)-anchor.x)+2,Mathf.Ceil(all.Max(p=>p.y)-anchor.y)+2);int w=Mathf.RoundToInt((max.x-min.x)*8),height=Mathf.RoundToInt((max.y-min.y)*8);if(w*height>32768)throw new InvalidOperationException("95 viewport budget");Targets(w,height);Wrap();if(diagnostics)ControlTargets();var cam=f.motion.camera;var canonical=GL.GetGPUProjectionMatrix(Matrix4x4.Ortho(min.x,max.x,-max.y,-min.y,cam.nearClipPlane,cam.farClipPlane),true);
+  Anchor96=anchor;Bounds96=new Vector4(min.x,min.y,max.x,max.y);screenSign=-1;if(diagnostics){Bind(controlMaterial,3,0,Vector2.zero,Matrix4x4.identity,1,true);controlMaterial.SetFloat("_ScreenSign89",screenSign);}
+  for(int part=0;part<4;part++)for(int i=0;i<2;i++){var mat=materials[part*2+i];Bind(mat,part,Mathf.RoundToInt(eye.centres[i].w),anchor,canonical,0,true);mat.SetFloat("_ScreenSign89",screenSign);}
+  for(int group=diagnostics?4:3;group>=0;group--){using var builder=graph.AddUnsafePass<Data>("95 source-local coupled parts with real graph shadows "+group,out var data);data.owner=this;data.part=group;var colours=group==4?controlHandles:wrappers[group];var depth=group==4?controlDepth:depthWrappers[group];foreach(var t in colours)builder.UseTexture(graph.ImportTexture(t),AccessFlags.Write);builder.UseTexture(graph.ImportTexture(depth),AccessFlags.Write);builder.UseAllGlobalTextures(true);if(resources.mainShadowsTexture.IsValid())builder.UseTexture(resources.mainShadowsTexture);if(resources.additionalShadowsTexture.IsValid())builder.UseTexture(resources.additionalShadowsTexture);builder.AllowPassCulling(false);builder.AllowGlobalStateModification(true);builder.SetRenderFunc(static(Data d,UnsafeGraphContext c)=>d.owner.DrawGraph(d.part,c));}
+  Arr58 M(Matrix4x4 m)=>new Arr58(Enumerable.Range(0,16).Select(i=>(double)m[i]));Info["anchor"]=new Arr58(anchor.x,anchor.y);Info["bounds"]=new Arr58(min.x,min.y,max.x,max.y);Info["size"]=new Arr58(w,height);Info["canonicalGPUProjection"]=M(canonical);Info["physicalView"]=M(cam.worldToCameraMatrix);Info["headMatrix"]=M(eye.headMatrix);Info["parts"]=new Arr58(parts);Info["sampler"]=8;Info["sourceFrame"]=f.motion.sourceFrame;Info["independentMaterialsPerPartAndEye"]=true;Info["graphContext"]=true;Info["borrowedTextureOwnershipTransferred"]=false;
+ }
+ void DrawGraph(int part,UnsafeGraphContext context){var cmd=CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);bool control=part==4;var textures=control?controlFields:layers[part];cmd.SetRenderTarget(textures.Select(t=>new RenderTargetIdentifier(t)).ToArray(),control?controlDepth.rt:depths[part]);cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);cmd.SetViewport(new Rect(0,0,textures[0].width,textures[0].height));var model=eye.full.motion.surface.outputs[1].transform.localToWorldMatrix;if(control){cmd.DrawMesh(sourceMesh,model,controlMaterial,6,0);ControlFrame=Time.frameCount;}else{for(int i=0;i<2;i++)cmd.DrawMesh(sourceMesh,model,materials[part*2+i],parts[part],0);if(part==0)RenderedFrame=Time.frameCount;}}
+ public void AssertRendered(){if(RenderedFrame!=Time.frameCount||(diagnostics&&ControlFrame!=Time.frameCount))throw new InvalidOperationException("95 source graph pass missing; no fallback draw");}
+ public void Dispose(){if(Disposed)return;Disposed=true;ReleaseTargets();if(controlHandles!=null)foreach(var t in controlHandles)t?.Release();controlDepth?.Release();if(controlMaterial)UnityEngine.Object.DestroyImmediate(controlMaterial);foreach(var m in materials)if(m)UnityEngine.Object.DestroyImmediate(m);}
+}
+

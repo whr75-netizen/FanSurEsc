@@ -1,0 +1,1000 @@
+{
+  "actualGPUFrames": 12,
+  "actualGPUCarrierQueriesChecked": 864,
+  "maxCPUvsGPUIntervalDifference": 0.0,
+  "shaderOnlyImportNoDomainReload": {
+    "CSharpAssetsImported": 0,
+    "compiling": false,
+    "domainSame": true,
+    "errors": [],
+    "playing": false,
+    "shader": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/NativeCarrier111.shader",
+    "supported": true
+  },
+  "restore": {
+    "PlayExited": true,
+    "optionsRestored": true,
+    "timeRestored": true,
+    "pipelineRestored": true,
+    "backgroundRestored": true,
+    "playerSettingsRunInBackgroundRestored": true,
+    "carrierSourceDisposed111": true,
+    "carrierNativeDisposed111": true,
+    "editInputRestoration82": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    },
+    "motionRestoration82": {
+      "InputSettingsReplacement": false,
+      "allRestored": true,
+      "reports": [
+        {
+          "allRestored": true,
+          "devicesAdded": 0,
+          "errors": [],
+          "inputSettingWrites": 0,
+          "inputUnchanged": true,
+          "ownedReferenceMeshDisposed": true
+        },
+        {
+          "allRestored": true,
+          "borrowedMeshesDisposed": false,
+          "devicesAdded": 0,
+          "hairDrawRangesExact": true,
+          "inputSettingsWrites": 0
+        },
+        {
+          "errors": [],
+          "ownedReferenceDisposed": true,
+          "restored": true
+        }
+      ]
+    },
+    "globalRestoreErrors": []
+  },
+  "nativeContentMatches": 46,
+  "nativeComparisons": 47,
+  "unavailableOrDifferent": [
+    {
+      "equal": null,
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "status": "Unavailable",
+      "type": "UnityEditor.AssetImporter"
+    }
+  ],
+  "memoryCounterAPI": "UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong/GetTotalReservedMemoryLong/GetMonoUsedSizeLong; NOT OS working set",
+  "memoryBefore": {
+    "allocated": 2074906323,
+    "mono": 1498492928,
+    "renderTextureCount": 30,
+    "reserved": 2800660480,
+    "utc": "2026-11-01T23:51:06.7822316Z"
+  },
+  "memoryAfter": {
+    "allocated": 2101968310,
+    "mono": 1403609088,
+    "renderTextureCount": 30,
+    "reserved": 2807336960,
+    "utc": "2026-11-01T23:51:32.6417359Z"
+  },
+  "allocatedDeltaBytes": 27061987,
+  "ownedRTCountBeforeAfter": [
+    30,
+    30
+  ],
+  "frames": [
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame99",
+      "frame": 99,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 0,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 0,
+        "inputSettingsWritten": false,
+        "requestedClose": 0,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.0002766159434503795,
+        "maxDepthResidualMetres": 5.610454731908021e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1581,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3228,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1192,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 515,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 633,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame101",
+      "frame": 101,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 25,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 1,
+        "inputSettingsWritten": false,
+        "requestedClose": 25,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.0002852444950058054,
+        "maxDepthResidualMetres": 5.934516007499724e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1576,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3165,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1180,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 362,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 484,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame103",
+      "frame": 103,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 50,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 2,
+        "inputSettingsWritten": false,
+        "requestedClose": 50,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.0002782212015212159,
+        "maxDepthResidualMetres": 4.946338236777592e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1575,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3101,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1132,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 212,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 284,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame105",
+      "frame": 105,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 75,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 3,
+        "inputSettingsWritten": false,
+        "requestedClose": 75,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.00028337956701807935,
+        "maxDepthResidualMetres": 5.107926561720433e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1571,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3058,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1102,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 57,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            0,
+            1
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 72,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            2
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame107",
+      "frame": 107,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 100,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 4,
+        "inputSettingsWritten": false,
+        "requestedClose": 100,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.0002895808122534691,
+        "maxDepthResidualMetres": 5.116624333112441e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1567,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3036,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1042,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 0,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            0,
+            0
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 0,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            0,
+            0
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame109",
+      "frame": 109,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 75,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 5,
+        "inputSettingsWritten": false,
+        "requestedClose": 75,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.00028337956701807935,
+        "maxDepthResidualMetres": 5.107926561720433e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1571,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3058,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1102,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 57,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            0,
+            1
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 72,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            2
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame111",
+      "frame": 111,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 50,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 6,
+        "inputSettingsWritten": false,
+        "requestedClose": 50,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.0002782212015212159,
+        "maxDepthResidualMetres": 4.946338236777592e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1575,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3101,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1132,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 212,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 284,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame113",
+      "frame": 113,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 25,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 7,
+        "inputSettingsWritten": false,
+        "requestedClose": 25,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.0002852444950058054,
+        "maxDepthResidualMetres": 5.934516007499724e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1576,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3165,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1180,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 362,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 484,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame115",
+      "frame": 115,
+      "stage": {
+        "actualInput": [
+          0,
+          0
+        ],
+        "deliveredDelta": [
+          0,
+          7.62939453125e-06
+        ],
+        "evaluatedStateConditionPassed": true,
+        "evaluatedVsOwnedBakeMax": 0,
+        "getterClose": 0,
+        "headJoinOffset": [
+          0,
+          2
+        ],
+        "index": 8,
+        "inputSettingsWritten": false,
+        "requestedClose": 0,
+        "stage": "evaluated-blink106"
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.0002766159434503795,
+        "maxDepthResidualMetres": 5.610454731908021e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1581,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 3228,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1192,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 515,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 633,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            3
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame122",
+      "frame": 122,
+      "stage": {
+        "evaluatedCloseError111": 0,
+        "hairDrawSuppressed": false,
+        "index": 0,
+        "inputSettingsWrites": 0,
+        "meshCount": 5,
+        "rendererOriginalStatesPreserved": true,
+        "requestedClose": 75,
+        "stage": "product77-hair-on",
+        "vertexOrIndexBytesErased": false
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.00030322395005628,
+        "maxDepthResidualMetres": 4.5290814476572905e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1497,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 2926,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1042,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 51,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            0,
+            1
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 69,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            2
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame125",
+      "frame": 125,
+      "stage": {
+        "evaluatedCloseError111": 0,
+        "hairDrawSuppressed": true,
+        "index": 1,
+        "inputSettingsWrites": 0,
+        "meshCount": 5,
+        "rendererOriginalStatesPreserved": false,
+        "requestedClose": 75,
+        "stage": "product77-hair-off",
+        "vertexOrIndexBytesErased": false
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.00030096623015194823,
+        "maxDepthResidualMetres": 5.355340810808684e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1497,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 2926,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1042,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 51,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            0,
+            1
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 69,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            2
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    },
+    {
+      "sourceId": "eye111geo-20261101T235105727Z-a4e99539-frame128",
+      "frame": 128,
+      "stage": {
+        "evaluatedCloseError111": 0,
+        "hairDrawSuppressed": false,
+        "index": 2,
+        "inputSettingsWrites": 0,
+        "meshCount": 5,
+        "rendererOriginalStatesPreserved": true,
+        "requestedClose": 75,
+        "stage": "product77-hair-restored",
+        "vertexOrIndexBytesErased": false
+      },
+      "GPUQueryValidation": {
+        "directCurrentGeometry": true,
+        "sampledGPUCarrierQueryChecks": 72,
+        "maxCPUvsGPUVisibilityIntervalDifference": 0.0,
+        "maxCanonicalProjectionResidualPixels": 0.00030322395005628,
+        "maxDepthResidualMetres": 4.5290814476572905e-07,
+        "frozenMeshReconstructionUsed": false
+      },
+      "carrierParts": [
+        {
+          "part": 1,
+          "actualGeometrySamples": 1497,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 2,
+          "actualGeometrySamples": 2926,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        },
+        {
+          "part": 3,
+          "actualGeometrySamples": 1042,
+          "allCarrierAlphaOne": true,
+          "RGBIsMetadataZeroNotAColourSupplier": true
+        }
+      ],
+      "nativeSourceBankPathUnchanged": true,
+      "sourceBankProof": [
+        {
+          "owner": 1,
+          "recordedDense8xSourceKeysChecked": 51,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            0,
+            1
+          ]
+        },
+        {
+          "owner": 2,
+          "recordedDense8xSourceKeysChecked": 69,
+          "unresolvedSourceKeys": 0,
+          "bankSourceRGB8Mismatch": 0,
+          "activeComponents": [
+            1,
+            2
+          ]
+        }
+      ],
+      "actualRuntimeGeometryPassExecuted": true,
+      "runtime2_2AllocatorExecuted": false
+    }
+  ],
+  "product77DefaultChanged": false,
+  "runtimeAllocatorOrCanvasHypothesisApplied": false
+}

@@ -1,0 +1,429 @@
+{
+  "allocate111.py": [
+    {
+      "function": "solve",
+      "line": 16
+    }
+  ],
+  "analyse111.py": [
+    {
+      "function": "source_fields",
+      "line": 13
+    },
+    {
+      "function": "bank_data",
+      "line": 20
+    },
+    {
+      "function": "source_components",
+      "line": 34
+    },
+    {
+      "function": "rest_world",
+      "line": 45
+    },
+    {
+      "function": "validate",
+      "line": 48
+    },
+    {
+      "function": "expose",
+      "line": 58
+    },
+    {
+      "function": "main",
+      "line": 81
+    }
+  ],
+  "analyse_gpu111.py": [
+    {
+      "function": "main",
+      "line": 7
+    }
+  ],
+  "canvas111.py": [
+    {
+      "function": "source_domain",
+      "line": 11
+    },
+    {
+      "function": "main",
+      "line": 16
+    }
+  ],
+  "check111.py": [
+    {
+      "function": "connected",
+      "line": 8
+    },
+    {
+      "function": "key",
+      "line": 17
+    },
+    {
+      "function": "main",
+      "line": 18
+    }
+  ],
+  "destinations111.py": [
+    {
+      "function": "main",
+      "line": 9
+    }
+  ],
+  "finish111.py": [
+    {
+      "function": "font",
+      "line": 7
+    },
+    {
+      "function": "preview",
+      "line": 9
+    },
+    {
+      "function": "main",
+      "line": 11
+    }
+  ],
+  "fix_import111.py": [],
+  "form111.py": [
+    {
+      "function": "rank",
+      "line": 12
+    },
+    {
+      "function": "main",
+      "line": 18
+    }
+  ],
+  "freeze111.py": [
+    {
+      "function": "sha",
+      "line": 6
+    },
+    {
+      "function": "main",
+      "line": 7
+    }
+  ],
+  "geometry111.py": [
+    {
+      "function": "read",
+      "line": 9
+    },
+    {
+      "function": "matrix",
+      "line": 13
+    },
+    {
+      "function": "Frozen111",
+      "line": 14
+    },
+    {
+      "function": "load",
+      "line": 22
+    },
+    {
+      "function": "packet_list",
+      "line": 30
+    }
+  ],
+  "layer_ablation111.py": [
+    {
+      "function": "main",
+      "line": 9
+    }
+  ],
+  "prepare_capture111.py": [
+    {
+      "function": "create",
+      "line": 6
+    },
+    {
+      "function": "replace",
+      "line": 8
+    },
+    {
+      "function": "main",
+      "line": 11
+    }
+  ],
+  "prepare_geometry_gpu111.py": [
+    {
+      "function": "create",
+      "line": 8
+    }
+  ],
+  "prepare_post111.py": [],
+  "prepare_read111.py": [
+    {
+      "function": "create",
+      "line": 3
+    }
+  ],
+  "ray111.py": [
+    {
+      "function": "NativeAlpha",
+      "line": 12
+    },
+    {
+      "function": "FaceRay",
+      "line": 41
+    },
+    {
+      "function": "barycentric",
+      "line": 63
+    },
+    {
+      "function": "carrier_at",
+      "line": 68
+    }
+  ],
+  "replay111.py": [
+    {
+      "function": "main",
+      "line": 8
+    }
+  ],
+  "trace111.py": [
+    {
+      "function": "related",
+      "line": 6
+    },
+    {
+      "function": "read",
+      "line": 11
+    },
+    {
+      "function": "components",
+      "line": 12
+    },
+    {
+      "function": "main",
+      "line": 22
+    }
+  ],
+  "ForwardCanvas111.cs": [
+    {
+      "functionOrCallLine": "try{native=new NativeRetarget96(e,regPath,diag);Source=new LiveSurface107(e,AssetDatabase.LoadAssetAtPath<ComputeShader>",
+      "line": 21
+    },
+    {
+      "functionOrCallLine": "void Record(RenderGraph graph,UniversalResourceData resources){if(Disposed)throw new ObjectDisposedException(nameof(Forw",
+      "line": 26
+    },
+    {
+      "functionOrCallLine": "foreach(var a in native.Handles96)foreach(var t in a)b.UseTexture(graph.ImportTexture(t),AccessFlags.Read);foreach(var t",
+      "line": 28
+    },
+    {
+      "functionOrCallLine": "void Draw(Data data,UnsafeGraphContext context){var cmd=CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);for(int",
+      "line": 34
+    },
+    {
+      "functionOrCallLine": "void ReleaseBuffers(){if(Results!=null)foreach(var b in Results)b?.Dispose();if(LegacyResults!=null)foreach(var b in Leg",
+      "line": 43
+    },
+    {
+      "functionOrCallLine": "public void Dispose(){if(Disposed)return;Disposed=true;if(canvas.AfterCanvas==Record)canvas.AfterCanvas=null;CarrierSour",
+      "line": 44
+    }
+  ],
+  "NativeCarrier111.cs": [
+    {
+      "functionOrCallLine": "catch{Dispose();throw;}",
+      "line": 35
+    },
+    {
+      "functionOrCallLine": "void Bind(Material mat,int layer,int owner,Vector2 anchor,Matrix4x4 canonical,int control,bool gpu){",
+      "line": 47
+    },
+    {
+      "functionOrCallLine": "public void RecordGraph(RenderGraph graph,UniversalResourceData resources){",
+      "line": 60
+    },
+    {
+      "functionOrCallLine": "Anchor96=anchor;Bounds96=new Vector4(min.x,min.y,max.x,max.y);screenSign=-1;if(diagnostics){Bind(controlMaterial,3,0,Vec",
+      "line": 64
+    },
+    {
+      "functionOrCallLine": "for(int part=0;part<4;part++)for(int i=0;i<2;i++){var mat=materials[part*2+i];Bind(mat,part,Mathf.RoundToInt(eye.centres",
+      "line": 65
+    },
+    {
+      "functionOrCallLine": "for(int group=diagnostics?4:3;group>=0;group--){using var builder=graph.AddUnsafePass<Data>(\"95 source-local coupled par",
+      "line": 66
+    },
+    {
+      "functionOrCallLine": "void DrawGraph(int part,UnsafeGraphContext context){var cmd=CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);boo",
+      "line": 69
+    },
+    {
+      "functionOrCallLine": "public void Dispose(){if(Disposed)return;Disposed=true;ReleaseTargets();if(controlHandles!=null)foreach(var t in control",
+      "line": 71
+    }
+  ],
+  "Sequence111.cs": [
+    {
+      "functionOrCallLine": "public bool Advance(){if(phase==1)return hair.Advance();if(blink.Advance())return true;blink.Dispose();reports.Add(blink",
+      "line": 17
+    },
+    {
+      "functionOrCallLine": "public void Dispose(){if(disposed)return;disposed=true;hair?.Dispose();hold?.Dispose();blink?.Dispose();if(hair!=null)re",
+      "line": 18
+    }
+  ],
+  "WholeEye111.cs": [
+    {
+      "functionOrCallLine": "void Drop(GraphicsBuffer b){if(b==null)return;if(owned.Remove(b)){OwnedBytes-=(long)b.count*b.stride;b.Dispose();}}",
+      "line": 22
+    },
+    {
+      "functionOrCallLine": "}catch{Dispose();throw;}",
+      "line": 33
+    },
+    {
+      "functionOrCallLine": "int k=Shader.FindKernel(\"Refit\");void Bind(string name,GraphicsBuffer b)=>cmd.SetComputeBufferParam(Shader,k,name,b);Bin",
+      "line": 55
+    },
+    {
+      "functionOrCallLine": "k=Shader.FindKernel(\"Query\");Bind(\"_Triangles96\",triangles);Bind(\"_Materials96\",materials);Bind(\"_World96\",World);Bind(\"",
+      "line": 56
+    },
+    {
+      "functionOrCallLine": "k=Shader.FindKernel(\"Select\");Bind(\"_Layers96\",Layers);Bind(\"_Visibility96\",Visibility);Bind(\"_CanonicalColour96\",Colour",
+      "line": 57
+    },
+    {
+      "functionOrCallLine": "public void ExportSource111(string file,string sourceId,int frame,int serial){Check();using(var w=new BinaryWriter(new F",
+      "line": 64
+    },
+    {
+      "functionOrCallLine": "public void Dispose(){if(disposed)return;disposed=true;foreach(var b in owned)b.Dispose();owned.Clear();OwnedBytes=0;if(",
+      "line": 69
+    }
+  ],
+  "gpu-carrier/Capture111.cs": [
+    {
+      "functionOrCallLine": "void Release76(){forward102?.Dispose();report[\"forward102Disposed\"]=forward102==null||forward102.Disposed;layer102?.Disp",
+      "line": 39
+    },
+    {
+      "functionOrCallLine": "public void Execute(ExecutionResult result)",
+      "line": 50
+    },
+    {
+      "functionOrCallLine": "CaptureCarrier111(hf,e);if(!(bool)report[\"frameUnchangedDuringReadback\"])throw new InvalidOperationException(\"107 captur",
+      "line": 206
+    },
+    {
+      "functionOrCallLine": "void CaptureCarrier111(CpuSourceCapture64.Frame f,EyeFeature348 e){",
+      "line": 209
+    },
+    {
+      "functionOrCallLine": "forward102.DenseSource.Engine.ExportSource111(Path.Combine(output,\"SOURCE_GEOMETRY111.bin\"),sourceId,Time.frameCount,nat",
+      "line": 215
+    }
+  ],
+  "gpu-carrier/Compile111.cs": [
+    {
+      "functionOrCallLine": "void Release76(){forward102?.Dispose();report[\"forward102Disposed\"]=forward102==null||forward102.Disposed;layer102?.Disp",
+      "line": 39
+    },
+    {
+      "functionOrCallLine": "public void Execute(ExecutionResult result){result.Log(\"111 complete external observer compiled; no Play\");}",
+      "line": 50
+    },
+    {
+      "functionOrCallLine": "CaptureCarrier111(hf,e);if(!(bool)report[\"frameUnchangedDuringReadback\"])throw new InvalidOperationException(\"107 captur",
+      "line": 207
+    },
+    {
+      "functionOrCallLine": "void CaptureCarrier111(CpuSourceCapture64.Frame f,EyeFeature348 e){",
+      "line": 210
+    },
+    {
+      "functionOrCallLine": "forward102.DenseSource.Engine.ExportSource111(Path.Combine(output,\"SOURCE_GEOMETRY111.bin\"),sourceId,Time.frameCount,nat",
+      "line": 216
+    }
+  ],
+  "gpu-carrier/ForwardGeometry111.cs": [
+    {
+      "functionOrCallLine": "try{native=new NativeRetarget96(e,regPath,diag);Source=new LiveSurface107(e,AssetDatabase.LoadAssetAtPath<ComputeShader>",
+      "line": 21
+    },
+    {
+      "functionOrCallLine": "void Record(RenderGraph graph,UniversalResourceData resources){if(Disposed)throw new ObjectDisposedException(nameof(Forw",
+      "line": 26
+    },
+    {
+      "functionOrCallLine": "foreach(var a in native.Handles96)foreach(var t in a)b.UseTexture(graph.ImportTexture(t),AccessFlags.Read);foreach(var t",
+      "line": 28
+    },
+    {
+      "functionOrCallLine": "void Draw(Data data,UnsafeGraphContext context){var cmd=CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);for(int",
+      "line": 34
+    },
+    {
+      "functionOrCallLine": "void ReleaseBuffers(){if(Results!=null)foreach(var b in Results)b?.Dispose();if(LegacyResults!=null)foreach(var b in Leg",
+      "line": 43
+    },
+    {
+      "functionOrCallLine": "public void Dispose(){if(Disposed)return;Disposed=true;if(canvas.AfterCanvas==Record)canvas.AfterCanvas=null;CarrierSour",
+      "line": 44
+    }
+  ],
+  "gpu-carrier/Import111G.cs": [
+    {
+      "functionOrCallLine": "internal class CommandScript:IRunCommand{public void Execute(ExecutionResult r){",
+      "line": 2
+    }
+  ],
+  "gpu-carrier/Import111Gb.cs": [
+    {
+      "functionOrCallLine": "internal class CommandScript:IRunCommand{public void Execute(ExecutionResult r){",
+      "line": 6
+    }
+  ],
+  "gpu-carrier/NativeGeometryCarrier111.cs": [
+    {
+      "functionOrCallLine": "catch{Dispose();throw;}",
+      "line": 35
+    },
+    {
+      "functionOrCallLine": "void Bind(Material mat,int layer,int owner,Vector2 anchor,Matrix4x4 canonical,int control,bool gpu){",
+      "line": 47
+    },
+    {
+      "functionOrCallLine": "public void RecordGraph(RenderGraph graph,UniversalResourceData resources){",
+      "line": 60
+    },
+    {
+      "functionOrCallLine": "Anchor96=anchor;Bounds96=new Vector4(min.x,min.y,max.x,max.y);screenSign=-1;if(diagnostics){Bind(controlMaterial,3,0,Vec",
+      "line": 64
+    },
+    {
+      "functionOrCallLine": "for(int part=0;part<4;part++)for(int i=0;i<2;i++){var mat=materials[part*2+i];Bind(mat,part,Mathf.RoundToInt(eye.centres",
+      "line": 65
+    },
+    {
+      "functionOrCallLine": "for(int group=diagnostics?4:3;group>=0;group--){using var builder=graph.AddUnsafePass<Data>(\"95 source-local coupled par",
+      "line": 66
+    },
+    {
+      "functionOrCallLine": "void DrawGraph(int part,UnsafeGraphContext context){var cmd=CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);boo",
+      "line": 69
+    },
+    {
+      "functionOrCallLine": "public void Dispose(){if(Disposed)return;Disposed=true;ReleaseTargets();if(controlHandles!=null)foreach(var t in control",
+      "line": 71
+    }
+  ],
+  "gpu-carrier/NativeCarrier111.shader": [
+    {
+      "functionOrCallLine": "O333 Eye333Fragment(const Varyings input,uint primitiveID:SV_PrimitiveID,bool facing:SV_IsFrontFace){Varyings v=input;v.",
+      "line": 156
+    }
+  ],
+  "pack_results111.py": []
+}

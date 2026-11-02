@@ -1,0 +1,33 @@
+{
+  "implementedLive": [
+    "same-frame8x source rest/UV/bank RGB + IDs verified without nearest-key guessing",
+    "direct evaluated world/rest/indices/material + exact current transforms",
+    "geometry-only native carrier shader and real GPU face visibility, original occluder alpha retained",
+    "normal Play12state capture/restore repeated for one definite geometry-alpha fix"
+  ],
+  "notImplementedLive": [
+    "2.2 typed upper-boundary/component allocator",
+    "registered feature-canvas ownership hypothesis",
+    "final finite RGB palette and outline lookup"
+  ],
+  "staticCacheInputs": [
+    "original feature source keys/RGBA family",
+    "part/component adjacency and native pigment path UV/barycentric binding",
+    "registration projections and carrier ownership policy",
+    "model/topology/UV/bank/texture-generation signature"
+  ],
+  "perFrameInputs": [
+    "view/renderer scope, source frame/serial, continuous anchor and current deformed vertices",
+    "source support intervals and source feature IDs BEFORE external hair",
+    "destination footprint per-sample carrier/world/UV/depth + actual occluder alpha",
+    "original lighting g/Q and palette indices in independent channels"
+  ],
+  "ownership": [
+    "One explicit owner per renderer/view/generation, shared immutable source cache only.",
+    "Own buffers/RT/material/shader clones disposed on failure or scope change; borrowed meshes/textures/buffers never disposed.",
+    "Invalidate on model/topology/UV/source-feature or bank content edits; palette spacing must not change shape IDs.",
+    "SourceGeometry111 streams existing evaluated CPU arrays; no per-frame GPU->CPU feedback may be introduced in product."
+  ],
+  "runtimeCostLimit": "Current exact solver is offline subset enumeration, not a real-time implementation. Observed<=9 iris/12 white source candidates; full search or a bounded exact DP/GPU reduction still requires implementation/profiling. GPU time was not measured or substituted by CPU time.",
+  "nextNarrowQuestion": "Which source-local deformation/carrier map covers the entire cached stylized eye support while current lid/Close controls internal shape, generic skin is canvas, and external face/hair still occlude? Current nearest-eye face tags and a single depth cannot encode that policy. This is a missing representation/ownership contract, not a proven information-theoretic impossibility or a request for fixed eye counts."
+}

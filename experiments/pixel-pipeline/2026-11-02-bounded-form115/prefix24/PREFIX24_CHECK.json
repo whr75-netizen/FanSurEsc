@@ -1,11 +1,16 @@
 {
-  "scope": "Current command-source CPU validation; prior actual GPU stage1 evidence read only",
+  "scope": "Current command-source CPU validation; existing actual GPU stages1/2 evidence read only",
   "sourcePreparationComplete": true,
   "GPUOrUnityCalls": 0,
   "GPUHostExecutedThisCheck": false,
   "AssetsImportedThisCheck": false,
-  "currentCommandVersionsSubmitted": false,
-  "priorActualGpuStage1Validated": true,
+  "currentCommandVersionsSubmitted": [
+    2
+  ],
+  "priorActualGpuStagesValidated": [
+    1,
+    2
+  ],
   "CPUCompilations": {
     "HLSLPreviouslyCompiledSameSource": 4,
     "CSharp": 7,
@@ -77,10 +82,10 @@
     "product77"
   ],
   "remainingConditions": [
-    "Next GPU stage has not been approved; no Unity/GPU calls in this check",
-    "The existing shader was imported in f919290b; its source has not changed in this metadata fix",
+    "Reduce/Write have not been approved or run; no Unity/GPU calls in this check",
+    "The existing shader was imported in f919290b; its source remains unchanged",
     "Fresh Editor/process/project/native/input preflight before any future Unity action",
-    "Completed stage1 cannot be replayed; stage2 must validate actual complete receipt/output bytes and absence of FAILED/PENDING",
+    "Completed stages1/2 cannot be replayed; a future stage3 must validate actual stage2 complete receipt/output bytes and absence of FAILED/PENDING",
     "Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence"
   ],
   "caseSHA256": "0bd1a3c7fbc3e30791cbcaa000854a6fafd79598f34a730b8a7e2e2c0559027b",

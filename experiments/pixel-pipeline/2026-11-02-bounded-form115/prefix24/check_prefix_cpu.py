@@ -59,14 +59,26 @@ def main():
         p=H/'fixture'/f['File'];assert p.stat().st_size==f['Bytes'] and sha(p)==f['Sha256']
     lock=(H/'CaseLock24.cs').read_text(encoding='utf-8')
     assert sha(H/'CASE.json')in lock and case['RunId']in lock
-    assert (H/'runs'/case['RunId']/'stage-01/COMPLETE.json').exists() and not(H/'runs'/case['RunId']/'stage-02').exists()
-    result={'scope':'Current command-source CPU validation; prior actual GPU stage1 evidence read only','sourcePreparationComplete':True,'GPUOrUnityCalls':0,'GPUHostExecutedThisCheck':False,'AssetsImportedThisCheck':False,'currentCommandVersionsSubmitted':False,'priorActualGpuStage1Validated':True,
+    prior_stages=[]
+    for stage in [1,2]:
+        directory=H/'runs'/case['RunId']/('stage-'+str(stage).zfill(2))
+        if not directory.exists():continue
+        receipt=json.loads((directory/'COMPLETE.json').read_text())
+        assert receipt['Success']and receipt['ExecutionKind']=='gpu-prefix'and receipt['StateEqual']and receipt['ResourcesReleased']and receipt['DispatchCalls']==1
+        assert receipt['SourceId']==case['SourceId']and receipt['CaseSha256']==sha(H/'CASE.json')and not(directory/'FAILED.json').exists()and not list(directory.glob('PENDING-*.json'))
+        for output in receipt['Outputs']:
+            assert output['File']==output['Name']+'.bin'and sha(directory/output['File'])==output['Sha256']
+            spec=next(x for x in case['InputFiles']if x['Name']==output['Name']and x['Stage']==stage);assert output['Sha256']==spec['Sha256']
+        prior_stages.append(stage)
+    assert prior_stages==[1,2] and not(H/'runs'/case['RunId']/'stage-03').exists()
+    request=json.loads((H/'enumerate24/Stage2Prefix24_REQUEST.json').read_text());assert request['sourceSHA256']==commands['commands'][1]['SHA256']
+    result={'scope':'Current command-source CPU validation; existing actual GPU stages1/2 evidence read only','sourcePreparationComplete':True,'GPUOrUnityCalls':0,'GPUHostExecutedThisCheck':False,'AssetsImportedThisCheck':False,'currentCommandVersionsSubmitted':[2],'priorActualGpuStagesValidated':prior_stages,
       'CPUCompilations':{'HLSLPreviouslyCompiledSameSource':4,'CSharp':7,'CSharpWarnings':0,'existingHlslSignedUnsignedWarning':'X3203 (original Enumerate expression; fixed eye0 fixture)'},
       'CPUTestGroups':tests['Passed'],'stages':rows,
       'lifetime':'One stage owns clone/buffers. No auto-next. All issued readbacks settled before release. Unknown submission/request retains ownership and blocks completion/replay.',
       'state':'Read-only before/after public Editor/options/scene/pipeline/time/input/devices/dirty/global summary; this host changes none of those. Any mismatch blocks completion; no guessed restoration.',
       'notIntegrated':['16-subsample depth transport','socket-diameter normalization','curve midpoint recovery','renderer final composition','product77'],
-      'remainingConditions':['Next GPU stage has not been approved; no Unity/GPU calls in this check','The existing shader was imported in f919290b; its source has not changed in this metadata fix','Fresh Editor/process/project/native/input preflight before any future Unity action','Completed stage1 cannot be replayed; stage2 must validate actual complete receipt/output bytes and absence of FAILED/PENDING','Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence'],
+      'remainingConditions':['Reduce/Write have not been approved or run; no Unity/GPU calls in this check','The existing shader was imported in f919290b; its source remains unchanged','Fresh Editor/process/project/native/input preflight before any future Unity action','Completed stages1/2 cannot be replayed; a future stage3 must validate actual stage2 complete receipt/output bytes and absence of FAILED/PENDING','Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence'],
       'caseSHA256':sha(H/'CASE.json'),'shaderSHA256':sha(H/'Prefix24.compute')}
     (H/'PREFIX24_CHECK.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(result,indent=2))

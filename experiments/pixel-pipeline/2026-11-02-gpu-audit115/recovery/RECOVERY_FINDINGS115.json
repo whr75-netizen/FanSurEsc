@@ -1,0 +1,104 @@
+{
+  "utc": "2026-11-02T05:26:15.180878+00:00",
+  "confirmedPID": 6288,
+  "oldPID": 35364,
+  "currentEditorStateUTC": "2026-11-02T05:24:31.7134793Z",
+  "version": "6000.5.9f1",
+  "scene": [
+    {
+      "active": true,
+      "dirty": false,
+      "loaded": true,
+      "path": "Assets/Scenes/GameMap1.unity"
+    }
+  ],
+  "stableEdit": true,
+  "beforeDirtyCount": 31,
+  "afterRestartBeforeNativeReadDirtyCount": 24,
+  "afterNativeReadDirtyCount": 25,
+  "nativeExactUTF8Count": 45,
+  "nativeUnavailable": [
+    {
+      "beforeDirty": true,
+      "beforeEntityId": "568105584918791192",
+      "beforeSnapshot": "native-before-19.json",
+      "equal": null,
+      "loadedMatches": 0,
+      "path": "Assets/EUnityValidation01/SourceLight329/Shaders/CommonSurface329.shader",
+      "status": "Unavailable",
+      "type": "UnityEngine.Shader"
+    },
+    {
+      "beforeDirty": true,
+      "beforeEntityId": "568105584918791150",
+      "beforeSnapshot": "native-before-21.json",
+      "equal": null,
+      "loadedMatches": 0,
+      "path": "Assets/Rendering/PixelArt/DeskLivePixelProbe.shader",
+      "status": "Unavailable",
+      "type": "UnityEngine.Shader"
+    }
+  ],
+  "nativeContentDifferencesObserved": [],
+  "meshExactUTF8": true,
+  "meshDirtyFlagChangedDuringRead": [
+    {
+      "beforeBytes": 9357126,
+      "beforeDirty": true,
+      "beforeEntityId": "568105584918860428",
+      "beforeSHA256": "e2e4fc2a9cda1b0c7a32f4a8273779dffea81c17ec8a0fe4e4683fb25ec32b24",
+      "beforeSnapshot": "native-before-15.json",
+      "blendShapeCount": 57,
+      "currentBytes": 9357126,
+      "currentEntityId": "568105584918872792",
+      "currentSHA256": "e2e4fc2a9cda1b0c7a32f4a8273779dffea81c17ec8a0fe4e4683fb25ec32b24",
+      "dirtyAfterRead": true,
+      "dirtyBeforeRead": false,
+      "equal": true,
+      "path": "Assets/EUnityValidation01/EyeContoursLayers202/Meshes/FaceSourceOwner202.asset",
+      "status": "ExactUTF8",
+      "subMeshCount": 7,
+      "type": "UnityEngine.Mesh",
+      "vertexCount": 4060
+    }
+  ],
+  "input22Equal": true,
+  "inputEntityIdBefore": "568105589213679894",
+  "inputEntityIdAfterRestart": "568105589213756420",
+  "inputDevicesEqual": true,
+  "optionsTimePipelineEqual": true,
+  "publicGlobalsEqual": 74,
+  "globalBuffersComparedOrRestored": false,
+  "oldPIDExitRequestReplayed": false,
+  "registeredCommandUpdateCallbacks": 0,
+  "oldExitExecutionReceiptExists": false,
+  "completeNativeMemoryOrUndoRecoveryProved": false,
+  "diskEvidence": {
+    "protectedFilesUnchanged": 33,
+    "originalTracked30StatusSame": true,
+    "HEAD": "75bbcaf988e5c612167b3f062869ee02511b1ff3",
+    "newRecoverySceneEqualsSavedGameMap1": true
+  },
+  "projectCodeChangedInRecoveryCheck": false,
+  "PlayEntriesInRecoveryCheck": 0,
+  "saveClearDirtyResetForceKillOperations": 0,
+  "namespaceDiagnostic": {
+    "firstReadTimedOut": true,
+    "firstReadContainedProhibitedSystemDiagnosticsUsage": true,
+    "actualDenialReplyReceived": false,
+    "replacementRemovedProcessOperationEntirely": true,
+    "supportedPublicReadSucceeded": true
+  },
+  "GPUFailureEvidence": {
+    "oldLogHasDeviceResetRemovedAndUnrecoverableShutdownMessage": true,
+    "exact115KernelResponsibleNotEstablished": true,
+    "CPUThreadCountsAreNotGPUTime": true
+  },
+  "nextValidationPlanNotExecuted": [
+    "First preserve this new6288 baseline; never restore old35364 native IDs/buffer bindings.",
+    "Use an isolated offscreen frozen113 fixture with a tiny, explicit dispatch bound before any whole-character Play; no current renderer recreation/reset.",
+    "Separate baseline113, primary115 enumeration, candidate collection and source-form evaluation. The current code schedules three32768x2x64 work-item batches (12582912 nominal work-items total), before additional passes; early-outs and actual GPU duration are unmeasured.",
+    "Validate bounds/resources and exact CPU metrics at each completed small stage; do not infer success from compilation or change Windows TDR settings.",
+    "Only after measured bounded kernels and safe disposal pass, consider a separately bounded same-input whole-character/Close/hair test. Thin curve endpoint recovery and full UV/outline/time stability remain unfinished."
+  ]
+}

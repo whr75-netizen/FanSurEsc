@@ -1,0 +1,85 @@
+{
+  "receipts": [
+    {
+      "operation": "RecoveryPublicState115",
+      "request": {
+        "utc": "2026-11-02T05:19:43.380318+00:00",
+        "pid": 6288,
+        "sourceSHA256": "bf1004765cc1fb0448bf2c9008835e2f2ce7b2e47cdd44e99569cc681e6db62b"
+      },
+      "success": true,
+      "compiled": true,
+      "executed": true,
+      "logs": "[Log] 111 read only: Play=False compiling=False dirty=24"
+    },
+    {
+      "operation": "RecoveryCompare115c",
+      "request": {
+        "utc": "2026-11-02T05:23:18.987459+00:00",
+        "pid": 6288,
+        "sourceSHA256": "9e710d1770afb0a96b04cde913f215a2607c594edbc6dea2822a6b69a50ea538"
+      },
+      "success": true,
+      "compiled": true,
+      "executed": true,
+      "logs": "[Log] 115 recovery public native/global comparison complete=True; no restoration or Unity object writes"
+    },
+    {
+      "operation": "RecoveryEndState115",
+      "request": {
+        "utc": "2026-11-02T05:24:31.502113+00:00",
+        "pid": 6288,
+        "sourceSHA256": "be03bd06c68797af5070c0b796ad1a181b53a30e81b2d4d9ce48e30e9b8a624d"
+      },
+      "success": true,
+      "compiled": true,
+      "executed": true,
+      "logs": "[Log] 111 read only: Play=False compiling=False dirty=25"
+    }
+  ],
+  "consoleBrief": [
+    {
+      "type": "Info",
+      "timestamp": "[14:11:28]",
+      "firstLine": "Failed to open 'Logs/Editor.log'. Logs will continue to be written to the global Editor.log file."
+    },
+    {
+      "type": "Warning",
+      "timestamp": "[14:12:08]",
+      "firstLine": "This project uses Input Manager, which is marked for deprecation. To manage input in your project, use the <a href=\"https://docs.unity3d.com/Packages/com.unity.inputsystem@latest\">Input System package</a> instead."
+    },
+    {
+      "type": "Info",
+      "timestamp": "[14:12:11]",
+      "firstLine": "Reduced additional punctual light shadows resolution by 2 to make 12 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame"
+    },
+    {
+      "type": "Info",
+      "timestamp": "[14:12:18]",
+      "firstLine": "Error reason is 'NoSubscription' and no additional error information was provided (https://generators.ai.unity.com)."
+    },
+    {
+      "type": "Info",
+      "timestamp": "[14:12:18]",
+      "firstLine": "Error reason is 'NoSubscription' and no additional error information was provided (https://generators.ai.unity.com)."
+    },
+    {
+      "type": "Info",
+      "timestamp": "[14:12:18]",
+      "firstLine": "Error reason is 'NoSubscription' and no additional error information was provided (https://generators.ai.unity.com)."
+    },
+    {
+      "type": "Info",
+      "timestamp": "[14:12:19]",
+      "firstLine": "Error reason is 'NoSubscription' and no additional error information was provided (https://generators.ai.unity.com)."
+    },
+    {
+      "type": "Info",
+      "timestamp": "[14:12:19]",
+      "firstLine": "Error reason is 'NoSubscription' and no additional error information was provided (https://generators.ai.unity.com)."
+    }
+  ],
+  "newPlay": 0,
+  "setterRestoration": 0,
+  "noReplay": "Recorded source contains historical output paths. Do not replay executed commands or old Exit requests."
+}

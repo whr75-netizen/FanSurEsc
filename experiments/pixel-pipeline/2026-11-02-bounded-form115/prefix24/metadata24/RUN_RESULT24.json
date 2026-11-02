@@ -1,0 +1,47 @@
+{
+  "utc": "2026-11-02T11:29:02.603512+00:00",
+  "executionKind": "actual-gpu-prefix-replay-of-saved-F103",
+  "sourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+  "sourceFrame": 103,
+  "dispatches": 1,
+  "groups": [
+    1,
+    2,
+    1
+  ],
+  "nominalThreads": 128,
+  "structuredBytes": 591616,
+  "readbackBytes": 4096,
+  "realCallbacksDoneNoError": 2,
+  "exactCpuBytesEqual": true,
+  "publicStateBeforeAfterEqual": true,
+  "native44BeforeImportAfterImportAfterGPUEqual": true,
+  "global74Equal": true,
+  "dirtyCount": 24,
+  "input22AndIdentityEqual": true,
+  "resourcesReleased": true,
+  "stateSetters": 0,
+  "PlayEntries": 0,
+  "CSharpAssetsImports": 0,
+  "otherKernelsDispatched": 0,
+  "nextStageCreated": false,
+  "preservation": {
+    "utc": "2026-11-02T11:29:02.603512+00:00",
+    "protected35Equal": true,
+    "userModified30Equal": true,
+    "native47BackupEqual": true,
+    "nativeBackupBytes": 13008941,
+    "currentEditorNativeStateQueried": false,
+    "GPUOrUnityCalls": 0
+  },
+  "importWarningsOnly": [
+    "Warning|signed/unsigned mismatch, unsigned assumed at kernel BuildSubsets113|Prefix24.compute:36",
+    "Warning|signed/unsigned mismatch, unsigned assumed at kernel Enumerate113|Prefix24.compute:36",
+    "Warning|signed/unsigned mismatch, unsigned assumed at kernel Reduce113|Prefix24.compute:36",
+    "Warning|signed/unsigned mismatch, unsigned assumed at kernel Write113|Prefix24.compute:36"
+  ],
+  "relayImportIsErrorWasExpectedWarningsNotDenial": true,
+  "previousTdrCauseResolved": false,
+  "wholeRuntimeOrArtSuccessClaimed": false,
+  "currentEditorNative44Queried": true
+}

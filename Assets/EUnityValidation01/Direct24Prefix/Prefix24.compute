@@ -1,0 +1,37 @@
+// Extracted Direct24 prefix only. No Unity execution or device clearance.
+// The four entrypoint bodies and helper closure match the113 scalar candidate.
+#pragma kernel BuildSubsets113
+#pragma kernel Enumerate113
+#pragma kernel Reduce113
+#pragma kernel Write113
+#define K113 65536.0
+#define MAXP113 24
+#define GROUPS113 32768u
+struct Group113{float4 score;uint4 masks,tail;};
+struct Subset113{uint4 a,b;};
+RWStructuredBuffer<float4> _Cells113;
+RWStructuredBuffer<uint4> _CellTags113,_Frame113,_Points113;
+RWStructuredBuffer<Group113> _Groups113,_Best113;
+RWStructuredBuffer<Subset113> _Subsets113;
+RWStructuredBuffer<float4> _CurveColour106,_CurveIdentity106,_CurveDecision106,_CurveAudit106;
+int2 _CurveEyeIds106,_CellsSize113;
+groupshared Group113 Shared113[64];
+
+float4 C113(int cell,int ch){return _Cells113[cell*7+ch];}
+float Interval113(float value,float low,float high){return value<low?low-value:value>high?value-high:0;}
+bool Connected113(uint mask,int eye){if(mask==0)return true;uint reach=1u<<firstbitlow(mask);for(int i=0;i<MAXP113;i++){uint next=reach;for(int p=0;p<MAXP113;p++)if(reach&(1u<<p))next|=_Points113[eye*MAXP113+p].w&mask;if(next==reach)break;reach=next;}return reach==mask;}
+Group113 Invalid113(){Group113 v;v.score=3.402823e38;v.masks=0;v.tail=uint4(0xffffffff,0,0,0);return v;}
+bool Less113(Group113 a,Group113 b){for(int j=0;j<4;j++)if(a.score[j]!=b.score[j])return a.score[j]<b.score[j];if(asfloat(a.tail.z)!=asfloat(b.tail.z))return asfloat(a.tail.z)>asfloat(b.tail.z);return a.tail.x<b.tail.x;}
+Group113 Merge113(Group113 a,Group113 b){if(a.tail.y==0)return b;if(b.tail.y==0)return a;if(Less113(a,b))return a;if(Less113(b,a))return b;a.masks=uint4(a.masks.x&b.masks.x,a.masks.y|b.masks.y,a.masks.z&b.masks.z,a.masks.w|b.masks.w);a.tail.y+=b.tail.y;return a;}
+[numthreads(64,1,1)]void BuildSubsets113(uint3 tid:SV_DispatchThreadID){int eye=tid.y/2,part=tid.y%2;uint state=tid.x;uint4 head=_Frame113[eye*32];Subset113 outValue;outValue.a=0;outValue.b=0;uint count=part==0?head.y:head.z;if(head.w==0&&state<(1u<<count)){uint mask=0,component=0,keys=0,n=0;float cost=0,directMass24=0;bool valid=true;for(uint p=0;p<head.x;p++){uint4 entry113=_Points113[eye*MAXP113+p];uint index=part==0?entry113.y:entry113.z;if(index==0xffffffff||!(state&(1u<<index)))continue;float4 mass=C113(entry113.x,0);uint4 tag=_CellTags113[entry113.x];mask|=1u<<p;n++;component|=tag[part];keys|=tag[part+2];cost+=K113-mass.x-mass.z-(part==0?mass.x:mass.z);directMass24+=part==0?mass.x:mass.z;}for(int bit=0;bit<8;bit++){uint scope=_Frame113[eye*32+4+part*8+bit].x;if(scope&&!Connected113(mask&scope,eye))valid=false;}outValue.a=uint4(mask,component,keys,n);outValue.b=uint4(asuint(cost),valid?1:0,asuint(directMass24),0);}_Subsets113[(eye*2+part)*4096+state]=outValue;}
+[numthreads(64,1,1)]void Enumerate113(uint3 gid:SV_GroupID,uint3 local:SV_GroupThreadID){int eye=gid.y;uint state=gid.x*64+local.x;uint4 header=_Frame113[eye*32];Group113 r=Invalid113();
+ if(header.w==0&&state<(1u<<(header.y+header.z))){uint si=state&((1u<<header.y)-1),sw=state>>header.y;Subset113 a=_Subsets113[eye*8192+si],b=_Subsets113[eye*8192+4096+sw];if(a.b.y&&b.b.y&&(a.a.x&b.a.x)==0){float4 mass=asfloat(_Frame113[eye*32+1]);uint4 active=_Frame113[eye*32+2];float reconstruction=asfloat(_Frame113[eye*32+3].x)+asfloat(a.b.x)+asfloat(b.b.x);r.score=float4(countbits(active.x&~a.a.y)+countbits(active.y&~b.a.y),Interval113((a.a.w+b.a.w)*K113,mass.x+mass.z,mass.y+mass.w),Interval113(a.a.w*K113,mass.x,mass.y)+Interval113(b.a.w*K113,mass.z,mass.w),max(reconstruction,0));r.masks=uint4(a.a.x,a.a.x,b.a.x,b.a.x);r.tail=uint4(countbits(active.z&~(a.a.z|b.a.z)),1,asuint(asfloat(a.b.z)+asfloat(b.b.z)),0);}
+ }
+ Shared113[local.x]=r;GroupMemoryBarrierWithGroupSync();for(uint stride=32;stride>0;stride>>=1){if(local.x<stride)Shared113[local.x]=Merge113(Shared113[local.x],Shared113[local.x+stride]);GroupMemoryBarrierWithGroupSync();}if(local.x==0)_Groups113[eye*GROUPS113+gid.x]=Shared113[0];
+}
+[numthreads(64,1,1)]void Reduce113(uint3 gid:SV_GroupID,uint3 local:SV_GroupThreadID){int eye=gid.x;Group113 r=Invalid113();for(uint i=local.x;i<GROUPS113;i+=64)r=Merge113(r,_Groups113[eye*GROUPS113+i]);Shared113[local.x]=r;GroupMemoryBarrierWithGroupSync();for(uint stride=32;stride>0;stride>>=1){if(local.x<stride)Shared113[local.x]=Merge113(Shared113[local.x],Shared113[local.x+stride]);GroupMemoryBarrierWithGroupSync();}if(local.x==0)_Best113[eye]=Shared113[0];}
+[numthreads(8,8,1)]void Write113(uint3 tid:SV_DispatchThreadID){int2 p=tid.xy;if(any(p>=_CellsSize113))return;int cell=p.y*_CellsSize113.x+p.x;float4 info=C113(cell,3),policy=C113(cell,5);int owner=(int)round(info.x),eye=owner==_CurveEyeIds106.x?0:1;float4 colour=0,id=0,decision=0,audit=0;
+ if(owner>0&&_Frame113[eye*32].w==0){if(policy.x==2){float4 lid=C113(cell,4);if(lid.w>0){colour=float4(lid.rgb,1);id=float4(6,owner,lid.w,0);decision=float4(6,113,0,0);audit.x=3;}else audit.x=-1;}else if(policy.x==1){uint4 header=_Frame113[eye*32];Group113 best=_Best113[eye];for(uint k=0;k<header.x;k++)if(_Points113[eye*MAXP113+k].x==cell){uint bit=1u<<k;bool isI=(best.masks.x&bit)!=0,isW=(best.masks.z&bit)!=0;bool uncertain=((best.masks.y^best.masks.x)|(best.masks.w^best.masks.z))&bit;if(uncertain){decision.x=-1;audit.x=-2;}else if(isI||isW){colour=C113(cell,isI?1:2);id=float4(isI?1:4,owner,isI?info.y:info.z,0);decision=float4(isI?1:4,113,0,0);audit.x=1;}break;}}}
+ else if(owner>0){decision.x=-1;audit=float4(-64,_Frame113[eye*32].w,_Frame113[eye*32].y,_Frame113[eye*32].z);}
+ _CurveColour106[cell]=colour;_CurveIdentity106[cell]=id;_CurveDecision106[cell]=decision;_CurveAudit106[cell]=audit;
+}

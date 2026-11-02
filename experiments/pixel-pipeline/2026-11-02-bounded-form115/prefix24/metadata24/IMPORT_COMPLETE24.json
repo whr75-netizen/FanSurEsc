@@ -1,0 +1,26 @@
+{
+    "Utc": "2026-11-02T11:24:05.9004686Z",
+    "Status": "complete",
+    "FolderGuid": "59ba6080fb8e109439f84b95759ffeac",
+    "ShaderGuid": "a86ba181213712cd5cb5d48972d38e82",
+    "SourceSha256": "a85bb725503d39e3c7fdd3a354bea2ea31382401f7deaae10fc254fdabe98d0d",
+    "MetaSha256": "179cc4548c14132b0be539d0fbe0ef3513fcfa63555858b948de91ced4071435",
+    "BeforeSha256": "3659ce16fb8cd2ae5daf27c32254854b910465e0bbf5b860595893eed07d6aea",
+    "AfterSha256": "3659ce16fb8cd2ae5daf27c32254854b910465e0bbf5b860595893eed07d6aea",
+    "Error": "",
+    "StateEqual": true,
+    "Kernels": [
+        "BuildSubsets113|64,1,1",
+        "Enumerate113|64,1,1",
+        "Reduce113|64,1,1",
+        "Write113|8,8,1"
+    ],
+    "Messages": [
+        "Warning|signed/unsigned mismatch, unsigned assumed at kernel BuildSubsets113|Prefix24.compute:36",
+        "Warning|signed/unsigned mismatch, unsigned assumed at kernel Enumerate113|Prefix24.compute:36",
+        "Warning|signed/unsigned mismatch, unsigned assumed at kernel Reduce113|Prefix24.compute:36",
+        "Warning|signed/unsigned mismatch, unsigned assumed at kernel Write113|Prefix24.compute:36"
+    ],
+    "NewErrors": [],
+    "Dispatches": 0
+}

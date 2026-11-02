@@ -1,0 +1,111 @@
+{
+  "utc": "2026-11-02T13:36:47.153610+00:00",
+  "scope": "Actual F103 one-eye GPU Reduce then Write only",
+  "GPUDispatches": 2,
+  "ReduceThreads": 64,
+  "WriteThreads": 64,
+  "ReduceActualOutputBytes": 48,
+  "WriteActualOutputBytes": 9216,
+  "sentinelCellsPerWriteOutput": 80,
+  "actualGpuBestPassedToWrite": true,
+  "preMidPostStateEqual": true,
+  "preservation": {
+    "utc": "2026-11-02T13:36:47.220793+00:00",
+    "protected35Equal": true,
+    "userModified30Equal": true,
+    "native47BackupEqual": true,
+    "nativeBackupBytes": 13008941,
+    "currentEditorNativeStateQueried": false,
+    "GPUOrUnityCalls": 0
+  },
+  "wholeRendererExecuted": false,
+  "EvaluateForm115Executed": false,
+  "PlayEntries": 0,
+  "shaderChanges": 0,
+  "stage3": {
+    "sourceRequest": "b55a8ea0b2a9e5f72fbf147b419d9d39224c2f3b831e5fc2fb0caf574871a1bc",
+    "result": {
+      "AfterStateSha256": "49858272b4a0338c4cb2da78607b17701d55ba9894a30bb55f30d9ad42912965",
+      "BeforeStateSha256": "49858272b4a0338c4cb2da78607b17701d55ba9894a30bb55f30d9ad42912965",
+      "CaseSha256": "0bd1a3c7fbc3e30791cbcaa000854a6fafd79598f34a730b8a7e2e2c0559027b",
+      "DispatchCalls": 1,
+      "Error": null,
+      "ExecutionKind": "gpu-prefix",
+      "Outputs": [
+        {
+          "Bytes": 48,
+          "File": "best.bin",
+          "Name": "best",
+          "Sha256": "3f193d98f7c0e562b33a5ac2e9d1dce39bb6a493fb62982d5a30363710d6b8d1",
+          "Stage": 3
+        }
+      ],
+      "ResourcesReleased": true,
+      "RunId": "prefix24-6344598354174e7d93b5ac1590cfd2ae",
+      "Schema": "prefix24/receipt/v1",
+      "ShaderSha256": "a85bb725503d39e3c7fdd3a354bea2ea31382401f7deaae10fc254fdabe98d0d",
+      "SourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+      "Stage": 3,
+      "StateEqual": true,
+      "Success": true
+    },
+    "submittedUtc": "2026-11-02T13:31:21.1837763Z",
+    "callbackUtc": "2026-11-02T13:31:32.2025172Z"
+  },
+  "stage4": {
+    "sourceRequest": "79453c074f9d2968a9178cac46146a31358436f46419c1bb02aacef5daead44c",
+    "result": {
+      "AfterStateSha256": "49858272b4a0338c4cb2da78607b17701d55ba9894a30bb55f30d9ad42912965",
+      "BeforeStateSha256": "49858272b4a0338c4cb2da78607b17701d55ba9894a30bb55f30d9ad42912965",
+      "CaseSha256": "0bd1a3c7fbc3e30791cbcaa000854a6fafd79598f34a730b8a7e2e2c0559027b",
+      "DispatchCalls": 1,
+      "Error": null,
+      "ExecutionKind": "gpu-prefix",
+      "Outputs": [
+        {
+          "Bytes": 2304,
+          "File": "colour.bin",
+          "Name": "colour",
+          "Sha256": "5f1f014ab78e8f8d91892fbcfd93bc814d1a36ec1946d9acf923e93fc7c7039b",
+          "Stage": 4
+        },
+        {
+          "Bytes": 2304,
+          "File": "identity.bin",
+          "Name": "identity",
+          "Sha256": "9a3b2ba3b474d0147063e4b928166e7e0c6edc4d5bc437b7a93de9c2c6a01b8d",
+          "Stage": 4
+        },
+        {
+          "Bytes": 2304,
+          "File": "decision.bin",
+          "Name": "decision",
+          "Sha256": "e68f24c52df68d662a09ce707e785e38cf8dc77acaf9641ebd23b1a5f9cb6d3d",
+          "Stage": 4
+        },
+        {
+          "Bytes": 2304,
+          "File": "audit.bin",
+          "Name": "audit",
+          "Sha256": "a53b53c5108d87df7235166096ca10b530354957b16fdfb57c8b30c0f44ceecc",
+          "Stage": 4
+        }
+      ],
+      "ResourcesReleased": true,
+      "RunId": "prefix24-6344598354174e7d93b5ac1590cfd2ae",
+      "Schema": "prefix24/receipt/v1",
+      "ShaderSha256": "a85bb725503d39e3c7fdd3a354bea2ea31382401f7deaae10fc254fdabe98d0d",
+      "SourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+      "Stage": 4,
+      "StateEqual": true,
+      "Success": true
+    },
+    "submittedUtc": "2026-11-02T13:32:48.8596389Z",
+    "callbackUtc": "2026-11-02T13:32:48.9020963Z"
+  },
+  "native": 44,
+  "globals": 74,
+  "dirty": 24,
+  "inputFields": 22,
+  "inputIdentityPreserved": true
+}

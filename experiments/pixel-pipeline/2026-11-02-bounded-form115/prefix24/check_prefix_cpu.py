@@ -60,7 +60,7 @@ def main():
     lock=(H/'CaseLock24.cs').read_text(encoding='utf-8')
     assert sha(H/'CASE.json')in lock and case['RunId']in lock
     prior_stages=[]
-    for stage in [1,2]:
+    for stage in [1,2,3,4]:
         directory=H/'runs'/case['RunId']/('stage-'+str(stage).zfill(2))
         if not directory.exists():continue
         receipt=json.loads((directory/'COMPLETE.json').read_text())
@@ -70,15 +70,17 @@ def main():
             assert output['File']==output['Name']+'.bin'and sha(directory/output['File'])==output['Sha256']
             spec=next(x for x in case['InputFiles']if x['Name']==output['Name']and x['Stage']==stage);assert output['Sha256']==spec['Sha256']
         prior_stages.append(stage)
-    assert prior_stages==[1,2] and not(H/'runs'/case['RunId']/'stage-03').exists()
+    assert prior_stages==[1,2,3,4]
     request=json.loads((H/'enumerate24/Stage2Prefix24_REQUEST.json').read_text());assert request['sourceSHA256']==commands['commands'][1]['SHA256']
-    result={'scope':'Current command-source CPU validation; existing actual GPU stages1/2 evidence read only','sourcePreparationComplete':True,'GPUOrUnityCalls':0,'GPUHostExecutedThisCheck':False,'AssetsImportedThisCheck':False,'currentCommandVersionsSubmitted':[2],'priorActualGpuStagesValidated':prior_stages,
+    for stage,file in [(3,'Reduce24'),(4,'Write24')]:
+        request=json.loads((H/'reduce-write24'/(file+'_REQUEST.json')).read_text());assert request['sourceSHA256']==commands['commands'][stage-1]['SHA256']
+    result={'scope':'Current command-source CPU validation; existing actual GPU stages1..4 evidence read only','sourcePreparationComplete':True,'GPUOrUnityCalls':0,'GPUHostExecutedThisCheck':False,'AssetsImportedThisCheck':False,'currentCommandVersionsSubmitted':[2,3,4],'priorActualGpuStagesValidated':prior_stages,
       'CPUCompilations':{'HLSLPreviouslyCompiledSameSource':4,'CSharp':7,'CSharpWarnings':0,'existingHlslSignedUnsignedWarning':'X3203 (original Enumerate expression; fixed eye0 fixture)'},
       'CPUTestGroups':tests['Passed'],'stages':rows,
       'lifetime':'One stage owns clone/buffers. No auto-next. All issued readbacks settled before release. Unknown submission/request retains ownership and blocks completion/replay.',
       'state':'Read-only before/after public Editor/options/scene/pipeline/time/input/devices/dirty/global summary; this host changes none of those. Any mismatch blocks completion; no guessed restoration.',
       'notIntegrated':['16-subsample depth transport','socket-diameter normalization','curve midpoint recovery','renderer final composition','product77'],
-      'remainingConditions':['Reduce/Write have not been approved or run; no Unity/GPU calls in this check','The existing shader was imported in f919290b; its source remains unchanged','Fresh Editor/process/project/native/input preflight before any future Unity action','Completed stages1/2 cannot be replayed; a future stage3 must validate actual stage2 complete receipt/output bytes and absence of FAILED/PENDING','Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence'],
+      'remainingConditions':['All four narrow prefix stages completed; no Unity/GPU calls in this read-only check','The existing shader was imported in f919290b; its source remains unchanged','Completed stages1..4 cannot be replayed','Full runtime query/depth/occlusion/composition/rendering is a separate path not covered by these prefix results','Prior D3D11 reset root cause remains unresolved; prefix success is not full-render safety evidence'],
       'caseSHA256':sha(H/'CASE.json'),'shaderSHA256':sha(H/'Prefix24.compute')}
     (H/'PREFIX24_CHECK.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(result,indent=2))

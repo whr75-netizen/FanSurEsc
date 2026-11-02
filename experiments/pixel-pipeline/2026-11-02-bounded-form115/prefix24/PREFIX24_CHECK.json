@@ -1,15 +1,19 @@
 {
-  "scope": "Current command-source CPU validation; existing actual GPU stages1/2 evidence read only",
+  "scope": "Current command-source CPU validation; existing actual GPU stages1..4 evidence read only",
   "sourcePreparationComplete": true,
   "GPUOrUnityCalls": 0,
   "GPUHostExecutedThisCheck": false,
   "AssetsImportedThisCheck": false,
   "currentCommandVersionsSubmitted": [
-    2
+    2,
+    3,
+    4
   ],
   "priorActualGpuStagesValidated": [
     1,
-    2
+    2,
+    3,
+    4
   ],
   "CPUCompilations": {
     "HLSLPreviouslyCompiledSameSource": 4,
@@ -82,11 +86,11 @@
     "product77"
   ],
   "remainingConditions": [
-    "Reduce/Write have not been approved or run; no Unity/GPU calls in this check",
+    "All four narrow prefix stages completed; no Unity/GPU calls in this read-only check",
     "The existing shader was imported in f919290b; its source remains unchanged",
-    "Fresh Editor/process/project/native/input preflight before any future Unity action",
-    "Completed stages1/2 cannot be replayed; a future stage3 must validate actual stage2 complete receipt/output bytes and absence of FAILED/PENDING",
-    "Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence"
+    "Completed stages1..4 cannot be replayed",
+    "Full runtime query/depth/occlusion/composition/rendering is a separate path not covered by these prefix results",
+    "Prior D3D11 reset root cause remains unresolved; prefix success is not full-render safety evidence"
   ],
   "caseSHA256": "0bd1a3c7fbc3e30791cbcaa000854a6fafd79598f34a730b8a7e2e2c0559027b",
   "shaderSHA256": "a85bb725503d39e3c7fdd3a354bea2ea31382401f7deaae10fc254fdabe98d0d"

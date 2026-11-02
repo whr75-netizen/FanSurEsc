@@ -21,7 +21,7 @@ def hlsl():
             assert sum(b['Type']==6 for b in bindings)<=8
             if entry in ['BuildSubsets113','Enumerate113','Reduce113','Write113']:assert not audit['privateArrayDeclarations']
             (out/(entry+'.dxbc')).write_bytes(binary)
-            rows.append({'entry':entry,'sourceSHA256':sha(source),'dxbcSHA256':hashlib.sha256(binary).hexdigest(),'audit':audit,'bindings':bindings,'constants':constants,'diagnostics':diagnostic})
+            rows.append({'entry':entry,'activeEntrypoint':entry.encode()in re.findall(rb'^#pragma kernel (\w+)',raw,re.M),'sourceSHA256':sha(source),'dxbcSHA256':hashlib.sha256(binary).hexdigest(),'audit':audit,'bindings':bindings,'constants':constants,'diagnostics':diagnostic})
         finally:fx.release(result);fx.release(errors)
     after=fx.modules();bad=[p for p in after if re.search(r'(?i)(?:d3d11|d3d12|dxgi|amdxx64|amddxx64|nvwgf2umx|igd10iumd64)\.dll$',p)];assert not bad
     (H/'HLSL_RUNTIME24.json').write_text(json.dumps({'GPUOrUnityCalls':0,'GPUDeviceCreated':False,'GPUDriverModules':bad,'newModules':sorted(set(after)-set(before)),'compilerSHA256':sha(fx.DLL),'kernels':rows,'notDriverSafetyEvidence':True},indent=2)+'\n')
@@ -43,6 +43,7 @@ def csharp():
     # This exact historical dependency bundle is compiler input only, not a
     # command submission deliverable. Remove its Execute entrypoint class.
     a,b=class_span(s,'CommandScript');s=s[:a]+s[b:]
+    s+='\n'+(H/'DispatchBounds24.cs').read_text(encoding='utf-8')
     assert 'EvaluateForm115'not in s and 'class CommandScript'not in s
     out=H/'build';out.mkdir(exist_ok=True);unit=out/'COMPILE_ONLY.cs';unit.write_bytes(s.encode())
     refs=[editor/'NetStandard/ref/2.1.0/netstandard.dll',editor/'NetStandard/compat/2.1.0/shims/netfx/mscorlib.dll']

@@ -29,6 +29,12 @@ def shader():
     s=s[:first]+declarations+s[first:]
     s=replace(s,'int _ExposeOwn113; float _SocketLimit113;','int _ExposeOwn113; float2 _SocketLimit113;')
     s=replace(s,'depth-zz<=_SocketLimit113','depth-zz<=SocketLimit24(eye)')
+    # A valid owned tree visits each node at most once. Corrupt/cyclic links
+    # must produce unknown before any out-of-range node/box access, not loop.
+    visit='int node=stack[--sp];visits++;'
+    guarded=visit+'if(_NodeCount96<=0||(uint)node>=(uint)_NodeCount96||visits>(uint)_NodeCount96){overflow=true;break;}'
+    s=replace(s,visit,guarded)
+    trace=replace(trace,visit,guarded)
     # Original Query remains source sampling. Native carrier holes are handled
     # only AFTER assignment, by the rewritten carrier/compose functions.
     for name in ['CarrierQueries113','ComposeRegion113']:
@@ -62,6 +68,11 @@ def shader():
     s=replace(s,f['Weight113']['source'],weight)
     s+='\n'+trace+'\nfloat SocketLimit24'+body
     s='#pragma kernel CurveColumns24\n#pragma kernel ColumnVisibility24\n#pragma kernel AssignedVisibility24\n'+s
+    # This variant has no users of legacy Select/Compose/curve controls.
+    # Strip their importer entrypoints; dead source text is not a GPU module.
+    active={'PackPart','Refit','Query','CurveColumns24','ColumnVisibility24','PrepareCells113','GatherEye113','BuildSubsets113','Enumerate113','Reduce113','Write113','CarrierQueries113','AssignedVisibility24','ComposeRegion113'}
+    s=re.sub(r'(?m)^#pragma kernel (\w+)\n',lambda m:m[0]if m[1]in active else'',s)
+    assert set(re.findall(r'^#pragma kernel (\w+)',s,re.M))==active
     for banned in ['115','EvaluateForm','BoundRun','Down115','Up115']:assert banned not in s
     before=functions(original);after=functions(s)
     for name in ['BuildSubsets113','Enumerate113','Reduce113','Write113']:assert before[name]['source']==after[name]['source']
@@ -102,20 +113,43 @@ def source_pigment():
 
 def engine():
     original=(R/'joint-lid107/WholeEye107.cs').read_text();s=original
+    marker='  cpuTriangles107=sourceTriangles;'
+    guard='''  global::Execution24.DispatchBounds24.Topology(initialWorld.Length,sourceTriangles.Length,sourceMaterials.Length,primitiveStride,partMap.Length,alphaCount);
+  if(sourceEyeIds==null||sourceEyeIds.Length!=2||sourceEyeIds[0]<1||sourceEyeIds[0]>=32||sourceEyeIds[1]<1||sourceEyeIds[1]>=32||sourceEyeIds[0]==sourceEyeIds[1]||px==null||py==null||px.Length!=2||py.Length!=2)throw new ArgumentException("24 eye/projection identities");
+  foreach(var t in sourceTriangles)global::Execution24.DispatchBounds24.Triangle(t.v.x,t.v.y,t.v.z,t.v.w,initialWorld.Length,sourceMaterials.Length);
+  foreach(int t in partMap)global::Execution24.DispatchBounds24.PartIndex(t,sourceTriangles.Length);
+  foreach(var a in initialWorld)for(int i=0;i<4;i++)global::Execution24.DispatchBounds24.Finite(a[i]);foreach(var a in sourceRest)for(int i=0;i<4;i++)global::Execution24.DispatchBounds24.Finite(a[i]);foreach(var a in sourceUV){global::Execution24.DispatchBounds24.Finite(a.x);global::Execution24.DispatchBounds24.Finite(a.y);}
+  foreach(var a in px.Concat(py))for(int i=0;i<4;i++)global::Execution24.DispatchBounds24.Finite(a[i]);foreach(var m in sourceMaterials){global::Execution24.DispatchBounds24.Texture(m.atlas.x,m.atlas.y,m.atlas.z,m.atlas.w);for(int i=0;i<4;i++){global::Execution24.DispatchBounds24.Finite(m.alphaCullWrap[i]);global::Execution24.DispatchBounds24.Finite(m.uvWrap[i]);}}
+'''
+    s=replace(s,marker,guard+marker)
+    s=replace(s,'if(w<=0||h<=0||w%4!=0||h%4!=0||w*h>32768)throw new ArgumentException("Canonical ROI contract");','global::Execution24.DispatchBounds24.Product(w,h,4,32768);')
+    s=replace(s,'public void UploadWorld(Vector4[] data){Check();if(data.Length!=VertexCount)throw new InvalidOperationException("Evaluated topology changed");','public void UploadWorld(Vector4[] data){Check();if(data.Length!=VertexCount)throw new InvalidOperationException("Evaluated topology changed");foreach(var a in data)for(int i=0;i<4;i++)global::Execution24.DispatchBounds24.Finite(a[i]);')
+    s=replace(s,'public void Pack(CommandBuffer cmd,int part,RenderTexture[] fields,bool flip){Check();','''public void CheckPack24(int part,RenderTexture[] fields){Check();if(part<0||part>3||fields==null||fields.Length!=5)throw new ArgumentException("24 pack input count");for(int i=0;i<5;i++)if(!fields[i]||fields[i].width!=width||fields[i].height!=height)throw new ArgumentException("24 pack texture/grid mismatch");}
+ public void Pack(CommandBuffer cmd,int part,RenderTexture[] fields,bool flip){CheckPack24(part,fields);''')
+    s=replace(s,'  Check();if(alphaSources==null||alphaSources.Any(t=>!t))', '  CheckMatrices24(view,projection);Check();if(alphaSources==null||alphaSources.Any(t=>!t))')
+    s=replace(s,'bool directQueries,int coldTie=0){','bool directQueries,int coldTie=0,bool selectOutput=true){')
+    s=replace(s,'  CheckMatrices24(view,projection);Check();','  if(selectOutput&&!Shader.HasKernel("Select"))throw new InvalidOperationException("24 selection output unavailable in this isolated shader");CheckMatrices24(view,projection);Check();')
+    selected='  k=Shader.FindKernel("Select");'
+    early='''  if(!selectOutput){cmd.SetComputeVectorArrayParam(Shader,"_SourceProjectionX96",projectionX);cmd.SetComputeVectorArrayParam(Shader,"_SourceProjectionY96",projectionY);cmd.SetComputeIntParams(Shader,"_SourceEyeIds96",eyeIds);cmd.EndSample("WholeEye107 BVH visibility and joint selection");Frames++;return;}
+'''
+    s=replace(s,selected,early+selected)
     # Reuse exactly the old Refit prefix; do not call its Query/Select afterward.
-    start=s.index('  Check();',s.index('public void Dispatch('));end=s.index('  k=Shader.FindKernel("Query")',start)
+    start=s.index('  if(selectOutput&&!Shader.HasKernel',s.index('public void Dispatch('));end=s.index('  k=Shader.FindKernel("Query")',start)
     prefix=s[start:end].replace('directQueries?1:0','0').replace('coldTie','0')
+    prefix=prefix[prefix.index('CheckMatrices24(view,projection);'):]
     prefix=prefix.replace('cmd.BeginSample("WholeEye107 BVH visibility and joint selection");','')
     method='''
  public void RefitOnly24(CommandBuffer cmd,Matrix4x4 view,Matrix4x4 projection){
-'''+prefix+'''
+'''+prefix.replace('  Check();','  CheckMatrices24(view,projection);Check();')+'''
  }
  public void ExternalBindings24(CommandBuffer cmd,ComputeShader cs,int k){
   Check();if(alphaSources==null||alphaSources.Any(t=>!t))throw new InvalidOperationException("24 borrowed alpha source invalidated");void Bind(string n,GraphicsBuffer b)=>cmd.SetComputeBufferParam(cs,k,n,b);
   Bind("_Triangles96",triangles);Bind("_Materials96",materials);Bind("_World96",World);Bind("_UV96",uv);Bind("_PartTriangles96",parts);Bind("_Nodes96",nodes);Bind("_Boxes96",boxes);
   for(int i=0;i<32;i++)cmd.SetComputeTextureParam(cs,k,"_SourceAlpha96_"+i,i<alphaSources.Length?alphaSources[i]:Texture2D.whiteTexture);
-  cmd.SetComputeIntParam(cs,"_FacePrimitiveStride96",PrimitiveStride);
+  cmd.SetComputeIntParam(cs,"_FacePrimitiveStride96",PrimitiveStride);cmd.SetComputeIntParam(cs,"_NodeCount96",nodeCount);
  }
+ public void CheckMatrices24(Matrix4x4 view,Matrix4x4 projection){for(int i=0;i<16;i++){global::Execution24.DispatchBounds24.Finite(view[i]);global::Execution24.DispatchBounds24.Finite(projection[i]);}}
+ public void CheckProjection24(Matrix4x4 view,Matrix4x4 projection){Check();if(alphaSources==null||alphaSources.Any(t=>!t))throw new InvalidOperationException("24 borrowed alpha source lost before submission");foreach(var m in cpuMaterials107)if(m.atlas.w!=0){int slot=(int)m.atlas.x;if(slot<0||slot>=alphaSources.Length||alphaSources[slot].width!=(int)m.atlas.y||alphaSources[slot].height!=(int)m.atlas.z)throw new InvalidOperationException("24 alpha sampler descriptor changed; explicit rebuild required");}CheckMatrices24(view,projection);foreach(var p in cpuWorld107){var v=view*p;var c=projection*v;if(c.w==0)throw new ArgumentException("24 undefined projected vertex");global::Execution24.DispatchBounds24.Finite((c.x/c.w*.5f+.5f)*480);global::Execution24.DispatchBounds24.Finite((.5f-c.y/c.w*.5f)*272);global::Execution24.DispatchBounds24.Finite(v.z);}}
 '''
     s=replace(s,' public void SetAlphaSources(',method+' public void SetAlphaSources(')
     save('WholeEye107_Geometry24.cs',s,original)
@@ -152,10 +186,17 @@ def forward():
     start=s.index('  void Dispatch(string kernel,');end=s.index('  RenderedFrame=Time.frameCount;',start);s=s[:start]+s[end:]
     s=replace(s,'["baseline102SameInputs"]=true,','["baseline102SameInputs"]=false,["legacyControlOutputsWritten24"]=false,')
     s=replace(s,'Region.PrepareCarrier(cmd,CarrierSource.Engine,CarrierNative.Anchor96+new Vector2(CarrierNative.Bounds96.x,CarrierNative.Bounds96.y));CarrierSource.Engine.Dispatch(cmd,data.view,data.projection,true,0);','CarrierSource.Engine.RefitOnly24(cmd,data.view,data.projection);')
+    s=replace(s,'DenseSource.Engine.Dispatch(cmd,data.view,data.projection,false,0);','DenseSource.Engine.Dispatch(cmd,data.view,data.projection,false,0,false);')
+    s=replace(s,'e.Dispatch(cmd,data.view,data.projection,false,0);','e.Dispatch(cmd,data.view,data.projection,false,0,false);')
     s=replace(s,'for(int p=0;p<4;p++)DenseSource.Engine.Pack(cmd,p,DenseNative.layers[p],true);','Region.Limits24(cmd,Curves,Source.Engine,DenseSource.Engine,CarrierSource.Engine);for(int p=0;p<4;p++)DenseSource.Engine.Pack(cmd,p,DenseNative.layers[p],true);')
     s=replace(s,'ComposeRegion113(cmd);','Region.PrepareCarrier(cmd,CarrierSource.Engine,e,Results,CarrierNative.Anchor96+new Vector2(CarrierNative.Bounds96.x,CarrierNative.Bounds96.y),native.Anchor96+new Vector2(native.Bounds96.x,native.Bounds96.y),data.view,data.projection);ComposeRegion113(cmd);')
     s=replace(s,'Region.Draw(cmd,e,DenseSource.Engine,CarrierSource.Engine,Curves,Results,CarrierNative.Anchor96+new Vector2(CarrierNative.Bounds96.x,CarrierNative.Bounds96.y));','Region.Draw(cmd,e,DenseSource.Engine,CarrierSource.Engine,Curves,Results,CarrierNative.Anchor96+new Vector2(CarrierNative.Bounds96.x,CarrierNative.Bounds96.y),native.Anchor96+new Vector2(native.Bounds96.x,native.Bounds96.y));')
     s=replace(s,'b.UseBuffer(graph.ImportBuffer(Curves.Buffer),AccessFlags.ReadWrite);','b.UseBuffer(graph.ImportBuffer(Curves.Buffer),AccessFlags.ReadWrite);b.UseBuffer(graph.ImportBuffer(Curves.Proof),AccessFlags.Read);')
+    s=replace(s,'void Draw(Data data,UnsafeGraphContext context){var cmd=', '''void Draw(Data data,UnsafeGraphContext context){
+  global::Execution24.DispatchBounds24.Grid(Source.Engine.Width,Source.Engine.Height,DenseSource.Engine.Width,DenseSource.Engine.Height,CarrierSource.Engine.Width,CarrierSource.Engine.Height,eye.roi.width,eye.roi.height,Region.keys.count,Curves.Count);
+  Source.Engine.CheckProjection24(data.view,data.projection);DenseSource.Engine.CheckProjection24(data.view,data.projection);CarrierSource.Engine.CheckProjection24(data.view,data.projection);
+  for(int p=0;p<4;p++){Source.Engine.CheckPack24(p,native.layers[p]);DenseSource.Engine.CheckPack24(p,DenseNative.layers[p]);CarrierSource.Engine.CheckPack24(p,CarrierNative.layers[p]);}
+  var cmd=''')
     # Geometry trace runs on target shader with the carrier BVH but view matrices
     # are already set by Source.Engine.Dispatch in exactly this graph pass.
     save('Forward113_Geometry24.cs',s,original)
@@ -163,6 +204,6 @@ def forward():
 def main():
     shader();source_pigment();engine();driver();forward()
     rows={p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in H.iterdir()if p.suffix in ['.cs','.compute','.bin','.hlsl']}
-    (H/'PREPARED_RUNTIME24.json').write_text(json.dumps({'files':rows,'GPUOrUnityCalls':0,'AssetsImported':False,'ProductApplied':False,'fourAllocatorBodiesPreserved':True,'unexecutedCandidate':True},indent=2)+'\n')
+    (H/'PREPARED_RUNTIME24.json').write_text(json.dumps({'files':rows,'runtimeStaticInputs':['existing113 PIGMENT113.bin','existing113 SOURCE113.json','GEOMETRY_BINDINGS24.bin'],'cpuOnlyFixture':'BOUNDS_INPUT24.bin','GPUOrUnityCalls':0,'AssetsImported':False,'ProductApplied':False,'fourAllocatorBodiesPreserved':True,'unexecutedCandidate':True},indent=2)+'\n')
     print(json.dumps(rows,indent=2))
 if __name__=='__main__':main()

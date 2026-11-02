@@ -958,7 +958,7 @@ PID35364 Edit/domain1/scene clean, InputSettings native ID568105589213679894/22�
 - **실행 전 남은 조건:** 최신 Editor/project/입력·미저장 내용 preflight, 신규 compute 에셋만의 검토·import 및 실제 variant 확인, 정상 서버 승인 절차가 필요하다. 이후에도 stage1 하나만 제출하고 실제 완료·CPU 바이트 일치·소유 자원 해제·상태 보존을 읽어 확인한 뒤 별도 판단으로 stage2를 고려한다. 자동 진행·timeout 재시도는 없다. 기존 두 차례 D3D11 reset의 정확 원인은 여전히 미확정이며, CPU 컴파일/작은 dispatch/배열0만으로 GPU 재개 안전을 선언하지 않는다.
 - **미완 유지:** 16서브샘플 깊이 운반·안와 직경 정규화·곡선 중점 복구는 기존 CPU/helper 수준이며 이 prefix나 실제 renderer에 연결하지 않았다. 최종 가림/합성·전체 캐릭터·유한 팔레트·외곽선·시간 안정성 및 제품77 교체도 미검증/미적용이다. 보호35파일·원래 modified30·외부 native47백업은 디스크 해시로 다시 비교한다. 현재 메모리 native 상태 보존을 새로 증명한 것은 아니다.
 
-#### Direct24 기하·가림 런타임 후보 연결 — Unity/GPU 미실행
+#### Direct24 기하·가림 런타임 후보 연결 — Unity/GPU 미실행 (80ed085d 당시)
 - **적용 범위:** `experiments/pixel-pipeline/2026-11-02-bounded-form115/runtime24/`. 기존113을 바탕으로 생성한 C# 4파일·compute·원본 UV/primitive/ring 입력·정확한 diff다. `prepare_runtime.py`가 원래 소스와 변경을 대응한다. 제품77/Assets/현재 Editor는 변경하지 않았다. 이번 단계 Unity 호출·import·Play·GPU 장치 생성·dispatch는 모두0이다. 관련 커밋은 이 경로의 `git log`로 찾는다.
 - **호출 순서:** `SourcePigment113_Geometry24.cs::Update/ValidateUV24`의 현재 평가 정점·안와 직경/깊이 → `WholeEye107_Geometry24.cs::RefitOnly24/ExternalBindings24` → `RegionDriver113_Geometry24.cs::Draw`의 `CurveColumns24/ColumnVisibility24` → 기존 PrepareCells/Gather 및 **본문 그대로인 BuildSubsets/Enumerate/Reduce/Write 4커널** → `PrepareCarrier`의 목적지16표본 생성/AssignedVisibility24 → `Forward113_Geometry24.cs::ComposeRegion113`에서 외부 앞머리 합성. prefix24는 고정 입력의 독립4커널 시험이고, 이 runtime24는 이후 실제 프레임 기하/가림까지 잇는 별도 미실행 후보다. CPU 기대값을 GPU 결과로 읽어 넣지 않는다.
 - `Geometry24.hlsl::CarrierQueries113/Destination24/AssignedVisibility24/ComposeRegion113`: 배정된 부위/owner의 실제 raster 깊이는 개별 보존하고 빈 표본만 셀 내 평균 깊이로 운반한다. 전부 없으면 현재 ring 깊이 범위 내 실제 선택 깊이만 허용한다. 생산·조회·최종 머리 비교가 동일16좌표/인덱스를 사용한다. **8x raster의 깊이 표본 자체를 새16좌표의 직접 측정으로 승격하지 않는다.** 가시성은 운반 후16목적지에서 다시 조회한다. source anchor/carrier origin/main 표시 offset을 별도 계약으로 유지한다.
@@ -967,3 +967,32 @@ PID35364 Edit/domain1/scene clean, InputSettings native ID568105589213679894/22�
 - **Close 한계:** F107의 `(8,5)` 원본 곡선 길이0.05182838px에서 source UV alpha `[1,1]`, 목적지 외부 얼굴 가시성 `[1,1]`로 CPU 복구 가능했다. 이는 원래 UV 곡선 경로의 보간점이며 인접 native carrier ray의 UV와 같다고 주장하지 않는다. 저장된 완전Close 입력의 홍채/흰자 배정0은 확인했지만, **새 GPU의 Close100 잔상0/재개방/움직임/최종 owner·RGB는 아직 미검증**이다. F103/F111의 새 흰자 배정과 운반 연결도 CPU oracle로만 검사하며 업로드하지 않는다.
 - **컴파일·비용:** `compile_runtime_cpu.py`: 실제 호출될15개 HLSL 커널과 변경 C#을 원래113 의존 소스에 연결하여 CPU 컴파일했다. 새 기하 경로의 forcing-unroll/레지스터 권고 초과 경고는 분리 후0이다. 기존 Enumerate signed 경고, Gather modulus 경고, 의존 C# unused-field3개는 기록했다. BVH stack32 및 기존 Select/Gather의 private 배열은 남는다. `prefix24/compile_hlsl_cpu.py`의 반영 검사만128 bindings까지 읽도록 확장하고 배열 허용은 명시적 runtime 검사에만 사용했다. 4커널 prefix의 기본 배열0 검사는 유지한다.
 - **소유·실행 보류:** 추가 GPU 소유량은 현재 source 기준 view당338,368B(columns/16깊이/가시성/proof)이며 각 Region/SourcePigment 소유·해제 경로에 연결했다. BVH/alpha/사용자 자원은 빌려 쓰며 해제하지 않는다. 모델·메쉬·view 변경은 기존 scope 검사를 유지하고 UV는 매 프레임 확인한다. 원래 baseline/legacy 색 출력 dispatch는 제거했으며 그 디버그 RT는 더 이상 유효 비교 출력이 아니다. 기존 Capture113 observer를 그대로 재생하면 안 된다. 전체 renderer에는 원래32768×2 열거와 기존 visibility/Select 경로가 남아 **GPU 재개 예산 검토가 별도로 필요**하다. 기존 TDR 원인 미확정, 실제 GPU 성능·수명·다중뷰·최종 렌더 및 얼굴 팔레트/외곽선/제품 적용은 미검증으로 유지한다.
+
+#### 재실행 전 실행량 감사·최소 입력 가드 — GPU 미실행
+- `runtime24/audit_execution24.py` / `EXECUTION_BUDGET24.json`: 성공113의12개 저장 입력 모두 shader SHA `046b56a22fb4476fd1f7f0b642eed2a7b36ff623e042a2b1df0907fc4e0d9356`와 원본 파일이 일치했다. 기존 DXBC cache는 resource-signature로 연결했으며 실제 native-driver 실행 바이너리 attestation은 아니다. 후보와 원본의 코드·loop/배열/UAV 비교 및 각 dispatch 상한을 JSON에 기록했다. 이 단계 Unity/import/Play/GPU device/dispatch0이며 현재 Editor 상태도 조회하지 않았다.
+- **원래 결과를 바꾸지 않는 제외:** 현재 합성은 Region.Write113의 Results를 읽으므로 Source/Dense의 Select 출력은 미사용이다. `WholeEye107_Geometry24.cs::Dispatch(...,selectOutput=true)`는 기존 호출의 기본 동작을 보존하고, 후보 Forward.Draw의 두 호출만false로 바꿨다. 필요한 투영/눈 ID 상수는 그대로 설정한다. Select와 사용하지 않는 legacy/control importer entry를 제외하여 후보 active kernel은14개다. Select 함수 텍스트/CPU 비교 컴파일은 남지만 새 모듈의 엔트리와 제출은0이다. 잘못된 호출이 Select를 요청하면 후보 compute 제출 전에 거부한다.
+- **입력·종료 가드:** `DispatchBounds24.cs`는 격자/곱 overflow·삼각형/primitive 인덱스·키/곡선/텍스처 범위·비유한 값을 검사한다. WholeEye 생성자의 검사 위치는 자기 shader clone/버퍼 생성 전, Resize 곱 검사는 기존 자원 해제 전이다. `Forward.Draw`는 후보 compute 명령을 기록하기 전에 세 owner의 격자·입력 RT·행렬·투영 결과를 확인한다. 이는 일반 Scene/URP의 기존 raster 작업까지 중단한다는 뜻이 아니다. 현재 source에서 추가 CPU 투영 검사는 owner3개×20,459=61,377정점이며 CPU 비용도 미계측이다.
+- `prepare_runtime.py::shader`의 Query/TraceExternal24는 node 인덱스가 범위 밖이거나 방문 횟수가 nodeCount를 초과하면 **메모리 읽기 전에** 중단하고 unknown을 출력한다. `ExternalBindings24`가 빌려 쓰는 실제 BVH owner의 nodeCount를 전달한다. 올바른 tree는 각 node를 최대1회 방문하므로 기존 결과를 바꾸지 않는다. 이 가드는 device fault/모든 GPU 생성 metadata를 검증하는 장치가 아니며, unknown을 투명/복구 성공으로 해석하지 않는다.
+
+현재 저장 입력은 정준18×8, dense/carrier144×64, 원본72×32, 물리ROI16×8, 곡선846개·key20개다. 아래는 **Forward.Draw 한 번/view 하나**의 compute 명목 스레드이며 다른 Scene/URP/표시/캡처 작업은 제외한다.
+
+| 커널 | dispatch 수 | 명목 스레드 합 | 한 dispatch 최대 |
+|---|---:|---:|---:|
+| PackPart | 12 | 82,944 | 9,216 |
+| Refit | 48(3 owner×16 level) | 178,368 | 26,368 |
+| Query | 2 | 46,080 | 36,864 |
+| Select | 0 | 0 | 0 |
+| CurveColumns24 / ColumnVisibility24 | 각각1 | 각각64(유효36) | 각각64 |
+| PrepareCells113 / Write113 | 각각1 | 각각192(유효144) | 각각192 |
+| GatherEye113 | 1 | 2 | 2 |
+| BuildSubsets113 | 1 | 16,384 | 16,384 |
+| Enumerate113 | 1 | 4,194,304 | 4,194,304 |
+| Reduce113 | 1 | 128 | 128 |
+| CarrierQueries113 / AssignedVisibility24 | 각각1 | 각각2,048 | 각각2,048 |
+| ComposeRegion113 | 1 | 128 | 128 |
+
+- **반복 상한:** Refit은 node당고정 작업. CurveColumns는 thread당3×846(입력상한3×1024) segment 검사, PrepareCells는64표본×2부위×최대32 key 및64 native안검 검사다. Gather는 eye당16 scope, 각 RawConnected의 코드상512회×최대512셀(실제144셀), valid flood-fill은 셀 수 이내에 정지한다. Build는 valid state당24 point +8×24×24 연결 predicate 상한. Enumerate는 각 lane1상태와6 reduction round이며 초기 barrier까지 **그룹당7개**를 모든 lane이 수행한다. Reduce는 lane당512 group merge+6 round, Write는최대24point. CarrierQueries는표본당16+1 raster depth조회, Compose는16face+16hair다.
+- **BVH와 큰 상한:** 실제 triangles29,542/nodes59,083, balanced depth15/DFS stack16이며 물리stack32와기존 push guard를 유지한다. 일반 입력 cap에서 triangles262,144/nodes524,287/balanced stack19다. 실제 source의 query slot48,164개를 모두 합친 유효 tree 최악 box 읽기는 **2,845,673,612회**, cap envelope는90,731,011,072회다. 수정 가드의 malformed tree는 마지막 검출 iteration1회가 추가될 수 있다. 이 값은 GPU 시간 추정이 아니다. CPU 모형 tree59,083개에서 원래/가드 순회가 같았고 cycle·잘못된 child는 unknown으로 정지했다. 실제 GPU node topology/방문량을 새로 관측한 것은 아니다.
+- **열거·공유 위험:** 저장 입력 최대 np16/ni8/nw12, valid state-range 합 최대1,114,112이나 host는 여전히4,194,304lane을 제출한다. Close100의 empty header에서도 같은 그룹/barrier 제출량이다. 총73dispatch/4,522,946명목thread(원본113은77/4,594,370;80ed는75/4,523,778)다. EvaluateForm115/BoundRun115 경로는 코드/host에 없지만 기존 BVH stack, Gather private배열6개, Write의8UAV, D3D11 driver/동시 Scene GPU작업은 공유한다. aggregate Stats의 uint counter는 일반 cap에서 wrap할 수 있어 시간/안전 gate로 쓰지 않는다. 전체 callback은 이미 기록된 후 GPU 오류가 나타나면 중간 제출을 취소할 수 없다.
+- **CPU 검증:** `BoundsTests24.cs.txt` / `test_bounds_cpu24.py`의18검사 그룹 통과: 실제12격자/29,542삼각형/16,928primitive 인덱스, 최대 격자, overflow/불일치/범위/NaN/Infinity 거부 등. Unity 참조 없는 순수 guard만 실행했다. 변경 C# 연결 컴파일과14 active+Select비교용1개의 CPU HLSL 컴파일 통과. 기존22좌표의 CPU 기하 회귀도 유지되며 실제 GPU 결과는 아니다. 원래4개 배정 함수 본문은 그대로다.
+- **다음 최소 실행안(아직 금지/미실행):** 기존 prefix24의 STAGE1만 별도 판단 후 고려한다. 고정 F103 owner2/header `[9,5,6,0]`, BuildSubsets `(1,2,1)`=128thread/96valid subset, structured591,616B, readback4,096B이며 BVH/Select/Play/전체 runtime은 제외한다. 모든 실제 callback done/error0·CPU byte동일·input/source hash·공개 상태 동일·소유 자원 해제·마지막 COMPLETE marker를 확인하기 전 다음 제출0이다. pending/timeout/error/불명 결과는 재시도·강제 회수하지 않는다. 최초 shader/buffer 생성 자체와 모듈에 있는 다른3커널의 backend 처리는 여전히 위험이며 TDR 원인이 해소됐다는 증거가 아니다. 현재 full runtime 재생은 승인된 GPU 예산으로 보지 않는다. 현 Editor/GPU 상태 preflight와 별도 재개 판단이 필요하다.

@@ -3,15 +3,9 @@
 #pragma kernel AssignedVisibility24
 StructuredBuffer<uint> _OwnSkin113; int _ExposeOwn113; float2 _SocketLimit113;
 RWStructuredBuffer<float4> _QueryEvidence107;
-#pragma kernel ResolveCurve107
-#pragma kernel ApplyCurve106
-#pragma kernel ComposeForward102
-#pragma kernel PackWorld98
 #pragma kernel PackPart
 #pragma kernel Refit
 #pragma kernel Query
-#pragma kernel Select
-#pragma kernel Compose
 #pragma target 5.0
 
 // Owned per-view buffers. No global setters, RGB averaging or readback.
@@ -120,7 +114,7 @@ float2 AlphaBounds96(int material,float2 uv){Mat96 m=_Materials96[material];int 
 [numthreads(64,1,1)]void Query(uint3 thread:SV_DispatchThreadID){int3 id=(int3)thread;int n=_Size96.x*_Size96.y;if(id.x>=n*4)return;int part=(int)((uint)id.x/(uint)n),p=(int)((uint)id.x%(uint)n);float4 meta=Layer96(part,1,p),rgba=Layer96(part,0,p);_Visibility96[id.x]=0;_QueryEvidence107[id.x*2]=0;_QueryEvidence107[id.x*2+1]=0;if(meta.x<=0||rgba.a<=0)return;
  int primitive=(int)round(Layer96(part,3,p).z);int ti=_PartTriangles96[part*_FacePrimitiveStride96+primitive-1];Tri96 source=_Triangles96[ti];int3 vi=source.verticesMaterial.xyz;float3 r=Layer96(part,2,p).xyz,a=_Rest96[vi.x].xyz,b=_Rest96[vi.y].xyz,c=_Rest96[vi.z].xyz;float3 u=b-a,v=c-a,q=r-a;float aa=dot(u,u),ab=dot(u,v),bb=dot(v,v),aq=dot(u,q),bq=dot(v,q),den=aa*bb-ab*ab;float2 bc=float2(bb*aq-ab*bq,aa*bq-ab*aq)/den;float3 bary=float3(1-bc.x-bc.y,bc);float4 world=_World96[vi.x]*bary.x+_World96[vi.y]*bary.y+_World96[vi.z]*bary.z;float4 view=mul(_View96,world),clip=mul(_Projection96,view);float2 queryPoint=float2((clip.x/clip.w*.5+.5)*480,(.5-clip.y/clip.w*.5)*272);float depth=meta.x;int eye=(int)round(meta.z);if(_DirectQueries96!=0){float4 d=_Queries96[id.x];queryPoint=d.xy;depth=d.z;eye=(int)d.w;}
  float2 trans=1;int stack[32],sp=0;stack[sp++]=0;uint visits=0,tests=0;bool overflow=false;
- while(sp>0){int node=stack[--sp];visits++;float3 lo=_Boxes96[node*2].xyz,hi=_Boxes96[node*2+1].xyz;if(any(queryPoint<lo.xy-1e-4)||any(queryPoint>hi.xy+1e-4)||lo.z>=depth-3e-5)continue;int4 nd=_Nodes96[node];if(nd.z<0){if(sp>29){overflow=true;break;}stack[sp++]=nd.x;stack[sp++]=nd.y;continue;}
+ while(sp>0){int node=stack[--sp];visits++;if(_NodeCount96<=0||(uint)node>=(uint)_NodeCount96||visits>(uint)_NodeCount96){overflow=true;break;}float3 lo=_Boxes96[node*2].xyz,hi=_Boxes96[node*2+1].xyz;if(any(queryPoint<lo.xy-1e-4)||any(queryPoint>hi.xy+1e-4)||lo.z>=depth-3e-5)continue;int4 nd=_Nodes96[node];if(nd.z<0){if(sp>29){overflow=true;break;}stack[sp++]=nd.x;stack[sp++]=nd.y;continue;}
   tests++;Tri96 t=_Triangles96[nd.z];if(t.source.x!=1||t.source.y!=3)continue; //102 external occlusion does not alter canonical eye allocation
 float3 s0=Screen96(t.verticesMaterial.x),s1=Screen96(t.verticesMaterial.y),s2=Screen96(t.verticesMaterial.z);float2 e0=s1.xy-s0.xy,e1=s2.xy-s0.xy,d=queryPoint-s0.xy;float determinant=Cross96(e0,e1);if(abs(determinant)<=1e-12)continue;int winding=determinant>0?1:-1;Mat96 m=_Materials96[t.verticesMaterial.w];int cull=(int)m.alphaCullWrap.z;if((cull==2&&winding!=1)||(cull==1&&winding==1))continue;float2 uvb=float2(Cross96(d,e1),Cross96(e0,d))/determinant;float3 weights=float3(1-uvb.x-uvb.y,uvb);if(min(weights.x,min(weights.y,weights.z))< -1e-7)continue;
   float4 cv0=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.x])),cv1=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.y])),cv2=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.z]));if(min(cv0.w,min(cv1.w,cv2.w))<=0)continue;weights/=float3(cv0.w,cv1.w,cv2.w);weights/=weights.x+weights.y+weights.z;float zz=dot(weights,float3(s0.z,s1.z,s2.z));if(zz>=depth-3e-5)continue;
@@ -310,7 +304,6 @@ void Contributions107(int at,out float4 lo,out float4 hi){
 #pragma kernel Enumerate113
 #pragma kernel Reduce113
 #pragma kernel Write113
-#pragma kernel ComposeWhole113
 #pragma kernel ComposeRegion113
 #pragma kernel CarrierQueries113
 #define K113 65536.0
@@ -414,7 +407,7 @@ groupshared Group113 Shared113[64];
 
 float2 TraceExternal24(float2 queryPoint,float depth,int eye){
  float2 trans=1;int stack[32],sp=0;stack[sp++]=0;uint visits=0,tests=0;bool overflow=false;
- while(sp>0){int node=stack[--sp];visits++;float3 lo=_Boxes96[node*2].xyz,hi=_Boxes96[node*2+1].xyz;if(any(queryPoint<lo.xy-1e-4)||any(queryPoint>hi.xy+1e-4)||lo.z>=depth-3e-5)continue;int4 nd=_Nodes96[node];if(nd.z<0){if(sp>29){overflow=true;break;}stack[sp++]=nd.x;stack[sp++]=nd.y;continue;}
+ while(sp>0){int node=stack[--sp];visits++;if(_NodeCount96<=0||(uint)node>=(uint)_NodeCount96||visits>(uint)_NodeCount96){overflow=true;break;}float3 lo=_Boxes96[node*2].xyz,hi=_Boxes96[node*2+1].xyz;if(any(queryPoint<lo.xy-1e-4)||any(queryPoint>hi.xy+1e-4)||lo.z>=depth-3e-5)continue;int4 nd=_Nodes96[node];if(nd.z<0){if(sp>29){overflow=true;break;}stack[sp++]=nd.x;stack[sp++]=nd.y;continue;}
   tests++;Tri96 t=_Triangles96[nd.z];if(t.source.x!=1||t.source.y!=3)continue;                                                                 
 float3 s0=Screen96(t.verticesMaterial.x),s1=Screen96(t.verticesMaterial.y),s2=Screen96(t.verticesMaterial.z);float2 e0=s1.xy-s0.xy,e1=s2.xy-s0.xy,d=queryPoint-s0.xy;float determinant=Cross96(e0,e1);if(abs(determinant)<=1e-12)continue;int winding=determinant>0?1:-1;Mat96 m=_Materials96[t.verticesMaterial.w];int cull=(int)m.alphaCullWrap.z;if((cull==2&&winding!=1)||(cull==1&&winding==1))continue;float2 uvb=float2(Cross96(d,e1),Cross96(e0,d))/determinant;float3 weights=float3(1-uvb.x-uvb.y,uvb);if(min(weights.x,min(weights.y,weights.z))< -1e-7)continue;
   float4 cv0=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.x])),cv1=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.y])),cv2=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.z]));if(min(cv0.w,min(cv1.w,cv2.w))<=0)continue;weights/=float3(cv0.w,cv1.w,cv2.w);weights/=weights.x+weights.y+weights.z;float zz=dot(weights,float3(s0.z,s1.z,s2.z));if(zz>=depth-3e-5)continue;

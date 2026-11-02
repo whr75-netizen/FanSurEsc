@@ -48,7 +48,7 @@ def reflect(dll,code):
     assert dll.D3DReflect(buf,len(code),C.byref(iid),C.byref(out))>=0
     rows=[];constants=[]
     try:
-        for i in range(32):
+        for i in range(128):
             desc=Binding();hr=method(out,6,C.c_long,C.c_uint,C.POINTER(Binding))(out,i,C.byref(desc))
             if hr<0:break
             row={n:int(getattr(desc,n))for n in ['Type','BindPoint','BindCount','Flags','ReturnType','Dimension','NumSamples']};row['Name']=desc.Name.decode();rows.append(row)
@@ -63,7 +63,7 @@ def reflect(dll,code):
     finally:release(out)
     return rows,constants
 
-def token_audit(code):
+def token_audit(code,allow_arrays=False):
     assert code[:4]==b'DXBC';count=struct.unpack_from('<I',code,28)[0]
     for i in range(count):
         at=struct.unpack_from('<I',code,32+i*4)[0]
@@ -76,7 +76,7 @@ def token_audit(code):
             if op==155:threads=list(w[p+1:p+4])
             if op in[158,162]:strides[('u'if op==158 else't')+str(w[p+2])]=w[p+3]
             ops.append(op);p+=n
-        assert threads and not arrays
+        assert threads and (allow_arrays or not arrays)
         return {'instructions':len(ops),'privateArrayDeclarations':arrays,'threads':threads,'structuredStridesBySlot':strides,'loops':ops.count(48)}
     raise AssertionError('No SM5 instruction chunk')
 

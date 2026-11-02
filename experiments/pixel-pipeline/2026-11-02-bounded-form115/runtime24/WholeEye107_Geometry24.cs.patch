@@ -1,0 +1,21 @@
+--- 113/WholeEye107_Geometry24.cs
++++ runtime24/WholeEye107_Geometry24.cs
+@@ -56,6 +56,18 @@
+   k=Shader.FindKernel("Query");Bind("_Triangles96",triangles);Bind("_Materials96",materials);Bind("_World96",World);Bind("_UV96",uv);Bind("_Rest96",rest);Bind("_PartTriangles96",parts);Bind("_Nodes96",nodes);Bind("_Boxes96",boxes);for(int i=0;i<32;i++)cmd.SetComputeTextureParam(Shader,k,"_SourceAlpha96_"+i,i<alphaSources.Length?alphaSources[i]:Texture2D.whiteTexture);Bind("_Layers96",Layers);Bind("_Visibility96",Visibility);Bind("_QueryEvidence107",Evidence107);Bind("_Queries96",Queries);Bind("_Stats96",Stats);cmd.DispatchCompute(Shader,k,(width*height*4+63)/64,1,1);
+   k=Shader.FindKernel("Select");Bind("_Layers96",Layers);Bind("_Visibility96",Visibility);Bind("_CanonicalColour96",Colour);Bind("_CanonicalIdentity96",Identity);Bind("_Decision96",Decisions);Bind("_Witness96",Witness);Bind("_Stats96",Stats);cmd.SetComputeVectorArrayParam(Shader,"_SourceProjectionX96",projectionX);cmd.SetComputeVectorArrayParam(Shader,"_SourceProjectionY96",projectionY);cmd.SetComputeIntParams(Shader,"_SourceEyeIds96",eyeIds);cmd.DispatchCompute(Shader,k,(width/4+7)/8,(height/4+7)/8,1);cmd.EndSample("WholeEye107 BVH visibility and joint selection");Frames++;
+  }
++
++ public void RefitOnly24(CommandBuffer cmd,Matrix4x4 view,Matrix4x4 projection){
++  Check();if(alphaSources==null||alphaSources.Any(t=>!t))throw new InvalidOperationException("Borrowed alpha source lost; explicit reinitialization required");if(Layers==null)throw new InvalidOperationException("Resize before dispatch");cmd.SetBufferData(Stats,zeroStats);cmd.SetComputeIntParams(Shader,"_Size96",width,height);cmd.SetComputeMatrixParam(Shader,"_View96",view);cmd.SetComputeMatrixParam(Shader,"_Projection96",projection);cmd.SetComputeIntParam(Shader,"_NodeCount96",nodeCount);cmd.SetComputeIntParam(Shader,"_FacePrimitiveStride96",PrimitiveStride);cmd.SetComputeIntParam(Shader,"_DirectQueries96",0);cmd.SetComputeIntParam(Shader,"_ColdTie96",0);
++  int k=Shader.FindKernel("Refit");void Bind(string name,GraphicsBuffer b)=>cmd.SetComputeBufferParam(Shader,k,name,b);Bind("_World96",World);Bind("_Triangles96",triangles);Bind("_Nodes96",nodes);Bind("_LevelNodes96",levelNodes);Bind("_Boxes96",boxes);for(int i=levelCounts.Length-1;i>=0;i--){cmd.SetComputeIntParam(Shader,"_LevelOffset96",levelOffsets[i]);cmd.SetComputeIntParam(Shader,"_LevelCount96",levelCounts[i]);cmd.DispatchCompute(Shader,k,(levelCounts[i]+63)/64,1,1);}
++
++ }
++ public void ExternalBindings24(CommandBuffer cmd,ComputeShader cs,int k){
++  Check();if(alphaSources==null||alphaSources.Any(t=>!t))throw new InvalidOperationException("24 borrowed alpha source invalidated");void Bind(string n,GraphicsBuffer b)=>cmd.SetComputeBufferParam(cs,k,n,b);
++  Bind("_Triangles96",triangles);Bind("_Materials96",materials);Bind("_World96",World);Bind("_UV96",uv);Bind("_PartTriangles96",parts);Bind("_Nodes96",nodes);Bind("_Boxes96",boxes);
++  for(int i=0;i<32;i++)cmd.SetComputeTextureParam(cs,k,"_SourceAlpha96_"+i,i<alphaSources.Length?alphaSources[i]:Texture2D.whiteTexture);
++  cmd.SetComputeIntParam(cs,"_FacePrimitiveStride96",PrimitiveStride);
++ }
+  public void SetAlphaSources(Texture2D[] sources){Check();if(sources.Length>32||sources.Any(t=>!t))throw new ArgumentException("Bounded borrowed alpha sources");alphaSources=(Texture2D[])sources.Clone();}
+ 
+  public int PartTriangle107(int part,int primitive)=>cpuParts107[part*PrimitiveStride+primitive-1];

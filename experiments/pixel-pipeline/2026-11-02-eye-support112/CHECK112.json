@@ -1,0 +1,26 @@
+{
+  "passed": 17,
+  "tests": [
+    "VRM unilateral binding matches exactly one complete registered ring",
+    "Source glTF/capture primitive identity, UV and winding match",
+    "All20 existing native iris/white point attachments are present and verified",
+    "Source handedness and Head-bind rest mapping preserved",
+    "Missing source semantics rejected with no nearest-eye fallback",
+    "Bilateral morph cannot impersonate a unilateral lid owner",
+    "UV/source binding mismatch fails before cache adoption",
+    "Morph content change invalidates static source signature",
+    "Palette RGB changes do not change geometric affiliation",
+    "Nearest-eye face tag is not used as semantic ownership",
+    "24 saved current-geometry states checked",
+    "Full Close has no iris/white even though skin ring has area",
+    "Hair ON/OFF leaves intrinsic canonical allocation unchanged",
+    "Minimum white counterexample is solid native skin, not missing alpha",
+    "Unknown skin is never converted to transparent",
+    "Blink-moved skin joins both eyes and cannot be a per-eye lid mask",
+    "Blink also moves eyebrows, not only lids"
+  ],
+  "sourceRestMaxAbsoluteErrorMetres": 7.412504832160494e-09,
+  "runtimeJointAllocationTested": false,
+  "currentUnityStateQueried": false,
+  "noNewUnityCalls": true
+}

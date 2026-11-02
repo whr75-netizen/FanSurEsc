@@ -1,0 +1,3379 @@
+{
+  "summary": {
+    "changedCoordinateCases": 22,
+    "meanVsMinimumRGBDisagreements": 0,
+    "afterTransportRingStatusCounts": {
+      "0": 22
+    },
+    "zeroKnownCases": 0,
+    "zeroKnownOutsideRingDepthRange": 0,
+    "ringPredicateScaleChecks": 1190,
+    "ringPredicateScaleMismatches": 0,
+    "missingCurveChecks": [
+      {
+        "frame": 107,
+        "canonicalXY": [
+          8,
+          5
+        ],
+        "owner": 2,
+        "column": {
+          "midXYZ": [
+            8.025838155226289,
+            5.4652590681720685,
+            13.713727593211058
+          ],
+          "arcLength": 0.051828380700094046,
+          "segments": [
+            418,
+            419,
+            420,
+            421,
+            422
+          ]
+        },
+        "actualMidpointCarrierHits": [
+          {
+            "primitive": 59,
+            "UV": [
+              0.4916256679485648,
+              0.5881384164976067
+            ],
+            "depth": 13.713725702091683,
+            "depthMinusCurveMean": -1.891119374874961e-06,
+            "alphaBounds": [
+              0.16470588235294117,
+              0.6352941176470588
+            ],
+            "sourcePhysicalXY": [
+              218.2283804348521,
+              53.5070097628836
+            ],
+            "sourceVisibility": [
+              1.0,
+              1.0
+            ],
+            "destinationPhysicalXY": [
+              219.46202589936692,
+              53.88602399126777
+            ],
+            "sourceDestinationDistancePixels": 1.2905552748470737,
+            "destinationVisibilityAtCurveDepth": [
+              1.0,
+              1.0
+            ]
+          }
+        ],
+        "positiveSourceAndVisibleDestination": true,
+        "linearMeanDepthIsNotAutomaticallyMeasuredCarrier": true
+      }
+    ],
+    "GPUOrUnityOrCompilerInvocations": 0,
+    "runtimeApplied": false,
+    "scope": "22 saved changed-coordinate CPU counterfactuals, not a full render or driver safety validation; depth extension is an explicit style policy, not extra measured geometry."
+  },
+  "ringMeasurements": [
+    {
+      "frame": 99,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame99",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.03979121676490281,
+          "depthRange": [
+            13.70535115727185,
+            13.730729551311484
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.039791118811809634,
+          "depthRange": [
+            13.702399031370717,
+            13.726167250362863
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 101,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame101",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.03925809599660879,
+          "depthRange": [
+            13.709361498765197,
+            13.73070148487026
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.039257872117638315,
+          "depthRange": [
+            13.706655098066605,
+            13.726150024702477
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 103,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.038725720115405045,
+          "depthRange": [
+            13.71337096729517,
+            13.73076932822
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.03872577322206073,
+          "depthRange": [
+            13.710612606250933,
+            13.726131842266028
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 105,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame105",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.038196852519272406,
+          "depthRange": [
+            13.716500787708888,
+            13.73131315763932
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.03819658832926421,
+          "depthRange": [
+            13.714286877087787,
+            13.726456873758082
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 107,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame107",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.037670239920901474,
+          "depthRange": [
+            13.71713977854801,
+            13.732476443712706
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.03767004079463529,
+          "depthRange": [
+            13.714905146087723,
+            13.727625113307852
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 109,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame109",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.038196852519272406,
+          "depthRange": [
+            13.716500787708888,
+            13.73131315763932
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.03819658832926421,
+          "depthRange": [
+            13.714286877087787,
+            13.726456873758082
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 111,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame111",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.038725720115405045,
+          "depthRange": [
+            13.71337096729517,
+            13.73076932822
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.03872577322206073,
+          "depthRange": [
+            13.710612606250933,
+            13.726131842266028
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 113,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame113",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.03925809599660879,
+          "depthRange": [
+            13.709361498765197,
+            13.73070148487026
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.039257872117638315,
+          "depthRange": [
+            13.706655098066605,
+            13.726150024702477
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 115,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame115",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.03979121676490281,
+          "depthRange": [
+            13.70535115727185,
+            13.730729551311484
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.039791118811809634,
+          "depthRange": [
+            13.702399031370717,
+            13.726167250362863
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 122,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame122",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.03819676341051134,
+          "depthRange": [
+            13.717638965067508,
+            13.731829619795441
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.038196978509044605,
+          "depthRange": [
+            13.71556790555639,
+            13.727274211322971
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 125,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame125",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.038196756350428615,
+          "depthRange": [
+            13.717640812811489,
+            13.731831527144074
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.0381969821184034,
+          "depthRange": [
+            13.715569753300372,
+            13.727276059066952
+          ],
+          "vertices": 24
+        }
+      }
+    },
+    {
+      "frame": 128,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame128",
+      "eyes": {
+        "1": {
+          "diameterWorld": 0.03819676341051134,
+          "depthRange": [
+            13.717638965067508,
+            13.731829619795441
+          ],
+          "vertices": 24
+        },
+        "2": {
+          "diameterWorld": 0.038196978509044605,
+          "depthRange": [
+            13.71556790555639,
+            13.727274211322971
+          ],
+          "vertices": 24
+        }
+      }
+    }
+  ],
+  "rows": [
+    {
+      "frame": 101,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame101",
+      "mainXY": [
+        222,
+        221
+      ],
+      "category": "face_occlusion_under_explicit_12mm_policy",
+      "owner": 1,
+      "part": 4,
+      "known16": 16,
+      "zCell": 13.721840858459473,
+      "ringDepthRange": [
+        13.709361498765197,
+        13.73070148487026
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.706558227539062,
+        "linearRGBA": [
+          0.9921875,
+          0.9296875,
+          0.79296875,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": -117,
+          "role": 4,
+          "owner": 1.0,
+          "depth": 13.706558227539062,
+          "linearRGBA": [
+            0.9921875,
+            0.9296875,
+            0.79296875,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": false
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 5,
+          "owner": 1,
+          "depth": 13.71346473701397,
+          "linearRGBA": [
+            0.8069522380828857,
+            0.7083757519721985,
+            0.7011018991470337,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": -117,
+          "role": 4,
+          "owner": 1.0,
+          "depth": 13.706558227539062,
+          "linearRGBA": [
+            0.9921875,
+            0.9296875,
+            0.79296875,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": false
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 5,
+          "owner": 1,
+          "depth": 13.71346473701397,
+          "linearRGBA": [
+            0.8069522380828857,
+            0.7083757519721985,
+            0.7011018991470337,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            6.0,
+            6.0
+          ],
+          "externalOpaqueHits": 10
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            6.0,
+            6.0
+          ],
+          "externalOpaqueHits": 10
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 101,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame101",
+      "mainXY": [
+        222,
+        222
+      ],
+      "category": "carrier_shortage_plus_one_real_face_hit",
+      "owner": 1,
+      "part": 6,
+      "known16": 8,
+      "zCell": 13.705072402954102,
+      "ringDepthRange": [
+        13.709361498765197,
+        13.73070148487026
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.693146705627441,
+        "linearRGBA": [
+          0.98046875,
+          0.86328125,
+          0.7227393388748169,
+          1.0
+        ],
+        "hairInterval": [
+          5.0,
+          5.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.698661581466986,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            5.0,
+            5.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.698661581466986,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            5.0,
+            5.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.698661581466986,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            5.0,
+            5.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.698661581466986,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            5.0,
+            5.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            10.0,
+            10.0
+          ],
+          "externalOpaqueHits": 6
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            12.0,
+            12.0
+          ],
+          "externalOpaqueHits": 4
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            12.0,
+            12.0
+          ],
+          "externalOpaqueHits": 4
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            12.0,
+            12.0
+          ],
+          "externalOpaqueHits": 4
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 101,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame101",
+      "mainXY": [
+        225,
+        223
+      ],
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "owner": 1,
+      "part": 6,
+      "known16": 9,
+      "zCell": 13.719245910644531,
+      "ringDepthRange": [
+        13.709361498765197,
+        13.73070148487026
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -113,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.702592849731445,
+        "linearRGBA": [
+          0.961029052734375,
+          0.7631641626358032,
+          0.601654052734375,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          14.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 12,
+          "owner": 0.0,
+          "depth": 13.664361000061035,
+          "linearRGBA": [
+            0.019346091896295547,
+            0.014232181012630463,
+            0.0284974817186594,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 12,
+          "owner": 0.0,
+          "depth": 13.664361000061035,
+          "linearRGBA": [
+            0.019346091896295547,
+            0.014232181012630463,
+            0.0284974817186594,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 12,
+          "owner": 0.0,
+          "depth": 13.664361000061035,
+          "linearRGBA": [
+            0.019346091896295547,
+            0.014232181012630463,
+            0.0284974817186594,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 12,
+          "owner": 0.0,
+          "depth": 13.664361000061035,
+          "linearRGBA": [
+            0.019346091896295547,
+            0.014232181012630463,
+            0.0284974817186594,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            13.0,
+            13.0
+          ],
+          "externalOpaqueHits": 3
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 103,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+      "mainXY": [
+        226,
+        222
+      ],
+      "category": "foreground_hair_source_reselection",
+      "owner": 1,
+      "part": 6,
+      "known16": 15,
+      "zCell": 13.727710723876953,
+      "ringDepthRange": [
+        13.71337096729517,
+        13.73076932822
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": 0,
+        "role": 13,
+        "owner": 0.0,
+        "depth": 13.698997497558594,
+        "linearRGBA": [
+          0.011565541848540306,
+          0.007273995783179998,
+          0.013973689638078213,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.011565541848540306,
+            0.007273995783179998,
+            0.013973689638078213,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.011565541848540306,
+            0.007273995783179998,
+            0.013973689638078213,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.011565541848540306,
+            0.007273995783179998,
+            0.013973689638078213,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.011565541848540306,
+            0.007273995783179998,
+            0.013973689638078213,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 105,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame105",
+      "mainXY": [
+        222,
+        221
+      ],
+      "category": "carrier_support_below_majority",
+      "owner": 1,
+      "part": 6,
+      "known16": 7,
+      "zCell": 13.71377182006836,
+      "ringDepthRange": [
+        13.716500787708888,
+        13.73131315763932
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.705322265625,
+        "linearRGBA": [
+          0.9921875,
+          0.89453125,
+          0.7575273513793945,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.705028651409336,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.705028651409336,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.705028651409336,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.705028651409336,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            14.0,
+            14.0
+          ],
+          "externalOpaqueHits": 2
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            14.0,
+            14.0
+          ],
+          "externalOpaqueHits": 2
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            14.0,
+            14.0
+          ],
+          "externalOpaqueHits": 2
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            14.0,
+            14.0
+          ],
+          "externalOpaqueHits": 2
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 105,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame105",
+      "mainXY": [
+        225,
+        222
+      ],
+      "category": "carrier_support_below_majority",
+      "owner": 1,
+      "part": 6,
+      "known16": 7,
+      "zCell": 13.721222877502441,
+      "ringDepthRange": [
+        13.716500787708888,
+        13.73131315763932
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.714418411254883,
+        "linearRGBA": [
+          0.965667724609375,
+          0.809417724609375,
+          0.6509838104248047,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          3.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.711364373217794,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            3.0,
+            3.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.711364373217794,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            3.0,
+            3.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.711364373217794,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            3.0,
+            3.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.711364373217794,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            3.0,
+            3.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 105,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame105",
+      "mainXY": [
+        226,
+        222
+      ],
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "owner": 1,
+      "part": 6,
+      "known16": 10,
+      "zCell": 13.726707458496094,
+      "ringDepthRange": [
+        13.716500787708888,
+        13.73131315763932
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -113,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.728474617004395,
+        "linearRGBA": [
+          0.969228982925415,
+          0.805084228515625,
+          0.6623077392578125,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.011541447602212429,
+            0.007258841302245855,
+            0.013944577425718307,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.011541447602212429,
+            0.007258841302245855,
+            0.013944577425718307,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.011541447602212429,
+            0.007258841302245855,
+            0.013944577425718307,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.011541447602212429,
+            0.007258841302245855,
+            0.013944577425718307,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 109,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame109",
+      "mainXY": [
+        222,
+        221
+      ],
+      "category": "carrier_support_below_majority",
+      "owner": 1,
+      "part": 6,
+      "known16": 7,
+      "zCell": 13.71377182006836,
+      "ringDepthRange": [
+        13.716500787708888,
+        13.73131315763932
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.705322265625,
+        "linearRGBA": [
+          0.9921875,
+          0.89453125,
+          0.7575273513793945,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.705028651409336,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.705028651409336,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.705028651409336,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.705028651409336,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            14.0,
+            14.0
+          ],
+          "externalOpaqueHits": 2
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            14.0,
+            14.0
+          ],
+          "externalOpaqueHits": 2
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            14.0,
+            14.0
+          ],
+          "externalOpaqueHits": 2
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            14.0,
+            14.0
+          ],
+          "externalOpaqueHits": 2
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 109,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame109",
+      "mainXY": [
+        225,
+        222
+      ],
+      "category": "carrier_support_below_majority",
+      "owner": 1,
+      "part": 6,
+      "known16": 7,
+      "zCell": 13.721222877502441,
+      "ringDepthRange": [
+        13.716500787708888,
+        13.73131315763932
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.714418411254883,
+        "linearRGBA": [
+          0.965667724609375,
+          0.809417724609375,
+          0.6509838104248047,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          3.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.711364373217794,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            3.0,
+            3.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.711364373217794,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            3.0,
+            3.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.711364373217794,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            3.0,
+            3.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.711364373217794,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            3.0,
+            3.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 109,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame109",
+      "mainXY": [
+        226,
+        222
+      ],
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "owner": 1,
+      "part": 6,
+      "known16": 10,
+      "zCell": 13.726707458496094,
+      "ringDepthRange": [
+        13.716500787708888,
+        13.73131315763932
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -113,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.728474617004395,
+        "linearRGBA": [
+          0.969228982925415,
+          0.805084228515625,
+          0.6623077392578125,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.01151795033365488,
+            0.007244063075631857,
+            0.013916187919676304,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.01151795033365488,
+            0.007244063075631857,
+            0.013916187919676304,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.01151795033365488,
+            0.007244063075631857,
+            0.013916187919676304,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.01151795033365488,
+            0.007244063075631857,
+            0.013916187919676304,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 111,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame111",
+      "mainXY": [
+        226,
+        222
+      ],
+      "category": "foreground_hair_source_reselection",
+      "owner": 1,
+      "part": 6,
+      "known16": 15,
+      "zCell": 13.727710723876953,
+      "ringDepthRange": [
+        13.71337096729517,
+        13.73076932822
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": 0,
+        "role": 13,
+        "owner": 0.0,
+        "depth": 13.698997497558594,
+        "linearRGBA": [
+          0.01149506215006113,
+          0.007229668088257313,
+          0.013888533227145672,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.01149506215006113,
+            0.007229668088257313,
+            0.013888533227145672,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.01149506215006113,
+            0.007229668088257313,
+            0.013888533227145672,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.01149506215006113,
+            0.007229668088257313,
+            0.013888533227145672,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 13,
+          "owner": 0.0,
+          "depth": 13.698997497558594,
+          "linearRGBA": [
+            0.01149506215006113,
+            0.007229668088257313,
+            0.013888533227145672,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 113,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame113",
+      "mainXY": [
+        222,
+        221
+      ],
+      "category": "face_occlusion_under_explicit_12mm_policy",
+      "owner": 1,
+      "part": 4,
+      "known16": 16,
+      "zCell": 13.721840858459473,
+      "ringDepthRange": [
+        13.709361498765197,
+        13.73070148487026
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.706558227539062,
+        "linearRGBA": [
+          0.9921875,
+          0.9296875,
+          0.79296875,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": -117,
+          "role": 4,
+          "owner": 1.0,
+          "depth": 13.706558227539062,
+          "linearRGBA": [
+            0.9921875,
+            0.9296875,
+            0.79296875,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": false
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 5,
+          "owner": 1,
+          "depth": 13.71346473701397,
+          "linearRGBA": [
+            0.8069522380828857,
+            0.7083757519721985,
+            0.7011018991470337,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": -117,
+          "role": 4,
+          "owner": 1.0,
+          "depth": 13.706558227539062,
+          "linearRGBA": [
+            0.9921875,
+            0.9296875,
+            0.79296875,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": false
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 5,
+          "owner": 1,
+          "depth": 13.71346473701397,
+          "linearRGBA": [
+            0.8069522380828857,
+            0.7083757519721985,
+            0.7011018991470337,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            6.0,
+            6.0
+          ],
+          "externalOpaqueHits": 10
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            6.0,
+            6.0
+          ],
+          "externalOpaqueHits": 10
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 113,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame113",
+      "mainXY": [
+        222,
+        222
+      ],
+      "category": "carrier_shortage_plus_one_real_face_hit",
+      "owner": 1,
+      "part": 6,
+      "known16": 8,
+      "zCell": 13.705072402954102,
+      "ringDepthRange": [
+        13.709361498765197,
+        13.73070148487026
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.693146705627441,
+        "linearRGBA": [
+          0.98046875,
+          0.86328125,
+          0.7227393388748169,
+          1.0
+        ],
+        "hairInterval": [
+          5.0,
+          5.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.698661581466986,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            5.0,
+            5.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.698661581466986,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            5.0,
+            5.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.698661581466986,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            5.0,
+            5.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.698661581466986,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            5.0,
+            5.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            10.0,
+            10.0
+          ],
+          "externalOpaqueHits": 6
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            12.0,
+            12.0
+          ],
+          "externalOpaqueHits": 4
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            12.0,
+            12.0
+          ],
+          "externalOpaqueHits": 4
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            12.0,
+            12.0
+          ],
+          "externalOpaqueHits": 4
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 113,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame113",
+      "mainXY": [
+        225,
+        223
+      ],
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "owner": 1,
+      "part": 6,
+      "known16": 9,
+      "zCell": 13.719245910644531,
+      "ringDepthRange": [
+        13.709361498765197,
+        13.73070148487026
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -113,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.702592849731445,
+        "linearRGBA": [
+          0.961029052734375,
+          0.7631641626358032,
+          0.601654052734375,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          14.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 12,
+          "owner": 0.0,
+          "depth": 13.664361000061035,
+          "linearRGBA": [
+            0.01915009506046772,
+            0.014087995514273643,
+            0.0282087754458189,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 12,
+          "owner": 0.0,
+          "depth": 13.664361000061035,
+          "linearRGBA": [
+            0.01915009506046772,
+            0.014087995514273643,
+            0.0282087754458189,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 12,
+          "owner": 0.0,
+          "depth": 13.664361000061035,
+          "linearRGBA": [
+            0.01915009506046772,
+            0.014087995514273643,
+            0.0282087754458189,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 12,
+          "owner": 0.0,
+          "depth": 13.664361000061035,
+          "linearRGBA": [
+            0.01915009506046772,
+            0.014087995514273643,
+            0.0282087754458189,
+            1.0
+          ],
+          "hairInterval": [
+            10.0,
+            10.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            13.0,
+            13.0
+          ],
+          "externalOpaqueHits": 3
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 122,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame122",
+      "mainXY": [
+        214,
+        218
+      ],
+      "category": "definite_hair_at_matched_destination",
+      "owner": 2,
+      "part": 4,
+      "known16": 12,
+      "zCell": 13.733850479125977,
+      "ringDepthRange": [
+        13.71556790555639,
+        13.727274211322971
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": 0,
+        "role": 14,
+        "owner": 0.0,
+        "depth": 13.721304893493652,
+        "linearRGBA": [
+          0.018696891143918037,
+          0.012294131331145763,
+          0.025773867964744568,
+          1.0
+        ],
+        "hairInterval": [
+          8.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.721304893493652,
+          "linearRGBA": [
+            0.018696891143918037,
+            0.012294131331145763,
+            0.025773867964744568,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.721304893493652,
+          "linearRGBA": [
+            0.018696891143918037,
+            0.012294131331145763,
+            0.025773867964744568,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.721304893493652,
+          "linearRGBA": [
+            0.018696891143918037,
+            0.012294131331145763,
+            0.025773867964744568,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.721304893493652,
+          "linearRGBA": [
+            0.018696891143918037,
+            0.012294131331145763,
+            0.025773867964744568,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 122,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame122",
+      "mainXY": [
+        214,
+        219
+      ],
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "owner": 2,
+      "part": 6,
+      "known16": 8,
+      "zCell": 13.716029167175293,
+      "ringDepthRange": [
+        13.71556790555639,
+        13.727274211322971
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -113,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.734413146972656,
+        "linearRGBA": [
+          0.9921875,
+          0.8945784568786621,
+          0.7772216796875,
+          1.0
+        ],
+        "hairInterval": [
+          6.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.71308708190918,
+          "linearRGBA": [
+            0.01168555486947298,
+            0.007634712383151054,
+            0.01600569114089012,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.71308708190918,
+          "linearRGBA": [
+            0.01168555486947298,
+            0.007634712383151054,
+            0.01600569114089012,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.71308708190918,
+          "linearRGBA": [
+            0.01168555486947298,
+            0.007634712383151054,
+            0.01600569114089012,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.71308708190918,
+          "linearRGBA": [
+            0.01168555486947298,
+            0.007634712383151054,
+            0.01600569114089012,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 122,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame122",
+      "mainXY": [
+        224,
+        219
+      ],
+      "category": "lid_recovered_at_matched_destination",
+      "owner": 1,
+      "part": 6,
+      "known16": 8,
+      "zCell": 13.719682693481445,
+      "ringDepthRange": [
+        13.717638965067508,
+        13.731829619795441
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.71327463686447,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.71327463686447,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.71327463686447,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.71327463686447,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.71327463686447,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 125,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame125",
+      "mainXY": [
+        214,
+        219
+      ],
+      "category": "lid_recovered_at_matched_destination",
+      "owner": 2,
+      "part": 6,
+      "known16": 8,
+      "zCell": 13.716032028198242,
+      "ringDepthRange": [
+        13.715569753300372,
+        13.727276059066952
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": 0,
+        "role": 7,
+        "owner": 2,
+        "depth": 13.714411533705468,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 2,
+          "depth": 13.714411533705468,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 2,
+          "depth": 13.714411533705468,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 2,
+          "depth": 13.714411533705468,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 2,
+          "depth": 13.714411533705468,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 125,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame125",
+      "mainXY": [
+        224,
+        219
+      ],
+      "category": "lid_recovered_at_matched_destination",
+      "owner": 1,
+      "part": 6,
+      "known16": 8,
+      "zCell": 13.719684600830078,
+      "ringDepthRange": [
+        13.717640812811489,
+        13.731831527144074
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.713275991231626,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.713275991231626,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.713275991231626,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.713275991231626,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.713275991231626,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 128,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame128",
+      "mainXY": [
+        214,
+        218
+      ],
+      "category": "definite_hair_at_matched_destination",
+      "owner": 2,
+      "part": 4,
+      "known16": 12,
+      "zCell": 13.733850479125977,
+      "ringDepthRange": [
+        13.71556790555639,
+        13.727274211322971
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": 0,
+        "role": 14,
+        "owner": 0.0,
+        "depth": 13.721304893493652,
+        "linearRGBA": [
+          0.018668893724679947,
+          0.012275723740458488,
+          0.0257352776825428,
+          1.0
+        ],
+        "hairInterval": [
+          8.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.721304893493652,
+          "linearRGBA": [
+            0.018668893724679947,
+            0.012275723740458488,
+            0.0257352776825428,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.721304893493652,
+          "linearRGBA": [
+            0.018668893724679947,
+            0.012275723740458488,
+            0.0257352776825428,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.721304893493652,
+          "linearRGBA": [
+            0.018668893724679947,
+            0.012275723740458488,
+            0.0257352776825428,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.721304893493652,
+          "linearRGBA": [
+            0.018668893724679947,
+            0.012275723740458488,
+            0.0257352776825428,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 128,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame128",
+      "mainXY": [
+        214,
+        219
+      ],
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "owner": 2,
+      "part": 6,
+      "known16": 8,
+      "zCell": 13.716029167175293,
+      "ringDepthRange": [
+        13.71556790555639,
+        13.727274211322971
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": -113,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.734413146972656,
+        "linearRGBA": [
+          0.9921875,
+          0.8945784568786621,
+          0.7772216796875,
+          1.0
+        ],
+        "hairInterval": [
+          6.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.71308708190918,
+          "linearRGBA": [
+            0.011668059043586254,
+            0.007623280864208937,
+            0.015981726348400116,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.71308708190918,
+          "linearRGBA": [
+            0.011668059043586254,
+            0.007623280864208937,
+            0.015981726348400116,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.71308708190918,
+          "linearRGBA": [
+            0.011668059043586254,
+            0.007623280864208937,
+            0.015981726348400116,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 14,
+          "owner": 0.0,
+          "depth": 13.71308708190918,
+          "linearRGBA": [
+            0.011668059043586254,
+            0.007623280864208937,
+            0.015981726348400116,
+            1.0
+          ],
+          "hairInterval": [
+            12.0,
+            12.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    },
+    {
+      "frame": 128,
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame128",
+      "mainXY": [
+        224,
+        219
+      ],
+      "category": "lid_recovered_at_matched_destination",
+      "owner": 1,
+      "part": 6,
+      "known16": 8,
+      "zCell": 13.719682693481445,
+      "ringDepthRange": [
+        13.717638965067508,
+        13.731829619795441
+      ],
+      "zeroKnownFallbackWithinRingDepthRange": null,
+      "baselinePaired": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.71327463686447,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "outputs": {
+        "mean+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.71327463686447,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "mean+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.71327463686447,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+12mm": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.71327463686447,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        },
+        "minimum+ring": {
+          "status": 0,
+          "role": 7,
+          "owner": 1,
+          "depth": 13.71327463686447,
+          "linearRGBA": [
+            0.2015562504529953,
+            0.12477181851863861,
+            0.09305896610021591,
+            1.0
+          ],
+          "hairInterval": [
+            0.0,
+            0.0
+          ],
+          "eyeChosenBeforeHair": true
+        }
+      },
+      "visibility": {
+        "mean+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "mean+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+12mm": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        },
+        "minimum+ring": {
+          "faceInterval16": [
+            16.0,
+            16.0
+          ],
+          "externalOpaqueHits": 0
+        }
+      },
+      "meanVsMinimumFinalRGBDiffers": false,
+      "existingKnownDepthsRetained": true,
+      "missingDepthIsPolicyTransportNotMeasuredSurface": true
+    }
+  ]
+}

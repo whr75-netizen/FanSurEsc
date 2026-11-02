@@ -1,0 +1,85 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+ [Serializable] sealed class PrefixImportGlobal24 {public string Name,Type;}
+ [Serializable] sealed class PrefixImportCase24 {public PrefixImportGlobal24[] Globals;}
+ [Serializable] sealed class PrefixExpected24 {public string Project,Version,Graphics,InputId,InputJson;public bool Playing,Transition,Compiling,Updating,Paused,Background,PlayerBackground,OptionsEnabled;public int Options;public string[] Scenes,Devices,Dirty;}
+ [Serializable] sealed class PrefixImportState24 {public string InputId,InputJson,Pipeline,QualityPipeline;public bool Playing,Transition,Compiling,Updating,Paused,Background,PlayerBackground,OptionsEnabled;public int Options;public float TimeScale,CaptureDelta;public string[] Scenes,Devices,Dirty,Native,Globals;}
+ [Serializable] sealed class PrefixImportReceipt24 {public string Utc,Status,FolderGuid,ShaderGuid,SourceSha256,MetaSha256,BeforeSha256,AfterSha256,Error;public bool StateEqual;public string[] Kernels,Messages,NewErrors;public int Dispatches;}
+ internal class CommandScript : IRunCommand {
+  const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\bounded-form115\prefix24";
+  const string Output=Root+@"\import-stage1";
+  const string Folder="Assets/EUnityValidation01/Direct24Prefix";
+  const string Asset=Folder+"/Prefix24.compute";
+  const string Guid24="a86ba181213712cd5cb5d48972d38e82";
+  const string ShaderSha="a85bb725503d39e3c7fdd3a354bea2ea31382401f7deaae10fc254fdabe98d0d";
+  static string Id(UnityEngine.Object o)=>o?o.GetEntityId().ToString():"null";
+  static string Hash(byte[] b){using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(b)).Replace("-","").ToLowerInvariant();}
+  static void New(string name,byte[] bytes){using(var f=new FileStream(Path.Combine(Output,name),FileMode.CreateNew,FileAccess.Write,FileShare.Read)){f.Write(bytes,0,bytes.Length);f.Flush(true);}}
+  static byte[] Json(object o)=>Encoding.UTF8.GetBytes(JsonUtility.ToJson(o,true));
+  static string Number(float x)=>x.ToString("R",System.Globalization.CultureInfo.InvariantCulture);
+  static PrefixImportState24 State(PrefixImportCase24 c,string phase){
+   var input=InputSystem.settings;if(!input)throw new InvalidOperationException("InputSettings absent; never replace");
+   var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)).ToArray();
+   var dirty=all.Where(o=>EditorUtility.IsDirty(o)).Select(o=>AssetDatabase.GetAssetPath(o)+"|"+o.GetType().FullName+"|"+Id(o)).Where(s=>s.StartsWith("Assets/",StringComparison.Ordinal)||s.StartsWith("ProjectSettings/",StringComparison.Ordinal)).OrderBy(s=>s,StringComparer.Ordinal).ToArray();
+   var native=new List<string>();int n=0;
+   foreach(var o in all.Where(o=>EditorUtility.IsDirty(o)||AssetDatabase.GetAssetPath(o).StartsWith("ProjectSettings/",StringComparison.Ordinal)).OrderBy(o=>AssetDatabase.GetAssetPath(o)+"|"+o.GetType().FullName+"|"+Id(o),StringComparer.Ordinal)){
+    var path=AssetDatabase.GetAssetPath(o);if(!path.StartsWith("Assets/",StringComparison.Ordinal)&&!path.StartsWith("ProjectSettings/",StringComparison.Ordinal))continue;
+    byte[] bytes=Encoding.UTF8.GetBytes(EditorJsonUtility.ToJson(o));if(bytes.Length>16*1024*1024)throw new IOException("Native snapshot exceeds budget");
+    New(phase+"-native-"+(n++).ToString("D2")+".json",bytes);native.Add(path+"|"+o.GetType().FullName+"|"+Id(o)+"|"+EditorUtility.IsDirty(o)+"|"+Hash(bytes));
+   }
+   var globals=new List<string>();foreach(var g in c.Globals){string value;
+    switch(g.Type){case "Float":value=Number(Shader.GetGlobalFloat(g.Name));break;case "Int":value=Shader.GetGlobalInt(g.Name).ToString();break;case "Texture":value=Id(Shader.GetGlobalTexture(g.Name));break;
+     case "Vector":var v=Shader.GetGlobalVector(g.Name);value=String.Join(",",new[]{Number(v.x),Number(v.y),Number(v.z),Number(v.w)});break;
+     case "Matrix":var m=Shader.GetGlobalMatrix(g.Name);value=String.Join(",",Enumerable.Range(0,16).Select(i=>Number(m[i])));break;default:value="UNQUERIED_NO_WRITES:"+g.Type;break;}globals.Add(g.Name+"="+value);
+   }
+   return new PrefixImportState24{Playing=EditorApplication.isPlaying,Transition=EditorApplication.isPlayingOrWillChangePlaymode,Compiling=EditorApplication.isCompiling,Updating=EditorApplication.isUpdating,Paused=EditorApplication.isPaused,
+    Background=Application.runInBackground,PlayerBackground=PlayerSettings.runInBackground,OptionsEnabled=EditorSettings.enterPlayModeOptionsEnabled,Options=(int)EditorSettings.enterPlayModeOptions,
+    InputId=Id(input),InputJson=JsonUtility.ToJson(input),Pipeline=Id(GraphicsSettings.defaultRenderPipeline),QualityPipeline=Id(QualitySettings.renderPipeline),TimeScale=Time.timeScale,CaptureDelta=Time.captureDeltaTime,
+    Scenes=Enumerable.Range(0,SceneManager.sceneCount).Select(i=>{var s=SceneManager.GetSceneAt(i);return s.path+"|"+s.isDirty+"|"+(s==SceneManager.GetActiveScene());}).ToArray(),Devices=InputSystem.devices.Select(d=>d.deviceId+"|"+d.layout+"|"+d.enabled).ToArray(),Dirty=dirty,Native=native.ToArray(),Globals=globals.ToArray()};
+  }
+  static void Stable(){if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required; no mode change");}
+  public void Execute(ExecutionResult result){
+   var receipt=new PrefixImportReceipt24{Utc=DateTime.UtcNow.ToString("O"),Status="failed",Dispatches=0};byte[] before=null;var errors=new List<string>();
+   Application.LogCallback observe=(message,stack,type)=>{if(type==LogType.Error||type==LogType.Exception||type==LogType.Assert)errors.Add(type+": "+message);};
+   PrefixImportCase24 c=null;
+   try{
+    Stable();if(Directory.GetParent(Application.dataPath).FullName!=@"C:\Users\15352\Documents\work\Fantasy Survival Escape Game"||SystemInfo.graphicsDeviceType!=GraphicsDeviceType.Direct3D11)throw new InvalidOperationException("Confirmed project/device changed");
+    if(File.Exists(Path.Combine(Output,"IMPORT_COMPLETE24.json"))||File.Exists(Path.Combine(Output,"IMPORT_INTENT24.json")))throw new IOException("Existing import outcome; inspect, no repeat");
+    var expected=JsonUtility.FromJson<PrefixExpected24>(File.ReadAllText(Path.Combine(Root,@"preflight24\EDITOR_STATE24.json")));
+    c=JsonUtility.FromJson<PrefixImportCase24>(File.ReadAllText(Path.Combine(Root,"CASE.json")));
+    var state=State(c,"before");before=Json(state);New("IMPORT_BEFORE24.json",before);
+    if(state.Playing!=expected.Playing||state.Transition!=expected.Transition||state.Compiling!=expected.Compiling||state.Updating!=expected.Updating||state.Paused!=expected.Paused||state.Background!=expected.Background||state.PlayerBackground!=expected.PlayerBackground||state.OptionsEnabled!=expected.OptionsEnabled||state.Options!=expected.Options||state.InputId!=expected.InputId||state.InputJson!=expected.InputJson||!state.Dirty.SequenceEqual(expected.Dirty)||!state.Scenes.SequenceEqual(expected.Scenes)||!state.Devices.SequenceEqual(expected.Devices))throw new InvalidOperationException("Current state differs from current-session preflight");
+    var project=Directory.GetParent(Application.dataPath).FullName;var dest=Path.Combine(project,Asset);var folderPath=Path.Combine(project,Folder);
+    if(Directory.Exists(folderPath)||File.Exists(folderPath+".meta")||File.Exists(dest)||File.Exists(dest+".meta")||AssetDatabase.IsValidFolder(Folder)||!String.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(Guid24)))throw new IOException("Asset/folder/GUID conflict; no overwrite");
+    if(!AssetDatabase.IsValidFolder("Assets/EUnityValidation01"))throw new IOException("Existing parent folder is not registered");
+    byte[] source=File.ReadAllBytes(Path.Combine(Root,"Prefix24.compute")),meta=File.ReadAllBytes(Path.Combine(Root,"Prefix24.compute.meta"));
+    if(Hash(source)!=ShaderSha||!Encoding.UTF8.GetString(meta).Contains("guid: "+Guid24))throw new IOException("Exact prepared source/meta mismatch");
+    receipt.SourceSha256=Hash(source);receipt.MetaSha256=Hash(meta);
+    New("IMPORT_INTENT24.json",Json(receipt));Application.logMessageReceived+=observe;
+    receipt.FolderGuid=AssetDatabase.CreateFolder("Assets/EUnityValidation01","Direct24Prefix");if(String.IsNullOrEmpty(receipt.FolderGuid)||!AssetDatabase.IsValidFolder(Folder))throw new IOException("Isolated folder creation did not finish");
+    using(var f=new FileStream(dest,FileMode.CreateNew,FileAccess.Write,FileShare.Read)){f.Write(source,0,source.Length);f.Flush(true);}
+    using(var f=new FileStream(dest+".meta",FileMode.CreateNew,FileAccess.Write,FileShare.Read)){f.Write(meta,0,meta.Length);f.Flush(true);}
+    AssetDatabase.ImportAsset(Asset,ImportAssetOptions.ForceSynchronousImport);
+    Stable();receipt.ShaderGuid=AssetDatabase.AssetPathToGUID(Asset);if(receipt.ShaderGuid!=Guid24||Hash(File.ReadAllBytes(dest))!=ShaderSha||Hash(File.ReadAllBytes(dest+".meta"))!=receipt.MetaSha256)throw new IOException("Imported identity/source/meta differs");
+    var shader=AssetDatabase.LoadAssetAtPath<ComputeShader>(Asset);if(!shader)throw new IOException("Imported shader missing");
+    var kernels=new List<string>();foreach(var name in new[]{"BuildSubsets113","Enumerate113","Reduce113","Write113"}){if(!shader.HasKernel(name))throw new IOException("Missing entrypoint "+name);uint x,y,z;shader.GetKernelThreadGroupSizes(shader.FindKernel(name),out x,out y,out z);kernels.Add(name+"|"+x+","+y+","+z);if(x!=(name=="Write113"?8u:64u)||y!=(name=="Write113"?8u:1u)||z!=1)throw new IOException("Imported group ABI differs");}
+    receipt.Kernels=kernels.ToArray();var messages=ShaderUtil.GetComputeShaderMessages(shader);receipt.Messages=messages.Select(m=>m.severity+"|"+m.message+"|"+m.file+":"+m.line).ToArray();
+    if(messages.Any(m=>m.severity.ToString()=="Error")||errors.Count>0)throw new IOException("New import/compute error");
+    var after=Json(State(c,"after"));New("IMPORT_AFTER24.json",after);receipt.BeforeSha256=Hash(before);receipt.AfterSha256=Hash(after);receipt.StateEqual=before.SequenceEqual(after);
+    if(!receipt.StateEqual)throw new IOException("Public/native state mismatch; no GPU submission");
+    receipt.Status="complete";receipt.NewErrors=errors.ToArray();New("IMPORT_COMPLETE24.json",Json(receipt));result.Log("Prefix24 shader-only import complete. Group ABI/state matched; GPU dispatch 0.");
+   }catch(Exception e){receipt.Error=e.ToString();receipt.NewErrors=errors.ToArray();New("IMPORT_FAILED24.json",Json(receipt));result.LogError("Prefix24 import/preflight stopped: "+e.Message);}
+   finally{Application.logMessageReceived-=observe;}
+  }
+ }
+}

@@ -1,0 +1,56 @@
+{
+  "faceMissingFromFirst43": "First pre-Play set did not include unloaded/not-dirty FaceSourceOwner202. Subsequent44 include it; exact serialized hash equals original47 backup. Nonserialized native state not attested.",
+  "faceSHA256": "e2e4fc2a9cda1b0c7a32f4a8273779dffea81c17ec8a0fe4e4683fb25ec32b24",
+  "runs": [
+    {
+      "run": "close",
+      "native44Equal": true,
+      "faceHashEqualOriginal47": true,
+      "memory": {
+        "deltaAllocatedMiB": 35.21472644805908,
+        "before": {
+          "allocated": 1650533116,
+          "mono": 1448312832,
+          "renderTextureCount": 30,
+          "reserved": 2302582784,
+          "utc": "2026-11-02T14:37:25.9638237Z"
+        },
+        "after": {
+          "allocated": 1687458433,
+          "mono": 1343352832,
+          "renderTextureCount": 30,
+          "reserved": 2303377408,
+          "utc": "2026-11-02T14:37:49.4959584Z"
+        }
+      }
+    },
+    {
+      "run": "motion",
+      "native44Equal": true,
+      "faceHashEqualOriginal47": true,
+      "memory": {
+        "deltaAllocatedMiB": 35.897616386413574,
+        "before": {
+          "allocated": 1657468882,
+          "mono": 1423810560,
+          "renderTextureCount": 30,
+          "reserved": 2303246336,
+          "utc": "2026-11-02T14:40:35.6515842Z"
+        },
+        "after": {
+          "allocated": 1695110261,
+          "mono": 1342750720,
+          "renderTextureCount": 30,
+          "reserved": 2320154624,
+          "utc": "2026-11-02T14:41:11.3974177Z"
+        }
+      }
+    }
+  ],
+  "codeReview": {
+    "WriteOwnedPlane": "NativeArray owns at most1MiB and Dispose in finally after request.done; no Texture2D/ToArray used",
+    "WholeEye107": "Owned buffers disposed and shader clone destroyed; no static mutable collection. Readonly CPU source arrays may live with the retired object until GC; no retaining-root proof.",
+    "Forward113": "Dispose callback removed; owned RTs released; parent reference set null by Release76",
+    "limitation": "No allocation call stacks/live root profiler; no forced GC/Unload. Counter growth is not attributed to a proved leak or cleared."
+  }
+}

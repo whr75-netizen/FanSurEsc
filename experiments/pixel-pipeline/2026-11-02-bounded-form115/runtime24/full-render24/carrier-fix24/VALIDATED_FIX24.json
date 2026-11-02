@@ -1,0 +1,3506 @@
+{
+  "actualGPUFrames": 40,
+  "assignedDepthSamplesChecked": 17168,
+  "measuredDepthSamplesBitExact": 12824,
+  "transportedMeanMaxAbsDepthError": 9.5367431640625e-07,
+  "transportedMeanMaxULP": 1.0,
+  "meanNote": "Recorded GPU mean can differ from sequential CPU float32 arithmetic; no accuracy threshold was loosened. Measured depths and zero-raster selected-source fallback remain bit-exact. No compiler-cause claim.",
+  "zeroCarrierCases": 14,
+  "actualNewFaceQueriesCPUExact": 224,
+  "causalRGBChanges": 7,
+  "changes": [
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame105",
+      "frame": 105,
+      "stage": "evaluated-blink106",
+      "tile": [
+        9,
+        3
+      ],
+      "sourceDepth": 13.712593078613281,
+      "actualGPUOwner": [
+        4.0,
+        1.0,
+        13.700797080993652,
+        -117.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        1.0,
+        1.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.700797080993652,
+        "linearRGBA": [
+          0.980194091796875,
+          0.8408203125,
+          0.6990985870361328,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          3.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.700797080993652,
+        "linearRGBA": [
+          0.980194091796875,
+          0.8408203125,
+          0.6990985870361328,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          3.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "causalRGBChange": false
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame109",
+      "frame": 109,
+      "stage": "evaluated-blink106",
+      "tile": [
+        9,
+        3
+      ],
+      "sourceDepth": 13.712593078613281,
+      "actualGPUOwner": [
+        4.0,
+        1.0,
+        13.700797080993652,
+        -117.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        1.0,
+        1.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.700797080993652,
+        "linearRGBA": [
+          0.980194091796875,
+          0.8408203125,
+          0.6990985870361328,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          3.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.700797080993652,
+        "linearRGBA": [
+          0.980194091796875,
+          0.8408203125,
+          0.6990985870361328,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          3.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "causalRGBChange": false
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame122",
+      "frame": 122,
+      "stage": "Close75-product77-hair-on",
+      "tile": [
+        7,
+        2
+      ],
+      "sourceDepth": 13.712020874023438,
+      "actualGPUOwner": [
+        7.0,
+        2.0,
+        13.712020874023438,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        10.0,
+        10.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.712379455566406,
+        "linearRGBA": [
+          0.9921875,
+          0.928253173828125,
+          0.79296875,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 7,
+        "owner": 2,
+        "depth": 13.712020874023438,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": true
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame125",
+      "frame": 125,
+      "stage": "Close75-product77-hair-off",
+      "tile": [
+        7,
+        2
+      ],
+      "sourceDepth": 13.712020874023438,
+      "actualGPUOwner": [
+        7.0,
+        2.0,
+        13.712020874023438,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        10.0,
+        10.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.712379455566406,
+        "linearRGBA": [
+          0.9921875,
+          0.928253173828125,
+          0.79296875,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 7,
+        "owner": 2,
+        "depth": 13.712020874023438,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": true
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame128",
+      "frame": 128,
+      "stage": "Close75-product77-hair-restored",
+      "tile": [
+        7,
+        2
+      ],
+      "sourceDepth": 13.712020874023438,
+      "actualGPUOwner": [
+        7.0,
+        2.0,
+        13.712020874023438,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        10.0,
+        10.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.712379455566406,
+        "linearRGBA": [
+          0.9921875,
+          0.928253173828125,
+          0.79296875,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 7,
+        "owner": 2,
+        "depth": 13.712020874023438,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": true
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame127",
+      "frame": 127,
+      "stage": "turn",
+      "tile": [
+        11,
+        4
+      ],
+      "sourceDepth": 13.694323539733887,
+      "actualGPUOwner": [
+        12.0,
+        0.0,
+        13.667768478393555,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        16.0,
+        16.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.667768478393555,
+        "linearRGBA": [
+          0.1345064342021942,
+          0.044898707419633865,
+          0.059655122458934784,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.667768478393555,
+        "linearRGBA": [
+          0.1345064342021942,
+          0.044898707419633865,
+          0.059655122458934784,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": false
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame128",
+      "frame": 128,
+      "stage": "turn",
+      "tile": [
+        10,
+        4
+      ],
+      "sourceDepth": 13.696161270141602,
+      "actualGPUOwner": [
+        13.0,
+        0.0,
+        13.6731538772583,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        16.0,
+        16.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": 0,
+        "role": 13,
+        "owner": 0.0,
+        "depth": 13.6731538772583,
+        "linearRGBA": [
+          0.11038126796483994,
+          0.044894736260175705,
+          0.06457491219043732,
+          1.0
+        ],
+        "hairInterval": [
+          9.0,
+          9.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 13,
+        "owner": 0.0,
+        "depth": 13.6731538772583,
+        "linearRGBA": [
+          0.11038126796483994,
+          0.044894736260175705,
+          0.06457491219043732,
+          1.0
+        ],
+        "hairInterval": [
+          9.0,
+          9.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": false
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame133",
+      "frame": 133,
+      "stage": "turn",
+      "tile": [
+        2,
+        6
+      ],
+      "sourceDepth": 13.753713607788086,
+      "actualGPUOwner": [
+        12.0,
+        0.0,
+        13.680652618408203,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        10.0,
+        10.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.680652618408203,
+        "linearRGBA": [
+          0.02661808393895626,
+          0.014142928645014763,
+          0.025174660608172417,
+          1.0
+        ],
+        "hairInterval": [
+          11.0,
+          11.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.680652618408203,
+        "linearRGBA": [
+          0.02661808393895626,
+          0.014142928645014763,
+          0.025174660608172417,
+          1.0
+        ],
+        "hairInterval": [
+          11.0,
+          11.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": false
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame134",
+      "frame": 134,
+      "stage": "turn",
+      "tile": [
+        9,
+        3
+      ],
+      "sourceDepth": 13.69636058807373,
+      "actualGPUOwner": [
+        7.0,
+        1.0,
+        13.69636058807373,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        16.0,
+        16.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.70418930053711,
+        "linearRGBA": [
+          0.672443151473999,
+          0.6172065734863281,
+          0.520995557308197,
+          1.0
+        ],
+        "hairInterval": [
+          4.0,
+          4.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.69636058807373,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          4.0,
+          4.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": true
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame135",
+      "frame": 135,
+      "stage": "turn",
+      "tile": [
+        7,
+        3
+      ],
+      "sourceDepth": 13.709928512573242,
+      "actualGPUOwner": [
+        12.0,
+        0.0,
+        13.66208553314209,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        0.0,
+        0.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.66208553314209,
+        "linearRGBA": [
+          0.0707753375172615,
+          0.03385196998715401,
+          0.056328292936086655,
+          1.0
+        ],
+        "hairInterval": [
+          9.0,
+          9.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.66208553314209,
+        "linearRGBA": [
+          0.0707753375172615,
+          0.03385196998715401,
+          0.056328292936086655,
+          1.0
+        ],
+        "hairInterval": [
+          9.0,
+          9.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "causalRGBChange": false
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame135",
+      "frame": 135,
+      "stage": "turn",
+      "tile": [
+        11,
+        3
+      ],
+      "sourceDepth": 13.695860862731934,
+      "actualGPUOwner": [
+        7.0,
+        1.0,
+        13.695860862731934,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        16.0,
+        16.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.703571319580078,
+        "linearRGBA": [
+          0.672443151473999,
+          0.6172065734863281,
+          0.520995557308197,
+          1.0
+        ],
+        "hairInterval": [
+          6.0,
+          6.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.695860862731934,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          6.0,
+          6.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": true
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame135",
+      "frame": 135,
+      "stage": "turn",
+      "tile": [
+        12,
+        3
+      ],
+      "sourceDepth": 13.697253227233887,
+      "actualGPUOwner": [
+        7.0,
+        1.0,
+        13.697253227233887,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        16.0,
+        16.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.706624031066895,
+        "linearRGBA": [
+          0.672443151473999,
+          0.6172065734863281,
+          0.520995557308197,
+          1.0
+        ],
+        "hairInterval": [
+          4.0,
+          4.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.697253227233887,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          4.0,
+          4.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": true
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame135",
+      "frame": 135,
+      "stage": "turn",
+      "tile": [
+        4,
+        4
+      ],
+      "sourceDepth": 13.710795402526855,
+      "actualGPUOwner": [
+        12.0,
+        0.0,
+        13.661002159118652,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        16.0,
+        16.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.661002159118652,
+        "linearRGBA": [
+          0.032100558280944824,
+          0.015333961695432663,
+          0.026488138362765312,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.661002159118652,
+        "linearRGBA": [
+          0.032100558280944824,
+          0.015333961695432663,
+          0.026488138362765312,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": false
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame136",
+      "frame": 136,
+      "stage": "turn",
+      "tile": [
+        10,
+        3
+      ],
+      "sourceDepth": 13.702980041503906,
+      "actualGPUOwner": [
+        7.0,
+        1.0,
+        13.702980041503906,
+        0.0
+      ],
+      "pairedFaceQueries": 16,
+      "faceInterval16": [
+        16.0,
+        16.0
+      ],
+      "sameCurrentInputOldPolicyCPU": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.7220458984375,
+        "linearRGBA": [
+          0.7912979125976562,
+          0.7304607629776001,
+          0.6172065734863281,
+          1.0
+        ],
+        "hairInterval": [
+          2.0,
+          2.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "actualFixedGPUAndMatchedCPU": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.702980041503906,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          2.0,
+          2.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "causalRGBChange": true
+    }
+  ],
+  "rows": [
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame99",
+      "frame": 99,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame101",
+      "frame": 101,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame103",
+      "frame": 103,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame105",
+      "frame": 105,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame107",
+      "frame": 107,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame109",
+      "frame": 109,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame111",
+      "frame": 111,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame113",
+      "frame": 113,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame115",
+      "frame": 115,
+      "stage": "evaluated-blink106",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame122",
+      "frame": 122,
+      "stage": "Close75-product77-hair-on",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.000370025634765625,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 114,
+      "separatePlayFinalRoleOwnerDifferences": 1,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame125",
+      "frame": 125,
+      "stage": "Close75-product77-hair-off",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.000370025634765625,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 88,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame128",
+      "frame": 128,
+      "stage": "Close75-product77-hair-restored",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.000370025634765625,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 114,
+      "separatePlayFinalRoleOwnerDifferences": 1,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame101",
+      "frame": 101,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 0,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame102",
+      "frame": 102,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 83,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame103",
+      "frame": 103,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 70,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame104",
+      "frame": 104,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 70,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame105",
+      "frame": 105,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 70,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame106",
+      "frame": 106,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 0,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame107",
+      "frame": 107,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 73,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame108",
+      "frame": 108,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame109",
+      "frame": 109,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame110",
+      "frame": 110,
+      "stage": "measured-phase",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 74,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame119",
+      "frame": 119,
+      "stage": "walk",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 69,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame120",
+      "frame": 120,
+      "stage": "walk",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 70,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame121",
+      "frame": 121,
+      "stage": "walk",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 0,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame122",
+      "frame": 122,
+      "stage": "walk",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 70,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame123",
+      "frame": 123,
+      "stage": "walk",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 73,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame124",
+      "frame": 124,
+      "stage": "walk",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 72,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame125",
+      "frame": 125,
+      "stage": "walk",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 73,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame126",
+      "frame": 126,
+      "stage": "walk",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 0,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame127",
+      "frame": 127,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 88,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame128",
+      "frame": 128,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 101,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame129",
+      "frame": 129,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 92,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame130",
+      "frame": 130,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 98,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame131",
+      "frame": 131,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 0,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame132",
+      "frame": 132,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 98,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame133",
+      "frame": 133,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 102,
+      "separatePlayFinalRoleOwnerDifferences": 0,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame134",
+      "frame": 134,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 90,
+      "separatePlayFinalRoleOwnerDifferences": 1,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame135",
+      "frame": 135,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 84,
+      "separatePlayFinalRoleOwnerDifferences": 2,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    },
+    {
+      "sourceId": "geometry24-20261102T144034769Z-e3175318-frame136",
+      "frame": 136,
+      "stage": "turn",
+      "canonicalRoleOwnerRGBAExactBaseline": true,
+      "separatePlaySelectedSourceDepthMaxDelta": 0.0,
+      "unknown": 0,
+      "separatePlayRGBFloatDifferences": 1,
+      "separatePlayFinalRoleOwnerDifferences": 1,
+      "warning": "Separate Play canvas/hair lighting inputs differ; only same-current-input CPU counterfactual isolates causal RGB changes."
+    }
+  ],
+  "close75SkinEvidence": [
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame105",
+      "tile": [
+        9,
+        3
+      ],
+      "nativeSource": {
+        "triangle": 20198,
+        "sourcePrimitive": 7,
+        "barycentric": [
+          0.8155904484112964,
+          0.05501273219424843,
+          0.1293968193944552
+        ],
+        "world": [
+          0.05928342054337614,
+          1.5168579255541943,
+          -0.0667001371325005
+        ],
+        "nativePhysicalXY": [
+          222.96025758529976,
+          53.00672416180429
+        ],
+        "nativeDepth": 13.712593454760567,
+        "sourceUV": [
+          0.5582989147295531,
+          0.6294060190660142
+        ]
+      },
+      "sourceFaceVisibility": {
+        "faceInterval": [
+          1.0,
+          1.0
+        ],
+        "hits": []
+      },
+      "destinationXY16": [
+        [
+          221.125,
+          52.875
+        ],
+        [
+          221.375,
+          52.875
+        ],
+        [
+          221.625,
+          52.875
+        ],
+        [
+          221.875,
+          52.875
+        ],
+        [
+          221.125,
+          52.625
+        ],
+        [
+          221.375,
+          52.625
+        ],
+        [
+          221.625,
+          52.625
+        ],
+        [
+          221.875,
+          52.625
+        ],
+        [
+          221.125,
+          52.375
+        ],
+        [
+          221.375,
+          52.375
+        ],
+        [
+          221.625,
+          52.375
+        ],
+        [
+          221.875,
+          52.375
+        ],
+        [
+          221.125,
+          52.125
+        ],
+        [
+          221.375,
+          52.125
+        ],
+        [
+          221.625,
+          52.125
+        ],
+        [
+          221.875,
+          52.125
+        ]
+      ],
+      "destinationFaceVisibility": [
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18070,
+              "sourcePrimitive": 2691,
+              "material": 7,
+              "sourceUV": [
+                0.5231147374782685,
+                0.46759733493969574
+              ],
+              "depth": 13.702301723949969,
+              "depthGapMetres": 0.010291354663312546,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18556,
+              "sourcePrimitive": 3177,
+              "material": 7,
+              "sourceUV": [
+                0.5329392811581282,
+                0.4661744880234477
+              ],
+              "depth": 13.703582670059298,
+              "depthGapMetres": 0.009010408553983495,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18556,
+              "sourcePrimitive": 3177,
+              "material": 7,
+              "sourceUV": [
+                0.5430568571316791,
+                0.46535546829690005
+              ],
+              "depth": 13.704956873534929,
+              "depthGapMetres": 0.007636205078352276,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 18555,
+              "sourcePrimitive": 3176,
+              "material": 7,
+              "sourceUV": [
+                0.5528428224584968,
+                0.46709893523564805
+              ],
+              "depth": 13.706216166548044,
+              "depthGapMetres": 0.00637691206523705,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18071,
+              "sourcePrimitive": 2692,
+              "material": 7,
+              "sourceUV": [
+                0.5230218275374563,
+                0.48218990134868733
+              ],
+              "depth": 13.699613325798996,
+              "depthGapMetres": 0.012979752814285206,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18071,
+              "sourcePrimitive": 2692,
+              "material": 7,
+              "sourceUV": [
+                0.5326906713178946,
+                0.4837469401750389
+              ],
+              "depth": 13.700801899172681,
+              "depthGapMetres": 0.01179117944059982,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18097,
+              "sourcePrimitive": 2718,
+              "material": 7,
+              "sourceUV": [
+                0.5422483784291143,
+                0.4863797297878949
+              ],
+              "depth": 13.701971091376677,
+              "depthGapMetres": 0.010621987236604014,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18096,
+              "sourcePrimitive": 2717,
+              "material": 7,
+              "sourceUV": [
+                0.5519451076242018,
+                0.48916507983441215
+              ],
+              "depth": 13.702976728129519,
+              "depthGapMetres": 0.009616350483762304,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18072,
+              "sourcePrimitive": 2693,
+              "material": 7,
+              "sourceUV": [
+                0.522985474296126,
+                0.4971549229629778
+              ],
+              "depth": 13.6966765711256,
+              "depthGapMetres": 0.01591650748768103,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18072,
+              "sourcePrimitive": 2693,
+              "material": 7,
+              "sourceUV": [
+                0.5326690485660441,
+                0.4984078160976043
+              ],
+              "depth": 13.697834548855994,
+              "depthGapMetres": 0.01475852975728742,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18095,
+              "sourcePrimitive": 2716,
+              "material": 7,
+              "sourceUV": [
+                0.5424901993307537,
+                0.49961344225873383
+              ],
+              "depth": 13.698841658149703,
+              "depthGapMetres": 0.013751420463577801,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18095,
+              "sourcePrimitive": 2716,
+              "material": 7,
+              "sourceUV": [
+                0.5526243488260749,
+                0.502892237190359
+              ],
+              "depth": 13.699679848285065,
+              "depthGapMetres": 0.01291323032821623,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18072,
+              "sourcePrimitive": 2693,
+              "material": 7,
+              "sourceUV": [
+                0.5230888416776096,
+                0.5092350828398601
+              ],
+              "depth": 13.693449612766745,
+              "depthGapMetres": 0.019143465846536145,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18073,
+              "sourcePrimitive": 2694,
+              "material": 7,
+              "sourceUV": [
+                0.5328320050495378,
+                0.5098101991434641
+              ],
+              "depth": 13.694489701033948,
+              "depthGapMetres": 0.018103377579333113,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18095,
+              "sourcePrimitive": 2716,
+              "material": 7,
+              "sourceUV": [
+                0.5425861460924489,
+                0.5103742492656155
+              ],
+              "depth": 13.69551716791219,
+              "depthGapMetres": 0.0170759107010916,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18094,
+              "sourcePrimitive": 2715,
+              "material": 7,
+              "sourceUV": [
+                0.5527123769095226,
+                0.5135887358967455
+              ],
+              "depth": 13.696366220322258,
+              "depthGapMetres": 0.01622685829102366,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        }
+      ],
+      "sourceRegisteredSampleXY": [
+        222.24868774414062,
+        53.3582649230957
+      ]
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame109",
+      "tile": [
+        9,
+        3
+      ],
+      "nativeSource": {
+        "triangle": 20198,
+        "sourcePrimitive": 7,
+        "barycentric": [
+          0.8155904484112964,
+          0.05501273219424843,
+          0.1293968193944552
+        ],
+        "world": [
+          0.05928342054337614,
+          1.5168579255541943,
+          -0.0667001371325005
+        ],
+        "nativePhysicalXY": [
+          222.96025758529976,
+          53.00672416180429
+        ],
+        "nativeDepth": 13.712593454760567,
+        "sourceUV": [
+          0.5582989147295531,
+          0.6294060190660142
+        ]
+      },
+      "sourceFaceVisibility": {
+        "faceInterval": [
+          1.0,
+          1.0
+        ],
+        "hits": []
+      },
+      "destinationXY16": [
+        [
+          221.125,
+          52.875
+        ],
+        [
+          221.375,
+          52.875
+        ],
+        [
+          221.625,
+          52.875
+        ],
+        [
+          221.875,
+          52.875
+        ],
+        [
+          221.125,
+          52.625
+        ],
+        [
+          221.375,
+          52.625
+        ],
+        [
+          221.625,
+          52.625
+        ],
+        [
+          221.875,
+          52.625
+        ],
+        [
+          221.125,
+          52.375
+        ],
+        [
+          221.375,
+          52.375
+        ],
+        [
+          221.625,
+          52.375
+        ],
+        [
+          221.875,
+          52.375
+        ],
+        [
+          221.125,
+          52.125
+        ],
+        [
+          221.375,
+          52.125
+        ],
+        [
+          221.625,
+          52.125
+        ],
+        [
+          221.875,
+          52.125
+        ]
+      ],
+      "destinationFaceVisibility": [
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18070,
+              "sourcePrimitive": 2691,
+              "material": 7,
+              "sourceUV": [
+                0.5231147374782685,
+                0.46759733493969574
+              ],
+              "depth": 13.702301723949969,
+              "depthGapMetres": 0.010291354663312546,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18556,
+              "sourcePrimitive": 3177,
+              "material": 7,
+              "sourceUV": [
+                0.5329392811581282,
+                0.4661744880234477
+              ],
+              "depth": 13.703582670059298,
+              "depthGapMetres": 0.009010408553983495,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18556,
+              "sourcePrimitive": 3177,
+              "material": 7,
+              "sourceUV": [
+                0.5430568571316791,
+                0.46535546829690005
+              ],
+              "depth": 13.704956873534929,
+              "depthGapMetres": 0.007636205078352276,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 18555,
+              "sourcePrimitive": 3176,
+              "material": 7,
+              "sourceUV": [
+                0.5528428224584968,
+                0.46709893523564805
+              ],
+              "depth": 13.706216166548044,
+              "depthGapMetres": 0.00637691206523705,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18071,
+              "sourcePrimitive": 2692,
+              "material": 7,
+              "sourceUV": [
+                0.5230218275374563,
+                0.48218990134868733
+              ],
+              "depth": 13.699613325798996,
+              "depthGapMetres": 0.012979752814285206,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18071,
+              "sourcePrimitive": 2692,
+              "material": 7,
+              "sourceUV": [
+                0.5326906713178946,
+                0.4837469401750389
+              ],
+              "depth": 13.700801899172681,
+              "depthGapMetres": 0.01179117944059982,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18097,
+              "sourcePrimitive": 2718,
+              "material": 7,
+              "sourceUV": [
+                0.5422483784291143,
+                0.4863797297878949
+              ],
+              "depth": 13.701971091376677,
+              "depthGapMetres": 0.010621987236604014,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18096,
+              "sourcePrimitive": 2717,
+              "material": 7,
+              "sourceUV": [
+                0.5519451076242018,
+                0.48916507983441215
+              ],
+              "depth": 13.702976728129519,
+              "depthGapMetres": 0.009616350483762304,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18072,
+              "sourcePrimitive": 2693,
+              "material": 7,
+              "sourceUV": [
+                0.522985474296126,
+                0.4971549229629778
+              ],
+              "depth": 13.6966765711256,
+              "depthGapMetres": 0.01591650748768103,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18072,
+              "sourcePrimitive": 2693,
+              "material": 7,
+              "sourceUV": [
+                0.5326690485660441,
+                0.4984078160976043
+              ],
+              "depth": 13.697834548855994,
+              "depthGapMetres": 0.01475852975728742,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18095,
+              "sourcePrimitive": 2716,
+              "material": 7,
+              "sourceUV": [
+                0.5424901993307537,
+                0.49961344225873383
+              ],
+              "depth": 13.698841658149703,
+              "depthGapMetres": 0.013751420463577801,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18095,
+              "sourcePrimitive": 2716,
+              "material": 7,
+              "sourceUV": [
+                0.5526243488260749,
+                0.502892237190359
+              ],
+              "depth": 13.699679848285065,
+              "depthGapMetres": 0.01291323032821623,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18072,
+              "sourcePrimitive": 2693,
+              "material": 7,
+              "sourceUV": [
+                0.5230888416776096,
+                0.5092350828398601
+              ],
+              "depth": 13.693449612766745,
+              "depthGapMetres": 0.019143465846536145,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18073,
+              "sourcePrimitive": 2694,
+              "material": 7,
+              "sourceUV": [
+                0.5328320050495378,
+                0.5098101991434641
+              ],
+              "depth": 13.694489701033948,
+              "depthGapMetres": 0.018103377579333113,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18095,
+              "sourcePrimitive": 2716,
+              "material": 7,
+              "sourceUV": [
+                0.5425861460924489,
+                0.5103742492656155
+              ],
+              "depth": 13.69551716791219,
+              "depthGapMetres": 0.0170759107010916,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 18094,
+              "sourcePrimitive": 2715,
+              "material": 7,
+              "sourceUV": [
+                0.5527123769095226,
+                0.5135887358967455
+              ],
+              "depth": 13.696366220322258,
+              "depthGapMetres": 0.01622685829102366,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        }
+      ],
+      "sourceRegisteredSampleXY": [
+        222.24868774414062,
+        53.3582649230957
+      ]
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame122",
+      "tile": [
+        7,
+        2
+      ],
+      "nativeSource": {
+        "triangle": 20250,
+        "sourcePrimitive": 59,
+        "barycentric": [
+          0.3683319811287997,
+          0.34083170199938506,
+          0.29083631687181516
+        ],
+        "world": [
+          0.00952935218186779,
+          1.5084718023653476,
+          -0.09946652892644123
+        ],
+        "nativePhysicalXY": [
+          218.2490639287991,
+          53.90861292819377
+        ],
+        "nativeDepth": 13.712020789498055,
+        "sourceUV": [
+          0.47759195922829273,
+          0.6070819190171834
+        ]
+      },
+      "sourceFaceVisibility": {
+        "faceInterval": [
+          1.0,
+          1.0
+        ],
+        "hits": []
+      },
+      "destinationXY16": [
+        [
+          219.125,
+          54.875
+        ],
+        [
+          219.375,
+          54.875
+        ],
+        [
+          219.625,
+          54.875
+        ],
+        [
+          219.875,
+          54.875
+        ],
+        [
+          219.125,
+          54.625
+        ],
+        [
+          219.375,
+          54.625
+        ],
+        [
+          219.625,
+          54.625
+        ],
+        [
+          219.875,
+          54.625
+        ],
+        [
+          219.125,
+          54.375
+        ],
+        [
+          219.375,
+          54.375
+        ],
+        [
+          219.625,
+          54.375
+        ],
+        [
+          219.875,
+          54.375
+        ],
+        [
+          219.125,
+          54.125
+        ],
+        [
+          219.375,
+          54.125
+        ],
+        [
+          219.625,
+          54.125
+        ],
+        [
+          219.875,
+          54.125
+        ]
+      ],
+      "destinationFaceVisibility": [
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17945,
+              "sourcePrimitive": 2566,
+              "material": 7,
+              "sourceUV": [
+                0.468432787309785,
+                0.4111406899976998
+              ],
+              "depth": 13.711636258143455,
+              "depthGapMetres": 0.00038461587998206426,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17950,
+              "sourcePrimitive": 2571,
+              "material": 7,
+              "sourceUV": [
+                0.47657242968802327,
+                0.41240104413727635
+              ],
+              "depth": 13.710792120357741,
+              "depthGapMetres": 0.0012287536656963027,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17935,
+              "sourcePrimitive": 2556,
+              "material": 7,
+              "sourceUV": [
+                0.44851978730924963,
+                0.41967981915116015
+              ],
+              "depth": 13.711775281349244,
+              "depthGapMetres": 0.00024559267419377306,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17935,
+              "sourcePrimitive": 2556,
+              "material": 7,
+              "sourceUV": [
+                0.45790655463935614,
+                0.42021118674921903
+              ],
+              "depth": 13.710977988601588,
+              "depthGapMetres": 0.0010428854218496042,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17945,
+              "sourcePrimitive": 2566,
+              "material": 7,
+              "sourceUV": [
+                0.46699362581326403,
+                0.42151180679521993
+              ],
+              "depth": 13.710175000193352,
+              "depthGapMetres": 0.0018458738300850541,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17944,
+              "sourcePrimitive": 2565,
+              "material": 7,
+              "sourceUV": [
+                0.4761466971345937,
+                0.4240231491377569
+              ],
+              "depth": 13.70923680204343,
+              "depthGapMetres": 0.0027840719800078517,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17932,
+              "sourcePrimitive": 2553,
+              "material": 7,
+              "sourceUV": [
+                0.44595451026306915,
+                0.4307176304976589
+              ],
+              "depth": 13.710412390362373,
+              "depthGapMetres": 0.0016084836610641418,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17934,
+              "sourcePrimitive": 2555,
+              "material": 7,
+              "sourceUV": [
+                0.45623490173251635,
+                0.43268250163092126
+              ],
+              "depth": 13.709413421452503,
+              "depthGapMetres": 0.002607452570934754,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17939,
+              "sourcePrimitive": 2560,
+              "material": 7,
+              "sourceUV": [
+                0.4660750611414653,
+                0.4346249537946431
+              ],
+              "depth": 13.708452347315653,
+              "depthGapMetres": 0.003568526707784514,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17949,
+              "sourcePrimitive": 2570,
+              "material": 7,
+              "sourceUV": [
+                0.47565514352284716,
+                0.43706072139257607
+              ],
+              "depth": 13.707522371787196,
+              "depthGapMetres": 0.004498502236241819,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        }
+      ],
+      "sourceRegisteredSampleXY": [
+        219.49703979492188,
+        54.084014892578125
+      ]
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame125",
+      "tile": [
+        7,
+        2
+      ],
+      "nativeSource": {
+        "triangle": 20250,
+        "sourcePrimitive": 59,
+        "barycentric": [
+          0.3683319811287997,
+          0.34083170199938506,
+          0.29083631687181516
+        ],
+        "world": [
+          0.00952935218186779,
+          1.5084716078553624,
+          -0.09946652892644123
+        ],
+        "nativePhysicalXY": [
+          218.24906392879905,
+          53.908628174598945
+        ],
+        "nativeDepth": 13.71202088675306,
+        "sourceUV": [
+          0.47759195922829273,
+          0.6070819190171834
+        ]
+      },
+      "sourceFaceVisibility": {
+        "faceInterval": [
+          1.0,
+          1.0
+        ],
+        "hits": []
+      },
+      "destinationXY16": [
+        [
+          219.125,
+          54.875
+        ],
+        [
+          219.375,
+          54.875
+        ],
+        [
+          219.625,
+          54.875
+        ],
+        [
+          219.875,
+          54.875
+        ],
+        [
+          219.125,
+          54.625
+        ],
+        [
+          219.375,
+          54.625
+        ],
+        [
+          219.625,
+          54.625
+        ],
+        [
+          219.875,
+          54.625
+        ],
+        [
+          219.125,
+          54.375
+        ],
+        [
+          219.375,
+          54.375
+        ],
+        [
+          219.625,
+          54.375
+        ],
+        [
+          219.875,
+          54.375
+        ],
+        [
+          219.125,
+          54.125
+        ],
+        [
+          219.375,
+          54.125
+        ],
+        [
+          219.625,
+          54.125
+        ],
+        [
+          219.875,
+          54.125
+        ]
+      ],
+      "destinationFaceVisibility": [
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17945,
+              "sourcePrimitive": 2566,
+              "material": 7,
+              "sourceUV": [
+                0.4684326999864144,
+                0.41114131928142256
+              ],
+              "depth": 13.711636266241488,
+              "depthGapMetres": 0.00038460778194959744,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17950,
+              "sourcePrimitive": 2571,
+              "material": 7,
+              "sourceUV": [
+                0.47657241584636456,
+                0.41240149718622854
+              ],
+              "depth": 13.710792123363456,
+              "depthGapMetres": 0.0012287506599815146,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17935,
+              "sourcePrimitive": 2556,
+              "material": 7,
+              "sourceUV": [
+                0.44851962149209285,
+                0.41968056426407524
+              ],
+              "depth": 13.711775320387948,
+              "depthGapMetres": 0.00024555363548905973,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17935,
+              "sourcePrimitive": 2556,
+              "material": 7,
+              "sourceUV": [
+                0.4579063888221986,
+                0.420211931862134
+              ],
+              "depth": 13.710978027640294,
+              "depthGapMetres": 0.0010428463831431145,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17945,
+              "sourcePrimitive": 2566,
+              "material": 7,
+              "sourceUV": [
+                0.4669935366621982,
+                0.42151244924996917
+              ],
+              "depth": 13.71017500846088,
+              "depthGapMetres": 0.0018458655625579468,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17944,
+              "sourcePrimitive": 2565,
+              "material": 7,
+              "sourceUV": [
+                0.47614667687324896,
+                0.42402364766716244
+              ],
+              "depth": 13.709236796384708,
+              "depthGapMetres": 0.002784077638729343,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17932,
+              "sourcePrimitive": 2553,
+              "material": 7,
+              "sourceUV": [
+                0.4459543031014815,
+                0.4307184711791034
+              ],
+              "depth": 13.71041238877812,
+              "depthGapMetres": 0.0016084852453168708,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17934,
+              "sourcePrimitive": 2555,
+              "material": 7,
+              "sourceUV": [
+                0.4562348173575425,
+                0.4326832296352188
+              ],
+              "depth": 13.709413415754995,
+              "depthGapMetres": 0.002607458268442997,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17939,
+              "sourcePrimitive": 2560,
+              "material": 7,
+              "sourceUV": [
+                0.46607498343165,
+                0.43462562474923305
+              ],
+              "depth": 13.70845234206139,
+              "depthGapMetres": 0.0035685319620473166,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17949,
+              "sourcePrimitive": 2570,
+              "material": 7,
+              "sourceUV": [
+                0.4756551242924181,
+                0.43706124100561056
+              ],
+              "depth": 13.707522367282124,
+              "depthGapMetres": 0.00449850674131369,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        }
+      ],
+      "sourceRegisteredSampleXY": [
+        219.49703979492188,
+        54.084022521972656
+      ]
+    },
+    {
+      "sourceId": "geometry24-20261102T143724852Z-cef1733c-frame128",
+      "tile": [
+        7,
+        2
+      ],
+      "nativeSource": {
+        "triangle": 20250,
+        "sourcePrimitive": 59,
+        "barycentric": [
+          0.3683319811287997,
+          0.34083170199938506,
+          0.29083631687181516
+        ],
+        "world": [
+          0.00952935218186779,
+          1.5084718023653476,
+          -0.09946652892644123
+        ],
+        "nativePhysicalXY": [
+          218.2490639287991,
+          53.90861292819377
+        ],
+        "nativeDepth": 13.712020789498055,
+        "sourceUV": [
+          0.47759195922829273,
+          0.6070819190171834
+        ]
+      },
+      "sourceFaceVisibility": {
+        "faceInterval": [
+          1.0,
+          1.0
+        ],
+        "hits": []
+      },
+      "destinationXY16": [
+        [
+          219.125,
+          54.875
+        ],
+        [
+          219.375,
+          54.875
+        ],
+        [
+          219.625,
+          54.875
+        ],
+        [
+          219.875,
+          54.875
+        ],
+        [
+          219.125,
+          54.625
+        ],
+        [
+          219.375,
+          54.625
+        ],
+        [
+          219.625,
+          54.625
+        ],
+        [
+          219.875,
+          54.625
+        ],
+        [
+          219.125,
+          54.375
+        ],
+        [
+          219.375,
+          54.375
+        ],
+        [
+          219.625,
+          54.375
+        ],
+        [
+          219.875,
+          54.375
+        ],
+        [
+          219.125,
+          54.125
+        ],
+        [
+          219.375,
+          54.125
+        ],
+        [
+          219.625,
+          54.125
+        ],
+        [
+          219.875,
+          54.125
+        ]
+      ],
+      "destinationFaceVisibility": [
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": []
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17945,
+              "sourcePrimitive": 2566,
+              "material": 7,
+              "sourceUV": [
+                0.468432787309785,
+                0.4111406899976998
+              ],
+              "depth": 13.711636258143455,
+              "depthGapMetres": 0.00038461587998206426,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17950,
+              "sourcePrimitive": 2571,
+              "material": 7,
+              "sourceUV": [
+                0.47657242968802327,
+                0.41240104413727635
+              ],
+              "depth": 13.710792120357741,
+              "depthGapMetres": 0.0012287536656963027,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17935,
+              "sourcePrimitive": 2556,
+              "material": 7,
+              "sourceUV": [
+                0.44851978730924963,
+                0.41967981915116015
+              ],
+              "depth": 13.711775281349244,
+              "depthGapMetres": 0.00024559267419377306,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17935,
+              "sourcePrimitive": 2556,
+              "material": 7,
+              "sourceUV": [
+                0.45790655463935614,
+                0.42021118674921903
+              ],
+              "depth": 13.710977988601588,
+              "depthGapMetres": 0.0010428854218496042,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17945,
+              "sourcePrimitive": 2566,
+              "material": 7,
+              "sourceUV": [
+                0.46699362581326403,
+                0.42151180679521993
+              ],
+              "depth": 13.710175000193352,
+              "depthGapMetres": 0.0018458738300850541,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17944,
+              "sourcePrimitive": 2565,
+              "material": 7,
+              "sourceUV": [
+                0.4761466971345937,
+                0.4240231491377569
+              ],
+              "depth": 13.70923680204343,
+              "depthGapMetres": 0.0027840719800078517,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17932,
+              "sourcePrimitive": 2553,
+              "material": 7,
+              "sourceUV": [
+                0.44595451026306915,
+                0.4307176304976589
+              ],
+              "depth": 13.710412390362373,
+              "depthGapMetres": 0.0016084836610641418,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            1.0,
+            1.0
+          ],
+          "hits": [
+            {
+              "triangle": 17934,
+              "sourcePrimitive": 2555,
+              "material": 7,
+              "sourceUV": [
+                0.45623490173251635,
+                0.43268250163092126
+              ],
+              "depth": 13.709413421452503,
+              "depthGapMetres": 0.002607452570934754,
+              "unilateralRingComponent": true,
+              "exempt113": true,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17939,
+              "sourcePrimitive": 2560,
+              "material": 7,
+              "sourceUV": [
+                0.4660750611414653,
+                0.4346249537946431
+              ],
+              "depth": 13.708452347315653,
+              "depthGapMetres": 0.003568526707784514,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "faceInterval": [
+            0.0,
+            0.0
+          ],
+          "hits": [
+            {
+              "triangle": 17949,
+              "sourcePrimitive": 2570,
+              "material": 7,
+              "sourceUV": [
+                0.47565514352284716,
+                0.43706072139257607
+              ],
+              "depth": 13.707522371787196,
+              "depthGapMetres": 0.004498502236241819,
+              "unilateralRingComponent": false,
+              "exempt113": false,
+              "alphaBounds": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        }
+      ],
+      "sourceRegisteredSampleXY": [
+        219.49703979492188,
+        54.084014892578125
+      ]
+    }
+  ],
+  "eyePaletteRGB8Errors": 0,
+  "memory": [
+    {
+      "run": "close",
+      "before": {
+        "allocated": 1650533116,
+        "mono": 1448312832,
+        "renderTextureCount": 30,
+        "reserved": 2302582784,
+        "utc": "2026-11-02T14:37:25.9638237Z"
+      },
+      "after": {
+        "allocated": 1687458433,
+        "mono": 1343352832,
+        "renderTextureCount": 30,
+        "reserved": 2303377408,
+        "utc": "2026-11-02T14:37:49.4959584Z"
+      },
+      "nativeContentsCompared": 44,
+      "deltaAllocatedMiB": 35.21472644805908
+    },
+    {
+      "run": "motion",
+      "before": {
+        "allocated": 1657468882,
+        "mono": 1423810560,
+        "renderTextureCount": 30,
+        "reserved": 2303246336,
+        "utc": "2026-11-02T14:40:35.6515842Z"
+      },
+      "after": {
+        "allocated": 1695110261,
+        "mono": 1342750720,
+        "renderTextureCount": 30,
+        "reserved": 2320154624,
+        "utc": "2026-11-02T14:41:11.3974177Z"
+      },
+      "nativeContentsCompared": 44,
+      "deltaAllocatedMiB": 35.897616386413574
+    }
+  ],
+  "product77DefaultChanged": false,
+  "GPUTimeMeasured": false,
+  "wholeTemporalStabilitySolved": false
+}

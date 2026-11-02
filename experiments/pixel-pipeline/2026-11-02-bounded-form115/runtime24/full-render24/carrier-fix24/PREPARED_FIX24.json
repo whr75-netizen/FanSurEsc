@@ -1,0 +1,94 @@
+{
+  "sourceSHA256": "cd5e441315e6914b19e56f8211ee0dc94c4d0a9637a1a0a279e37380a6edc5d0",
+  "baselineSHA256": "9f749bcfeb272a805b80f02ec69cbae58d69138c7a5fcf4df7aaed4bfa5617e9",
+  "changedExpression": [
+    "if(z<=0)z=count>0?sum/count:(id.z>=range.x&&id.z<=range.y?id.z:0);",
+    "if(z<=0)z=count>0?sum/count:((role==6||id.z>=range.x&&id.z<=range.y)?id.z:0);"
+  ],
+  "changedKernel": "CarrierQueries113",
+  "dispatchCountsChanged": false,
+  "newBuffersOrBindings": false,
+  "newThresholds": false,
+  "audit": {
+    "instructions": 149,
+    "privateArrayDeclarations": [],
+    "threads": [
+      64,
+      1,
+      1
+    ],
+    "structuredStridesBySlot": {
+      "t0": 16,
+      "t1": 16,
+      "t2": 16,
+      "u0": 16,
+      "u1": 16
+    },
+    "loops": 1
+  },
+  "bindings": [
+    {
+      "Type": 5,
+      "BindPoint": 0,
+      "BindCount": 1,
+      "Flags": 0,
+      "ReturnType": 6,
+      "Dimension": 1,
+      "NumSamples": 16,
+      "Name": "_ReadIdentity96"
+    },
+    {
+      "Type": 5,
+      "BindPoint": 1,
+      "BindCount": 1,
+      "Flags": 0,
+      "ReturnType": 6,
+      "Dimension": 1,
+      "NumSamples": 16,
+      "Name": "_ReadDecision96"
+    },
+    {
+      "Type": 5,
+      "BindPoint": 2,
+      "BindCount": 1,
+      "Flags": 0,
+      "ReturnType": 6,
+      "Dimension": 1,
+      "NumSamples": 16,
+      "Name": "_SrcLayers113"
+    },
+    {
+      "Type": 6,
+      "BindPoint": 0,
+      "BindCount": 1,
+      "Flags": 0,
+      "ReturnType": 6,
+      "Dimension": 1,
+      "NumSamples": 16,
+      "Name": "_AssignedDepth24"
+    },
+    {
+      "Type": 6,
+      "BindPoint": 1,
+      "BindCount": 1,
+      "Flags": 0,
+      "ReturnType": 6,
+      "Dimension": 1,
+      "NumSamples": 16,
+      "Name": "_AssignedVisibility24"
+    },
+    {
+      "Type": 0,
+      "BindPoint": 0,
+      "BindCount": 1,
+      "Flags": 0,
+      "ReturnType": 0,
+      "Dimension": 0,
+      "NumSamples": 0,
+      "Name": "$Globals"
+    }
+  ],
+  "GPUDriverModules": [],
+  "GPUCalls": 0,
+  "sourceProvenance": "Existing Write113 emits positive role6 only from current validated native pigment/curve proof. Finite positive depth and destination occlusion tests unchanged."
+}

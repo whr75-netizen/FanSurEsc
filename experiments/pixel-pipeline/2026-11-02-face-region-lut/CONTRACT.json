@@ -1,0 +1,29 @@
+{
+  "status": "outside-Assets candidate / CPU validated / not activated or GPU compiled",
+  "reuse": "SourcePalette58.ExtractReference/MakePalette/ShadeIndex/Resolve and SourcePalette54.hlsl, unchanged",
+  "sourceRegion": "External confirmed source-colour region ID plus decision provenance. Material ID, palette-family ordinal and occlusion owner are different identifiers. A confirmed flag is a caller assertion, not semantic proof.",
+  "input": {
+    "source": "Original model/image hashes, original material linear factor, primitive/triangle/UV/texel/RGBA witnesses from SourcePalette58.Family/Sample",
+    "region": "ResolvedRegionInput.Region: unique id, confirmed, decisionId, explicit palette-family ordinal",
+    "stageSample": "ResolvedRegionInput.Cell: sourceId, regionId, original source witness, opaqueInterior, integer shade index k",
+    "shade": "Initial Q and final corrected Qprime are separate externally supplied integer indices. The bridge never derives them from RGB or palette spacing.",
+    "raster": "One row-major binding per actual stage raster sample. stagePixel=floor(SV_POSITION.xy), in that target's pixel convention. Initial480/960 and final480 need distinct correctly aligned inputs. No UV reprojection or stage resampling is implemented.",
+    "uploadABI": "uint2 binding=(family,1 iff resolved opaque); uint index=k; uint4 family=(paletteOffset,count,0,0); uint4 palette=(sRGB8,255); uint2 size=(width,height)"
+  },
+  "output": {
+    "resolvedInterior": "SourceLookup54(family,k) -> existing sRGB8-to-linear transfer; original alpha retained. No RGB*g, factor multiplication, interpolation or medoid recomputation after lookup.",
+    "initial": "BodyPalette302 candidate passes stagePixel to SurfaceLayerOutput335; normal colour view resolves LUT before legacy colour*factor fallback.",
+    "final": "ApplyShadeBoundary candidate resolves LUT before legacy apply, role and old==q gates; factor RGB=1. Existing class metadata copies the legacy Qprime mask, so the future supplier must prove it describes the same supplied k. This live metadata agreement is not yet verified.",
+    "unresolvedOrExcluded": "No invented family/index/colour. Keep original legacy path, count separately, and do not include in finite-palette success.",
+    "afterLookup": "Final finite RGB is guaranteed only at these candidate joins. Later RGB multiplication, LineTone, AA blend or tone mapping can break membership; no full-frame or outline completion is claimed. Debug g/Q views are outside colour-output membership tests."
+  },
+  "missingCurrentFaceInputs": [
+    "Confirmed full-face source region hierarchy that preserves scalp/skin separation and the actual weak cheek stroke/gradient/AA evidence.",
+    "Confirmed region-to-family/source-sample bindings; 104 parent8 is not a flat palette family and material ID is not a substitute.",
+    "Same-frame primitive/material/UV-to-region raster supplier for each initial/final pass, including opaque interior vs partial/AA boundaries and matching Q/Qprime metadata.",
+    "Separate finite outline/partial-alpha and post-LUT colour handling contract."
+  ],
+  "lifetime": "Pure CPU preparation/reference builder, no Unity objects/static history/GPU allocations or default per-frame integration. Returned packet owns its arrays. Rebuild input when source/region decisions change; palette settings do not alter region IDs or Q.",
+  "tests": "verify_cpu.py uses installed csc.exe and unchanged existing palette54 tests. test_cpu.ps1 was denied by OS script policy before execution; policy unchanged and not retried.",
+  "notClaimed": ["automatic UV segmentation", "actual current-face LUT coverage", "eye ownership/occlusion policy", "HLSL/Unity/GPU compilation", "whole-frame finite palette", "outline or art success", "temporal stability"]
+}

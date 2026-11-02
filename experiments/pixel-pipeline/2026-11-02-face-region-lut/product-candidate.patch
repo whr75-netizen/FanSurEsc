@@ -1,0 +1,66 @@
+--- Assets/EUnityValidation01/SkinPalette302/Shaders/FaceSceneLight335.hlsl
++++ candidate/FaceSceneLight335.hlsl
+@@ -1,3 +1,4 @@
++#include "ResolvedRegionPalette.hlsl"
+ // Separate unlit colour and illumination; no source RGB feeds light quantization.
+ #include "Assets/EUnityValidation01/SkinPalette302/Shaders/HairRamp335.hlsl"
+ // Existing file identity retained when superseding the earlier binary face-light trial.
+@@ -67,9 +68,12 @@
+  if(role>=11&&role<=14)return _ShadeLayer335>.5?HairAnchor335()*lerp(minimumShade,1,level):1;
+  return _ShadeLayer335>.5?lerp(minimumShade,1,level):1;
+ }
+-float3 SurfaceLayerOutput335(float3 colour,float3 factor,float continuous,float quantized){
++float3 SurfaceLayerOutput335(float3 colour,float3 factor,float continuous,float quantized,uint2 stagePixel){
+  if(_SurfaceLayerView335==1)return colour;
+  if(_SurfaceLayerView335==2)return continuous.xxx;
+  if(_SurfaceLayerView335==3)return quantized.xxx;
++ float3 paletteRGB;
++ if(TryResolvedRegionPalette(stagePixel,paletteRGB))return paletteRGB;
++ // Unresolved/excluded remains legacy and MUST NOT count as finite-LUT success.
+  return colour*factor;
+ }
+--- Assets/EUnityValidation01/SkinPalette302/Shaders/BodyPalette302.hlsl
++++ candidate/BodyPalette302.hlsl
+@@ -8,7 +8,7 @@
+ sampler2D _Auto245CreamMember,_Auto245StockMember,_Auto245FaceSkinMember,_Auto245BodySkinMember;
+ float4 _Auto245CreamShade,_Auto245SkinShade,_Auto245StockLit,_Auto245StockShade;
+ 
+-#include "Assets/EUnityValidation01/SkinPalette302/Shaders/FaceSceneLight335.hlsl"
++#include "FaceSceneLight335.hlsl"
+ 
+ // Reuse installed MToon reflectance. Radiance RGB is never passed to the palette.
+ half Auto245Shadow(const Varyings input,const MToonInput material){
+@@ -53,7 +53,7 @@
+  if(_Auto249Probe>.5)return float4(uv,_Auto245Role+1,alpha);
+  MToonInput material;material.uv=uv;material.normalWS=GetMToonGeometry_Normal(input,fragmentInput.facing,uv);material.viewDirWS=normalize(input.viewDirWS);material.litColor=source.rgb;material.alpha=alpha;
+  if(_Auto245Stage<.5)return half4(source.rgb,alpha);
+- if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){half3 baseColour,shadeEndpoint;Auto245Palette(uv,source.rgb,baseColour,shadeEndpoint);float continuous=ContinuousSurfaceLight335(input,material);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));level=ProviderSurfaceLevel335(level,(int)round(_Auto245Role),input.pos.xy,-TransformWorldToView(input.positionWS).z);float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);return float4(SurfaceLayerOutput335(baseColour,factor,continuous,level),alpha);}
++ if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){half3 baseColour,shadeEndpoint;Auto245Palette(uv,source.rgb,baseColour,shadeEndpoint);float continuous=ContinuousSurfaceLight335(input,material);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));level=ProviderSurfaceLevel335(level,(int)round(_Auto245Role),input.pos.xy,-TransformWorldToView(input.positionWS).z);float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);return float4(SurfaceLayerOutput335(baseColour,factor,continuous,level,(uint2)input.pos.xy),alpha);}
+  half shadow=Auto245Shadow(input,material);
+  if(_Auto245Stage<1.5)return half4(shadow.xxx,alpha);
+  half3 lit,shade;Auto245Palette(uv,source.rgb,lit,shade);
+--- Assets/EUnityValidation01/MinimalRestore335/Shaders/RestoreStyle335.compute
++++ candidate/RestoreStyle335.compute
+@@ -1,3 +1,4 @@
++#include "ResolvedRegionPalette.hlsl"
+ #pragma kernel Restore
+ #include "Assets/EUnityValidation01/SkinPalette302/Shaders/HairRamp335.hlsl"
+ #pragma kernel ShadeBoundary
+@@ -77,7 +78,16 @@
+  _ShadeMaskOut335[p]=float4(q,c.x,c.z,ShadeRole335(m)?m.y:0);
+ }
+ [numthreads(8,8,1)]void ApplyShadeBoundary(uint3 id:SV_DispatchThreadID){
+- int2 p=id.xy;if(any(p>=_ShadeSize335)||_ShadeApply335==0)return;
++ int2 p=id.xy;if(any(p>=_ShadeSize335))return;
++ float3 paletteRGB;
++ if(TryResolvedRegionPalette((uint2)p,paletteRGB)){
++  float4 colour=_ShadeColourOut335[p];colour.rgb=paletteRGB;_ShadeColourOut335[p]=colour;
++  float4 cls=_ShadeClassOut335[p];cls.x=_ShadeMaskRead335.Load(int3(p,0)).x;_ShadeClassOut335[p]=cls;
++  float4 factor=_ShadeFactorOut335[p];factor.rgb=1;_ShadeFactorOut335[p]=factor;
++  return;
++ }
++ // No confirmed region: retain legacy output, reported unresolved by CPU input.
++ if(_ShadeApply335==0)return;
+  float4 m=_ShadeMeta335.Load(int3(p,0));if(!ShadeRole335(m))return;
+  float4 mask=_ShadeMaskRead335.Load(int3(p,0)),cls=_ShadeClassOut335[p];
+  float old=cls.x,q=mask.x;if(abs(old-q)<.01)return;

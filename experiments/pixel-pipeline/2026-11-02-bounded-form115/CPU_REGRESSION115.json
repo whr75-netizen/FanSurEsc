@@ -1,0 +1,37 @@
+{
+  "passed": 12,
+  "tests": [
+    "Frozen binary stride/size, uniform, point/cell and mask ranges",
+    "Cache wrapper bytes agree with interpreted constant offsets and SRV/UAV slots; not actual GPU binding contents",
+    "Reject zero width",
+    "Reject key count33",
+    "Reject point count25",
+    "Reject cell144",
+    "Reject mask beyond nine points",
+    "Reject short moment buffer",
+    "Candidate permutation changes output slots only; exact metric words preserved",
+    "Observed0: missing pairs equal n*(n-1)/2; absent relative geometry remains invalid",
+    "Available0: pair arithmetic has no unsigned-underflow loop; relative dimensions remain absent",
+    "CPU interpreter hard step budget stops incomplete interpretation"
+  ],
+  "GPUOrUnityOrCompilerInvocations": 0,
+  "baselineSteps": [
+    6006,
+    6006
+  ],
+  "reversedSteps": [
+    6006,
+    6006
+  ],
+  "activeSourceKeysByPart": [
+    4,
+    3
+  ],
+  "emptyCandidateMissingPairs": [
+    6,
+    3
+  ],
+  "sourceOfBounds": "Reviewed115 capacity32keys/24points; microfixture slot0 two candidates; not a GPU-content attestation",
+  "productionApplied": false,
+  "rootCauseConfirmed": false
+}

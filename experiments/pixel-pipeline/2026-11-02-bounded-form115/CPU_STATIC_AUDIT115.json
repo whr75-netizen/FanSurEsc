@@ -1,0 +1,69 @@
+{
+  "schema": "bounded-form115/cpu-static-followup/v1",
+  "rootCauseConfirmed": false,
+  "GPUExecutionSafe": false,
+  "GPUCommands": 0,
+  "UnityCommands": 0,
+  "CompilerInvocations": 0,
+  "productChanges": 0,
+  "lastCompletedGPUStage": "BeginForm115 init state/primary readbacks, 2026-11-02T06:02:39.8278709Z",
+  "lastSubmittedGPUStage": "EvaluateForm115 two threads, 2026-11-02T06:02:39.8334833Z",
+  "ParetoSubmitted": false,
+  "cachedProgram": {
+    "file": "00/10d3f55c74b590a23ab2f86e4c2f1836.bin",
+    "SHA256": "c5c6463f2525c7e228e221d7877fbd7511295b4151daa565f8ef2d9cdc55e302",
+    "DXBCbytes": 30288,
+    "SHEXbytes": 30204,
+    "instructions": 1062,
+    "loops": 10,
+    "privateArrays": "5 indexable arrays of32 float4 registers each",
+    "temporaryFloat4Registers": 14,
+    "UAVs": 8,
+    "SRVs": 1,
+    "identification": "Resource signature, kernel name in compiler warnings, matching control/data flow",
+    "driverMachineCodeAttested": false
+  },
+  "hypotheses": [
+    {
+      "name": "Loop termination/unsigned underflow",
+      "finding": "Cached continue edges increment their counters. Both CPU interpretations terminate in6006 instructions. Observed0/source0 pair tests terminate with valid signed counts and invalid unobserved relative dimensions.",
+      "limit": "Actual GPU uniforms were not echoed. Intended-input termination is not proof of driver execution."
+    },
+    {
+      "name": "Array/structured memory bounds",
+      "finding": "Every CPU effective access checked: private maximum19<32, key19<20, moment1919<2880, tag95<144, point6<48, metric1<2. Cache8UAV+1SRV strides match host structs.",
+      "limit": "No GPU content readback attestation. Original kernel has no defensive key-count/point-count/zero-width validation; this is not evidence those values were actually wrong."
+    },
+    {
+      "name": "Uniform layout/binding",
+      "finding": "Expected int2/int/int2 source types and cached byte offsets484/496/560 agree with host setters. Structured slots0..7 and SRV0 agree with the interpreter and source bindings.",
+      "limit": "CPU constant block is host-intended, not captured GPU state. Unity cache wrapper bytes corroborate offsets but its complete schema is not assumed."
+    },
+    {
+      "name": "Initialization/alias/lifetime",
+      "finding": "Host typed uploads cover frozen input sizes. Allocations are distinct C# buffer objects. No owner Dispose before pending callbacks. Init GPU success checks state16 and primary group48 only.",
+      "limit": "Other GPU input contents/handles were not sampled. Cannot prove native resource identities merely from C# source."
+    },
+    {
+      "name": "Compiler code generation",
+      "finding": "Forced-unroll warning exists, but saved DXBC has1062 instructions,10 loops and5 indexable arrays. CPU token semantics enclose12 independent rational oracle values.",
+      "limit": "Warning does not establish expansion or device-loss cause. Driver translation, scheduling, FTZ and exact loaded machine code are not emulated."
+    },
+    {
+      "name": "Incomplete readbacks",
+      "finding": "Init callbacks succeeded; metric stage had2 pending callbacks. No WaitForCompletion call. No normal Dispose/AFTER/complete marker. Old PID6288 ended; no old observer survives reboot.",
+      "limit": "Request structs/done/hasError were not retained. Pending callback state cannot distinguish GPU execution, driver/device failure or callback transport. Device reset cannot be dismissed as a harmless readback stall."
+    }
+  ],
+  "runtimeFixApplied": false,
+  "offlineChanges": "Bounded CPU decoder/interpreter, frozen-input validation,12 regression checks. No speculative shader correction.",
+  "currentNativeState": "New Editor loaded settings/dirty/Play are unqueried under Unity-command suspension. File and external-backup preservation are checked separately.",
+  "GPUResumeConditionsNotMet": [
+    "Do not rerun original115, tiny2candidate evaluation, new Play or shader compiler on the basis of this CPU result.",
+    "Exact device-loss path and actual submitted constants/resource identity remain missing. Need a separate safety decision before any later GPU diagnostic.",
+    "A later diagnostic must be explicit stages without late-callback auto-chaining, retain request state, and attest input identity before evaluation; pending resources must not be force-freed.",
+    "Removing a warning, reducing dispatch or waiting longer cannot establish safety. No driver/TDR/security change is proposed."
+  ],
+  "tokenFormatReference": "https://raw.githubusercontent.com/microsoft/DirectXShaderCompiler/main/include/dxc/Support/d3d12TokenizedProgramFormat.hpp",
+  "CPUReproduce": ["python cpu_tokens115.py", "python cpu_regression115.py"]
+}

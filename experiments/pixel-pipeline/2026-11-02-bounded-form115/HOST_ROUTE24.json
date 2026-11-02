@@ -1,0 +1,683 @@
+{
+  "schema": "candidate24/static-host-gate/v1",
+  "GPUOrUnityOrCompilerInvocations": 0,
+  "oldShaderSHA256": "046b56a22fb4476fd1f7f0b642eed2a7b36ff623e042a2b1df0907fc4e0d9356",
+  "candidateShaderSHA256": "f570dec5e0c56efea1b25a8f73990e0f799ebe51e4a9d200598607399cf602da",
+  "successfulCommand": {
+    "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\argon23-runtime113\\attempt5\\RUN_Capture113e.cs.txt",
+    "SHA256": "c847d770b4245f2df4895c6515a16af7c1d412fec3821332c53862d59fdd4c08",
+    "bytes": 211070,
+    "forbiddenReferences": [],
+    "keyDependencies": [
+      {
+        "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\argon23-runtime113\\Forward113.cs",
+        "SHA256": "7c8baf8741349788187929dbd6c72816fabd0a58ea5c254ff5dff42136dc5eb9",
+        "bodyInSuccessfulBundle": true,
+        "bundledClass": "Forward113",
+        "bundleLine": 1118
+      },
+      {
+        "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\argon23-runtime113\\RegionDriver113.cs",
+        "SHA256": "c2f03c4536760e2de49ed263fde22ee8a8cd948e574cf5d440fc09c360a0bb4c",
+        "bodyInSuccessfulBundle": true,
+        "bundledClass": "RegionDriver113",
+        "bundleLine": 1099
+      },
+      {
+        "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\argon23-runtime113\\NativeCarrier113.cs",
+        "SHA256": "cfebaba35773d8b6ab6df17102c1f9295154df00379c41d5a1c4a4443b5afbb3",
+        "bodyInSuccessfulBundle": true,
+        "bundledClass": "NativeCarrier113",
+        "bundleLine": 885
+      },
+      {
+        "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\argon23-runtime113\\SourcePigmentStream113.cs",
+        "SHA256": "64a4db2aefb1bdc00599d021073640ccb5c58661ce60e845bdbbef1e10446309",
+        "bodyInSuccessfulBundle": true,
+        "bundledClass": "SourcePigment113",
+        "bundleLine": 1081
+      },
+      {
+        "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\aperture-runtime111\\WholeEye111.cs",
+        "SHA256": "e2b56388d72a76cd2d12a875d26945480f41a97fd4ea9cfc8646ee7c7e38655a",
+        "bodyInSuccessfulBundle": true,
+        "bundledClass": "WholeEye107",
+        "bundleLine": 974
+      },
+      {
+        "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\joint-lid107\\LiveSurface107.cs",
+        "SHA256": "0c7345c4697f3e182942e41bd095bd09b1a5ac165e8ec746bcfd34b0a44aa7e9",
+        "bodyInSuccessfulBundle": true,
+        "bundledClass": "LiveSurface107",
+        "bundleLine": 949
+      },
+      {
+        "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\layer-zero101\\LayerZero101.cs",
+        "SHA256": "6a3cf2c7ea993bf3d4826fb1befce3a7b0b20a3fef55201def27bddd21e10f32",
+        "bodyInSuccessfulBundle": true,
+        "bundledClass": "LayerZero101",
+        "bundleLine": 733
+      },
+      {
+        "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\live-underlay98\\NativeRetarget96.cs",
+        "SHA256": "5c73b3eb2c97e46aacc79aed71aa234f71cb3478bfaed7d830f31f62a6b6e128",
+        "bodyInSuccessfulBundle": true,
+        "bundledClass": "NativeRetarget96",
+        "bundleLine": 760
+      }
+    ]
+  },
+  "productCSharpScan": {
+    "roots": [
+      "Assets/EUnityValidation01",
+      "Assets/Scripts"
+    ],
+    "files": 231,
+    "bytes": 2656953,
+    "forbiddenReferences": [],
+    "notScanned": "Other package/native/reflection/dynamically loaded session code; current Editor state not queried"
+  },
+  "serializedAssetScan": {
+    "files": 84,
+    "bytes": 84302787,
+    "dangerous115References": [],
+    "skipped": [
+      "Assets\\EUnityValidation01\\AutoMask245R3\\Config\\BodySkinMaterialMembership245.asset",
+      "Assets\\EUnityValidation01\\AutoMask245R3\\Config\\StockMaterialMembership245.asset",
+      "Assets\\EUnityValidation01\\AutoMask245R3\\Config\\TopCreamMaterialMembership245.asset",
+      "Assets\\EUnityValidation01\\GarmentClass189\\Inputs\\B24LinearPointField189.asset",
+      "Assets\\EUnityValidation01\\Residual249\\Config\\CleanLitB25.asset"
+    ],
+    "scope": "EUnityValidation01/Settings/Scenes .asset/.prefab/.unity; not all package/native/session state"
+  },
+  "currentCandidateHostExists": false,
+  "candidateShaderInAssets": false,
+  "currentHardcodedShaderLoads": {
+    "file": "Forward113.cs",
+    "line": 21,
+    "count": 3,
+    "path": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/ForwardEye113.compute"
+  },
+  "cloneOwnership": {
+    "file": "WholeEye111.cs",
+    "line": 26,
+    "cloneInput": "Explicit original passed from Forward113, not a hardcoded115 asset",
+    "perViewOwned": true,
+    "disposeLine": 69
+  },
+  "callbacks": {
+    "Capture113.cs:64": "EditorApplication.update+=Tick (Play lifecycle/capture)",
+    "Forward113.cs:21": "LayerZero101.AfterCanvas=Record",
+    "Forward113.cs:48": "Unhooks own AfterCanvas, disposes own region/three engines/native/targets",
+    "Capture113.cs:107": "EditorApplication.update-=Tick"
+  },
+  "hazardsInHistoricalRunner": [
+    "It enters Play and installs observers; do not replay it for the first compute test.",
+    "Whole engine still Query stack32/Select arrays; GatherEye113 still seen16; ComposeRegion113 still depth16/known16.",
+    "GraphicsBuffer.GetData and CpuSourceCapture64 synchronous plane readback are present; strip height bounds bytes, not GPU waiting time.",
+    "Full3-engine BVH/region enumeration and legacy102/106 control paths remain; no automatic full renderer reuse."
+  ],
+  "mechanicallyExcludedNow": "115 evaluator/interval code absent from candidate source and frozen113 host. Not an end-to-end loaded candidate attestation: no candidate host/binding exists yet.",
+  "changedFunctionBodies": [
+    "Less113",
+    "BuildSubsets113",
+    "Enumerate113"
+  ],
+  "changedKernelClosures": [
+    "BuildSubsets113",
+    "Enumerate113",
+    "Reduce113"
+  ],
+  "geometryImplementation": "Transport/ring/midpoint are CPU checks and uncompiled helper source only. No changes in RegionDriver113 scalar12mm, CarrierQueries1138x or ComposeRegion113 missing-carrier logic.",
+  "matrix": [
+    {
+      "kernel": "ResolveCurve107",
+      "threads": "8,8,1",
+      "line": 265,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "Contributions107",
+        "Distance106",
+        "Intersects106",
+        "Layer96",
+        "ResolveCurve107"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_BaselineColour106": "StructuredBuffer<float4>",
+        "_BaselineDecision106": "StructuredBuffer<float4>",
+        "_BaselineIdentity106": "StructuredBuffer<float4>",
+        "_CurveAudit106": "RWStructuredBuffer<float4>",
+        "_CurveColour106": "RWStructuredBuffer<float4>",
+        "_CurveDecision106": "RWStructuredBuffer<float4>",
+        "_CurveIdentity106": "RWStructuredBuffer<float4>",
+        "_Curves106": "StructuredBuffer<CurveSegment106>",
+        "_Layers96": "RWStructuredBuffer<float4>",
+        "_Visibility96": "RWStructuredBuffer<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "Not called in successful113 Draw (literal ApplyCurve106 selected)",
+      "memoryRange": "Unchanged declarations",
+      "loopBoundAndDelta": "Dead on audited path, but retained shader entrypoint"
+    },
+    {
+      "kernel": "ApplyCurve106",
+      "threads": "8,8,1",
+      "line": 216,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "ApplyCurve106",
+        "Distance106",
+        "Intersects106",
+        "Layer96"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_BaselineColour106": "StructuredBuffer<float4>",
+        "_BaselineDecision106": "StructuredBuffer<float4>",
+        "_BaselineIdentity106": "StructuredBuffer<float4>",
+        "_CurveAudit106": "RWStructuredBuffer<float4>",
+        "_CurveColour106": "RWStructuredBuffer<float4>",
+        "_CurveDecision106": "RWStructuredBuffer<float4>",
+        "_CurveIdentity106": "RWStructuredBuffer<float4>",
+        "_Curves106": "StructuredBuffer<CurveSegment106>",
+        "_Layers96": "RWStructuredBuffer<float4>",
+        "_Visibility96": "RWStructuredBuffer<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "1 control dispatch:ceil(18/8),ceil(8/8)",
+      "memoryRange": "Original legacy106 debug output/curves",
+      "loopBoundAndDelta": "Curve loop and source sampling unchanged; control-only work not needed in first probe"
+    },
+    {
+      "kernel": "ComposeForward102",
+      "threads": "8,8,1",
+      "line": 178,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "ComposeForward102"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_CanvasMeta102": "Texture2D<float4>",
+        "_CanvasRGBA102": "Texture2D<float4>",
+        "_EyeOwner102": "RWTexture2D<float4>",
+        "_EyeRGBA102": "RWTexture2D<float4>",
+        "_FinalOwner102": "RWTexture2D<float4>",
+        "_FinalRGBA102": "RWTexture2D<float4>",
+        "_HairMeta102": "Texture2D<float4>",
+        "_HairRGBA102": "Texture2D<float4>",
+        "_ReadColour96": "StructuredBuffer<float4>",
+        "_ReadDecision96": "StructuredBuffer<float4>",
+        "_ReadIdentity96": "StructuredBuffer<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "Twice for original102 and legacy106 controls;ceil(ROI/8)",
+      "memoryRange": "Same canvas/hair and four ROI RTs",
+      "loopBoundAndDelta": "16 fine samples and legacy select; control-only work not required in new first probe"
+    },
+    {
+      "kernel": "PackWorld98",
+      "threads": "8,8,1",
+      "line": 60,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "PackWorld98"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_NativeWorldColour98": "Texture2D<float4>",
+        "_NativeWorldDepth98": "Texture2D<float>",
+        "_WorldColourOut98": "RWTexture2D<float4>",
+        "_WorldProofOut98": "RWTexture2D<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "Not called by Forward113 path; method exists in WholeEye107",
+      "memoryRange": "Unchanged world-underlay resources",
+      "loopBoundAndDelta": "Dead on audited path; no claim physically absent from asset"
+    },
+    {
+      "kernel": "PackPart",
+      "threads": "8,8,1",
+      "line": 99,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "PackPart"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_Layers96": "RWStructuredBuffer<float4>",
+        "_PartMeta96": "Texture2D<float4>",
+        "_PartRGBA96": "Texture2D<float4>",
+        "_PartRest96": "Texture2D<float4>",
+        "_PartShade96": "Texture2D<float4>",
+        "_PartUV96": "Texture2D<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "12 dispatches:4 parts \u00d73 engines; ceil(w/8),ceil(h/8)",
+      "memoryRange": "Native dimensions72\u00d732, dense/carrier144\u00d764;20 float4 planes/engine",
+      "loopBoundAndDelta": "Constant5 fields; per-thread O(1)"
+    },
+    {
+      "kernel": "Refit",
+      "threads": "64,1,1",
+      "line": 100,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "Refit",
+        "Screen96"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_Boxes96": "RWStructuredBuffer<float4>",
+        "_LevelNodes96": "StructuredBuffer<int>",
+        "_Nodes96": "StructuredBuffer<int4>",
+        "_Triangles96": "StructuredBuffer<Tri96>",
+        "_World96": "StructuredBuffer<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "3 engines \u00d7 each recorded BVH level; ceil(levelCount/64)",
+      "memoryRange": "Nodes59083, depth15 in actual113; boxes2\u00d7nodes; indices checked by original constructor",
+      "loopBoundAndDelta": "One node/thread per level; full topology unchanged"
+    },
+    {
+      "kernel": "Query",
+      "threads": "64,1,1",
+      "line": 104,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "AlphaBounds96",
+        "AlphaTexel96",
+        "Cross96",
+        "Layer96",
+        "Query",
+        "Screen96",
+        "Wrap96"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_Boxes96": "RWStructuredBuffer<float4>",
+        "_Layers96": "RWStructuredBuffer<float4>",
+        "_Materials96": "StructuredBuffer<Mat96>",
+        "_Nodes96": "StructuredBuffer<int4>",
+        "_OwnSkin113": "StructuredBuffer<uint>",
+        "_PartTriangles96": "StructuredBuffer<int>",
+        "_Queries96": "StructuredBuffer<float4>",
+        "_QueryEvidence107": "RWStructuredBuffer<float4>",
+        "_Rest96": "StructuredBuffer<float4>",
+        "_SourceAlpha96_0": "Texture2D<float4>",
+        "_SourceAlpha96_1": "Texture2D<float4>",
+        "_SourceAlpha96_10": "Texture2D<float4>",
+        "_SourceAlpha96_11": "Texture2D<float4>",
+        "_SourceAlpha96_12": "Texture2D<float4>",
+        "_SourceAlpha96_13": "Texture2D<float4>",
+        "_SourceAlpha96_14": "Texture2D<float4>",
+        "_SourceAlpha96_15": "Texture2D<float4>",
+        "_SourceAlpha96_16": "Texture2D<float4>",
+        "_SourceAlpha96_17": "Texture2D<float4>",
+        "_SourceAlpha96_18": "Texture2D<float4>",
+        "_SourceAlpha96_19": "Texture2D<float4>",
+        "_SourceAlpha96_2": "Texture2D<float4>",
+        "_SourceAlpha96_20": "Texture2D<float4>",
+        "_SourceAlpha96_21": "Texture2D<float4>",
+        "_SourceAlpha96_22": "Texture2D<float4>",
+        "_SourceAlpha96_23": "Texture2D<float4>",
+        "_SourceAlpha96_24": "Texture2D<float4>",
+        "_SourceAlpha96_25": "Texture2D<float4>",
+        "_SourceAlpha96_26": "Texture2D<float4>",
+        "_SourceAlpha96_27": "Texture2D<float4>",
+        "_SourceAlpha96_28": "Texture2D<float4>",
+        "_SourceAlpha96_29": "Texture2D<float4>",
+        "_SourceAlpha96_3": "Texture2D<float4>",
+        "_SourceAlpha96_30": "Texture2D<float4>",
+        "_SourceAlpha96_31": "Texture2D<float4>",
+        "_SourceAlpha96_4": "Texture2D<float4>",
+        "_SourceAlpha96_5": "Texture2D<float4>",
+        "_SourceAlpha96_6": "Texture2D<float4>",
+        "_SourceAlpha96_7": "Texture2D<float4>",
+        "_SourceAlpha96_8": "Texture2D<float4>",
+        "_SourceAlpha96_9": "Texture2D<float4>",
+        "_Stats96": "RWStructuredBuffer<uint>",
+        "_Triangles96": "StructuredBuffer<Tri96>",
+        "_UV96": "StructuredBuffer<float2>",
+        "_Visibility96": "RWStructuredBuffer<float4>",
+        "_World96": "StructuredBuffer<float4>"
+      },
+      "sourceLocalArrays": [
+        {
+          "function": "Query",
+          "name": "stack",
+          "count": 32
+        }
+      ],
+      "dispatch113AndUnconnectedCandidate": "3 dispatches; total82944 logical query rays",
+      "memoryRange": "Same triangles29542/vertices20459/materials15/BVH59083 in saved inputs",
+      "loopBoundAndDelta": "while(sp>0), stack32; no explicit visit-budget check. Acyclic-tree proof only; worst59083 node visits/ray"
+    },
+    {
+      "kernel": "Select",
+      "threads": "8,8,1",
+      "line": 121,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "Layer96",
+        "Select",
+        "SourceKey96"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_CanonicalColour96": "RWStructuredBuffer<float4>",
+        "_CanonicalIdentity96": "RWStructuredBuffer<float4>",
+        "_Decision96": "RWStructuredBuffer<float4>",
+        "_Layers96": "RWStructuredBuffer<float4>",
+        "_Stats96": "RWStructuredBuffer<uint>",
+        "_Visibility96": "RWStructuredBuffer<float4>",
+        "_Witness96": "RWStructuredBuffer<int4>"
+      },
+      "sourceLocalArrays": [
+        {
+          "function": "Select",
+          "name": "L",
+          "count": 4
+        },
+        {
+          "function": "Select",
+          "name": "weight",
+          "count": 48
+        },
+        {
+          "function": "Select",
+          "name": "meanDepth",
+          "count": 3
+        }
+      ],
+      "dispatch113AndUnconnectedCandidate": "3 dispatches; each ceil((w/4)/8),ceil((h/4)/8)",
+      "memoryRange": "Same input layers/visibility, canonical outputs n/16",
+      "loopBoundAndDelta": "16 sub-samples,3 parts; private weight48/L4/U4 arrays retained"
+    },
+    {
+      "kernel": "Compose",
+      "threads": "8,8,1",
+      "line": 154,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "Compose"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_BackingColour96": "Texture2D<float4>",
+        "_BackingMeta96": "Texture2D<float4>",
+        "_BackingUV96": "Texture2D<float4>",
+        "_BaseDepth96": "Texture2D<float4>",
+        "_BaseFinal96": "Texture2D<float4>",
+        "_BaseOwner96": "Texture2D<float4>",
+        "_FinalAudit96": "RWTexture2D<float4>",
+        "_FinalColour96": "RWTexture2D<float4>",
+        "_FinalDepth96": "RWTexture2D<float4>",
+        "_FinalOwner96": "RWTexture2D<float4>",
+        "_NonEyeColour98": "Texture2D<float4>",
+        "_NonEyeMeta98": "Texture2D<float4>",
+        "_NonEyeUV98": "Texture2D<float4>",
+        "_OldIntrinsic96": "Texture2D<float4>",
+        "_OldOwner96": "Texture2D<float4>",
+        "_PackedWorldColour98": "Texture2D<float4>",
+        "_PackedWorldProof98": "Texture2D<float4>",
+        "_ReadColour96": "StructuredBuffer<float4>",
+        "_ReadDecision96": "StructuredBuffer<float4>",
+        "_ReadIdentity96": "StructuredBuffer<float4>",
+        "_ReadLayers96": "StructuredBuffer<float4>",
+        "_ReadVisibility96": "StructuredBuffer<float4>",
+        "_Records96": "StructuredBuffer<Record96>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "Not called by Forward113 path; method exists in WholeEye107",
+      "memoryRange": "Unchanged legacy composition resources",
+      "loopBoundAndDelta": "Dead on audited path; no claim physically absent from asset"
+    },
+    {
+      "kernel": "PrepareCells113",
+      "threads": "8,8,1",
+      "line": 342,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "Distance106",
+        "Encode113",
+        "PrepareCells113",
+        "SL113",
+        "SourceKey113",
+        "Upper113",
+        "Weight113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_CellTags113": "RWStructuredBuffer<uint4>",
+        "_Cells113": "RWStructuredBuffer<float4>",
+        "_Curves106": "StructuredBuffer<CurveSegment106>",
+        "_Keys113": "StructuredBuffer<Key113>",
+        "_SrcLayers113": "StructuredBuffer<float4>",
+        "_SrcVisibility113": "StructuredBuffer<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "3\u00d71 groups \u00d764 threads;144 in-bounds cells",
+      "memoryRange": "Cells512\u00d77\u00d716, tags512\u00d716, source144\u00d764, keys20, curves846",
+      "loopBoundAndDelta": "64 samples/cell; SourceKey scan\u226432; curve loops\u22641024. Source limits unchanged"
+    },
+    {
+      "kernel": "GatherEye113",
+      "threads": "1,1,1",
+      "line": 360,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "AtBit113",
+        "C113",
+        "GatherEye113",
+        "RawConnected113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_CellTags113": "RWStructuredBuffer<uint4>",
+        "_Cells113": "RWStructuredBuffer<float4>",
+        "_Frame113": "RWStructuredBuffer<uint4>",
+        "_Points113": "RWStructuredBuffer<uint4>"
+      },
+      "sourceLocalArrays": [
+        {
+          "function": "RawConnected113",
+          "name": "seen",
+          "count": 16
+        }
+      ],
+      "dispatch113AndUnconnectedCandidate": "2\u00d71\u00d71, numthreads1",
+      "memoryRange": "Frame64\u00d716, points48\u00d716, grid\u2264512; same caches",
+      "loopBoundAndDelta": "RawConnected seen16; up to32 active scope calls \u00d7512 passes \u00d7512 cells, plus24-point adjacency"
+    },
+    {
+      "kernel": "BuildSubsets113",
+      "threads": "64,1,1",
+      "line": 374,
+      "bodyChanged": true,
+      "closureChanged": true,
+      "closure": [
+        "BuildSubsets113",
+        "C113",
+        "Connected113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_CellTags113": "RWStructuredBuffer<uint4>",
+        "_Cells113": "RWStructuredBuffer<float4>",
+        "_Frame113": "RWStructuredBuffer<uint4>",
+        "_Points113": "RWStructuredBuffer<uint4>",
+        "_Subsets113": "RWStructuredBuffer<Subset113>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "64\u00d74\u00d71, numthreads64 =16384 nominal threads",
+      "memoryRange": "Subsets16384\u00d732; head np\u226424/ni,nw\u226412/ni+nw\u226421; b.z now direct float bits",
+      "loopBoundAndDelta": "Per valid subset\u226424 point scans +8\u00d724\u00d724 connectivity checks. New\u226424 scalar mass additions/subset"
+    },
+    {
+      "kernel": "Enumerate113",
+      "threads": "64,1,1",
+      "line": 375,
+      "bodyChanged": true,
+      "closureChanged": true,
+      "closure": [
+        "Enumerate113",
+        "Interval113",
+        "Invalid113",
+        "Less113",
+        "Merge113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_Frame113": "RWStructuredBuffer<uint4>",
+        "_Groups113": "RWStructuredBuffer<Group113>",
+        "_Subsets113": "RWStructuredBuffer<Subset113>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "32768\u00d72\u00d71, numthreads64 =4194304 nominal threads",
+      "memoryRange": "Groups65536\u00d748; subset indices<16384; same guard/buffer sizes",
+      "loopBoundAndDelta": "64-thread shared reduction,6 barrier rounds; one direct-sum add/valid pair; comparator adds scalar tie check"
+    },
+    {
+      "kernel": "Reduce113",
+      "threads": "64,1,1",
+      "line": 380,
+      "bodyChanged": false,
+      "closureChanged": true,
+      "closure": [
+        "Invalid113",
+        "Less113",
+        "Merge113",
+        "Reduce113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_Best113": "RWStructuredBuffer<Group113>",
+        "_Groups113": "RWStructuredBuffer<Group113>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "2\u00d71\u00d71, numthreads64",
+      "memoryRange": "Read32768 groups/eye; best2\u00d748; tail.z now direct float bits",
+      "loopBoundAndDelta": "512 serial group merges/thread +6 shared reduction rounds. Body unchanged but Less113 closure changes"
+    },
+    {
+      "kernel": "Write113",
+      "threads": "8,8,1",
+      "line": 381,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "C113",
+        "Write113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_Best113": "RWStructuredBuffer<Group113>",
+        "_Cells113": "RWStructuredBuffer<float4>",
+        "_CurveAudit106": "RWStructuredBuffer<float4>",
+        "_CurveColour106": "RWStructuredBuffer<float4>",
+        "_CurveDecision106": "RWStructuredBuffer<float4>",
+        "_CurveIdentity106": "RWStructuredBuffer<float4>",
+        "_Frame113": "RWStructuredBuffer<uint4>",
+        "_Points113": "RWStructuredBuffer<uint4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "3\u00d71 groups \u00d764 threads;144 in-bounds cells",
+      "memoryRange": "Read cells/frame/points/best; four144\u00d716 outputs for current grid",
+      "loopBoundAndDelta": "\u226424 point lookups/cell; closure unchanged; valid first-write diagnostic entry"
+    },
+    {
+      "kernel": "ComposeWhole113",
+      "threads": "8,8,1",
+      "line": 386,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "ComposeWhole113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_CandidateTile113": "Texture2D<float4>",
+        "_FullBase113": "Texture2D<float4>",
+        "_FullOut113": "RWTexture2D<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "1 extra capture dispatch:60\u00d734 groups \u00d764 threads",
+      "memoryRange": "480\u00d7272 float4 RT; candidate tile/current product77 colour",
+      "loopBoundAndDelta": "O(1)/pixel; capture helper then synchronous plane readbacks"
+    },
+    {
+      "kernel": "ComposeRegion113",
+      "threads": "8,8,1",
+      "line": 387,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "ComposeRegion113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_CanvasMeta102": "Texture2D<float4>",
+        "_CanvasRGBA102": "Texture2D<float4>",
+        "_CarrierLayers113": "StructuredBuffer<float4>",
+        "_CarrierVisibility113": "StructuredBuffer<float4>",
+        "_Exposure113": "RWStructuredBuffer<float4>",
+        "_EyeOwner102": "RWTexture2D<float4>",
+        "_EyeRGBA102": "RWTexture2D<float4>",
+        "_FinalOwner102": "RWTexture2D<float4>",
+        "_FinalRGBA102": "RWTexture2D<float4>",
+        "_HairMeta102": "Texture2D<float4>",
+        "_HairRGBA102": "Texture2D<float4>",
+        "_ReadColour96": "StructuredBuffer<float4>",
+        "_ReadDecision96": "StructuredBuffer<float4>",
+        "_ReadIdentity96": "StructuredBuffer<float4>"
+      },
+      "sourceLocalArrays": [
+        {
+          "function": "ComposeRegion113",
+          "name": "cvDepth",
+          "count": 16
+        },
+        {
+          "function": "ComposeRegion113",
+          "name": "known",
+          "count": 16
+        }
+      ],
+      "dispatch113AndUnconnectedCandidate": "1 dispatch:ceil(ROI/8)",
+      "memoryRange": "Same four region output RTs; exposure1024\u00d716",
+      "loopBoundAndDelta": "16 carrier/hair samples; private depth16/known16 retained. New transport and ring policy NOT integrated"
+    },
+    {
+      "kernel": "CarrierQueries113",
+      "threads": "64,1,1",
+      "line": 324,
+      "bodyChanged": false,
+      "closureChanged": false,
+      "closure": [
+        "CarrierQueries113"
+      ],
+      "sameResourceNamesAndTypes": true,
+      "resources": {
+        "_SrcLayers113": "StructuredBuffer<float4>",
+        "_WriteQueries113": "RWStructuredBuffer<float4>"
+      },
+      "sourceLocalArrays": [],
+      "dispatch113AndUnconnectedCandidate": "1 dispatch:ceil(144\u00d764\u00d74/64)=576 groups",
+      "memoryRange": "Read20 layer planes; write4\u00d79216 query records",
+      "loopBoundAndDelta": "O(1)/query; original8x carrier coordinate contract remains"
+    }
+  ]
+}

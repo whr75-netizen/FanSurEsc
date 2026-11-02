@@ -1,0 +1,124 @@
+{
+  "schema": "direct24/isolated-prefix-plan/v1",
+  "executableNow": false,
+  "GPUClearanceByThisFile": false,
+  "currentPhase": "Static/CPU review only; no new host, thin shader, compiler, import or dispatch performed",
+  "whyNotReplayExistingHost": [
+    "Historical successful113 runner is free of115 references, but enters Play, registers Editor/canvas observers, runs3 BVH engines, legacy102/106 controls and synchronous readbacks.",
+    "Current Forward113.cs still loads original ForwardEye113.compute three times. Executing it would not test Direct24.",
+    "Forward115/RegionDriver115 and BoundRun115 are forbidden dependencies. Original115 assets stay forensic; their absence from an entrypoint call graph is mandatory."
+  ],
+  "requiredPreparationBeforeDeviceUse": [
+    "Prepare a source module extracted from the four existing113-based candidate roots BuildSubsets113/Enumerate113/Reduce113/Write113 and their helper/type/constant/resource closure only. No new mathematical kernel; remove every other entrypoint/function rather than merely leaving it uncalled.",
+    "The full18-kernel candidate is NOT the first import target. A thin source artifact with a new identity must first pass a source whitelist/hash check. Do not overwrite/reuse old113 or115 assets or their GUIDs.",
+    "When compilation is permitted, compile/inspect without device dispatch first. Exactly four entrypoints, expected thread groups, resource names/strides and no dcl_indexable_temp/interval helpers are required. Current source-array absence and old cache are supporting evidence, not this unperformed compiled check.",
+    "Prepare an external one-stage command that owns all buffers/one shader clone, submits at most one Dispatch, and returns. It must not include historical capture/Play/renderer/observer/relay mode dispatchers. A callback may collect results, dispose completed owned resources and write a receipt; it must never dispatch a next stage.",
+    "Every later stage uses fresh buffers uploaded from the immutable input and the previous validated GPU result bytes. CPU may validate/hash/copy but must not select a layout. Separate explicit official command per stage; no automatic stage chain, sleep-based retry, WaitForCompletion or GraphicsBuffer.GetData.",
+    "Only after the parent reviews source/compiled identity and remaining risk, perform a fresh read-only Editor/process preflight. Do not assume old PID, Edit/dirty31, Input22 or backup47 are current loaded state."
+  ],
+  "inputContract": {
+    "kind": "Saved-source compute fixture, not a new character frame or motion capture",
+    "inputSourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+    "sourceFrame": 103,
+    "sourceSerial": 10,
+    "testRunId": "New unique ID per proposed prefix run; never relabel old113 buffers as a new render source",
+    "logicalEyeSlot": 0,
+    "originalOwner": 2,
+    "eyeIdUniform": [2,1],
+    "width": 18,
+    "height": 8,
+    "header": [9,5,6,0],
+    "points": 9,
+    "validPartSubsetCounts": [32,64],
+    "stateBits": 11,
+    "completePairStates": 2048,
+    "enumerationGroups": 32,
+    "rawInputsRequired": ["REGION113-cells.f32", "REGION113-tags.f32", "REGION113-frame.f32", "REGION113-points.f32", "REGION113-best.f32"],
+    "fixture115NotReusableAsWhole": "That fixture contains moments/keys, not Cells113. Obtain cells from existing same-source113 archive, no new capture needed. Permute frame/points/best eye slots only; preserve cell owner IDs and exact bytes.",
+    "guards": [
+      "Verify input completion marker/source/frame/serial/hash, dimensions and typed strides before allocating. Reject mismatches, never clamp them into a different feature.",
+      "All9 point indices<144, ni5/nw6, count bits11, all subset mask indices in range, mass values finite and nonnegative. Group48/Subset32/U4-16 layouts verified by typed serialization.",
+      "Preinitialize every unused Subset invalid and every unused Group to original Invalid113 (tail.y0). Upload all allocated bytes. Output unwritten cells retain a known sentinel.",
+      "No source-colour averages or predicted winning layout uploaded. First stage tests scalar support from original source masses."
+    ]
+  },
+  "stages": [
+    {
+      "number": 1,
+      "kernel": "BuildSubsets113",
+      "dispatch": [1,2,1],
+      "numthreads": [64,1,1],
+      "nominalThreads": 128,
+      "validFrozenSubsets": 96,
+      "memory": {"Cells113":57344,"CellTags113":8192,"Frame113":1024,"Points113":768,"Subsets113":524288,"sumOwnedBufferBytes":591616},
+      "activeUAVs": 5,
+      "sourcePrivateArraysInClosure": 0,
+      "maxAccess": "slot0 I states0..31, W states0..63 at offset4096; writes<=4159 of16384 subset records; points0..8, cells<144 of512",
+      "loopBound": "96 valid threads × (9 point scans + at most8×24×24 connectivity tests)=443232 source-loop test/add slots, excluding constant instruction expansion. No unbounded while or barrier.",
+      "readback": "I first64 and W first64 records in separate bounded ranges;4096bytes total. Invalid I32..63 must remain invalid, not unobserved-zero success.",
+      "completionGate": "All requests done, no GPU error, every old field plus new b.z matches CPU float32 oracle, stage result files hashed and complete marker created. Otherwise no stage2."
+    },
+    {
+      "number": 2,
+      "kernel": "Enumerate113",
+      "dispatch": [32,1,1],
+      "numthreads": [64,1,1],
+      "nominalThreads": 2048,
+      "memory": {"Frame113":1024,"Subsets113":524288,"Groups113":3145728,"sumOwnedBufferBytes":3671040,"groupsharedBytesPerGroup":3072},
+      "activeUAVs": 3,
+      "sourcePrivateArraysInClosure": 0,
+      "maxAccess": "Full original65536-group allocation initialized invalid; write group0..31 only. I subset<=31, W<=4159.",
+      "loopBound": "One original state evaluation per thread, then initial barrier plus6 shared reduction barriers;63 merges/group. Existing barriers remain outside divergent branches. New work is one scalar direct sum per valid pair and scalar tie comparisons.",
+      "readback": "32×48=1536bytes of GPU-produced group results. Leave remaining groups invalid; do not CPU-select a winner.",
+      "completionGate": "All32 group rows match CPU oracle including all surviving masks/counts/source-key fallback/direct bits; no invalid/nonfinite output; then explicit separate stage3 command."
+    },
+    {
+      "number": 3,
+      "kernel": "Reduce113",
+      "dispatch": [1,1,1],
+      "numthreads": [64,1,1],
+      "memory": {"Groups113":3145728,"Best113":96,"sumOwnedBufferBytes":3145824,"groupsharedBytesPerGroup":3072},
+      "activeUAVs": 2,
+      "sourcePrivateArraysInClosure": 0,
+      "maxAccess": "Read logical-eye0 groups0..32767; all except uploaded32 records are original Invalid113. Best output slot0 only.",
+      "loopBound": "512 original group-merge iterations/thread plus initial+6 reduction barriers;32768 group visits plus63 shared merges. Less113 now compares direct mass after four original scores, then old key loss.",
+      "readback": "48bytes GPU winner/consensus; no CPU layout decision injected.",
+      "completionGate": "Full primary score/masks/tail equals expected source-backed Direct24 result and previous32 group data. Complete marker and owned-resource cleanup confirmation required before stage4."
+    },
+    {
+      "number": 4,
+      "kernel": "Write113",
+      "dispatch": [1,1,1],
+      "numthreads": [8,8,1],
+      "nominalThreads": 64,
+      "memory": {"Cells113":57344,"Frame113":1024,"Points113":768,"Best113":96,"fourCanonicalOutputs":9216,"sumOwnedBufferBytes":68448},
+      "activeUAVs": 8,
+      "sourcePrivateArraysInClosure": 0,
+      "maxAccess": "Grid18×8 output144 records/channel; this8×8 tile writes indices0..7,18..25,...126..133. It contains all9 owner2 F103 points; other cells retain sentinels.",
+      "loopBound": "At most9 frozen point comparisons/cell (source cap24), same original Write113 closure. No new colour math.",
+      "readback": "Four outputs×144×16=9216bytes. Compare only produced cells plus untouched sentinels; palette identity/RGB/owner/depth exact to CPU contract.",
+      "completionGate": "This is fixture-level scalar selector/output validation only. No final face/hair composition, rendering quality, temporal, ring or curve recovery claim."
+    }
+  ],
+  "completionAndFailureProtocol": [
+    "Create new unique output directory and stage intent before one dispatch. Do not move/delete/overwrite existing results. Record shader/source/input hashes, kernel/thread groups, buffer names/count/stride and submission count.",
+    "Retain AsyncGPUReadbackRequest and per-request state until callbacks settle. Only validate actual produced data. Completion marker is written last, after output and state/resource checks.",
+    "No callback submits a next stage. No next-stage command until prior marker, every validation and disposal receipt are confirmed. A pending request is uncertain, not denied or complete.",
+    "Any device/reset/error, shader warning inconsistent with reviewed compile, resource/CPU mismatch or stalled request blocks all further GPU work. Do not extend timeout, retry, exit Play (none entered), force-dispose pending GPU resources, kill, reset or alter driver/TDR.",
+    "Release only owned buffers/shader after every associated request actually completes. If completion is unknown, retain them and report exact stage/last receipt. Never release borrowed project or product buffers."
+  ],
+  "preservation": [
+    "Edit-mode compute only: no Play, camera/pose/mesh/material/renderer instance, InputSettings/device changes, Shader.SetGlobal*, pipeline/time/background options or scene hooks.",
+    "External runner source remains outside Assets; no Assets C# or domain reload. New thin compute asset import, if later permitted, is explicit and separately identity/hash checked. It is not performed by this plan.",
+    "Before and after compare actual current scene/options/input/public globals and relevant protected-file hashes with fresh read-only snapshots. Preserve current user changes rather than restore an old dirty count.",
+    "Original user30/protected35 and native47 backup hashes stay protected. Fresh loaded native equality is not established by old backup existence. No SaveAssets/ClearDirty/cache deletion.",
+    "No automatic full113 renderer or later Play follows this prefix. Full geometry integration, candidate-only renderer and async image capture require their own code/budget/state review using these receipts."
+  ],
+  "residualRisks": [
+    "Exact cause of the two device resets is still not known. A small thread count is not a safety proof; this proposal instead removes the entire offending shader program and its dependencies from the submitted module.",
+    "Legacy113 Write still uses8 UAVs. Not every hypothesized risk factor disappears. Source-array absence does not prove compiled scratch absence; actual candidate compilation/reflection is an unmet gate.",
+    "Driver JIT/device state and normal Editor/OS GPU rendering are outside a CPU proof. Existing source/kernel success cannot guarantee no driver or hardware fault.",
+    "The proposed host/thin module do not exist yet. No end-to-end currently loaded candidate path, resource state or absence of live callbacks has been attested.",
+    "16-sub-sample transport, evaluated-ring float2 binding and curve-midpoint/source visibility are NOT connected by this prefix. Entire character palette, outlines and real motion remain incomplete."
+  ]
+}

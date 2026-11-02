@@ -1,0 +1,316 @@
+using System.Collections.Concurrent;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
+using UnityEngine.Profiling;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor
+{
+// Offline66 candidate. Historical58 source is unchanged; loaded Unity code is unchanged.
+// Small dependency-free JSON boundary for the existing RunCommand reference set.
+// No reflection, package loading, runtime serialization of arbitrary objects.
+
+public class Json58 : IEnumerable<Json58>
+{
+    protected Dictionary<string,Json58> fields;protected List<Json58> items;protected object value;
+    public Json58 this[string key] {get {Json58 v;return fields!=null&&fields.TryGetValue(key,out v)?v:null;}set {fields[key]=value;}}
+    public Json58 this[int i] {get {return items[i];}}
+    public int Count {get {return items!=null?items.Count:fields!=null?fields.Count:0;}}
+    public void Add(Json58 v) {items.Add(v);}
+    public IEnumerable<T> Values<T>() {return this.Select(v=>(T)Convert.ChangeType(v.value,typeof(T),CultureInfo.InvariantCulture));}
+    public IEnumerator<Json58> GetEnumerator() {return (items??(fields==null?new List<Json58>():fields.Values.ToList())).GetEnumerator();}
+    IEnumerator IEnumerable.GetEnumerator() {return GetEnumerator();}
+    public static implicit operator Json58(string v) {return v==null?null:new Json58{value=v};}
+    public static implicit operator Json58(int v) {return new Json58{value=v};}
+    public static implicit operator Json58(long v) {return new Json58{value=v};}
+    public static implicit operator Json58(float v) {return new Json58{value=(double)v};}
+    public static implicit operator Json58(double v) {return new Json58{value=v};}
+    public static implicit operator Json58(bool v) {return new Json58{value=v};}
+    public static explicit operator string(Json58 v) {return v==null?null:Convert.ToString(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator int(Json58 v) {return Convert.ToInt32(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator long(Json58 v) {return Convert.ToInt64(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator double(Json58 v) {return Convert.ToDouble(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator bool(Json58 v) {return Convert.ToBoolean(v.value,CultureInfo.InvariantCulture);}
+    public static Json58 Wrap(object v) {
+        if(v==null)return null;if(v is Json58)return(Json58)v;if(v is string)return(string)v;if(v is bool)return(bool)v;
+        if(v is double)return(double)v;if(v is float)return(float)v;if(v is int)return(int)v;if(v is long)return(long)v;
+        if(v is IEnumerable){var a=new Arr58();foreach(var x in(IEnumerable)v)a.Add(Wrap(x));return a;}
+        throw new ArgumentException("Unsupported JSON boundary value: "+v.GetType().Name);
+    }
+    static string Quote(string text) {
+        var b=new StringBuilder("\"");foreach(char c in text){switch(c){case '"':b.Append("\\\"");break;case '\\':b.Append("\\\\");break;case '\b':b.Append("\\b");break;case '\f':b.Append("\\f");break;case '\n':b.Append("\\n");break;case '\r':b.Append("\\r");break;case '\t':b.Append("\\t");break;default:if(c<32)b.Append("\\u"+((int)c).ToString("x4"));else b.Append(c);break;}}return b.Append('"').ToString();
+    }
+    public override string ToString() {
+        if(fields!=null)return "{"+string.Join(",",fields.OrderBy(p=>p.Key,StringComparer.Ordinal).Select(p=>Quote(p.Key)+":"+(p.Value==null?"null":p.Value.ToString())))+"}";
+        if(items!=null)return "["+string.Join(",",items.Select(v=>v==null?"null":v.ToString()))+"]";
+        if(value==null)return "null";if(value is string)return Quote((string)value);if(value is bool)return(bool)value?"true":"false";
+        if(value is double){double x=(double)value;if(double.IsNaN(x)||double.IsInfinity(x))throw new ArgumentException("Nonfinite JSON number");return x.ToString("R",CultureInfo.InvariantCulture);}
+        return Convert.ToString(value,CultureInfo.InvariantCulture);
+    }
+    public static bool DeepEquals(Json58 a,Json58 b) {return a==null?b==null:b!=null&&a.ToString()==b.ToString();}
+    public const int MaxInputChars66=65536;
+    public static Json58 Parse(string text) {if(text.Length>MaxInputChars66)throw new ArgumentException("Small JSON budget exceeded; use streaming verification");int p=0;var result=ParseValue(text,ref p,0);Space(text,ref p);if(p!=text.Length)throw new ArgumentException("Trailing JSON data");return result;}
+    static void Space(string s,ref int p) {while(p<s.Length&&char.IsWhiteSpace(s[p]))p++;}
+    static string ParseString(string s,ref int p) {
+        if(s[p++]!='"')throw new ArgumentException("JSON string expected");var b=new StringBuilder();
+        while(p<s.Length){char c=s[p++];if(c=='"')return b.ToString();if(c=='\\'){char e=s[p++];switch(e){case '"':case '\\':case '/':b.Append(e);break;case 'b':b.Append('\b');break;case 'f':b.Append('\f');break;case 'n':b.Append('\n');break;case 'r':b.Append('\r');break;case 't':b.Append('\t');break;case 'u':b.Append((char)int.Parse(s.Substring(p,4),NumberStyles.HexNumber,CultureInfo.InvariantCulture));p+=4;break;default:throw new ArgumentException("JSON escape");}}else{if(c<32)throw new ArgumentException("JSON control character");b.Append(c);}}
+        throw new ArgumentException("Unterminated JSON string");
+    }
+    static Json58 ParseValue(string s,ref int p,int depth) {
+        if(depth>128)throw new ArgumentException("JSON nesting limit");Space(s,ref p);if(p>=s.Length)throw new ArgumentException("JSON value expected");char c=s[p];
+        if(c=='"')return ParseString(s,ref p);
+        if(c=='{'||c=='['){bool obj=c=='{';p++;Json58 result=obj?(Json58)new Obj58():new Arr58();Space(s,ref p);if(p<s.Length&&s[p]==(obj?'}':']')){p++;return result;}
+            while(true){Space(s,ref p);string key=null;if(obj){key=ParseString(s,ref p);if(result.fields.ContainsKey(key))throw new ArgumentException("Duplicate JSON member");Space(s,ref p);if(s[p++]!=':')throw new ArgumentException("JSON colon");}var v=ParseValue(s,ref p,depth+1);if(obj)result[key]=v;else result.Add(v);Space(s,ref p);char end=s[p++];if(end==(obj?'}':']'))break;if(end!=',')throw new ArgumentException("JSON separator");}return result;}
+        foreach(string word in new[]{"true","false","null"})if(p+word.Length<=s.Length&&string.CompareOrdinal(s,p,word,0,word.Length)==0){p+=word.Length;return word=="null"?null:(Json58)(word=="true");}
+        int start=p;while(p<s.Length&&"-+0123456789.eE".IndexOf(s[p])>=0)p++;if(start==p)throw new ArgumentException("JSON token");return double.Parse(s.Substring(start,p-start),CultureInfo.InvariantCulture);
+    }
+}
+public sealed class Obj58 : Json58 {public Obj58(){fields=new Dictionary<string,Json58>(StringComparer.Ordinal);}public new static Obj58 Parse(string text){return(Obj58)Json58.Parse(text);}}
+public sealed class Arr58 : Json58 {public Arr58(params object[] values){items=new List<Json58>();if(values.Length==1&&values[0] is IEnumerable&&!(values[0] is string)&&!(values[0] is Json58)){foreach(var v in(IEnumerable)values[0])Add(Wrap(v));}else foreach(var v in values)Add(Wrap(v));}}
+
+// Offline66 candidate: no Unity/API/thread/process/GC actions.
+
+public static class SerializedContent66
+{
+ public const int SmallSemanticBudgetBytes=65536;
+ public const int CharChunk=8192,ByteChunk=32768;
+ public sealed class Comparison
+ {
+  public string Status,BeforeSHA256,AfterSHA256,Reason;
+  public long BeforeBytes,AfterBytes,HashInputBytes;
+  public bool? Equivalent;
+ }
+ static string Finish(SHA256 h)
+ {
+  h.TransformFinalBlock(new byte[0],0,0);
+  return BitConverter.ToString(h.Hash).Replace("-","").ToLowerInvariant();
+ }
+ static string HashFile(string path,out long length)
+ {
+  length=0;
+  using(var h=SHA256.Create())using(var f=File.OpenRead(path))
+  {
+   var buffer=new byte[ByteChunk];int n;
+   while((n=f.Read(buffer,0,buffer.Length))>0){h.TransformBlock(buffer,0,n,buffer,0);length+=n;}
+   return Finish(h);
+  }
+ }
+ static string HashText(string text,out long length)
+ {
+  length=0;var chars=new char[CharChunk];var bytes=new byte[ByteChunk];
+  var encoder=new UTF8Encoding(false,true).GetEncoder();
+  using(var h=SHA256.Create())
+  {
+   int position=0;bool completed=false;
+   do
+   {
+    int count=Math.Min(chars.Length,text.Length-position);
+    text.CopyTo(position,chars,0,count);
+    int charsUsed,bytesUsed;
+    encoder.Convert(chars,0,count,bytes,0,bytes.Length,position+count==text.Length,out charsUsed,out bytesUsed,out completed);
+    if(charsUsed==0&&bytesUsed==0&&!completed)throw new InvalidOperationException("UTF8 encoder made no progress");
+    position+=charsUsed;
+    if(bytesUsed>0){h.TransformBlock(bytes,0,bytesUsed,bytes,0);length+=bytesUsed;}
+   }while(position<text.Length||!completed);
+   return Finish(h);
+  }
+ }
+ static bool RequiresExactNumericReview(string text)
+ {
+  int i=0;
+  while(i<text.Length)
+  {
+   if(text[i]=='"')
+   {i++;while(i<text.Length){char c=text[i++];if(c=='\\'){if(i<text.Length)i++;}else if(c=='"')break;}continue;}
+   char first=text[i];
+   if(first=='-'||(first>='0'&&first<='9'))
+   {
+    int j=i;if(text[j]=='-')j++;int significant=0;bool started=false;
+    while(j<text.Length)
+    {
+     char c=text[j];if(c=='.'){j++;continue;}
+     if(c<'0'||c>'9')break;if(c!='0')started=true;if(started)significant++;j++;
+    }
+    if(significant>15)return true;
+    if(j<text.Length&&(text[j]=='e'||text[j]=='E')){j++;if(j<text.Length&&(text[j]=='+'||text[j]=='-'))j++;while(j<text.Length&&text[j]>='0'&&text[j]<='9')j++;}
+    i=Math.Max(i+1,j);continue;
+   }
+   i++;
+  }
+  return false;
+ }
+ public static Comparison Verify(string beforePath,string currentSerialized)
+ {
+  if(currentSerialized==null)throw new ArgumentNullException("currentSerialized");
+  var r=new Comparison();long before,after;
+  r.BeforeSHA256=HashFile(beforePath,out before);r.AfterSHA256=HashText(currentSerialized,out after);
+  r.BeforeBytes=before;r.AfterBytes=after;r.HashInputBytes=before+after;
+  if(before==after&&r.BeforeSHA256==r.AfterSHA256)
+  {r.Status="ExactUTF8";r.Equivalent=true;r.Reason="Same serialized UTF8 fingerprint; no JSON parse/re-serialization.";return r;}
+  if(before>SmallSemanticBudgetBytes||after>SmallSemanticBudgetBytes)
+  {r.Status="UnverifiedRepresentationChange";r.Equivalent=null;r.Reason="Large nonidentical input exceeds bounded semantic fallback; not declared changed or equivalent.";return r;}
+  string previous=File.ReadAllText(beforePath,new UTF8Encoding(false,true));
+  if(RequiresExactNumericReview(previous)||RequiresExactNumericReview(currentSerialized))
+  {r.Status="UnverifiedNumericPrecision";r.Equivalent=null;r.Reason="No double-rounding equivalence for >15 significant digits.";return r;}
+  try
+  {
+   r.Equivalent=Json58.DeepEquals(Json58.Parse(previous),Json58.Parse(currentSerialized));
+   r.Status=r.Equivalent.Value?"SmallSemanticEquivalent":"SmallSemanticDifferent";
+   r.Reason="Fallback <=64KiB; no suffix copying. High-precision numbers/duplicate keys are not accepted as equivalent.";
+  }
+  catch(Exception e)
+  {
+   if(!(e is ArgumentException)&&!(e is FormatException)&&!(e is OverflowException)&&!(e is IndexOutOfRangeException))throw;
+   r.Status="UnverifiedInvalidOrUnsupportedJSON";r.Equivalent=null;r.Reason=e.GetType().Name+": "+e.Message;
+  }
+  return r;
+ }
+}
+
+public static class CreateOnly73
+{
+ public static void Text(string path,string text)
+ {using(var f=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read))using(var w=new StreamWriter(f,new UTF8Encoding(false))){w.Write(text);w.Flush();f.Flush(true);}}
+}
+
+public static class NativeSnapshot73
+{
+ public static Arr58 Backup(string root)
+ {
+  var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var rows=new Arr58();bool player=false;int i=0;
+  foreach(var o in all.Where(x=>x&&EditorUtility.IsPersistent(x)).OrderBy(x=>AssetDatabase.GetAssetPath(x)))
+  {
+   string path=AssetDatabase.GetAssetPath(o);if(!path.StartsWith("Assets/")&&!path.StartsWith("ProjectSettings/"))continue;
+   if(!EditorUtility.IsDirty(o)&&!path.StartsWith("ProjectSettings/"))continue;
+   bool dirty=EditorUtility.IsDirty(o);string name="native-before-"+(i++)+".json";string file=Path.Combine(root,name);if(File.Exists(file))throw new IOException("Snapshot already exists");
+   string text=EditorJsonUtility.ToJson(o);CreateOnly73.Text(file,text);var c=SerializedContent66.Verify(file,text);if(c.Equivalent!=true)throw new IOException("Native backup failed: "+path);
+   rows.Add(new Obj58{["path"]=path,["type"]=o.GetType().FullName,["entityId"]=o.GetEntityId().ToString(),["snapshot"]=name,["sha256"]=c.BeforeSHA256,["bytes"]=c.BeforeBytes,["dirtyBefore"]=dirty,["dirtyAfter"]=EditorUtility.IsDirty(o)});
+   if(o is PlayerSettings)player=true;
+  }
+  if(!player)throw new InvalidOperationException("Full loaded PlayerSettings snapshot unavailable; no Play");
+  CreateOnly73.Text(Path.Combine(root,"NATIVE_BEFORE73.json"),rows.ToString());return rows;
+ }
+ public static Arr58 Compare(string root,Arr58 rows)
+ {
+  var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var checks=new Arr58();
+  foreach(Obj58 row in rows)
+  {
+   string path=(string)row["path"],type=(string)row["type"];var o=all.FirstOrDefault(x=>x&&AssetDatabase.GetAssetPath(x)==path&&x.GetType().FullName==type);
+   if(!o){checks.Add(new Obj58{["path"]=path,["type"]=type,["status"]="Unavailable",["equal"]=null});continue;}
+   var c=SerializedContent66.Verify(Path.Combine(root,(string)row["snapshot"]),EditorJsonUtility.ToJson(o));checks.Add(new Obj58{["path"]=path,["type"]=type,["status"]=c.Status,["equal"]=c.Equivalent.HasValue?(Json58)c.Equivalent.Value:null,["beforeSHA"]=c.BeforeSHA256,["afterSHA"]=c.AfterSHA256,["dirty"]=EditorUtility.IsDirty(o)});
+  }
+  return checks;
+ }
+}
+
+
+internal class CommandScript:IRunCommand {
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\bounded-form115";
+ const string Prior=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\gpu-form115";
+ struct U4{public uint x,y,z,w;public U4(uint a,uint b,uint c,uint d){x=a;y=b;z=c;w=d;}}
+ struct Key{public Vector4 id,rgba,tag;}
+ struct Stat{public Vector4 low,high;}
+ struct Group{public Vector4 score;public U4 masks,tail;}
+ struct Metric{public Vector4 low0,high0,low1,high1;public U4 info;}
+ struct ReadSpec{public string name;public GraphicsBuffer buffer;public int bytes;public ReadSpec(string n,GraphicsBuffer b,int count){name=n;buffer=b;bytes=count;}}
+ readonly List<GraphicsBuffer> owned=new List<GraphicsBuffer>();readonly ConcurrentQueue<Action> actions=new ConcurrentQueue<Action>();readonly Dictionary<string,byte[]> values=new Dictionary<string,byte[]>();
+ GraphicsBuffer best,primary,state,keys,moments,references,frame,points,tags,candidates,metrics,survivors;ComputeShader shader;
+ Obj58 before,report;Json58 fixture;string output,phase,error;int sequence,pending,submissions;bool terminal,submitting,stageFailure,unknownSubmission;
+ byte[] expectedBest;long ownedBytes;double phaseStarted;bool pendingNoted;
+ static Vector4 V(BinaryReader r){return new Vector4(r.ReadSingle(),r.ReadSingle(),r.ReadSingle(),r.ReadSingle());}
+ static U4 U(BinaryReader r){return new U4(r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32());}
+ GraphicsBuffer B(int count,int stride){var b=new GraphicsBuffer(GraphicsBuffer.Target.Structured,count,stride);owned.Add(b);ownedBytes+=(long)count*stride;return b;}
+ T[] Load<T>(string name,int stride,Func<BinaryReader,T> read)where T:struct{
+  var spec=fixture["files"][name];string file=(string)spec["file"];if(Path.GetFileName(file)!=file)throw new IOException("Fixture path");string path=Path.Combine(Root,file);long bytes=(long)(double)spec["bytes"];if(bytes<1||bytes>100000||bytes%stride!=0||new FileInfo(path).Length!=bytes||Hash(path)!=(string)spec["SHA256"])throw new IOException("Fixture integrity "+name);
+  var a=new T[(int)(bytes/stride)];using(var r=new BinaryReader(File.OpenRead(path))){for(int i=0;i<a.Length;i++)a[i]=read(r);if(r.BaseStream.Position!=r.BaseStream.Length)throw new IOException("Fixture stride");}return a;
+ }
+ static string Hash(string path){using(var h=System.Security.Cryptography.SHA256.Create())using(var f=File.OpenRead(path))return BitConverter.ToString(h.ComputeHash(f)).Replace("-","").ToLowerInvariant();}
+ void Binary(string name,byte[] data){using(var f=new FileStream(Path.Combine(output,name),FileMode.CreateNew,FileAccess.Write,FileShare.Read)){f.Write(data,0,data.Length);f.Flush(true);}}
+ void Save(string stage){report["stage"]=stage;report["utc"]=DateTime.UtcNow.ToString("O");report["GPUDispatches"]=submissions;report["pendingReadbacks"]=pending;report["submissionOutcomeUnknown"]=unknownSubmission;report["ownedBufferBytes"]=ownedBytes;CreateOnly73.Text(Path.Combine(output,"STATE-"+(sequence++).ToString("D3")+"-"+stage+".json"),report.ToString());}
+ Obj58 Snapshot(){var input=UnityEngine.InputSystem.InputSystem.settings;if(!input)throw new InvalidOperationException("Existing input object required; no replacement");var dirty=new Arr58(Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).Select(o=>new{path=AssetDatabase.GetAssetPath(o),type=o.GetType().FullName,id=o.GetEntityId().ToString()}).Where(o=>o.path.StartsWith("Assets/")||o.path.StartsWith("ProjectSettings/")).OrderBy(o=>o.path).ThenBy(o=>o.type).Select(o=>(Json58)new Obj58{["path"]=o.path,["type"]=o.type,["id"]=o.id}));return new Obj58{["playing"]=EditorApplication.isPlaying,["transition"]=EditorApplication.isPlayingOrWillChangePlaymode,["compiling"]=EditorApplication.isCompiling,["updating"]=EditorApplication.isUpdating,["paused"]=EditorApplication.isPaused,["background"]=Application.runInBackground,["playerBackground"]=PlayerSettings.runInBackground,["optionsEnabled"]=EditorSettings.enterPlayModeOptionsEnabled,["options"]=(int)EditorSettings.enterPlayModeOptions,["timeScale"]=Time.timeScale,["captureDeltaTime"]=Time.captureDeltaTime,["pipeline"]=AssetDatabase.GetAssetPath(UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline),["qualityPipeline"]=AssetDatabase.GetAssetPath(UnityEngine.QualitySettings.renderPipeline),["scenes"]=new Arr58(Enumerable.Range(0,SceneManager.sceneCount).Select(i=>{var s=SceneManager.GetSceneAt(i);return(Json58)new Obj58{["path"]=s.path,["dirty"]=s.isDirty,["active"]=s==SceneManager.GetActiveScene()};})),["inputId"]=input.GetEntityId().ToString(),["inputJSON"]=JsonUtility.ToJson(input),["devices"]=new Arr58(UnityEngine.InputSystem.InputSystem.devices.Select(d=>(Json58)new Obj58{["id"]=d.deviceId,["layout"]=d.layout,["enabled"]=d.enabled})),["dirty"]=dirty,["globals"]=ReadGlobals()};}
+ public void Execute(ExecutionResult result){
+  if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required");
+  output=Path.Combine(Root,"run-"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ")+"-"+Guid.NewGuid().ToString("N").Substring(0,8));Directory.CreateDirectory(output);
+  report=new Obj58{["scope"]=Path.GetFileName(output),["sourceId"]="eye113-20261102T012349564Z-df6df224-frame103",["originalOwner"]=2,["diagnosticSlot"]=0,["GPUWholeRenderer"]=false,["PlayEntries"]=0,["BVHDispatches"]=0,["enumerationDispatches"]=0,["runtimeSourceMomentGenerationTested"]=false,["GPUTimeMeasured"]=false};
+  try{
+   before=Snapshot();CreateOnly73.Text(Path.Combine(output,"BEFORE.json"),before.ToString());report["graphicsDevice"]=SystemInfo.graphicsDeviceType.ToString();report["graphicsName"]=SystemInfo.graphicsDeviceName;report["graphicsVersion"]=SystemInfo.graphicsDeviceVersion;if(!SystemInfo.supportsComputeShaders||SystemInfo.graphicsDeviceType!=GraphicsDeviceType.Direct3D11)throw new InvalidOperationException("Expected current D3D11 compute context");fixture=Json58.Parse(File.ReadAllText(Path.Combine(Root,"FIXTURE115.json")));if((int)fixture["cells"]!=144||(int)fixture["keyCount"]!=20||(int)fixture["pointCount"]!=9||(int)fixture["candidateCount"]!=2)throw new IOException("Frozen workload mismatch");
+   string asset=(string)fixture["shaderPath"];if(Hash(Path.Combine(Directory.GetParent(Application.dataPath).FullName,asset))!=(string)fixture["shaderSHA256"])throw new IOException("Reviewed shader changed");var source=AssetDatabase.LoadAssetAtPath<ComputeShader>(asset);if(!source)throw new IOException("Existing115 shader not loaded");shader=UnityEngine.Object.Instantiate(source);shader.hideFlags=HideFlags.DontSave;
+   foreach(string name in new[]{"BeginForm115","EvaluateForm115","Pareto115"}){uint x,y,z;shader.GetKernelThreadGroupSizes(shader.FindKernel(name),out x,out y,out z);if(x!=1||y!=1||z!=1)throw new IOException("Expected1thread groups only");}
+   keys=B(20,48);keys.SetData(Load("keys",48,r=>new Key{id=V(r),rgba=V(r),tag=V(r)}));moments=B(2880,32);moments.SetData(Load("moments",32,r=>new Stat{low=V(r),high=V(r)}));references=B(20,32);references.SetData(Load("references",32,r=>new Stat{low=V(r),high=V(r)}));frame=B(64,16);frame.SetData(Load("frame",16,U));points=B(48,16);points.SetData(Load("points",16,U));tags=B(144,16);tags.SetData(Load("tags",16,U));best=B(2,48);best.SetData(Load("best",48,r=>new Group{score=V(r),masks=U(r),tail=U(r)}));expectedBest=File.ReadAllBytes(Path.Combine(Root,"best.bin"));primary=B(2,48);primary.SetData(new Group[2]);state=B(2,16);state.SetData(new[]{new U4(77,88,99,11),new U4(77,88,99,11)});candidates=B(2,16);candidates.SetData(Load("candidates",16,U));metrics=B(2,80);metrics.SetData(new Metric[2]);survivors=B(2,4);survivors.SetData(new uint[]{99,99});
+   if(ownedBytes>110000)throw new IOException("Owned buffer budget");shader.SetInts("_CellsSize113",18,8);shader.SetInt("_KeyCount113",20);shader.SetInts("_CurveEyeIds106",2,1);
+   EditorApplication.update+=Poll;Save("prepared");Start("init","BeginForm115",2,new[]{new ReadSpec("state",state,32),new ReadSpec("primary",primary,96)});result.Log("115 bounded diagnostic armed;2 init threads,2 metric threads,1 Pareto thread; no Play/render/BVH/enumeration");
+  }catch(Exception e){error=e.ToString();if(pending==0&&!unknownSubmission)Finish(false);else Save("failed-pending");result.Log("115 bounded start stopped: "+e.Message);}
+ }
+ void Bind(int k,string name,GraphicsBuffer b){shader.SetBuffer(k,name,b);}
+ void BindStage(int k){
+  if(phase=="init"){Bind(k,"_Best113",best);Bind(k,"_PrimaryBest115",primary);Bind(k,"_FormState115",state);return;}
+  Bind(k,"_FormState115",state);Bind(k,"_Candidates115",candidates);Bind(k,"_Metrics115",metrics);Bind(k,"_Frame113",frame);
+  if(phase=="metric"){Bind(k,"_Keys113",keys);Bind(k,"_CellKey115",moments);Bind(k,"_ReferenceKey115",references);Bind(k,"_Points113",points);Bind(k,"_CellTags113",tags);}
+  else{Bind(k,"_PrimaryBest115",primary);Bind(k,"_Best113",best);Bind(k,"_Survivors115",survivors);}
+ }
+ void Start(string name,string kernel,int groups,ReadSpec[] reads){
+  if(terminal||pending!=0||error!=null)throw new InvalidOperationException("No overlapping submission");phase=name;values.Clear();stageFailure=false;pendingNoted=false;phaseStarted=EditorApplication.timeSinceStartup;int k=shader.FindKernel(kernel);BindStage(k);Save(name+"-submit-intent");unknownSubmission=true;shader.Dispatch(k,groups,1,1);unknownSubmission=false;submissions++;Save(name+"-submitted");submitting=true;
+  foreach(var spec in reads){pending++;try{AsyncGPUReadback.Request(spec.buffer,spec.bytes,0,request=>{byte[] data=null;string failure=null;try{if(request.hasError)failure="GPU readback error";else data=request.GetData<byte>().ToArray();}catch(Exception e){failure=e.ToString();}var copy=data;var fail=failure;actions.Enqueue(()=>Received(spec,copy,fail));});}catch(Exception e){pending--;error=e.ToString();stageFailure=true;break;}}
+  submitting=false;if(pending==0)CompleteStage();
+ }
+ void Poll(){for(int i=0;i<16&&actions.TryDequeue(out var action);i++){try{action();}catch(Exception e){error=e.ToString();stageFailure=true;if(pending==0&&!unknownSubmission)Finish(false);else Save("failed-pending");}}if(!terminal&&pending>0&&!pendingNoted&&EditorApplication.timeSinceStartup-phaseStarted>10){pendingNoted=true;Save("pending-no-retry-no-force-disposal");}}
+ void Received(ReadSpec spec,byte[] data,string failure){if(terminal)return;try{if(failure!=null||data==null||data.Length!=spec.bytes){error=phase+"/"+spec.name+": "+failure;stageFailure=true;}else{values.Add(spec.name,data);Binary(phase+"-"+spec.name+".bin",data);}}catch(Exception e){error=e.ToString();stageFailure=true;}finally{pending--;}if(pending==0&&!submitting)CompleteStage();}
+ static uint[] UInts(byte[] bytes){var a=new uint[bytes.Length/4];Buffer.BlockCopy(bytes,0,a,0,bytes.Length);return a;}
+ void CompleteStage(){if(stageFailure||error!=null){Finish(false);return;}Save(phase+"-readbacks-complete");
+  if(phase=="init"){if(UInts(values["state"]).Any(x=>x!=0)||!values["primary"].SequenceEqual(expectedBest))throw new IOException("Initialization parity");state.SetData(new[]{new U4(2,0,0,0),new U4(0,0,0,0)});Start("metric","EvaluateForm115",2,new[]{new ReadSpec("metrics",metrics,160),new ReadSpec("state",state,32)});return;}
+  if(phase=="metric"){var s=UInts(values["state"]);if(s[0]!=2||s[1]!=0)throw new IOException("Metric state flags");using(var r=new BinaryReader(new MemoryStream(values["metrics"]))){for(int index=0;index<2;index++){var lo0=V(r);var hi0=V(r);var lo1=V(r);var hi1=V(r);var info=U(r);if(info.x!=63||info.y!=0)throw new IOException("Metric validity");for(int d=0;d<6;d++){double target=(double)fixture["expectedDoubleMetrics"][index][d];float lo=d<4?lo0[d]:lo1[d-4],hi=d<4?hi0[d]:hi1[d-4];if(float.IsNaN(lo)||float.IsNaN(hi)||float.IsInfinity(lo)||float.IsInfinity(hi)||lo>target||hi<target||lo>hi)throw new IOException("Metric enclosure "+index+"/"+d);}}}Start("pareto","Pareto115",1,new[]{new ReadSpec("state",state,32),new ReadSpec("best",best,96),new ReadSpec("survivors",survivors,8),new ReadSpec("frame",frame,16)});return;}
+  var final=UInts(values["state"]);var selected=UInts(values["survivors"]);var header=UInts(values["frame"]);var b=UInts(values["best"]);if(final[0]!=2||final[1]!=0||final[2]!=1||final[3]!=63||selected[0]!=0||selected[1]!=1||header[3]!=0||b[4]!=12||b[5]!=12||b[6]!=130||b[7]!=130||b[9]!=1)throw new IOException("Pareto exact reference mismatch");Finish(true);
+ }
+ void Finish(bool passed){if(terminal)return;if(pending>0||unknownSubmission){error=error??"GPU completion uncertain; retain owned resources";Save("pending-retained");return;}terminal=true;EditorApplication.update-=Poll;var failures=new Arr58();foreach(var b in owned)try{b.Dispose();}catch(Exception e){failures.Add(e.ToString());}owned.Clear();ownedBytes=0;if(shader){try{UnityEngine.Object.DestroyImmediate(shader);}catch(Exception e){failures.Add(e.ToString());}}report["gpuValidationPassed"]=passed;report["error"]=error;report["disposeErrors"]=failures;report["ownedResourcesReleased"]=failures.Count==0&&!shader;try{var after=Snapshot();CreateOnly73.Text(Path.Combine(output,"AFTER.json"),after.ToString());report["statePreserved"]=Json58.DeepEquals(before,after);}catch(Exception e){report["statePreserved"]=false;report["preservationError"]=e.ToString();}Save(passed?"finished":"stopped");if(passed&&(bool)report["statePreserved"]&&(bool)report["ownedResourcesReleased"]){CreateOnly73.Text(Path.Combine(output,"COMPLETE_BOUND115.json"),report.ToString());}}
+ static string[] Bits(IEnumerable<float> values){return values.Select(v=>BitConverter.ToUInt32(BitConverter.GetBytes(v),0).ToString("x8")).ToArray();}
+ static float[] Vector(BinaryReader r){return Enumerable.Range(0,4).Select(_=>r.ReadSingle()).ToArray();}
+ static float[] Matrix(BinaryReader r){return Enumerable.Range(0,16).Select(_=>r.ReadSingle()).ToArray();}
+ static IEnumerable<float> V(Vector4 v){for(int i=0;i<4;i++)yield return v[i];}
+ static IEnumerable<float> M(Matrix4x4 m){for(int c=0;c<4;c++)for(int r=0;r<4;r++)yield return m[r,c];}
+ static int Count(BinaryReader r){int n=r.ReadInt32();if(n<0||n>4096)throw new IOException("Global array outside frozen backup bound");return n;}
+ static Arr58 ReadGlobals(){
+  var rows=new Arr58();
+  using(var r=new BinaryReader(File.OpenRead(Prior+@"\eye115-20261102T023401691Z-4f7e54be\GLOBALS_BEFORE.bin"))){
+   if(r.ReadInt32()!=0x34364a47||r.ReadInt32()!=1)throw new IOException("Global backup header");
+   if(r.ReadString()!="eye115-20261102T023401691Z-4f7e54be")throw new IOException("Global backup source identity");
+   int total=Count(r);if(total!=74)throw new IOException("Expected frozen74 globals");
+   for(int index=0;index<total;index++){
+    string name=r.ReadString();int kind=r.ReadInt32();bool restorable=r.ReadBoolean();string reason=r.ReadString();float scalar=r.ReadSingle();int integer=r.ReadInt32();var vector=Vector(r);var matrix=Matrix(r);string textureKind=r.ReadString(),guid=r.ReadString();long local=r.ReadInt64();
+    var floats=Enumerable.Range(0,Count(r)).Select(_=>r.ReadSingle()).ToArray();var vectors=Enumerable.Range(0,Count(r)).SelectMany(_=>Vector(r)).ToArray();var matrices=Enumerable.Range(0,Count(r)).SelectMany(_=>Matrix(r)).ToArray();
+    string[] before=null,after=null;string oldIdentity=null,newIdentity=null;bool? equal=null;
+    switch(kind){
+     case 0:before=Bits(new[]{scalar});after=Bits(new[]{Shader.GetGlobalFloat(name)});break;
+     case 1:before=Bits(new[]{scalar}).Concat(new[]{integer.ToString()}).ToArray();after=Bits(new[]{Shader.GetGlobalFloat(name)}).Concat(new[]{Shader.GetGlobalInt(name).ToString()}).ToArray();break;
+     case 2:oldIdentity=integer.ToString();newIdentity=Shader.GetGlobalInteger(name).ToString();break;
+     case 3:before=Bits(vector);after=Bits(V(Shader.GetGlobalVector(name)));break;
+     case 4:before=Bits(matrix);after=Bits(M(Shader.GetGlobalMatrix(name)));break;
+     case 5:
+      oldIdentity=textureKind+"|"+guid+"|"+local;
+      var texture=Shader.GetGlobalTexture(name);string currentKind,currentGUID="";long currentLocal=0;
+      if(!texture)currentKind="null";else if(texture==Texture2D.blackTexture)currentKind="builtin-black";else if(texture==Texture2D.whiteTexture)currentKind="builtin-white";else if(texture==Texture2D.grayTexture)currentKind="builtin-gray";else currentKind=EditorUtility.IsPersistent(texture)&&AssetDatabase.TryGetGUIDAndLocalFileIdentifier(texture,out currentGUID,out currentLocal)?"persistent-asset":"runtime-unrecoverable";
+      newIdentity=currentKind+"|"+currentGUID+"|"+currentLocal;break;
+     case 6:before=Bits(floats);after=Bits(Shader.GetGlobalFloatArray(name)??new float[0]);break;
+     case 7:before=Bits(vectors);after=Bits((Shader.GetGlobalVectorArray(name)??new Vector4[0]).SelectMany(V));break;
+     case 8:before=Bits(matrices);after=Bits((Shader.GetGlobalMatrixArray(name)??new Matrix4x4[0]).SelectMany(M));break;
+     case 9:case 10:reason="No public binding getter; no read/restore attempted";break;
+     default:throw new IOException("Unknown frozen global kind");
+    }
+    if(before!=null)equal=before.SequenceEqual(after);else if(oldIdentity!=null)equal=oldIdentity==newIdentity;
+    rows.Add(new Obj58{["name"]=name,["kind"]=kind,["beforeRestorable"]=restorable,["equalPublicValues"]=equal.HasValue?(Json58)equal.Value:null,["beforeBits"]=before==null?null:new Arr58(before),["currentBits"]=after==null?null:new Arr58(after),["beforeIdentity"]=oldIdentity,["currentIdentity"]=newIdentity,["reason"]=reason});
+   }
+   if(r.BaseStream.Position!=r.BaseStream.Length)throw new IOException("Global backup trailing bytes");
+  }
+  return rows;
+ }
+
+}
+
+}

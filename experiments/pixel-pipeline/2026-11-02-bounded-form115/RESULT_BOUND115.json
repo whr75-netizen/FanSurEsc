@@ -1,0 +1,53 @@
+{
+  "schema": "bounded-sourceform115/result/v1",
+  "observedUTC": "2026-11-02T06:12:21.077827+00:00",
+  "run": "run-20261102T060239032Z-3a7a745a",
+  "sourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+  "originalFeatureOwnerId": 2,
+  "logicalSlotPermutation": [
+    2,
+    1
+  ],
+  "externalFullCompilationPassed": true,
+  "toolRunReportedWarningError": true,
+  "toolRunWasNotDenied": true,
+  "partialExecutionProvedByFiles": true,
+  "GPUDispatchesSubmitted": 2,
+  "initThreadsCompletedAndValidated": 2,
+  "initialStateZeroedByGPU": true,
+  "primaryBestByteCopyExact": true,
+  "metricThreadsSubmitted": 2,
+  "metricReadbacksPending": 2,
+  "metricGPUCompletionOrParityProved": false,
+  "ParetoDispatchesSubmitted": 0,
+  "metricMaxActiveKeys": 10,
+  "metricPointLoopBoundPerActiveKey": 9,
+  "metricKeyPairTermsPerCandidateUpperBound": 21,
+  "ownedGraphicsBufferBytesRetained": 98280,
+  "ownedGraphicsBufferCount": 12,
+  "ownedShaderCloneRetained": true,
+  "forceDisposalAttempted": false,
+  "postStatePreservationProved": false,
+  "observedGPUTime": null,
+  "newDeviceResetProved": false,
+  "warningForForcedArrayUnroll": true,
+  "warningMayNotBeCause": true,
+  "before": {
+    "PID": 6288,
+    "dirty": 25,
+    "inputId": "568105589213756420"
+  },
+  "scopeExclusions": {
+    "Play": 0,
+    "BVH": 0,
+    "enumeration": 0,
+    "rendererOrCamera": 0,
+    "newAssetsOrProjectCSharp": 0,
+    "globalSetter": 0,
+    "InputSettingsReplacement": 0,
+    "forceKillResetDriverTDRChanges": 0
+  },
+  "lifecycle": "Original observer remains registered while awaiting two callbacks. On error/mismatch no next dispatch; on a late valid completion only the approved1thread Pareto may follow. No retry or forced cleanup was attempted.",
+  "causeNarrowing": "Completion stall occurs after2thread Evaluate submission without BVH/exhaustive search/full renderer. It is not explained solely by the large full115 workload. Kernel code/binding/compiler-driver/async completion are not yet separated.",
+  "nextBoundary": "Resolve the existing pending operation first. Do not submit a new variant, higher-cost stage, or replay this command. Future diagnostics need an echo-only ABI check, retained request status/public stop-next control, and no dynamically indexed private array/unroll path before larger phases."
+}

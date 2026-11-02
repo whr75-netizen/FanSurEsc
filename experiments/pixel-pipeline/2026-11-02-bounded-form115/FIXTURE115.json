@@ -1,0 +1,182 @@
+{
+  "schema": "bounded-form115/frozen-source/v1",
+  "sourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+  "frame": 103,
+  "mainSerial": 10,
+  "originalOwnerId": 2,
+  "diagnosticLogicalSlot": 0,
+  "slotMap": [
+    2,
+    1
+  ],
+  "slotPermutationOnly": true,
+  "sourceGenerationIsCPUReferenceNotGPUPartOfThisTest": true,
+  "originalPointsYX": [
+    [
+      4,
+      2
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      4,
+      4
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      5,
+      3
+    ],
+    [
+      5,
+      4
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      5,
+      7
+    ]
+  ],
+  "masks": [
+    [
+      12,
+      66
+    ],
+    [
+      12,
+      130
+    ]
+  ],
+  "CPUReferenceWinners": [
+    1
+  ],
+  "expectedRationalMetrics": [
+    [
+      "4/7",
+      "25/42",
+      "0",
+      "5166020175169/14293843718400",
+      "0",
+      "5952342749/2861913600"
+    ],
+    [
+      "4/7",
+      "7/57",
+      "0",
+      "5166020175169/14293843718400",
+      "0",
+      "2002360349/2861913600"
+    ]
+  ],
+  "expectedDoubleMetrics": [
+    [
+      0.5714285714285714,
+      0.5952380952380952,
+      0.0,
+      0.3614157449139415,
+      0.0,
+      2.0798471166285384
+    ],
+    [
+      0.5714285714285714,
+      0.12280701754385964,
+      0.0,
+      0.3614157449139415,
+      0.0,
+      0.6996578614392831
+    ]
+  ],
+  "width": 18,
+  "height": 8,
+  "cells": 144,
+  "keyCount": 20,
+  "pointCount": 9,
+  "candidateCount": 2,
+  "files": {
+    "keys": {
+      "file": "keys.bin",
+      "bytes": 960,
+      "SHA256": "e09c31fde823c24a1747823b1070b039de12da2df1dba52d2200ee7f1b6a1d68"
+    },
+    "moments": {
+      "file": "moments.bin",
+      "bytes": 92160,
+      "SHA256": "f24601293beaad051a3dd55045e659c06ee483b2a773c48ba9aa91be9ac41738"
+    },
+    "references": {
+      "file": "references.bin",
+      "bytes": 640,
+      "SHA256": "0e98d77606c4318d18a77111e4e959249f7f0e73d4fc8c3af9eade443a459a35"
+    },
+    "frame": {
+      "file": "frame.bin",
+      "bytes": 1024,
+      "SHA256": "19c14a8bea9e746de1a55965075c9a7fdfb2b4c3c1128a457e52cfe93e39a8b6"
+    },
+    "points": {
+      "file": "points.bin",
+      "bytes": 768,
+      "SHA256": "2bae7de7192bf94d7b1689d6cf3c45a751e907e1e654964feead6075500f518b"
+    },
+    "tags": {
+      "file": "tags.bin",
+      "bytes": 2304,
+      "SHA256": "209e7dbb065954359569c355d6b0d292c3ff83c09fea698aed92e0444b917f71"
+    },
+    "best": {
+      "file": "best.bin",
+      "bytes": 96,
+      "SHA256": "04fd78e0409965fbd6ede307e46a6c3b19e200e396b936bde9dc3a3b825795d8"
+    },
+    "candidates": {
+      "file": "candidates.bin",
+      "bytes": 32,
+      "SHA256": "d06c2cee198e92c2be3c20a7b864477da3773ac68676f922bf7ca6719a95d812"
+    }
+  },
+  "shaderPath": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/ForwardEye115.compute",
+  "shaderSHA256": "3712abc3055d910231ddd33ac20826d0c59d7d5ebe5d8453c2ffa79e71946702",
+  "stages": [
+    {
+      "kernel": "BeginForm115",
+      "groups": [
+        2,
+        1,
+        1
+      ],
+      "threads": 2
+    },
+    {
+      "kernel": "EvaluateForm115",
+      "groups": [
+        2,
+        1,
+        1
+      ],
+      "threads": 2
+    },
+    {
+      "kernel": "Pareto115",
+      "groups": [
+        1,
+        1,
+        1
+      ],
+      "threads": 1
+    }
+  ],
+  "noBVHOrEnumerationOrPlay": true,
+  "noWinnerInput": true
+}

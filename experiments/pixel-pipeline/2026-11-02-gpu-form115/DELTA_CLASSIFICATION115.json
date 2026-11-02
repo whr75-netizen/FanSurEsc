@@ -1,0 +1,1759 @@
+{
+  "schema": "paired-coordinate-classification115/v1",
+  "inputs": "Actual113 source geometry/alpha/S4 buffers; independent paired4x computation from114",
+  "notRuntime115Result": true,
+  "existing12mmModelPolicyUnchanged": true,
+  "counts": {
+    "face_occlusion_under_explicit_12mm_policy": 2,
+    "carrier_shortage_plus_one_real_face_hit": 2,
+    "unresolved_hair_interval_canvas_fallback": 6,
+    "foreground_hair_source_reselection": 2,
+    "carrier_support_below_majority": 4,
+    "definite_hair_at_matched_destination": 2,
+    "lid_recovered_at_matched_destination": 4
+  },
+  "rows": [
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame101",
+      "frame": 101,
+      "mainXYBottomLeft": [
+        222,
+        221
+      ],
+      "canonicalXY": [
+        11,
+        4
+      ],
+      "part": 4,
+      "owner": 1,
+      "category": "face_occlusion_under_explicit_12mm_policy",
+      "verdict": "Coordinate correction follows current2.3 policy: actual opaque own-component hits exceed12mm. Model-scale policy, not new source colour or a universal ownership proof.",
+      "oldFinal": {
+        "status": 0,
+        "role": 5,
+        "owner": 1,
+        "depth": 13.71759033203125,
+        "linearRGBA": [
+          0.8069522380828857,
+          0.7083757519721985,
+          0.7011018991470337,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.706558227539062,
+        "linearRGBA": [
+          0.9921875,
+          0.9296875,
+          0.79296875,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "validCarrier16": 16,
+      "missingCarrier16": 0,
+      "visibleFace16": [
+        6.0,
+        6.0
+      ],
+      "actualBlockedAmongCarriers": 10.0,
+      "hairInterval16": [
+        0.0,
+        0.0
+      ],
+      "nonExemptActualFaceHits": [
+        {
+          "triangle": 18552,
+          "sourcePrimitive": 3173,
+          "material": 7,
+          "sourceUV": [
+            0.5733910772446318,
+            0.4682203698028161
+          ],
+          "depth": 13.706559761136095,
+          "depthGapMetres": 0.012286239920259234,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18549,
+          "sourcePrimitive": 3170,
+          "material": 7,
+          "sourceUV": [
+            0.5836477178103342,
+            0.4690858983073929
+          ],
+          "depth": 13.708315426777268,
+          "depthGapMetres": 0.012282168784283343,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18540,
+          "sourcePrimitive": 3161,
+          "material": 7,
+          "sourceUV": [
+            0.5628044644005561,
+            0.48459245163997083
+          ],
+          "depth": 13.701680797375252,
+          "depthGapMetres": 0.013678060019373106,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18543,
+          "sourcePrimitive": 3164,
+          "material": 7,
+          "sourceUV": [
+            0.5733707042771742,
+            0.48512622456086957
+          ],
+          "depth": 13.703065125356442,
+          "depthGapMetres": 0.014479003236651522,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18541,
+          "sourcePrimitive": 3162,
+          "material": 7,
+          "sourceUV": [
+            0.5842224361156899,
+            0.48461044295699823
+          ],
+          "depth": 13.70481643629951,
+          "depthGapMetres": 0.014947681670619772,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18538,
+          "sourcePrimitive": 3159,
+          "material": 7,
+          "sourceUV": [
+            0.595692433794919,
+            0.4835289100751071
+          ],
+          "depth": 13.7069268997421,
+          "depthGapMetres": 0.01456577832083461,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18105,
+          "sourcePrimitive": 2726,
+          "material": 7,
+          "sourceUV": [
+            0.5633089820236902,
+            0.49751364120486896
+          ],
+          "depth": 13.698442046785377,
+          "depthGapMetres": 0.015022690228592595,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18539,
+          "sourcePrimitive": 3160,
+          "material": 7,
+          "sourceUV": [
+            0.5740333646155638,
+            0.4997690876063033
+          ],
+          "depth": 13.699799161336195,
+          "depthGapMetres": 0.01623538165179994,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18531,
+          "sourcePrimitive": 3152,
+          "material": 7,
+          "sourceUV": [
+            0.5846122418680842,
+            0.4995840236365365
+          ],
+          "depth": 13.701208732253122,
+          "depthGapMetres": 0.017155086957723498,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18535,
+          "sourcePrimitive": 3156,
+          "material": 7,
+          "sourceUV": [
+            0.5956157058868131,
+            0.49960938553011874
+          ],
+          "depth": 13.702794098922102,
+          "depthGapMetres": 0.017819566125613306,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame101",
+      "frame": 101,
+      "mainXYBottomLeft": [
+        222,
+        222
+      ],
+      "canonicalXY": [
+        11,
+        3
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "carrier_shortage_plus_one_real_face_hit",
+      "verdict": "Eight unsupported positions plus one real non-exempt opaque hit leave7/16. Do not describe the whole-cell skin result as majority physical occlusion.",
+      "oldFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.698437690734863,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          5.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.693146705627441,
+        "linearRGBA": [
+          0.98046875,
+          0.86328125,
+          0.7227393388748169,
+          1.0
+        ],
+        "hairInterval": [
+          5.0,
+          5.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "validCarrier16": 8,
+      "missingCarrier16": 8,
+      "visibleFace16": [
+        7.0,
+        7.0
+      ],
+      "actualBlockedAmongCarriers": 1.0,
+      "hairInterval16": [
+        5.0,
+        5.0
+      ],
+      "nonExemptActualFaceHits": [
+        {
+          "triangle": 18096,
+          "sourcePrimitive": 2717,
+          "material": 7,
+          "sourceUV": [
+            0.5635443912118686,
+            0.5085804251675256
+          ],
+          "depth": 13.695219403197525,
+          "depthGapMetres": 0.004535596684510423,
+          "unilateralRingComponent": false,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame101",
+      "frame": 101,
+      "mainXYBottomLeft": [
+        225,
+        223
+      ],
+      "canonicalXY": [
+        14,
+        2
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "verdict": "Not a proven restoration: uncertainty includes missing destination carrier; canvas skin is fallback, not evidence that skin owns the pixel.",
+      "oldFinal": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.664361000061035,
+        "linearRGBA": [
+          0.019346091896295547,
+          0.014232181012630463,
+          0.0284974817186594,
+          1.0
+        ],
+        "hairInterval": [
+          8.0,
+          15.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -113,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.702592849731445,
+        "linearRGBA": [
+          0.961029052734375,
+          0.7631641626358032,
+          0.601654052734375,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          14.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 9,
+      "missingCarrier16": 7,
+      "visibleFace16": [
+        9.0,
+        9.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        7.0,
+        14.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+      "frame": 103,
+      "mainXYBottomLeft": [
+        226,
+        222
+      ],
+      "canonicalXY": [
+        15,
+        3
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "foreground_hair_source_reselection",
+      "verdict": "Both outputs choose actual foreground hair. Exact query location changes which original hair surface wins the existing nearest-hair-depth policy; not an invented palette colour.",
+      "oldFinal": {
+        "status": 0,
+        "role": 15,
+        "owner": 1.0,
+        "depth": 13.889522552490234,
+        "linearRGBA": [
+          0.018055133521556854,
+          0.025617005303502083,
+          0.052732404321432114,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          11.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": 0,
+        "role": 13,
+        "owner": 0.0,
+        "depth": 13.698997497558594,
+        "linearRGBA": [
+          0.011565541848540306,
+          0.007273995783179998,
+          0.013973689638078213,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 15,
+      "missingCarrier16": 1,
+      "visibleFace16": [
+        15.0,
+        15.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        10.0,
+        10.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame105",
+      "frame": 105,
+      "mainXYBottomLeft": [
+        222,
+        221
+      ],
+      "canonicalXY": [
+        11,
+        4
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "carrier_support_below_majority",
+      "verdict": "Confirmed support shortage under centre sampling. Not evidence of actual occlusion; native coverage is clipping a selected feature.",
+      "oldFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.704757690429688,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.705322265625,
+        "linearRGBA": [
+          0.9921875,
+          0.89453125,
+          0.7575273513793945,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "validCarrier16": 7,
+      "missingCarrier16": 9,
+      "visibleFace16": [
+        7.0,
+        7.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        0.0,
+        0.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame105",
+      "frame": 105,
+      "mainXYBottomLeft": [
+        225,
+        222
+      ],
+      "canonicalXY": [
+        14,
+        3
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "carrier_support_below_majority",
+      "verdict": "Confirmed support shortage under centre sampling. Not evidence of actual occlusion; native coverage is clipping a selected feature.",
+      "oldFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.712327003479004,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          4.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.714418411254883,
+        "linearRGBA": [
+          0.965667724609375,
+          0.809417724609375,
+          0.6509838104248047,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          3.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "validCarrier16": 7,
+      "missingCarrier16": 9,
+      "visibleFace16": [
+        7.0,
+        7.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        3.0,
+        3.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame105",
+      "frame": 105,
+      "mainXYBottomLeft": [
+        226,
+        222
+      ],
+      "canonicalXY": [
+        15,
+        3
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "verdict": "Not a proven restoration: uncertainty includes missing destination carrier; canvas skin is fallback, not evidence that skin owns the pixel.",
+      "oldFinal": {
+        "status": 0,
+        "role": 13,
+        "owner": 0.0,
+        "depth": 13.698997497558594,
+        "linearRGBA": [
+          0.011541447602212429,
+          0.007258841302245855,
+          0.013944577425718307,
+          1.0
+        ],
+        "hairInterval": [
+          9.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -113,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.728474617004395,
+        "linearRGBA": [
+          0.969228982925415,
+          0.805084228515625,
+          0.6623077392578125,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 10,
+      "missingCarrier16": 6,
+      "visibleFace16": [
+        10.0,
+        10.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        7.0,
+        10.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame109",
+      "frame": 109,
+      "mainXYBottomLeft": [
+        222,
+        221
+      ],
+      "canonicalXY": [
+        11,
+        4
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "carrier_support_below_majority",
+      "verdict": "Confirmed support shortage under centre sampling. Not evidence of actual occlusion; native coverage is clipping a selected feature.",
+      "oldFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.704757690429688,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.705322265625,
+        "linearRGBA": [
+          0.9921875,
+          0.89453125,
+          0.7575273513793945,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "validCarrier16": 7,
+      "missingCarrier16": 9,
+      "visibleFace16": [
+        7.0,
+        7.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        0.0,
+        0.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame109",
+      "frame": 109,
+      "mainXYBottomLeft": [
+        225,
+        222
+      ],
+      "canonicalXY": [
+        14,
+        3
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "carrier_support_below_majority",
+      "verdict": "Confirmed support shortage under centre sampling. Not evidence of actual occlusion; native coverage is clipping a selected feature.",
+      "oldFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.712327003479004,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          4.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.714418411254883,
+        "linearRGBA": [
+          0.965667724609375,
+          0.809417724609375,
+          0.6509838104248047,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          3.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "validCarrier16": 7,
+      "missingCarrier16": 9,
+      "visibleFace16": [
+        7.0,
+        7.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        3.0,
+        3.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame109",
+      "frame": 109,
+      "mainXYBottomLeft": [
+        226,
+        222
+      ],
+      "canonicalXY": [
+        15,
+        3
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "verdict": "Not a proven restoration: uncertainty includes missing destination carrier; canvas skin is fallback, not evidence that skin owns the pixel.",
+      "oldFinal": {
+        "status": 0,
+        "role": 13,
+        "owner": 0.0,
+        "depth": 13.698997497558594,
+        "linearRGBA": [
+          0.01151795033365488,
+          0.007244063075631857,
+          0.013916187919676304,
+          1.0
+        ],
+        "hairInterval": [
+          9.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -113,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.728474617004395,
+        "linearRGBA": [
+          0.969228982925415,
+          0.805084228515625,
+          0.6623077392578125,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 10,
+      "missingCarrier16": 6,
+      "visibleFace16": [
+        10.0,
+        10.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        7.0,
+        10.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame111",
+      "frame": 111,
+      "mainXYBottomLeft": [
+        226,
+        222
+      ],
+      "canonicalXY": [
+        15,
+        3
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "foreground_hair_source_reselection",
+      "verdict": "Both outputs choose actual foreground hair. Exact query location changes which original hair surface wins the existing nearest-hair-depth policy; not an invented palette colour.",
+      "oldFinal": {
+        "status": 0,
+        "role": 15,
+        "owner": 1.0,
+        "depth": 13.889522552490234,
+        "linearRGBA": [
+          0.01794510707259178,
+          0.025460895150899887,
+          0.05241105705499649,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          11.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": 0,
+        "role": 13,
+        "owner": 0.0,
+        "depth": 13.698997497558594,
+        "linearRGBA": [
+          0.01149506215006113,
+          0.007229668088257313,
+          0.013888533227145672,
+          1.0
+        ],
+        "hairInterval": [
+          10.0,
+          10.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 15,
+      "missingCarrier16": 1,
+      "visibleFace16": [
+        15.0,
+        15.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        10.0,
+        10.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame113",
+      "frame": 113,
+      "mainXYBottomLeft": [
+        222,
+        221
+      ],
+      "canonicalXY": [
+        11,
+        4
+      ],
+      "part": 4,
+      "owner": 1,
+      "category": "face_occlusion_under_explicit_12mm_policy",
+      "verdict": "Coordinate correction follows current2.3 policy: actual opaque own-component hits exceed12mm. Model-scale policy, not new source colour or a universal ownership proof.",
+      "oldFinal": {
+        "status": 0,
+        "role": 5,
+        "owner": 1,
+        "depth": 13.71759033203125,
+        "linearRGBA": [
+          0.8069522380828857,
+          0.7083757519721985,
+          0.7011018991470337,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.706558227539062,
+        "linearRGBA": [
+          0.9921875,
+          0.9296875,
+          0.79296875,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "validCarrier16": 16,
+      "missingCarrier16": 0,
+      "visibleFace16": [
+        6.0,
+        6.0
+      ],
+      "actualBlockedAmongCarriers": 10.0,
+      "hairInterval16": [
+        0.0,
+        0.0
+      ],
+      "nonExemptActualFaceHits": [
+        {
+          "triangle": 18552,
+          "sourcePrimitive": 3173,
+          "material": 7,
+          "sourceUV": [
+            0.5733910772446318,
+            0.4682203698028161
+          ],
+          "depth": 13.706559761136095,
+          "depthGapMetres": 0.012286239920259234,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18549,
+          "sourcePrimitive": 3170,
+          "material": 7,
+          "sourceUV": [
+            0.5836477178103342,
+            0.4690858983073929
+          ],
+          "depth": 13.708315426777268,
+          "depthGapMetres": 0.012282168784283343,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18540,
+          "sourcePrimitive": 3161,
+          "material": 7,
+          "sourceUV": [
+            0.5628044644005561,
+            0.48459245163997083
+          ],
+          "depth": 13.701680797375252,
+          "depthGapMetres": 0.013678060019373106,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18543,
+          "sourcePrimitive": 3164,
+          "material": 7,
+          "sourceUV": [
+            0.5733707042771742,
+            0.48512622456086957
+          ],
+          "depth": 13.703065125356442,
+          "depthGapMetres": 0.014479003236651522,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18541,
+          "sourcePrimitive": 3162,
+          "material": 7,
+          "sourceUV": [
+            0.5842224361156899,
+            0.48461044295699823
+          ],
+          "depth": 13.70481643629951,
+          "depthGapMetres": 0.014947681670619772,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18538,
+          "sourcePrimitive": 3159,
+          "material": 7,
+          "sourceUV": [
+            0.595692433794919,
+            0.4835289100751071
+          ],
+          "depth": 13.7069268997421,
+          "depthGapMetres": 0.01456577832083461,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18105,
+          "sourcePrimitive": 2726,
+          "material": 7,
+          "sourceUV": [
+            0.5633089820236902,
+            0.49751364120486896
+          ],
+          "depth": 13.698442046785377,
+          "depthGapMetres": 0.015022690228592595,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18539,
+          "sourcePrimitive": 3160,
+          "material": 7,
+          "sourceUV": [
+            0.5740333646155638,
+            0.4997690876063033
+          ],
+          "depth": 13.699799161336195,
+          "depthGapMetres": 0.01623538165179994,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18531,
+          "sourcePrimitive": 3152,
+          "material": 7,
+          "sourceUV": [
+            0.5846122418680842,
+            0.4995840236365365
+          ],
+          "depth": 13.701208732253122,
+          "depthGapMetres": 0.017155086957723498,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "triangle": 18535,
+          "sourcePrimitive": 3156,
+          "material": 7,
+          "sourceUV": [
+            0.5956157058868131,
+            0.49960938553011874
+          ],
+          "depth": 13.702794098922102,
+          "depthGapMetres": 0.017819566125613306,
+          "unilateralRingComponent": true,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame113",
+      "frame": 113,
+      "mainXYBottomLeft": [
+        222,
+        222
+      ],
+      "canonicalXY": [
+        11,
+        3
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "carrier_shortage_plus_one_real_face_hit",
+      "verdict": "Eight unsupported positions plus one real non-exempt opaque hit leave7/16. Do not describe the whole-cell skin result as majority physical occlusion.",
+      "oldFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.698437690734863,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          3.0,
+          5.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -117,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.693146705627441,
+        "linearRGBA": [
+          0.98046875,
+          0.86328125,
+          0.7227393388748169,
+          1.0
+        ],
+        "hairInterval": [
+          5.0,
+          5.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "validCarrier16": 8,
+      "missingCarrier16": 8,
+      "visibleFace16": [
+        7.0,
+        7.0
+      ],
+      "actualBlockedAmongCarriers": 1.0,
+      "hairInterval16": [
+        5.0,
+        5.0
+      ],
+      "nonExemptActualFaceHits": [
+        {
+          "triangle": 18096,
+          "sourcePrimitive": 2717,
+          "material": 7,
+          "sourceUV": [
+            0.5635443912118686,
+            0.5085804251675256
+          ],
+          "depth": 13.695219403197525,
+          "depthGapMetres": 0.004535596684510423,
+          "unilateralRingComponent": false,
+          "exempt113": false,
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame113",
+      "frame": 113,
+      "mainXYBottomLeft": [
+        225,
+        223
+      ],
+      "canonicalXY": [
+        14,
+        2
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "verdict": "Not a proven restoration: uncertainty includes missing destination carrier; canvas skin is fallback, not evidence that skin owns the pixel.",
+      "oldFinal": {
+        "status": 0,
+        "role": 12,
+        "owner": 0.0,
+        "depth": 13.664361000061035,
+        "linearRGBA": [
+          0.01915009506046772,
+          0.014087995514273643,
+          0.0282087754458189,
+          1.0
+        ],
+        "hairInterval": [
+          8.0,
+          15.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": -113,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.702592849731445,
+        "linearRGBA": [
+          0.961029052734375,
+          0.7631641626358032,
+          0.601654052734375,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          14.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 9,
+      "missingCarrier16": 7,
+      "visibleFace16": [
+        9.0,
+        9.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        7.0,
+        14.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame122",
+      "frame": 122,
+      "mainXYBottomLeft": [
+        214,
+        218
+      ],
+      "canonicalXY": [
+        3,
+        5
+      ],
+      "part": 4,
+      "owner": 2,
+      "category": "definite_hair_at_matched_destination",
+      "verdict": "Actual saved S4 hair data has a certain-majority foreground count. Hair identity/RGB are original recorded values.",
+      "oldFinal": {
+        "status": -113,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.74765396118164,
+        "linearRGBA": [
+          0.9749641418457031,
+          0.8177909851074219,
+          0.6960048675537109,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": 0,
+        "role": 14,
+        "owner": 0.0,
+        "depth": 13.721304893493652,
+        "linearRGBA": [
+          0.018696891143918037,
+          0.012294131331145763,
+          0.025773867964744568,
+          1.0
+        ],
+        "hairInterval": [
+          8.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 12,
+      "missingCarrier16": 4,
+      "visibleFace16": [
+        12.0,
+        12.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        8.0,
+        12.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame122",
+      "frame": 122,
+      "mainXYBottomLeft": [
+        214,
+        219
+      ],
+      "canonicalXY": [
+        3,
+        4
+      ],
+      "part": 6,
+      "owner": 2,
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "verdict": "Not a proven restoration: uncertainty includes missing destination carrier; canvas skin is fallback, not evidence that skin owns the pixel.",
+      "oldFinal": {
+        "status": 0,
+        "role": 14,
+        "owner": 0.0,
+        "depth": 13.71308708190918,
+        "linearRGBA": [
+          0.01168555486947298,
+          0.007634712383151054,
+          0.01600569114089012,
+          1.0
+        ],
+        "hairInterval": [
+          12.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "pairedPointCPUFinal": {
+        "status": -113,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.734413146972656,
+        "linearRGBA": [
+          0.9921875,
+          0.8945784568786621,
+          0.7772216796875,
+          1.0
+        ],
+        "hairInterval": [
+          6.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 8,
+      "missingCarrier16": 8,
+      "visibleFace16": [
+        8.0,
+        8.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        6.0,
+        12.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame122",
+      "frame": 122,
+      "mainXYBottomLeft": [
+        224,
+        219
+      ],
+      "canonicalXY": [
+        13,
+        4
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "lid_recovered_at_matched_destination",
+      "verdict": "Matched carrier has8/16, visible8/16 and no hair. Supported recovery under the existing majority rule; aesthetic quality not certified.",
+      "oldFinal": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.724287986755371,
+        "linearRGBA": [
+          0.9921875,
+          0.9200928211212158,
+          0.77734375,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "pairedPointCPUFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.71327463686447,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 8,
+      "missingCarrier16": 8,
+      "visibleFace16": [
+        8.0,
+        8.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        0.0,
+        0.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame125",
+      "frame": 125,
+      "mainXYBottomLeft": [
+        214,
+        219
+      ],
+      "canonicalXY": [
+        3,
+        4
+      ],
+      "part": 6,
+      "owner": 2,
+      "category": "lid_recovered_at_matched_destination",
+      "verdict": "Matched carrier has8/16, visible8/16 and no hair. Supported recovery under the existing majority rule; aesthetic quality not certified.",
+      "oldFinal": {
+        "status": -116,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.734415054321289,
+        "linearRGBA": [
+          0.9921875,
+          0.8945784568786621,
+          0.7772216796875,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "pairedPointCPUFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 2,
+        "depth": 13.714411533705468,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 8,
+      "missingCarrier16": 8,
+      "visibleFace16": [
+        8.0,
+        8.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        0.0,
+        0.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame125",
+      "frame": 125,
+      "mainXYBottomLeft": [
+        224,
+        219
+      ],
+      "canonicalXY": [
+        13,
+        4
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "lid_recovered_at_matched_destination",
+      "verdict": "Matched carrier has8/16, visible8/16 and no hair. Supported recovery under the existing majority rule; aesthetic quality not certified.",
+      "oldFinal": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.724289894104004,
+        "linearRGBA": [
+          0.9921875,
+          0.9200928211212158,
+          0.77734375,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "pairedPointCPUFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.713275991231626,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 8,
+      "missingCarrier16": 8,
+      "visibleFace16": [
+        8.0,
+        8.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        0.0,
+        0.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame128",
+      "frame": 128,
+      "mainXYBottomLeft": [
+        214,
+        218
+      ],
+      "canonicalXY": [
+        3,
+        5
+      ],
+      "part": 4,
+      "owner": 2,
+      "category": "definite_hair_at_matched_destination",
+      "verdict": "Actual saved S4 hair data has a certain-majority foreground count. Hair identity/RGB are original recorded values.",
+      "oldFinal": {
+        "status": -113,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.74765396118164,
+        "linearRGBA": [
+          0.9749641418457031,
+          0.8177909851074219,
+          0.6960048675537109,
+          1.0
+        ],
+        "hairInterval": [
+          7.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "pairedPointCPUFinal": {
+        "status": 0,
+        "role": 14,
+        "owner": 0.0,
+        "depth": 13.721304893493652,
+        "linearRGBA": [
+          0.018668893724679947,
+          0.012275723740458488,
+          0.0257352776825428,
+          1.0
+        ],
+        "hairInterval": [
+          8.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 12,
+      "missingCarrier16": 4,
+      "visibleFace16": [
+        12.0,
+        12.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        8.0,
+        12.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame128",
+      "frame": 128,
+      "mainXYBottomLeft": [
+        214,
+        219
+      ],
+      "canonicalXY": [
+        3,
+        4
+      ],
+      "part": 6,
+      "owner": 2,
+      "category": "unresolved_hair_interval_canvas_fallback",
+      "verdict": "Not a proven restoration: uncertainty includes missing destination carrier; canvas skin is fallback, not evidence that skin owns the pixel.",
+      "oldFinal": {
+        "status": 0,
+        "role": 14,
+        "owner": 0.0,
+        "depth": 13.71308708190918,
+        "linearRGBA": [
+          0.011668059043586254,
+          0.007623280864208937,
+          0.015981726348400116,
+          1.0
+        ],
+        "hairInterval": [
+          12.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "pairedPointCPUFinal": {
+        "status": -113,
+        "role": 4,
+        "owner": 2.0,
+        "depth": 13.734413146972656,
+        "linearRGBA": [
+          0.9921875,
+          0.8945784568786621,
+          0.7772216796875,
+          1.0
+        ],
+        "hairInterval": [
+          6.0,
+          12.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 8,
+      "missingCarrier16": 8,
+      "visibleFace16": [
+        8.0,
+        8.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        6.0,
+        12.0
+      ],
+      "nonExemptActualFaceHits": []
+    },
+    {
+      "sourceId": "eye113-20261102T012349564Z-df6df224-frame128",
+      "frame": 128,
+      "mainXYBottomLeft": [
+        224,
+        219
+      ],
+      "canonicalXY": [
+        13,
+        4
+      ],
+      "part": 6,
+      "owner": 1,
+      "category": "lid_recovered_at_matched_destination",
+      "verdict": "Matched carrier has8/16, visible8/16 and no hair. Supported recovery under the existing majority rule; aesthetic quality not certified.",
+      "oldFinal": {
+        "status": -116,
+        "role": 4,
+        "owner": 1.0,
+        "depth": 13.724287986755371,
+        "linearRGBA": [
+          0.9921875,
+          0.9200928211212158,
+          0.77734375,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": false
+      },
+      "pairedPointCPUFinal": {
+        "status": 0,
+        "role": 7,
+        "owner": 1,
+        "depth": 13.71327463686447,
+        "linearRGBA": [
+          0.2015562504529953,
+          0.12477181851863861,
+          0.09305896610021591,
+          1.0
+        ],
+        "hairInterval": [
+          0.0,
+          0.0
+        ],
+        "eyeChosenBeforeHair": true
+      },
+      "validCarrier16": 8,
+      "missingCarrier16": 8,
+      "visibleFace16": [
+        8.0,
+        8.0
+      ],
+      "actualBlockedAmongCarriers": 0.0,
+      "hairInterval16": [
+        0.0,
+        0.0
+      ],
+      "nonExemptActualFaceHits": []
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+// Source-form115: same six I/W Pareto dimensions as form22.rank_source.
+// Complete equal-primary layouts, no proxy key-count ranking or RGB cost.
+// Outward float intervals never certify an unobserved pair as zero error.
+#pragma kernel PrepareCells115
+#pragma kernel Enumerate115
+#pragma kernel Reduce115
+#pragma kernel BeginForm115
+#pragma kernel CollectForm115
+#pragma kernel KeyReferences115
+#pragma kernel EvaluateForm115
+#pragma kernel Pareto115
+#define FORM_CAP115 128
+struct Stat115{float4 low,high;};
+struct Metric115{float4 low0,high0,low1,high1;uint4 info;};
+RWStructuredBuffer<Stat115> _CellKey115,_ReferenceKey115;
+RWStructuredBuffer<uint4> _FormState115,_Candidates115;
+RWStructuredBuffer<uint> _Survivors115;
+RWStructuredBuffer<Metric115> _Metrics115;
+RWStructuredBuffer<Group113> _PrimaryBest115;
+float Down115(float x){if(abs(x)<=1.17549435e-38)return -1.17549435e-38;return asfloat(x>0?asuint(x)-1:asuint(x)+1);}
+float Up115(float x){if(abs(x)<=1.17549435e-38)return 1.17549435e-38;return asfloat(x>0?asuint(x)+1:asuint(x)-1);}
+float2 Exact115(float a){return float2(a,a);}
+bool Zero115(float2 a){return a.x==0&&a.y==0;}
+float2 Add115(float2 a,float2 b){if(Zero115(a))return b;if(Zero115(b))return a;precise float lo=a.x+b.x,hi=a.y+b.y;return float2(Down115(lo),Up115(hi));}
+float2 Sub115(float2 a,float2 b){return Add115(a,-b.yx);}
+float2 Mul115(float2 a,float2 b){if(Zero115(a)||Zero115(b))return 0;precise float4 p=float4(a.x*b.x,a.x*b.y,a.y*b.x,a.y*b.y);return float2(Down115(min(min(p.x,p.y),min(p.z,p.w))),Up115(max(max(p.x,p.y),max(p.z,p.w))));}
+float2 Div115(float2 a,float2 b){precise float4 p=float4(a.x/b.x,a.x/b.y,a.y/b.x,a.y/b.y);return float2(Down115(min(min(p.x,p.y),min(p.z,p.w))),Up115(max(max(p.x,p.y),max(p.z,p.w))));}
+float2 Abs115(float2 a){return a.x>=0?a:a.y<=0?-a.yx:float2(0,max(-a.x,a.y));}
+float2 Square115(float2 a){float2 v=Abs115(a);return max(Mul115(v,v),0);}
+Stat115 StatZero115(){Stat115 a;a.low=0;a.high=0;return a;}
+Stat115 StatAdd115(Stat115 a,float weight,float2 p){float2 w=Add115(float2(a.low.x,a.high.x),Exact115(weight));float2 x=Add115(float2(a.low.y,a.high.y),Mul115(Exact115(weight),Exact115(p.x)));float2 y=Add115(float2(a.low.z,a.high.z),Mul115(Exact115(weight),Exact115(p.y)));a.low=float4(max(w.x,0),x.x,y.x,0);a.high=float4(w.y,x.y,y.y,0);return a;}
+bool LessPrimary115(Group113 a,Group113 b){for(int d=0;d<4;d++)if(a.score[d]!=b.score[d])return a.score[d]<b.score[d];return false;}
+Group113 MergePrimary115(Group113 a,Group113 b){if(a.tail.y==0)return b;if(b.tail.y==0)return a;if(LessPrimary115(a,b))return a;if(LessPrimary115(b,a))return b;a.masks=uint4(a.masks.x&b.masks.x,a.masks.y|b.masks.y,a.masks.z&b.masks.z,a.masks.w|b.masks.w);a.tail.y+=b.tail.y;return a;}
+Group113 State115(int eye,uint state){Group113 r=Invalid113();uint4 h=_Frame113[eye*32];if(h.w!=0||state>=(1u<<(h.y+h.z)))return r;uint si=state&((1u<<h.y)-1),sw=state>>h.y;Subset113 a=_Subsets113[eye*8192+si],b=_Subsets113[eye*8192+4096+sw];if(!a.b.y||!b.b.y||(a.a.x&b.a.x)!=0)return r;float4 mass=asfloat(_Frame113[eye*32+1]);uint4 active=_Frame113[eye*32+2];float reconstruction=asfloat(_Frame113[eye*32+3].x)+asfloat(a.b.x)+asfloat(b.b.x);r.score=float4(countbits(active.x&~a.a.y)+countbits(active.y&~b.a.y),Interval113((a.a.w+b.a.w)*K113,mass.x+mass.z,mass.y+mass.w),Interval113(a.a.w*K113,mass.x,mass.y)+Interval113(b.a.w*K113,mass.z,mass.w),max(reconstruction,0));r.masks=uint4(a.a.x,a.a.x,b.a.x,b.a.x);r.tail=uint4(countbits(active.z&~(a.a.z|b.a.z)),1,0,0);return r;}
+[numthreads(64,1,1)]void Enumerate115(uint3 gid:SV_GroupID,uint3 local:SV_GroupThreadID){Group113 r=State115(gid.y,gid.x*64+local.x);Shared113[local.x]=r;GroupMemoryBarrierWithGroupSync();for(uint stride=32;stride>0;stride>>=1){if(local.x<stride)Shared113[local.x]=MergePrimary115(Shared113[local.x],Shared113[local.x+stride]);GroupMemoryBarrierWithGroupSync();}if(local.x==0)_Groups113[gid.y*GROUPS113+gid.x]=Shared113[0];}
+[numthreads(64,1,1)]void Reduce115(uint3 gid:SV_GroupID,uint3 local:SV_GroupThreadID){Group113 r=Invalid113();for(uint i=local.x;i<GROUPS113;i+=64)r=MergePrimary115(r,_Groups113[gid.x*GROUPS113+i]);Shared113[local.x]=r;GroupMemoryBarrierWithGroupSync();for(uint stride=32;stride>0;stride>>=1){if(local.x<stride)Shared113[local.x]=MergePrimary115(Shared113[local.x],Shared113[local.x+stride]);GroupMemoryBarrierWithGroupSync();}if(local.x==0)_Best113[gid.x]=Shared113[0];}
+[numthreads(1,1,1)]void BeginForm115(uint3 tid:SV_DispatchThreadID){if(tid.x>=2)return;_FormState115[tid.x]=0;_PrimaryBest115[tid.x]=_Best113[tid.x];}
+[numthreads(64,1,1)]void CollectForm115(uint3 gid:SV_GroupID,uint3 local:SV_GroupThreadID){int eye=gid.y;Group113 g=_Groups113[eye*GROUPS113+gid.x],best=_PrimaryBest115[eye];if(g.tail.y==0||best.tail.y==0||any(g.score!=best.score))return;uint state=gid.x*64+local.x;Group113 r=State115(eye,state);if(r.tail.y==0||any(r.score!=best.score))return;uint slot;InterlockedAdd(_FormState115[eye].x,1,slot);if(slot>=FORM_CAP115){InterlockedOr(_FormState115[eye].y,1);return;}_Candidates115[eye*FORM_CAP115+slot]=uint4(r.masks.x,r.masks.z,state,r.tail.x);}
+[numthreads(1,1,1)]void KeyReferences115(uint3 tid:SV_DispatchThreadID){uint key=tid.x;if(key>=_KeyCount113)return;Stat115 r=StatZero115();for(int cell=0;cell<_CellsSize113.x*_CellsSize113.y;cell++){Stat115 a=_CellKey115[cell*_KeyCount113+key];for(int d=0;d<3;d++){float2 s=Add115(float2(r.low[d],r.high[d]),float2(a.low[d],a.high[d]));r.low[d]=d==0?max(s.x,0):s.x;r.high[d]=s.y;}}_ReferenceKey115[key]=r;}
+void MetricSet115(inout Metric115 m,int d,float2 v){if(!all(isfinite(v))||v.x>v.y){m.info.y|=1u<<d;return;}if(d<4){m.low0[d]=v.x;m.high0[d]=v.y;}else{m.low1[d-4]=v.x;m.high1[d-4]=v.y;}m.info.x|=1u<<d;}
+float2 MetricGet115(Metric115 m,int d){return d<4?float2(m.low0[d],m.high0[d]):float2(m.low1[d-4],m.high1[d-4]);}
+[numthreads(1,1,1)]void EvaluateForm115(uint3 tid:SV_DispatchThreadID){int eye=tid.y,index=tid.x;uint count=_FormState115[eye].x;if(index>=min(count,FORM_CAP115)||_FormState115[eye].y!=0)return;uint4 c=_Candidates115[eye*FORM_CAP115+index];int owner=_CurveEyeIds106[eye];float2 hm[32],hx[32],hy[32],ex[32],ey[32];uint selected=0;Metric115 metric;metric.low0=0;metric.high0=0;metric.low1=0;metric.high1=0;metric.info=0;
+ for(int key=0;key<_KeyCount113;key++){hm[key]=0;hx[key]=0;hy[key]=0;ex[key]=0;ey[key]=0;Stat115 ref=_ReferenceKey115[key];if(round(_Keys113[key].id.z)!=owner||ref.high.x<=0)continue;int part=round(_Keys113[key].id.w)==1?0:1;uint mask=part==0?c.x:c.y;for(uint p=0;p<_Frame113[eye*32].x;p++){if(!(mask&(1u<<p)))continue;uint cell=_Points113[eye*MAXP113+p].x;Stat115 s=_CellKey115[cell*_KeyCount113+key];hm[key]=Add115(hm[key],float2(s.low.x,s.high.x));hx[key]=Add115(hx[key],Mul115(float2(s.low.x,s.high.x),Exact115(cell%_CellsSize113.x+.5)));hy[key]=Add115(hy[key],Mul115(float2(s.low.x,s.high.x),Exact115(cell/_CellsSize113.x+.5)));selected|=_CellTags113[cell][part+2];}if(ref.low.x>0){ex[key]=Div115(float2(ref.low.y,ref.high.y),float2(ref.low.x,ref.high.x));ey[key]=Div115(float2(ref.low.z,ref.high.z),float2(ref.low.x,ref.high.x));}if(hm[key].x>0){hx[key]=Div115(hx[key],hm[key]);hy[key]=Div115(hy[key],hm[key]);}}
+ for(int part=0;part<2;part++){uint available=0,present=0;float2 total=0;int n=0;for(int key=0;key<_KeyCount113;key++)if(round(_Keys113[key].id.z)==owner&&round(_Keys113[key].id.w)==(part==0?1:4)&&_ReferenceKey115[key].high.x>0){available|=1u<<key;n++;total=Add115(total,hm[key]);}present=available&selected;int observed=countbits(present),pairs=n*(n-1)/2,missing=pairs-observed*(observed-1)/2;MetricSet115(metric,part==0?2:4,Exact115(missing));if(n>0&&total.x>0){float2 l1=0,unit=Div115(Exact115(1),Exact115(n));for(int key=0;key<_KeyCount113;key++)if(available&(1u<<key))l1=Add115(l1,Abs115(Sub115(unit,Div115(hm[key],total))));MetricSet115(metric,part,l1);}if(n>=2&&observed>=2){float2 error=0;bool valid=true;for(int a=0;a<_KeyCount113;a++)if(present&(1u<<a))for(int b=a+1;b<_KeyCount113;b++)if(present&(1u<<b)){if(hm[a].x<=0||hm[b].x<=0){valid=false;continue;}float2 dx=Sub115(Sub115(hx[a],hx[b]),Sub115(ex[a],ex[b])),dy=Sub115(Sub115(hy[a],hy[b]),Sub115(ey[a],ey[b]));error=Add115(error,Add115(Square115(dx),Square115(dy)));}if(valid)MetricSet115(metric,part==0?3:5,Div115(error,Exact115(pairs)));}}
+ _Metrics115[eye*FORM_CAP115+index]=metric;if(metric.info.y!=0)InterlockedOr(_FormState115[eye].y,2);
+}
+bool Dominates115(int eye,int a,int b,uint common){uint4 ma=_Candidates115[eye*FORM_CAP115+a],mb=_Candidates115[eye*FORM_CAP115+b];Metric115 va=_Metrics115[eye*FORM_CAP115+a],vb=_Metrics115[eye*FORM_CAP115+b];bool strict=false;for(int d=0;d<6;d++){if(!(common&(1u<<d)))continue;int part=(d==0||d==2||d==3)?0:1;if(ma[part]==mb[part])continue;float2 x=MetricGet115(va,d),y=MetricGet115(vb,d);if(x.y>y.x)return false;if(x.y<y.x)strict=true;}return strict;}
+[numthreads(1,1,1)]void Pareto115(uint3 tid:SV_DispatchThreadID){int eye=tid.x;uint n=_FormState115[eye].x;uint4 state=_FormState115[eye];if(n==0||n>FORM_CAP115||state.y!=0){uint4 header=_Frame113[eye*32];header.w|=2048;_Frame113[eye*32]=header;return;}uint common=63;for(uint i=0;i<n;i++)common&=_Metrics115[eye*FORM_CAP115+i].info.x;uint bothI=0xffffffff,bothW=0xffffffff,anyI=0,anyW=0,survivors=0;for(uint i=0;i<n;i++){bool dominated=false;for(uint j=0;j<n;j++)if(i!=j&&Dominates115(eye,j,i,common)){dominated=true;break;}_Survivors115[eye*FORM_CAP115+i]=dominated?0:1;if(!dominated){uint4 c=_Candidates115[eye*FORM_CAP115+i];bothI&=c.x;anyI|=c.x;bothW&=c.y;anyW|=c.y;survivors++;}}Group113 best=_PrimaryBest115[eye];best.masks=uint4(bothI,anyI,bothW,anyW);best.tail.y=survivors;_Best113[eye]=best;state.z=survivors;state.w=common;_FormState115[eye]=state;}

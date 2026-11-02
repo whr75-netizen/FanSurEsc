@@ -1,0 +1,85 @@
+{
+  "sourcePreparationComplete": true,
+  "GPUOrUnityCalls": 0,
+  "GPUHostExecuted": false,
+  "AssetsImported": false,
+  "CPUCompilations": {
+    "HLSL": 4,
+    "CSharp": 7,
+    "CSharpWarnings": 0,
+    "existingHlslSignedUnsignedWarning": "X3203 (original Enumerate expression; fixed eye0 fixture)"
+  },
+  "CPUTestGroups": 17,
+  "stages": [
+    {
+      "stage": 1,
+      "kernel": "BuildSubsets113",
+      "dispatch": [
+        1,
+        2,
+        1
+      ],
+      "uavs": 5,
+      "allocatedStructuredBytes": 591616,
+      "readbackBytes": 4096,
+      "privateArrays": 0
+    },
+    {
+      "stage": 2,
+      "kernel": "Enumerate113",
+      "dispatch": [
+        32,
+        1,
+        1
+      ],
+      "uavs": 3,
+      "allocatedStructuredBytes": 3671040,
+      "readbackBytes": 1536,
+      "privateArrays": 0
+    },
+    {
+      "stage": 3,
+      "kernel": "Reduce113",
+      "dispatch": [
+        1,
+        1,
+        1
+      ],
+      "uavs": 2,
+      "allocatedStructuredBytes": 3145824,
+      "readbackBytes": 48,
+      "privateArrays": 0
+    },
+    {
+      "stage": 4,
+      "kernel": "Write113",
+      "dispatch": [
+        1,
+        1,
+        1
+      ],
+      "uavs": 8,
+      "allocatedStructuredBytes": 68448,
+      "readbackBytes": 9216,
+      "privateArrays": 0
+    }
+  ],
+  "lifetime": "One stage owns clone/buffers. No auto-next. All issued readbacks settled before release. Unknown submission/request retains ownership and blocks completion/replay.",
+  "state": "Read-only before/after public Editor/options/scene/pipeline/time/input/devices/dirty/global summary; this host changes none of those. Any mismatch blocks completion; no guessed restoration.",
+  "notIntegrated": [
+    "16-subsample depth transport",
+    "socket-diameter normalization",
+    "curve midpoint recovery",
+    "renderer final composition",
+    "product77"
+  ],
+  "remainingConditions": [
+    "Fresh Editor/process/project/native/input preflight before any future Unity action",
+    "Review/import ONLY the new four-entry compute asset; no C# Assets import",
+    "Check actual imported variant and normal command policy/approval at action time",
+    "Explicitly submit stage1 only; inspect complete CPU-equal bytes/state/release before considering stage2",
+    "Prior D3D11 reset root cause remains unresolved; CPU compilation is not device/driver safety evidence"
+  ],
+  "caseSHA256": "0bd1a3c7fbc3e30791cbcaa000854a6fafd79598f34a730b8a7e2e2c0559027b",
+  "shaderSHA256": "a85bb725503d39e3c7fdd3a354bea2ea31382401f7deaae10fc254fdabe98d0d"
+}

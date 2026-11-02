@@ -1,0 +1,404 @@
+{
+  "Schema": "prefix24/case/v1",
+  "SourceId": "eye113-20261102T012349564Z-df6df224-frame103",
+  "SourceFrame": 103,
+  "SourceSerial": 10,
+  "Width": 18,
+  "Height": 8,
+  "Owner": 2,
+  "RunId": "prefix24-6344598354174e7d93b5ac1590cfd2ae",
+  "ShaderAssetPath": "Assets/EUnityValidation01/Direct24Prefix/Prefix24.compute",
+  "ShaderSha256": "a85bb725503d39e3c7fdd3a354bea2ea31382401f7deaae10fc254fdabe98d0d",
+  "ShaderGuid": "a86ba181213712cd5cb5d48972d38e82",
+  "InputFiles": [
+    {
+      "Name": "cells",
+      "File": "cells.bin",
+      "Stage": 0,
+      "Bytes": 57344,
+      "Sha256": "9ac25ca8c073ce9cdfead3612ed41c31490f327fc33b510bd25ce7166aa91cbb"
+    },
+    {
+      "Name": "tags",
+      "File": "tags.bin",
+      "Stage": 0,
+      "Bytes": 8192,
+      "Sha256": "2e84c001062d657da0a4637d5deeb3e3611fa19c922ea1de36c9f6a002f786a8"
+    },
+    {
+      "Name": "frame",
+      "File": "frame.bin",
+      "Stage": 0,
+      "Bytes": 1024,
+      "Sha256": "19c14a8bea9e746de1a55965075c9a7fdfb2b4c3c1128a457e52cfe93e39a8b6"
+    },
+    {
+      "Name": "points",
+      "File": "points.bin",
+      "Stage": 0,
+      "Bytes": 768,
+      "Sha256": "2bae7de7192bf94d7b1689d6cf3c45a751e907e1e654964feead6075500f518b"
+    },
+    {
+      "Name": "old-best",
+      "File": "old-best.bin",
+      "Stage": 0,
+      "Bytes": 96,
+      "Sha256": "04fd78e0409965fbd6ede307e46a6c3b19e200e396b936bde9dc3a3b825795d8"
+    },
+    {
+      "Name": "subsets-I",
+      "File": "subsets-I.bin",
+      "Stage": 1,
+      "Bytes": 2048,
+      "Sha256": "7413473ca3432492fce7caaa6b4f52a59b30a1e079dbef15958e3826896002e6"
+    },
+    {
+      "Name": "subsets-W",
+      "File": "subsets-W.bin",
+      "Stage": 1,
+      "Bytes": 2048,
+      "Sha256": "8896521c70856e5236a3551f7d788d97431965c68119c436b4be739d6b8a55af"
+    },
+    {
+      "Name": "groups",
+      "File": "groups.bin",
+      "Stage": 2,
+      "Bytes": 1536,
+      "Sha256": "98adf829086820b9cbfd16c34ea85fec498ee29a68e2e34565f1844cc422b2b9"
+    },
+    {
+      "Name": "best",
+      "File": "best.bin",
+      "Stage": 3,
+      "Bytes": 48,
+      "Sha256": "3f193d98f7c0e562b33a5ac2e9d1dce39bb6a493fb62982d5a30363710d6b8d1"
+    },
+    {
+      "Name": "colour",
+      "File": "colour.bin",
+      "Stage": 4,
+      "Bytes": 2304,
+      "Sha256": "5f1f014ab78e8f8d91892fbcfd93bc814d1a36ec1946d9acf923e93fc7c7039b"
+    },
+    {
+      "Name": "identity",
+      "File": "identity.bin",
+      "Stage": 4,
+      "Bytes": 2304,
+      "Sha256": "9a3b2ba3b474d0147063e4b928166e7e0c6edc4d5bc437b7a93de9c2c6a01b8d"
+    },
+    {
+      "Name": "decision",
+      "File": "decision.bin",
+      "Stage": 4,
+      "Bytes": 2304,
+      "Sha256": "e68f24c52df68d662a09ce707e785e38cf8dc77acaf9641ebd23b1a5f9cb6d3d"
+    },
+    {
+      "Name": "audit",
+      "File": "audit.bin",
+      "Stage": 4,
+      "Bytes": 2304,
+      "Sha256": "a53b53c5108d87df7235166096ca10b530354957b16fdfb57c8b30c0f44ceecc"
+    }
+  ],
+  "Globals": [
+    {
+      "Name": "_Auto245BodySkinMember",
+      "Type": "Texture"
+    },
+    {
+      "Name": "_Auto245CreamMember",
+      "Type": "Texture"
+    },
+    {
+      "Name": "_Auto245CreamShade",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Auto245FaceSkinMember",
+      "Type": "Texture"
+    },
+    {
+      "Name": "_Auto245Local",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Auto245MembershipEnabled",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Auto245SkinShade",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Auto245Stage",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Auto245StockLit",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Auto245StockMember",
+      "Type": "Texture"
+    },
+    {
+      "Name": "_Auto245StockShade",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Auto249Probe",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Auto249VisibilityOne",
+      "Type": "Float"
+    },
+    {
+      "Name": "_BodyScope551Enabled",
+      "Type": "Int"
+    },
+    {
+      "Name": "_ClipShift331",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_ClipShift333",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Cloth524Enabled",
+      "Type": "Int"
+    },
+    {
+      "Name": "_Cloth524Mask",
+      "Type": "Texture"
+    },
+    {
+      "Name": "_Cloth524Parts",
+      "Type": "Int"
+    },
+    {
+      "Name": "_E152Diagnostic",
+      "Type": "Float"
+    },
+    {
+      "Name": "_E155ProtectedCapture",
+      "Type": "Float"
+    },
+    {
+      "Name": "_E189Diag",
+      "Type": "Float"
+    },
+    {
+      "Name": "_E189FieldEnabled",
+      "Type": "Float"
+    },
+    {
+      "Name": "_E202MainHideEyes",
+      "Type": "Float"
+    },
+    {
+      "Name": "_E202Part",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Eye253Part",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Eye253Tag",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FHEnabled44",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FaceShadeChromaticity335",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_FaceShadeSteps335",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FaceShadeTint335",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FantasyRainColor",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_FantasyRainDirection",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FantasyRainIntensity",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FantasyRainShelterClearance",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FantasyRainShelterHeight",
+      "Type": "Texture"
+    },
+    {
+      "Name": "_FantasyRainShelterMaximumHeight",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FantasyRainShelterReady",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FantasyRainShelterWorldRect",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_FantasyRainVisualTime",
+      "Type": "Float"
+    },
+    {
+      "Name": "_FantasyRainWorldGridOffset",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_FantasyRainWorldUnitsPerScreenPixel",
+      "Type": "Float"
+    },
+    {
+      "Name": "_H216SourceTag",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Hair283Channel",
+      "Type": "Int"
+    },
+    {
+      "Name": "_ProbeRole331",
+      "Type": "Int"
+    },
+    {
+      "Name": "_ProbeSide331",
+      "Type": "Int"
+    },
+    {
+      "Name": "_Profile333",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_ROI348",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Region502Hair",
+      "Type": "Int"
+    },
+    {
+      "Name": "_Region502OwnedShift",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Region502Quad",
+      "Type": "Int"
+    },
+    {
+      "Name": "_Region502Scale",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Region502ViewProjection",
+      "Type": "Matrix"
+    },
+    {
+      "Name": "_Restore250Actor",
+      "Type": "Texture"
+    },
+    {
+      "Name": "_Restore250Bottom",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Restore250LowerLit",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Restore250LowerShade",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_ShadeLayer335",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Source329Metadata",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Source329ShadeProfile",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_Style297Enabled",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Style297OwnShade",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Style297SkinMode",
+      "Type": "Float"
+    },
+    {
+      "Name": "_SupportKind348",
+      "Type": "Int"
+    },
+    {
+      "Name": "_Surface252TorsoOnly",
+      "Type": "Float"
+    },
+    {
+      "Name": "_Surface255Filter",
+      "Type": "Float"
+    },
+    {
+      "Name": "_SurfaceInvRaster335",
+      "Type": "Vector"
+    },
+    {
+      "Name": "_SurfaceLayerView335",
+      "Type": "Int"
+    },
+    {
+      "Name": "_SurfaceLayers335",
+      "Type": "Float"
+    },
+    {
+      "Name": "_SurfaceMaskReady335",
+      "Type": "Float"
+    },
+    {
+      "Name": "_SurfaceOwnShade335",
+      "Type": "Float"
+    },
+    {
+      "Name": "_SurfaceShadeMask335",
+      "Type": "Texture"
+    },
+    {
+      "Name": "_SurfaceShadeSteps335",
+      "Type": "Float"
+    },
+    {
+      "Name": "_WorldToHead348",
+      "Type": "Matrix"
+    }
+  ]
+}

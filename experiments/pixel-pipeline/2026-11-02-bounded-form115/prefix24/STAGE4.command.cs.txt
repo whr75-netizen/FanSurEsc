@@ -1,0 +1,286 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Globalization;
+using System.Text;
+using System.Threading;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor { public sealed class CommandScript : IRunCommand { public void Execute(ExecutionResult result) { global::Prefix24.Prefix24Host.Start(4,message=>result.Log(message)); } } }
+
+namespace Prefix24 {
+// C# value structs have sequential layout by default. Only32-bit scalar/nested
+// value fields are used. Actual sizes/offsets are checked OUTSIDE Unity by the
+// CPU test executable; the live command performs no native interop or Marshal.
+public struct F4 { public float x,y,z,w; public F4(float a,float b,float c,float d){x=a;y=b;z=c;w=d;} }
+public struct U4 { public uint x,y,z,w; public U4(uint a,uint b,uint c,uint d){x=a;y=b;z=c;w=d;} }
+public struct Group24 { public F4 score; public U4 masks,tail; }
+public struct Subset24 { public U4 a,b; }
+[Serializable] public sealed class Blob24 {
+ public string Name;
+ public string File;
+ public int Stage;
+ public int Bytes;
+ public string Sha256;
+}
+[Serializable] public sealed class Global24 { public string Name; public string Type; }
+[Serializable] public sealed class Case24 {
+ public string Schema,SourceId,RunId,ShaderAssetPath,ShaderSha256,ShaderGuid;
+ public int SourceFrame,SourceSerial,Width,Height,Owner;
+ public Blob24[] InputFiles;
+ public Global24[] Globals;
+}
+[Serializable] public sealed class Receipt24 {
+ public string Schema="prefix24/receipt/v1",ExecutionKind,RunId,CaseSha256,SourceId,ShaderSha256;
+ public int Stage,DispatchCalls;
+ public bool Success,StateEqual,ResourcesReleased;
+ public string BeforeStateSha256,AfterStateSha256,Error;
+ public Blob24[] Outputs;
+}
+
+// One fixed diagnostic run; callbacks cannot advance this state to a new stage.
+public sealed class StepGate24 {
+ public int DispatchCalls {get;private set;}
+ public int Pending {get;private set;}
+ public bool Unknown {get;private set;}
+ public bool Failed {get;private set;}
+ public bool Issuing {get;private set;}
+ public bool Finalized {get;private set;}
+ bool returned; int completed; readonly HashSet<string> reads=new HashSet<string>();
+ public void BeforeDispatch(){if(DispatchCalls!=0||Finalized)throw new InvalidOperationException("One dispatch only");DispatchCalls=1;Unknown=true;}
+ public void DispatchReturned(){if(DispatchCalls!=1||returned)throw new InvalidOperationException("Submission state");returned=true;Unknown=false;}
+ public void BeginReads(){if(!returned||Issuing)throw new InvalidOperationException("No overlapping scheduling");Issuing=true;}
+ public void BeforeRead(string name){if(!Issuing||!reads.Add(name))throw new InvalidOperationException("Duplicate read");Pending++;}
+ public void ReadRequestUncertain(){Unknown=true;Failed=true;}
+ public void EndReads(){Issuing=false;}
+ public void CompleteRead(string name,bool done,bool hasError){
+  if(Finalized)throw new InvalidOperationException("Late callback after terminal state");
+  if(!done){Unknown=true;Failed=true;return;}
+  if(!reads.Remove(name))throw new InvalidOperationException("Unregistered or duplicate callback");
+  Pending--;completed++;if(hasError)Failed=true;
+ }
+ public void Fail(){Failed=true;}
+ public bool CanRelease=>!Finalized&&!Unknown&&!Issuing&&Pending==0&&(DispatchCalls==0||(returned&&completed>0));
+ public void MarkFinalized(){if(!CanRelease)throw new InvalidOperationException("GPU completion not established");Finalized=true;}
+ public bool CanComplete=>Finalized&&!Failed&&DispatchCalls==1;
+}
+
+public static class Protocol24 {
+ public const int MaxBlobBytes=4*1024*1024;
+ // Host installs Unity JsonUtility. The external CPU test installs its own
+ // field serializer; neither path requires a live command assembly reference
+ // to System.Runtime.Serialization or native interop.
+ public static Func<object,byte[]> Encode;
+ public static Func<byte[],Type,object> Decode;
+ public static string Hash(byte[] bytes){using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(bytes)).Replace("-","").ToLowerInvariant();}
+ public static byte[] ReadBounded(string path,int limit){var f=new FileInfo(path);if(f.Length<1||f.Length>limit)throw new IOException("File budget");return File.ReadAllBytes(path);}
+ public static byte[] Json<T>(T value){if(Encode==null)throw new InvalidOperationException("Metadata encoder not installed");var bytes=Encode(value);if(bytes==null||bytes.Length>256*1024)throw new IOException("Metadata budget");return bytes;}
+ public static T Parse<T>(byte[] bytes){if(Decode==null)throw new InvalidOperationException("Metadata decoder not installed");if(bytes.Length>256*1024)throw new IOException("Metadata budget");return(T)Decode(bytes,typeof(T));}
+ public static void Create(string path,byte[] bytes){if(bytes.Length>MaxBlobBytes)throw new IOException("Output budget");using(var f=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read)){f.Write(bytes,0,bytes.Length);f.Flush(true);}}
+ public static void CreateJson<T>(string path,T value){Create(path,Json(value));}
+ public static string Child(string parent,string name){if(String.IsNullOrEmpty(name)||Path.GetFileName(name)!=name||name=="."||name=="..")throw new IOException("Relative filename required");return Path.Combine(parent,name);}
+ public static Case24 LoadCase(string root,string approvedHash){
+  if(!BitConverter.IsLittleEndian)throw new PlatformNotSupportedException("Little-endian fixture");
+  var bytes=ReadBounded(Path.Combine(root,"CASE.json"),65536);if(Hash(bytes)!=approvedHash)throw new IOException("Unapproved case");var c=Parse<Case24>(bytes);
+  if(c.Schema!="prefix24/case/v1"||c.SourceFrame!=103||c.SourceSerial!=10||c.Width!=18||c.Height!=8||c.Owner!=2||c.InputFiles==null||c.InputFiles.Select(x=>x.Name).Distinct().Count()!=c.InputFiles.Length)throw new IOException("Frozen case changed");
+  foreach(var row in c.InputFiles){var data=ReadBounded(Child(Path.Combine(root,"fixture"),row.File),MaxBlobBytes);if(data.Length!=row.Bytes||Hash(data)!=row.Sha256)throw new IOException("Fixture hash "+row.Name);}
+  ValidateCaseData(c,root);
+  return c;
+ }
+ public static void ValidateCaseData(Case24 c,string root){
+  var sizes=new Dictionary<string,int>{{"cells",57344},{"tags",8192},{"frame",1024},{"points",768},{"old-best",96}};
+  foreach(var row in sizes)if(Input(c,root,row.Key).Length!=row.Value)throw new IOException("Input stride/count");
+  var frame=UInts(Input(c,root,"frame"));if(frame[0].x!=9||frame[0].y!=5||frame[0].z!=6||frame[0].w!=0)throw new IOException("Frozen header");
+  var points=UInts(Input(c,root,"points"));for(int i=0;i<9;i++)if(points[i].x>=144||(points[i].y!=UInt32.MaxValue&&points[i].y>=5)||(points[i].z!=UInt32.MaxValue&&points[i].z>=6)||(points[i].w&~511u)!=0)throw new IOException("Point/mask bounds");
+  var cells=Fours(Input(c,root,"cells"));for(int i=0;i<144;i++){var m=cells[i*7];if(Single.IsNaN(m.x)||Single.IsNaN(m.y)||Single.IsNaN(m.z)||Single.IsNaN(m.w)||Single.IsInfinity(m.x)||Single.IsInfinity(m.y)||Single.IsInfinity(m.z)||Single.IsInfinity(m.w)||m.x<0||m.z<0||m.y<m.x||m.w<m.z)throw new IOException("Invalid source mass");}
+  var expected=new Dictionary<string,int>{{"subsets-I",2048},{"subsets-W",2048},{"groups",1536},{"best",48},{"colour",2304},{"identity",2304},{"decision",2304},{"audit",2304}};
+  if(c.InputFiles.Length!=sizes.Count+expected.Count)throw new IOException("Case blob set");foreach(var row in expected)if(c.InputFiles.Single(x=>x.Name==row.Key&&x.Stage>0).Bytes!=row.Value)throw new IOException("Output count/stride");
+ }
+ public static byte[] Input(Case24 c,string root,string name){var row=c.InputFiles.Single(x=>x.Name==name&&x.Stage==0);return ReadBounded(Child(Path.Combine(root,"fixture"),row.File),row.Bytes);}
+ public static Blob24 ValidateOutput(Case24 c,int stage,string name,byte[] bytes){var row=c.InputFiles.Single(x=>x.Name==name&&x.Stage==stage);if(bytes.Length!=row.Bytes||Hash(bytes)!=row.Sha256)throw new IOException("GPU/CPU byte mismatch "+name);return new Blob24{Name=name,File=name+".bin",Stage=stage,Bytes=bytes.Length,Sha256=Hash(bytes)};}
+ public static string StagePath(string runRoot,int stage){if(stage<1||stage>4)throw new ArgumentOutOfRangeException(nameof(stage));return Path.Combine(runRoot,"stage-"+stage.ToString("D2"));}
+ public static Receipt24 Previous(Case24 c,string caseHash,string runRoot,int stage){
+  if(stage<=1||stage>4)throw new ArgumentOutOfRangeException(nameof(stage));var dir=StagePath(runRoot,stage-1);var bytes=ReadBounded(Path.Combine(dir,"COMPLETE.json"),65536);
+  var r=Parse<Receipt24>(bytes);CheckReceipt(c,caseHash,stage-1,r,"gpu-prefix");
+  foreach(var row in r.Outputs){var data=ReadBounded(Child(dir,row.File),MaxBlobBytes);if(data.Length!=row.Bytes||Hash(data)!=row.Sha256)throw new IOException("Previous output corrupt");ValidateOutput(c,stage-1,row.Name,data);}
+  return r;
+ }
+ public static void CheckReceipt(Case24 c,string hash,int stage,Receipt24 r,string kind){
+  if(r.Schema!="prefix24/receipt/v1"||r.ExecutionKind!=kind||r.RunId!=c.RunId||r.Stage!=stage||r.CaseSha256!=hash||r.SourceId!=c.SourceId||r.ShaderSha256!=c.ShaderSha256||r.DispatchCalls!=1||!r.Success||!r.StateEqual||!r.ResourcesReleased||r.BeforeStateSha256!=r.AfterStateSha256||!String.IsNullOrEmpty(r.Error)||r.Outputs==null)throw new IOException("No validated predecessor");
+  var names=c.InputFiles.Where(x=>x.Stage==stage).Select(x=>x.Name).OrderBy(x=>x,StringComparer.Ordinal);
+  if(!names.SequenceEqual(r.Outputs.Select(x=>x.Name).OrderBy(x=>x,StringComparer.Ordinal)))throw new IOException("Incomplete outputs");
+ }
+ public static byte[] PreviousBytes(Case24 c,string hash,string runRoot,int stage,string name){var r=Previous(c,hash,runRoot,stage);var row=r.Outputs.Single(x=>x.Name==name);return ReadBounded(Child(StagePath(runRoot,stage-1),row.File),row.Bytes);}
+ public static string ClaimStage(Case24 c,string caseHash,string runRoot,int stage){
+  if(Path.GetFileName(runRoot)!=c.RunId)throw new IOException("Run identity mismatch");
+  if(stage>1)Previous(c,caseHash,runRoot,stage);
+  string dir=StagePath(runRoot,stage);Directory.CreateDirectory(dir);
+  // CreateNew is the single-use claim; even an uncertain prior attempt blocks replay.
+  Create(Path.Combine(dir,"INTENT.json"),Json(new Receipt24{ExecutionKind="intent",RunId=c.RunId,Stage=stage,CaseSha256=caseHash,SourceId=c.SourceId,ShaderSha256=c.ShaderSha256}));
+  return dir;
+ }
+ public static F4[] Fours(byte[] bytes){if(bytes.Length%16!=0)throw new IOException("F4 stride");var a=new F4[bytes.Length/16];using(var r=new BinaryReader(new MemoryStream(bytes)))for(int i=0;i<a.Length;i++)a[i]=new F4(r.ReadSingle(),r.ReadSingle(),r.ReadSingle(),r.ReadSingle());return a;}
+ public static U4[] UInts(byte[] bytes){if(bytes.Length%16!=0)throw new IOException("U4 stride");var a=new U4[bytes.Length/16];using(var r=new BinaryReader(new MemoryStream(bytes)))for(int i=0;i<a.Length;i++)a[i]=new U4(r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32());return a;}
+ public static Group24[] Groups(byte[] bytes){if(bytes.Length%48!=0)throw new IOException("Group stride");var a=new Group24[bytes.Length/48];using(var r=new BinaryReader(new MemoryStream(bytes)))for(int i=0;i<a.Length;i++)a[i]=new Group24{score=new F4(r.ReadSingle(),r.ReadSingle(),r.ReadSingle(),r.ReadSingle()),masks=new U4(r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32()),tail=new U4(r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32())};return a;}
+ public static Subset24[] Subsets(byte[] bytes){if(bytes.Length%32!=0)throw new IOException("Subset stride");var a=new Subset24[bytes.Length/32];using(var r=new BinaryReader(new MemoryStream(bytes)))for(int i=0;i<a.Length;i++)a[i]=new Subset24{a=new U4(r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32()),b=new U4(r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32(),r.ReadUInt32())};return a;}
+ public static Group24[] InvalidGroups(int n){var a=new Group24[n];for(int i=0;i<n;i++)a[i]=new Group24{score=new F4(3.402823e38f,3.402823e38f,3.402823e38f,3.402823e38f),tail=new U4(UInt32.MaxValue,0,0,0)};return a;}
+ public static int ExpectedStride<T>()where T:struct{if(typeof(T)==typeof(F4)||typeof(T)==typeof(U4))return 16;if(typeof(T)==typeof(Subset24))return 32;if(typeof(T)==typeof(Group24))return 48;throw new IOException("Unapproved upload type");}
+}
+}
+
+namespace Prefix24 {
+public static class CaseLock24 {
+ public const string ManifestSha="0bd1a3c7fbc3e30791cbcaa000854a6fafd79598f34a730b8a7e2e2c0559027b";
+ public const string FixtureRoot=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\bounded-form115\prefix24";
+ public const string RunRoot=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\bounded-form115\prefix24\runs\prefix24-6344598354174e7d93b5ac1590cfd2ae";
+}
+}
+
+
+namespace Prefix24 {
+[Serializable] sealed class State24 {
+ public bool Playing,Transition,Compiling,Updating,Paused,Background,PlayerBackground,OptionsEnabled;
+ public int Options;
+ public string TimeScale,CaptureDelta,Pipeline,QualityPipeline,InputId,InputJson;
+ public string[] Scenes,Devices,Dirty,Globals;
+}
+[Serializable] sealed class Event24 {
+ public string Kind,Utc,Kernel,Name,Error;
+ public int Stage,Bytes,Pending,Dispatches;
+ public bool Done,HasError,Unknown;
+}
+
+// Not a renderer or observer. Four independent official commands call Start.
+// One command owns one dispatch and its asynchronous readbacks only.
+public sealed class Prefix24Host {
+ static readonly Dictionary<string,Prefix24Host> Live=new Dictionary<string,Prefix24Host>();
+ readonly Dictionary<string,GraphicsBuffer> buffers=new Dictionary<string,GraphicsBuffer>();
+ readonly List<AsyncGPUReadbackRequest> requests=new List<AsyncGPUReadbackRequest>();
+ readonly List<Blob24> outputs=new List<Blob24>(); readonly StepGate24 gate=new StepGate24();
+ sealed class Read24 {public string Name;public GraphicsBuffer Buffer;public int Bytes,Offset;}
+ readonly List<Read24> reads=new List<Read24>();
+ Case24 data;int stage,mainThread;string dir,kernel,error;byte[] before;ComputeShader shader;
+ SynchronizationContext context;Action<string> log;bool finishPosted,terminal;
+ static string Id(UnityEngine.Object o)=>o?o.GetEntityId().ToString():"null";
+ static string Number(float v)=>v.ToString("R",CultureInfo.InvariantCulture);
+ static State24 State(Case24 c){
+  var input=InputSystem.settings;if(!input)throw new InvalidOperationException("Existing InputSettings required; no replacement");
+  var globals=new List<string>();foreach(var g in c.Globals){string value;
+   switch(g.Type){case "Float":value=Number(Shader.GetGlobalFloat(g.Name));break;case "Int":value=Shader.GetGlobalInt(g.Name).ToString(CultureInfo.InvariantCulture);break;
+    case "Texture":value=Id(Shader.GetGlobalTexture(g.Name));break;
+    case "Vector":var v=Shader.GetGlobalVector(g.Name);value=String.Join(",",new[]{Number(v.x),Number(v.y),Number(v.z),Number(v.w)});break;
+    case "Matrix":var m=Shader.GetGlobalMatrix(g.Name);value=String.Join(",",Enumerable.Range(0,16).Select(i=>Number(m[i])));break;
+    default:value="UNQUERIED_NO_WRITES:"+g.Type;break;}
+   globals.Add(g.Name+"="+value);
+  }
+  return new State24{Playing=EditorApplication.isPlaying,Transition=EditorApplication.isPlayingOrWillChangePlaymode,Compiling=EditorApplication.isCompiling,Updating=EditorApplication.isUpdating,Paused=EditorApplication.isPaused,
+   Background=Application.runInBackground,PlayerBackground=PlayerSettings.runInBackground,OptionsEnabled=EditorSettings.enterPlayModeOptionsEnabled,Options=(int)EditorSettings.enterPlayModeOptions,
+   TimeScale=Number(Time.timeScale),CaptureDelta=Number(Time.captureDeltaTime),Pipeline=Id(GraphicsSettings.defaultRenderPipeline),QualityPipeline=Id(QualitySettings.renderPipeline),InputId=Id(input),InputJson=JsonUtility.ToJson(input),
+   Scenes=Enumerable.Range(0,SceneManager.sceneCount).Select(i=>{var s=SceneManager.GetSceneAt(i);return s.path+"|"+s.isDirty+"|"+(s==SceneManager.GetActiveScene());}).ToArray(),
+   Devices=InputSystem.devices.Select(d=>d.deviceId+"|"+d.layout+"|"+d.enabled).ToArray(),
+   Dirty=Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).Select(o=>AssetDatabase.GetAssetPath(o)+"|"+o.GetType().FullName+"|"+Id(o)).Where(s=>s.StartsWith("Assets/",StringComparison.Ordinal)||s.StartsWith("ProjectSettings/",StringComparison.Ordinal)).OrderBy(s=>s,StringComparer.Ordinal).ToArray(),
+   Globals=globals.ToArray()};
+ }
+ static void Stable(){if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required");}
+ public static void Start(int requestedStage,Action<string> logger){
+  Protocol24.Encode=value=>Encoding.UTF8.GetBytes(JsonUtility.ToJson(value));
+  Protocol24.Decode=(bytes,type)=>JsonUtility.FromJson(Encoding.UTF8.GetString(bytes),type);
+  var job=new Prefix24Host{stage=requestedStage,log=logger??(_=>{})};job.Begin();
+ }
+ void Begin(){
+  // Disk/case checks precede GPU asset loading. Nothing invokes an importer.
+  if(stage<1||stage>4)throw new ArgumentOutOfRangeException(nameof(stage));Stable();
+  context=SynchronizationContext.Current;mainThread=Thread.CurrentThread.ManagedThreadId;
+  if(context==null||context.GetType().FullName!="UnityEngine.UnitySynchronizationContext")throw new InvalidOperationException("Unity main synchronization context required");
+  data=Protocol24.LoadCase(CaseLock24.FixtureRoot,CaseLock24.ManifestSha);
+  if(stage>1)Protocol24.Previous(data,CaseLock24.ManifestSha,CaseLock24.RunRoot,stage);
+  if(SystemInfo.graphicsDeviceType!=GraphicsDeviceType.Direct3D11||!SystemInfo.supportsComputeShaders)throw new InvalidOperationException("Reviewed D3D11 compute context required; no API switch");
+  var project=Directory.GetParent(Application.dataPath).FullName;var source=Path.GetFullPath(Path.Combine(project,data.ShaderAssetPath));
+  if(data.ShaderAssetPath!="Assets/EUnityValidation01/Direct24Prefix/Prefix24.compute"||!source.StartsWith(Path.Combine(project,"Assets")+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new IOException("Exact isolated asset required");
+  if(Protocol24.Hash(Protocol24.ReadBounded(source,65536))!=data.ShaderSha256)throw new IOException("Unimported/mismatched shader source; no fallback");
+  before=Protocol24.Json(State(data));dir=Protocol24.ClaimStage(data,CaseLock24.ManifestSha,CaseLock24.RunRoot,stage);
+  Protocol24.Create(Path.Combine(dir,"BEFORE.json"),before);Live.Add(dir,this);
+  try{
+   if(AssetDatabase.AssetPathToGUID(data.ShaderAssetPath)!=data.ShaderGuid)throw new IOException("Isolated shader identity mismatch");
+   var original=AssetDatabase.LoadAssetAtPath<ComputeShader>(data.ShaderAssetPath);if(!original)throw new IOException("Candidate asset is not imported; no fallback");
+   shader=UnityEngine.Object.Instantiate(original);shader.hideFlags=HideFlags.DontSave;
+   foreach(var name in new[]{"BuildSubsets113","Enumerate113","Reduce113","Write113"}){
+    if(!shader.HasKernel(name))throw new IOException("Candidate entrypoint missing");uint x,y,z;shader.GetKernelThreadGroupSizes(shader.FindKernel(name),out x,out y,out z);
+    if(x!=(name=="Write113"?8u:64u)||y!=(name=="Write113"?8u:1u)||z!=1)throw new IOException("Thread-group ABI");
+   }
+   Prepare();int k=shader.FindKernel(kernel);foreach(var b in buffers)shader.SetBuffer(k,b.Key,b.Value);
+   shader.SetInts("_CellsSize113",18,8);shader.SetInts("_CurveEyeIds106",2,1);
+   Protocol24.CreateJson(Path.Combine(dir,"PREPARED.json"),new Event24{Kind="prepared",Utc=DateTime.UtcNow.ToString("O"),Stage=stage,Kernel=kernel});
+   gate.BeforeDispatch();
+   // The sole GPU submission site. No callback or finalizer can reach it.
+   shader.Dispatch(k,stage==2?32:1,stage==1?2:1,1);
+   gate.DispatchReturned();Protocol24.CreateJson(Path.Combine(dir,"SUBMITTED.json"),new Event24{Kind="submitted",Stage=stage,Kernel=kernel,Dispatches=gate.DispatchCalls,Utc=DateTime.UtcNow.ToString("O")});
+   gate.BeginReads();
+   foreach(var spec in reads){gate.BeforeRead(spec.Name);try{var capture=spec;var request=AsyncGPUReadback.Request(spec.Buffer,spec.Bytes,spec.Offset,r=>Received(capture,r));requests.Add(request);}catch(Exception e){gate.ReadRequestUncertain();error=e.ToString();break;}}
+   gate.EndReads();MaybeFinish();log("Prefix24 stage"+stage+" submitted once; no automatic next stage. Read "+dir);
+  }catch(Exception e){error=e.ToString();gate.Fail();MaybeFinish();if(!gate.CanRelease&&!terminal)Pending("start-failed-uncertain");log("Prefix24 stopped: "+e.Message);}
+ }
+ byte[] Input(string name)=>Protocol24.Input(data,CaseLock24.FixtureRoot,name);
+ byte[] Prior(string name)=>Protocol24.PreviousBytes(data,CaseLock24.ManifestSha,CaseLock24.RunRoot,stage,name);
+ GraphicsBuffer Buffer<T>(string name,T[] array,int stride)where T:struct{
+  if(stride!=Protocol24.ExpectedStride<T>()||array.Length<1||(long)array.Length*stride>Protocol24.MaxBlobBytes)throw new IOException("Buffer type/stride/budget");
+  var b=new GraphicsBuffer(GraphicsBuffer.Target.Structured,array.Length,stride);buffers.Add(name,b);b.SetData(array);return b;
+ }
+ void Read(string name,GraphicsBuffer buffer,int bytes,int offset=0){if(bytes<1||offset<0||(long)offset+bytes>(long)buffer.count*buffer.stride||bytes>9216)throw new IOException("Readback bounds");reads.Add(new Read24{Name=name,Buffer=buffer,Bytes=bytes,Offset=offset});}
+ void Prepare(){
+  kernel=new[]{"BuildSubsets113","Enumerate113","Reduce113","Write113"}[stage-1];
+  if(stage==1||stage==4){Buffer("_Cells113",Protocol24.Fours(Input("cells")),16);Buffer("_Frame113",Protocol24.UInts(Input("frame")),16);Buffer("_Points113",Protocol24.UInts(Input("points")),16);}
+  if(stage==1){Buffer("_CellTags113",Protocol24.UInts(Input("tags")),16);var b=Buffer("_Subsets113",new Subset24[16384],32);Read("subsets-I",b,2048);Read("subsets-W",b,2048,4096*32);}
+  if(stage==2){Buffer("_Frame113",Protocol24.UInts(Input("frame")),16);var a=new Subset24[16384];Array.Copy(Protocol24.Subsets(Prior("subsets-I")),0,a,0,64);Array.Copy(Protocol24.Subsets(Prior("subsets-W")),0,a,4096,64);Buffer("_Subsets113",a,32);Read("groups",Buffer("_Groups113",Protocol24.InvalidGroups(65536),48),32*48);}
+  if(stage==3){var a=Protocol24.InvalidGroups(65536);Array.Copy(Protocol24.Groups(Prior("groups")),a,32);Buffer("_Groups113",a,48);Read("best",Buffer("_Best113",Protocol24.Groups(Input("old-best")),48),48);}
+  if(stage==4){var best=Protocol24.Groups(Input("old-best"));best[0]=Protocol24.Groups(Prior("best"))[0];Buffer("_Best113",best,48);
+   string[] names={"colour","identity","decision","audit"},gpu={"_CurveColour106","_CurveIdentity106","_CurveDecision106","_CurveAudit106"};
+   for(int i=0;i<4;i++)Read(names[i],Buffer(gpu[i],Enumerable.Repeat(new F4(-12345.25f,-12345.25f,-12345.25f,-12345.25f),144).ToArray(),16),144*16);
+  }
+ }
+ void Received(Read24 spec,AsyncGPUReadbackRequest request){
+  if(terminal)return;
+  try{
+   bool done=request.done,failed=request.hasError;
+   if(!done){error="Readback callback not complete";gate.CompleteRead(spec.Name,false,failed);Pending("callback-incomplete");return;}
+   try{
+    Protocol24.CreateJson(Path.Combine(dir,"CALLBACK-"+spec.Name+".json"),new Event24{Kind="callback",Name=spec.Name,Stage=stage,Done=done,HasError=failed,Bytes=spec.Bytes,Utc=DateTime.UtcNow.ToString("O")});
+    if(failed)throw new IOException("GPU readback error "+spec.Name);
+    var bytes=request.GetData<byte>().ToArray();Protocol24.Create(Path.Combine(dir,spec.Name+".bin"),bytes);
+    outputs.Add(Protocol24.ValidateOutput(data,stage,spec.Name,bytes));
+   }catch(Exception e){error=e.ToString();gate.Fail();}
+   finally{gate.CompleteRead(spec.Name,true,failed);}
+  }catch(Exception e){error=e.ToString();gate.Fail();}
+  MaybeFinish();
+ }
+ void Pending(string kind){try{Protocol24.CreateJson(Path.Combine(dir,"PENDING-"+Guid.NewGuid().ToString("N")+".json"),new Event24{Kind=kind,Stage=stage,Kernel=kernel,Error=error,Pending=gate.Pending,Dispatches=gate.DispatchCalls,Unknown=gate.Unknown||(gate.DispatchCalls>0&&!gate.CanRelease),Utc=DateTime.UtcNow.ToString("O")});}catch{}}
+ void MaybeFinish(){
+  if(terminal||finishPosted||!gate.CanRelease)return;
+  finishPosted=true;
+  if(Thread.CurrentThread.ManagedThreadId==mainThread)Finish();
+  else try{context.Post(_=>Finish(),null);}catch(Exception e){error=e.ToString();gate.Fail();Pending("main-finalization-not-scheduled");}
+ }
+ void Finish(){
+  if(terminal)return;if(Thread.CurrentThread.ManagedThreadId!=mainThread){error="Main synchronization context did not return to original thread";gate.Fail();Pending("wrong-finalization-thread");return;}
+  if(!gate.CanRelease){finishPosted=false;return;}var failures=new List<string>();
+  foreach(var b in buffers.Values)try{b.Dispose();}catch(Exception e){failures.Add(e.ToString());}
+  try{if(shader)UnityEngine.Object.DestroyImmediate(shader);}catch(Exception e){failures.Add(e.ToString());}
+  bool released=failures.Count==0;byte[] after=null;bool equal=false;
+  try{after=Protocol24.Json(State(data));Protocol24.Create(Path.Combine(dir,"AFTER.json"),after);equal=before.SequenceEqual(after);}catch(Exception e){failures.Add(e.ToString());}
+  if(!equal||failures.Count>0){gate.Fail();error=(error??"")+"\nState/cleanup verification failed: "+String.Join("\n",failures);}
+  gate.MarkFinalized();terminal=true;
+  var receipt=new Receipt24{ExecutionKind="gpu-prefix",RunId=data.RunId,Stage=stage,CaseSha256=CaseLock24.ManifestSha,SourceId=data.SourceId,ShaderSha256=data.ShaderSha256,
+   DispatchCalls=gate.DispatchCalls,StateEqual=equal,ResourcesReleased=released,BeforeStateSha256=Protocol24.Hash(before),AfterStateSha256=after==null?null:Protocol24.Hash(after),Error=error,Outputs=outputs.ToArray()};
+  receipt.Success=gate.CanComplete&&released&&equal&&String.IsNullOrEmpty(error)&&outputs.Count==reads.Count;
+  if(receipt.Success)Protocol24.CheckReceipt(data,CaseLock24.ManifestSha,stage,receipt,"gpu-prefix");
+  Protocol24.CreateJson(Path.Combine(dir,receipt.Success?"COMPLETE.json":"FAILED.json"),receipt);
+  if(released){buffers.Clear();requests.Clear();Live.Remove(dir);} // Never retry failed disposal.
+  log("Prefix24 stage"+stage+" terminal; success="+receipt.Success+", no next submission");
+ }
+}
+}

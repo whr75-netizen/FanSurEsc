@@ -1,0 +1,336 @@
+{
+  "compiler": "C:\\Windows\\System32\\d3dcompiler_47.dll",
+  "compilerSHA256": "0f89c19165fd83a05e39bea601a06007e6a8814d55e2adf913902926231f843e",
+  "API": [
+    "D3DCompile",
+    "D3DReflect",
+    "ID3DBlob",
+    "ID3D11ShaderReflection"
+  ],
+  "sourceSHA256": "a85bb725503d39e3c7fdd3a354bea2ea31382401f7deaae10fc254fdabe98d0d",
+  "compiledSourceSHA256": "c5ea102da38a030c978a64fdb66dd0f2b5c57f869cce7dae4e9061b22f8da41f",
+  "target": "cs_5_0",
+  "flags": "strictness|optimization3",
+  "GPUDeviceCreated": false,
+  "GPUDispatches": 0,
+  "UnityCalls": 0,
+  "newModules": [
+    "C:\\Windows\\System32\\d3dcompiler_47.dll"
+  ],
+  "GPUDriverOrDeviceDLLsLoaded": [],
+  "kernels": [
+    {
+      "entry": "BuildSubsets113",
+      "SHA256": "beeb6838eb3c5642e1d87dd0b89edf2b2b0f8eae0225e324d3ab6b72c33a7664",
+      "bytes": 3972,
+      "diagnostics": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\Prefix24.compute(30,308-340): warning X3203: signed/unsigned mismatch, unsigned assumed\n\u0000",
+      "audit": {
+        "instructions": 122,
+        "privateArrayDeclarations": [],
+        "threads": [
+          64,
+          1,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "u0": 16,
+          "u1": 16,
+          "u2": 16,
+          "u3": 16,
+          "u4": 32
+        },
+        "loops": 4
+      },
+      "bindings": [
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Cells113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_CellTags113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Frame113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 3,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Points113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 4,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 32,
+          "Name": "_Subsets113"
+        }
+      ],
+      "constants": []
+    },
+    {
+      "entry": "Enumerate113",
+      "SHA256": "844156a8c1410a567c1bfa2ae68c96d3c7b8853127c5d8aaa01ee0bb64540371",
+      "bytes": 5800,
+      "diagnostics": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\Prefix24.compute(30,308-340): warning X3203: signed/unsigned mismatch, unsigned assumed\n\u0000",
+      "audit": {
+        "instructions": 197,
+        "privateArrayDeclarations": [],
+        "threads": [
+          64,
+          1,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "u0": 16,
+          "u1": 48,
+          "u2": 32
+        },
+        "loops": 3
+      },
+      "bindings": [
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Frame113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Groups113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 32,
+          "Name": "_Subsets113"
+        }
+      ],
+      "constants": []
+    },
+    {
+      "entry": "Reduce113",
+      "SHA256": "6a6954f3c00d0e3dc230f6681021c18df0cb90a7dfe75d2a701f01209786823e",
+      "bytes": 4852,
+      "diagnostics": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\Prefix24.compute(30,308-340): warning X3203: signed/unsigned mismatch, unsigned assumed\n\u0000",
+      "audit": {
+        "instructions": 191,
+        "privateArrayDeclarations": [],
+        "threads": [
+          64,
+          1,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "u0": 48,
+          "u1": 48
+        },
+        "loops": 6
+      },
+      "bindings": [
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Groups113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Best113"
+        }
+      ],
+      "constants": []
+    },
+    {
+      "entry": "Write113",
+      "SHA256": "cbf4bf61ba6b98d9fa1b66d619eaba4237795e974ae8405a5fcf40476557cf46",
+      "bytes": 4800,
+      "diagnostics": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\Prefix24.compute(30,308-340): warning X3203: signed/unsigned mismatch, unsigned assumed\n\u0000",
+      "audit": {
+        "instructions": 119,
+        "privateArrayDeclarations": [],
+        "threads": [
+          8,
+          8,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "u0": 16,
+          "u1": 16,
+          "u2": 16,
+          "u3": 48,
+          "u4": 16,
+          "u5": 16,
+          "u6": 16,
+          "u7": 16
+        },
+        "loops": 1
+      },
+      "bindings": [
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Cells113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Frame113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Points113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 3,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Best113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 4,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_CurveColour106"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 5,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_CurveIdentity106"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 6,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_CurveDecision106"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 7,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_CurveAudit106"
+        },
+        {
+          "Type": 0,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 0,
+          "Dimension": 0,
+          "NumSamples": 0,
+          "Name": "$Globals"
+        }
+      ],
+      "constants": [
+        {
+          "name": "$Globals",
+          "bytes": 16,
+          "variables": [
+            {
+              "name": "_CurveEyeIds106",
+              "offset": 0,
+              "bytes": 8,
+              "flags": 2
+            },
+            {
+              "name": "_CellsSize113",
+              "offset": 8,
+              "bytes": 8,
+              "flags": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notGPUClearance": true,
+  "reference": "https://learn.microsoft.com/en-us/windows/win32/api/d3dcompiler/nf-d3dcompiler-d3dcompile"
+}

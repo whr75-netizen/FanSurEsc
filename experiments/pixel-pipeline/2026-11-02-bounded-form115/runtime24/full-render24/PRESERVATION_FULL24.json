@@ -1,0 +1,158 @@
+{
+  "disk": {
+    "utc": "2026-11-02T14:17:22.847707+00:00",
+    "protected35Equal": true,
+    "originalUserModified30Equal": true,
+    "originalNative47BackupEqual": true,
+    "originalFaceMeshNativeHashEqual": true,
+    "product77DefaultChanged": false,
+    "newOwnedShaderSHA": "9f749bcfeb272a805b80f02ec69cbae58d69138c7a5fcf4df7aaed4bfa5617e9",
+    "GPUOrUnityCallsInThisDiskCheck": 0
+  },
+  "runs": [
+    {
+      "run": "open",
+      "beforeCount": 509,
+      "afterCount": 517,
+      "added": [
+        {
+          "path": "ProjectSettings/ProjectSettings.asset",
+          "type": "UnityEditor.PlayerSettings",
+          "count": 1
+        },
+        {
+          "path": "ProjectSettings/TimeManager.asset",
+          "type": "UnityEditor.TimeManager",
+          "count": 1
+        },
+        {
+          "path": "ProjectSettings/EditorSettings.asset",
+          "type": "UnityEditor.EditorSettings",
+          "count": 1
+        },
+        {
+          "path": "ProjectSettings/GraphicsSettings.asset",
+          "type": "UnityEngine.Rendering.GraphicsSettings",
+          "count": 1
+        },
+        {
+          "path": "",
+          "type": "UnityEngine.Object",
+          "count": 1
+        },
+        {
+          "path": "",
+          "type": "UnityEditor.SceneVisibilityState",
+          "count": 1
+        },
+        {
+          "path": "Library/unity editor resources",
+          "type": "UnityEngine.Texture2D",
+          "count": 1
+        },
+        {
+          "path": "Assets/EUnityValidation01/EyeContoursLayers202/Meshes/FaceSourceOwner202.asset",
+          "type": "UnityEngine.Mesh",
+          "count": 1
+        }
+      ],
+      "removed": [],
+      "nativeContentsCompared": 43,
+      "allComparedContentsEqual": true,
+      "scenesEqual": true,
+      "memoryAPI": "UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong / GetMonoUsedSizeLong / GetTotalReservedMemoryLong; not physical working set",
+      "beforeMemory": {
+        "allocated": 1180713387,
+        "mono": 1723162624,
+        "renderTextureCount": 30,
+        "reserved": 1750958080,
+        "utc": "2026-11-02T14:00:28.6501141Z"
+      },
+      "afterMemory": {
+        "allocated": 1678080333,
+        "mono": 1333514240,
+        "renderTextureCount": 30,
+        "reserved": 2198769664,
+        "utc": "2026-11-02T14:00:45.1527057Z"
+      },
+      "allocatedDeltaMiB": 474.32608222961426,
+      "leakConclusion": null
+    },
+    {
+      "run": "sequence24",
+      "beforeCount": 515,
+      "afterCount": 517,
+      "added": [
+        {
+          "path": "",
+          "type": "UnityEngine.Object",
+          "count": 1
+        },
+        {
+          "path": "",
+          "type": "UnityEditor.SceneVisibilityState",
+          "count": 1
+        }
+      ],
+      "removed": [],
+      "nativeContentsCompared": 44,
+      "allComparedContentsEqual": true,
+      "scenesEqual": true,
+      "memoryAPI": "UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong / GetMonoUsedSizeLong / GetTotalReservedMemoryLong; not physical working set",
+      "beforeMemory": {
+        "allocated": 1624632746,
+        "mono": 1413169152,
+        "renderTextureCount": 30,
+        "reserved": 2230095872,
+        "utc": "2026-11-02T14:04:28.0568257Z"
+      },
+      "afterMemory": {
+        "allocated": 1686782967,
+        "mono": 1331810304,
+        "renderTextureCount": 30,
+        "reserved": 2288693248,
+        "utc": "2026-11-02T14:04:53.6126403Z"
+      },
+      "allocatedDeltaMiB": 59.27106952667236,
+      "leakConclusion": null
+    },
+    {
+      "run": "motion24",
+      "beforeCount": 515,
+      "afterCount": 517,
+      "added": [
+        {
+          "path": "",
+          "type": "UnityEngine.Object",
+          "count": 1
+        },
+        {
+          "path": "",
+          "type": "UnityEditor.SceneVisibilityState",
+          "count": 1
+        }
+      ],
+      "removed": [],
+      "nativeContentsCompared": 44,
+      "allComparedContentsEqual": true,
+      "scenesEqual": true,
+      "memoryAPI": "UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong / GetMonoUsedSizeLong / GetTotalReservedMemoryLong; not physical working set",
+      "beforeMemory": {
+        "allocated": 1656656420,
+        "mono": 1425944576,
+        "renderTextureCount": 30,
+        "reserved": 2303242240,
+        "utc": "2026-11-02T14:07:20.8484655Z"
+      },
+      "afterMemory": {
+        "allocated": 1678475516,
+        "mono": 1339117568,
+        "renderTextureCount": 30,
+        "reserved": 2296168448,
+        "utc": "2026-11-02T14:07:55.7118299Z"
+      },
+      "allocatedDeltaMiB": 20.808311462402344,
+      "leakConclusion": null
+    }
+  ]
+}

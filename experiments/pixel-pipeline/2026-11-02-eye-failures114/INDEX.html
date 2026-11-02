@@ -1,0 +1,7 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>114 저장 입력 실패 원인 — 런타임 미적용</title><style>body{margin:24px auto;max-width:1210px;padding:0 20px;background:#171b24;color:#eef2fa;font:17px/1.7 system-ui}a{color:#9ad3ff}img{max-width:100%;height:auto}small{color:#ffcc88}</style>
+<h1>114 저장된 GPU113 입력의 실패 분류</h1>
+<p>이번 작업의 Unity 호출·Play·Assets 수정·Library 업로드는 모두0입니다. 제품77과 실제 GPU113은 그대로입니다. 아래 그림은 원인 진단 마스크이며 새 런타임 렌더나 미술 개선 완료본이 아닙니다.</p>
+<img src="FAILURES114.png" alt="동등해 목적함수 누락, 표본 좌표 불일치와 얇은 안검 끝부분 손실의 진단">
+<p><a href="FINDINGS114.json">핵심 원인·좌표·남은 두 질문</a> · <a href="CHECK114.json">44검사 및 실제 입력 재현 범위</a> · <a href="TIES114.json">두 완전 동등해와 기존 원형 기준 재사용</a> · <a href="PIGMENT114.json">안검1셀의 실제 UV·평가 정점 대조</a> · <a href="CODE_INDEX114.json">함수 위치</a> · <a href="DATA114.zip">270셀 상세 대응</a> · <a href="PAIRED_SAMPLING114.patch">최소 표본 연결 수정 패치</a> · <a href="../2026-11-02-argon23-runtime113/INDEX.html">기존 실제 GPU113 렌더</a></p>
+<p><small>paired-point-patch의 C#/HLSL은 검토용이며 import/컴파일/Play되지 않았습니다. 기존 실행기의 절대 경로와 출력값이 포함되어 있으므로 그대로 실행하지 마십시오. 다음 실행에는 새 sourceId·출력 폴더와 전체 외부 runner 재구성이 필요합니다. 표본 좌표 수정만으로 전체 소유권/가림 회귀를 통과하지는 않았습니다.</small></p>
+<p>기존 인계: <a href="../../../docs/ai/PIXEL_ALBEDO_20261030.md">§114</a>. 이 폴더의 <code>python -B check114.py</code>로 저장소의113 ZIP 및109/110/2.2/111 함수를 재사용해 오프라인 검산할 수 있습니다. 필요한 NumPy/Pillow는 기존 환경 그대로이며 새 설치는 없습니다. 전체 재분석은 trace114.py --all-selected, pairing114.py --all-selected, tie114.py, pigment114.py 순서입니다.</p></html>

@@ -1,0 +1,28 @@
+#pragma kernel JoinBare
+#pragma kernel MainToHead
+#pragma kernel EyesToMain
+#pragma kernel JoinSamples
+int2 _Offset365,_MainROI365,_HeadROI365,_MainROIShape365,_HeadROIShape365;int _Channel365;
+float _DepthOffset365;
+int _BodyRay512Enabled;Texture2D<float4> _BodyRay512;
+int _BodyCentre550Enabled;Texture2D<float4> _BodyCentre550;
+Texture2D<float4> _HColour,_HOwner,_HMeta,_HUV,_HPalette,_HSample;
+RWTexture2D<float4> _MBefore,_MColour,_MOwner,_MMeta,_MUV,_MSurface,_MPalette,_MDomain;
+RWTexture2D<float4> _HBeforeRW,_HColourRW,_HOwnerRW,_HMetaRW,_HUVRW,_HPostLineRW,_HDomainRW;
+Texture2D<float4> _MLine,_MReadOwner,_MReadMeta,_MReadUV,_HReadDomain;
+RWTexture2D<float4> _MSample;
+bool InGrid(int2 p){return all(p>=0)&&all(p<int2(480,272));}
+[numthreads(8,8,1)]void JoinBare(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(!InGrid(p))return;_MDomain[p]=0;int2 q=p-_Offset365;if(!InGrid(q))return;float4 c=_HColour.Load(int3(q,0)),o=_HOwner.Load(int3(q,0)),m=_HMeta.Load(int3(q,0));if(c.a<=.5||o.z<=0)return;float z=o.z+_DepthOffset365;float4 current=_MOwner[p];float compareDepth=current.z;
+ // The source surface packet and its physical occlusion move with the designed
+ // cell. Integer XY transport must not resample a different body ray. Only the
+ // 511 hair/body comparison uses this certified reference; face/eye paths retain
+ // their existing inputs. No RGB, mask boundary or depth epsilon changes.
+ if(_BodyRay512Enabled>0&&round(o.x)>=12&&round(current.x)>=8&&round(current.x)<=11){float4 reference=_BodyRay512.Load(int3(q,0));if(reference.a<.5)return;compareDepth=reference.b>0?reference.b+_DepthOffset365:0;}
+ // 550 reuses the head centre metadata pass with its body-part filter disabled.
+ // It covers every body submesh (including legs), with the same camera, alpha and cull.
+ // Only unmodified centre hair uses it; designed 511 packets retain their own ray contract.
+ if(_BodyCentre550Enabled>0&&round(o.x)>=12&&round(current.x)>=8&&round(current.x)<=11){float4 body=_BodyCentre550.Load(int3(q,0));compareDepth=body.x>0?body.x+_DepthOffset365:0;}
+ if(compareDepth>0&&z>compareDepth+.0001)return;o.z=z;m.x=m.x>0?m.x+_DepthOffset365:m.x;_MBefore[p]=c;_MColour[p]=c;_MOwner[p]=o;_MMeta[p]=m;_MUV[p]=_HUV.Load(int3(q,0));float4 pal=_HPalette.Load(int3(2*q+1,0));pal.z=pal.z>0?pal.z+_DepthOffset365:pal.z;for(int y=0;y<2;y++)for(int x=0;x<2;x++){_MSurface[2*p+int2(x,y)]=float4(o.z,o.r,o.g,o.a);_MPalette[2*p+int2(x,y)]=pal;}}
+[numthreads(8,8,1)]void MainToHead(uint3 id:SV_DispatchThreadID){int2 q=id.xy;if(!InGrid(q))return;int2 p=q+_Offset365;float4 c=InGrid(p)?_MLine.Load(int3(p,0)):0,o=InGrid(p)?_MReadOwner.Load(int3(p,0)):0,m=InGrid(p)?_MReadMeta.Load(int3(p,0)):0,u=InGrid(p)?_MReadUV.Load(int3(p,0)):0;if(o.z>0)o.z-=_DepthOffset365;if(m.x>0)m.x-=_DepthOffset365;_HBeforeRW[q]=c;_HColourRW[q]=c;_HPostLineRW[q]=c;_HOwnerRW[q]=o;_HMetaRW[q]=m;_HUVRW[q]=u;_HDomainRW[q]=0;}
+[numthreads(8,8,1)]void EyesToMain(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(!InGrid(p))return;int2 q=p-_Offset365;if(!InGrid(q))return;float4 domain=_HReadDomain.Load(int3(q,0));if(domain.x<.5)return;float4 c=_HColour.Load(int3(q,0)),o=_HOwner.Load(int3(q,0)),m=_HMeta.Load(int3(q,0));if(o.z>0)o.z+=_DepthOffset365;if(m.x>0)m.x+=_DepthOffset365;_MBefore[p]=c;_MColour[p]=c;_MOwner[p]=o;_MMeta[p]=m;_MUV[p]=_HUV.Load(int3(q,0));_MDomain[p]=domain;}
+[numthreads(8,8,1)]void JoinSamples(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=4*_MainROIShape365))return;int2 global=p+4*_MainROI365,q=global-4*_Offset365-4*_HeadROI365;bool inside=all(q>=0)&&all(q<4*_HeadROIShape365);float4 v=inside?_HSample.Load(int3(q,0)):0;if((_Channel365==1||_Channel365==2)&&v.x>0)v.x+=_DepthOffset365;_MSample[p]=v;}

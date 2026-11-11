@@ -1,0 +1,27 @@
+from pathlib import Path
+import json,numpy as np,sys
+from PIL import Image,ImageDraw
+from native_contour42 import coordinates,native_min,oracle
+H=Path(__file__).resolve().parent;G=H/'face42';worldCase='--world'in sys.argv;G=G/'world'if worldCase else G;C=G/'capture';O=G/'analysis'
+def main():
+ r=json.loads((C/'COMPLETE.json').read_text());assert r['restorationChecksPass']and r['ownedResourcesReleased']and not r['errors']and r['pendingOwners']==0;O.mkdir(exist_ok=True);rows=[];images=[]
+ if worldCase:
+  st=r['worldFixture41After'];assert st['disposed']and not any(st[k]for k in ['ownedGoAlive','ownedMaterialAlive','ownedMeshAlive'])
+ for f in r['frames']:
+  ps=[p for p in r['planes']if p['frame']==f['frame']];assert len(ps)==3
+  def read(name):
+   p=next(p for p in ps if p['name']==name);return np.fromfile(C/p['file'],dtype='<f4').reshape(p['height'],p['width'],4)
+  a=read('atlas40');beforeNative=read('nativeBefore42');afterNative=read('nativeAfter42');x,y,w,h=f['QROI'];assert a.shape==(h,15*w,4)and beforeNative.shape==afterNative.shape==(2*h,2*w,4);fields=[a[:,i*w:(i+1)*w]for i in range(15)];info=f['frameInfo']['nativeComposite42'];assert info['sameFrame']==f['frame']and info['sourceId']==f['sourceId']and info['presentSerialExecuted']>info['presentSerialBeforeGraphExecute']
+  q,p,inside=coordinates(f['QROI'],info['joinOffset'],info['nativeOrigin'],info['deliveredDelta']);assert info['nativeROI'][:2]==native_min(f['QROI'],info['joinOffset'],info['nativeOrigin'],info['deliveredDelta']).tolist();ink=np.asarray(f['frameInfo']['sourceOutlineRGB39'],np.float32);expected,gate=oracle(fields[3],fields[4],fields[9],fields[12],fields[13],fields[14],inside,q,info['depthOffset'],ink);assert expected.tobytes()==fields[10].tobytes()and gate.tobytes()==fields[11].tobytes();assert np.array_equal(beforeNative,np.repeat(np.repeat(fields[9],2,0),2,1))and np.array_equal(afterNative,np.repeat(np.repeat(expected,2,0),2,1));use=gate[:,:,3]==1;source=gate[:,:,0]==1
+  row={'frame':f['frame'],'sourceId':f['sourceId'],'actualNativePresenter':True,'actualBeforeAndGPUNativeAfterByteMatches':True,'CPUGateByteMatch':True,'nativeCellReceiptsMatched':int(((fields[14][:,:,:2]==q).all(2)).sum()),'sourceLineCells':int(source.sum()),'selected':int(use.sum()),'styleRejected':int((source&(gate[:,:,1]==0)).sum()),'worldRejected':int((source&(gate[:,:,2]==0)).sum()),'invalid':int((gate[:,:,3]<0).sum()),'paletteMismatch':int((fields[10][use,:3]!=ink).any(1).sum()),'unselectedNativeRGBChanged':int((fields[10][~use]!=fields[9][~use]).any(1).sum()),'deliveredDelta':info['deliveredDelta'],'worldSerial':info['worldSerial'],'presentSerial':info['presentSerialExecuted'],'motion':f['frameInfo']['motion40']};rows.append(row)
+  def image(z):
+   z=np.clip(z[::-1,:,:3],0,1);z=np.where(z<=.0031308,12.92*z,1.055*z**(1/2.4)-.055);return Image.fromarray(np.uint8(np.rint(z*255)))
+  board=Image.new('RGB',(760,350),(35,37,43));d=ImageDraw.Draw(board)
+  for i,(title,z)in enumerate([('Actual Native395 final pixels',beforeNative),('GPU native contour candidate',afterNative)]):
+   im=image(z);board.paste(im,(i*380+5,35));board.paste(im.resize((w*8,h*8),Image.Resampling.NEAREST),(i*380+75,35));d.text((i*380+5,10),title+' F'+str(f['frame']),fill='white')
+  d.text((8,317),'source '+str(source.sum())+'; selected '+str(use.sum())+'; style reject '+str(row['styleRejected'])+'; world reject '+str(row['worldRejected']),fill='white');board.save(O/('frame'+str(f['frame'])+'.png'));images.append(board)
+ result={'actualFrames':[p['frame']for p in rows],'actualNative395PixelReadback':True,'actualGPUNativeCandidate':True,'CPUExactFrames':len(rows),'worldFixtureCase':worldCase,'worldOcclusionObserved':any(p['worldRejected']for p in rows),'product77Changed':False,'ownerOrHistoryReplaced':False,'fullFacePaletteAndVariableThicknessComplete':False,'artTemporalStabilityPassed':False,'rows':rows};(O/'ACTUAL_NATIVE42.json').write_text(json.dumps(result,indent=2),encoding='utf-8',newline='\n')
+ board=Image.new('RGB',(1520,1160),(35,37,43));d=ImageDraw.Draw(board);d.text((12,10),'NATIVE FINAL 42 | copied actual Native395 pixels / GPU candidate RT | 6 actual game-input frames',fill='white');d.text((12,30),'Native physical pixels + integer 4x nearest; output cell scale2. Private candidate; product77 unchanged.',fill='white')
+ for i,im in enumerate(images):board.paste(im,((i%2)*760,60+(i//2)*350))
+ d.text((12,1125),'Face palette / variable thickness / final owner / temporal art quality remain incomplete.',fill='white');board.save(G/'FACE_NATIVE_FINAL42.png');images[0].save(G/'FACE_NATIVE_FINAL42_MOTION.webp',save_all=True,append_images=images[1:],duration=200,loop=0,lossless=True);print(json.dumps({'frames':result['actualFrames'],'exactCPU':len(rows),'selected':[p['selected']for p in rows],'styleRejected':[p['styleRejected']for p in rows],'worldRejected':[p['worldRejected']for p in rows],'invalid':[p['invalid']for p in rows],'delta':[p['deliveredDelta']for p in rows]}))
+if __name__=='__main__':main()

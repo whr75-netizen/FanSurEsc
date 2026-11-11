@@ -1,0 +1,33 @@
+#pragma kernel FinalContour41
+// Same depth transport/epsilon as GridJoin367 + Compose333. Diagnostic proposal
+// only: neither production output, ownership nor temporal history is written.
+Texture2D<float4> _Line41,_Proof41,_MainColour41,_MainMeta41,_WorldInfo41,_MainAudit41;
+RWTexture2D<float4> _Atlas41;
+int2 _Size41,_HeadTextureOrigin41,_JoinOffset41,_ComposeDelta41;
+float _DepthOffset41;float4 _Ink41;
+[numthreads(8,8,1)]void FinalContour41(uint3 id:SV_DispatchThreadID){
+ int2 local=id.xy;if(any(local>=_Size41))return;
+ int2 mainCell=local+_HeadTextureOrigin41+_JoinOffset41;
+ int2 outputCell=mainCell+_ComposeDelta41;
+ bool inside=all(mainCell>=0)&&all(mainCell<int2(480,272))&&all(outputCell>=0)&&all(outputCell<int2(480,272));
+ float4 before=inside?_MainColour41.Load(int3(outputCell,0)):0;
+ float4 meta=inside?_MainMeta41.Load(int3(mainCell,0)):0;
+ float4 world=inside?_WorldInfo41.Load(int3(outputCell,0)):0;
+ float4 audit=inside?_MainAudit41.Load(int3(outputCell,0)):0;
+ float4 stroke=_Line41.Load(int3(local,0)),proof=_Proof41.Load(int3(local,0));
+ float depth=proof.x+_DepthOffset41;
+ bool finite=all(isfinite(stroke))&&all(isfinite(proof))&&all(isfinite(meta))&&all(isfinite(world))&&isfinite(depth);
+ bool source=stroke.a==1&&all(stroke.rgb==_Ink41.rgb)&&proof.x>0&&proof.y>0&&proof.w>0;
+ bool style=inside&&finite&&(meta.x<=0||depth<=meta.x+.0001);
+ bool visible=inside&&finite&&world.x>0&&depth<=world.x+.0001;
+ bool use=source&&style&&visible;
+ float4 after=use?float4(_Ink41.rgb,1):before;
+ // x=source, y=style depth, z=world depth, w=selected/-1 invalid
+ float4 gate=float4(source?1:0,style?1:0,visible?1:0,inside&&finite?(use?1:0):-1);
+ _Atlas41[local+int2(9*_Size41.x,0)]=before;
+ _Atlas41[local+int2(10*_Size41.x,0)]=after;
+ _Atlas41[local+int2(11*_Size41.x,0)]=gate;
+ _Atlas41[local+int2(12*_Size41.x,0)]=meta;
+ _Atlas41[local+int2(13*_Size41.x,0)]=world;
+ _Atlas41[local+int2(14*_Size41.x,0)]=audit;
+}

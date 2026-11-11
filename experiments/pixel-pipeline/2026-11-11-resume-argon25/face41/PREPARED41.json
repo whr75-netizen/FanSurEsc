@@ -1,0 +1,22 @@
+{
+  "CPUCompile": true,
+  "GPUCompileOrDispatch": false,
+  "newKernelTokenAudit": {
+    "instructions": 120,
+    "privateArrayDeclarations": [],
+    "threads": [
+      8,
+      8,
+      1
+    ],
+    "structuredStridesBySlot": {},
+    "loops": 0
+  },
+  "maxDispatchThreads": 4096,
+  "runtimeROIBudgetBytes": 262144,
+  "noBorrowedWrites": true,
+  "noHistoryWrites": true,
+  "endAckAfterBothViews": true,
+  "captureSHA256": "5fc39a74cd061597847107edd8a8afde9de5e9694b555786fb3514775934ab4b",
+  "shaderSHA256": "26100f3f2bc40749f89b6fad36ef3b2a0dd594e14428f01e79f9ac8542b36b76"
+}

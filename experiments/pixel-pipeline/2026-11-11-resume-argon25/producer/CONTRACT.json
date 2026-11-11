@@ -1,0 +1,11 @@
+{
+ "scope":"Isolated S4 producer + final eye-footprint consumer, product77 unchanged",
+ "space":"Full319View335.Project full480x272 pixels, +X right/+Y DOWN. O is the existing continuous native.Anchor96+Bounds96.xy, not CarrierNative's snapped origin. Earlier consumer-only notes incorrectly called this bottom-left/+Y up; numeric equations/replays there were paired against actual GPU, but that descriptive label is corrected here.",
+ "grid":"Same logical width/height as current canonical eye source. Raw GPU RT row0 maps to maximum Project Y, so increasing raw texture Y decreases Project Y. For canonical cell(c.x,c.y) and fine sample(s.x,s.y), physicalXY=O+(c.x+(s.x+.5)/4,c.y+1-(s.y+.5)/4); hairTexel=(4*c.x+s.x,4*(Hcells-1-c.y)+s.y). No integer hairShift or fractional texture interpolation.",
+ "producer":"Owned clone of original S4 EyeSurface348 shader; same current evaluated mesh, material/UV/alpha/shading. Only clip position/raster domain changes. Physical fragment coordinates reconstructed for screen-space lighting.",
+ "consumer":"DirectDepth24, CarrierQueries113, AssignedVisibility24 and ComposeRegion113 use the same exact continuous head-cell sample. Non-eye canvas continues using untouched physical S4.",
+ "resources":"One HeadHair25 per eye view/generation; four owned material clones,5float4 RTs+depth,4mesh draws; <=32768fine pixels/2.625MiB. No new compute kernel/buffer, no globals, no borrowed release. Constructor failure/Dispose release owned resources; topology/mesh/view mismatch rejects reuse.",
+ "preserved":"Source allocation/bank/palette, original S4 control, product77, Close behavior, real geometry/alpha/depth, existing conservative skin mask and source visibility",
+ "notAdopted":"No fixed eye size or symmetry. No shared-skin mask expansion before source-unoccluded gate. No face UV/AA/gradient decisions.",
+ "validation":"CPU coordinate/projection and saved-input geometry first, offline C# and compute compiler without GPU device, then bounded shader-only import/isolated render only after current state snapshots and source/frame/resource validation. EvaluateForm115 excluded."
+}

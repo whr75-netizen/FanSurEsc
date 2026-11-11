@@ -1,0 +1,33 @@
+{
+  "producerStatus": "Actual isolated GPU integration verified in two consecutive phase states; product77 default unchanged",
+  "outputSupport": {
+    "confirmedFailure": "canonical lid(0,3), owner2, exists in both curve-identity buffers but is outside physical ROI frame101. Physical ROI is [212,48,16,8] then [212,48,17,8]; canonical grid is18x8.",
+    "code": "EyeFeature348.UpdateFrame derives its physical ROI from earlier eye supports; Forward113.Targets/Compose/Destination use eye.roi without checking coverage of allocated native lid support.",
+    "minimumRequiredChange": "Derive isolated candidate output extent from the union of allocated canonical support and original physical ROI before recording its canvas/hair/depth targets. Recompute crop and full-composition tile from that same extent. Retain original product77 control extent.",
+    "coordinateRule": "canonical c is displayed at integer j=ceil(O+c-0.5), with centre j+0.5. Any positive identity outside output extent is a failed invariant, not legitimate occlusion.",
+    "notYetImplemented": true
+  },
+  "sharedSkinSourceGate": {
+    "currentMaskChanged": false,
+    "confirmedSourceEvidence": "Existing native accessor/cache proves all9 Close75 shared-skin triangles have ipsilateral vertex majority and stronger eye1 blink displacement. This is not evidence that every skin hit in every pose is co-transportable.",
+    "code": "TraceExternal24 applies _OwnSkin113 unconditionally; ColumnVisibility24 and AssignedVisibility24 both call it. Write113 sets identity.w=0 and does not carry a selected original source-visibility witness. PrepareCells113 writes reserved cell channel6=0.",
+    "minimumRequiredChange": "Keep conservative source visibility separate from destination co-transport. Carry same-frame source primitive/UV/part/component and visibility certificate with the selected canonical cell, then allow dominant ipsilateral skin exemption only in destination queries with that certificate and current SocketLimit. Unknown or occluded source must not grant exemption.",
+    "testsRequired": ["same known Close75 nine hits", "occluded/unknown source cannot bypass skin", "contralateral/nose/deeper surface remains an occluder", "Close100/reopen", "same source certificate independent of hair ON/OFF"],
+    "policyNotInvented": "Argon2.5 epsilon/two-ring metric and section3 fixed shapes/counts were not adopted. No all-skin ignore or runtime mask expansion occurred.",
+    "notYetImplemented": true
+  },
+  "faceUV": {
+    "independentOfHairProducer": true,
+    "knownBridge": "2026-11-02-face-region-lut ResolvedRegionInput + SourcePalette58/54",
+    "remainingInput": "confirmed source feature/colour-region hierarchy distinguishing weak blush, continuous texture gradient and AA transition, plus per-stage primitive/UV region binding",
+    "currentFaceBindings": 0,
+    "notSolvedByMaterialIDOrOwnSkin": true,
+    "noNewThresholdSweep": true
+  },
+  "execution": {
+    "noPendingUnityRequest": true,
+    "onePlayNormallyExited": true,
+    "currentLimitation": "No full phase sweep, Close/reopen, rotation, hair ON/OFF or actual multiview regression of this new producer yet. No whole-face finite-palette/outline completion claim.",
+    "forbiddenPaths": ["EvaluateForm115", "BoundRun115", "InputSystem.settings replacement", "CUA", "driver/TDR/security changes", "kill/reset/cache deletion", "push"]
+  }
+}

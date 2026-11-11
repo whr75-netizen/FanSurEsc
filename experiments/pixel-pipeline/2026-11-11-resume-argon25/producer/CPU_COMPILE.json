@@ -1,0 +1,289 @@
+{
+  "csharpCompiled": true,
+  "sourceSHA256": "643f0d5373843a85ab35a16ff7c0f46afabfd80465a84358b7682e295c652098",
+  "diagnostics": "render-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1392,64): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1392,10): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1394,61): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1394,11): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1329,43): warning CS0649: Field 'CommandScript.Baseline76.owner' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1349,75): warning CS0649: Field 'CommandScript.probeBuffer' is never assigned to, and will always have its default value null\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1349,107): warning CS0649: Field 'CommandScript.probeROI' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1329,64): warning CS0649: Field 'CommandScript.Baseline76.stamp' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1541,37): warning CS0649: Field 'CommandScript.GroupRead113.score' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1349,39): warning CS0649: Field 'CommandScript.probeShader' is never assigned to, and will always have its default value null\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1349,87): warning CS0649: Field 'CommandScript.probeVisits' is never assigned to, and will always have its default value null\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1541,49): warning CS0649: Field 'CommandScript.GroupRead113.tail' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1331,30): warning CS0649: Field 'CommandScript.renderError89' is never assigned to, and will always have its default value null\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1329,57): warning CS0649: Field 'CommandScript.Baseline76.domain' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1329,54): warning CS0649: Field 'CommandScript.Baseline76.uv' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1329,36): warning CS0649: Field 'CommandScript.Baseline76.colour' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1541,43): warning CS0649: Field 'CommandScript.GroupRead113.masks' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1329,49): warning CS0649: Field 'CommandScript.Baseline76.meta' is never assigned to, and will always have its default value \nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(894,82): warning CS0414: The field 'NativeCarrier113.controlConvention' is assigned but its value is never used\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(1331,48): warning CS0414: The field 'CommandScript.retargetFrame89' is assigned but its value is never used\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(769,82): warning CS0414: The field 'NativeRetarget96.controlConvention' is assigned but its value is never used\nrender-fix21\\resume-20261111\\producer\\HOST_CPU_ONLY.cs.txt(831,82): warning CS0414: The field 'NativeDense107.controlConvention' is assigned but its value is never used\n",
+  "compute": [
+    {
+      "entry": "CarrierQueries113",
+      "audit": {
+        "instructions": 153,
+        "privateArrayDeclarations": [],
+        "threads": [
+          64,
+          1,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "t0": 16,
+          "t1": 16,
+          "t2": 16,
+          "u0": 16,
+          "u1": 16
+        },
+        "loops": 1
+      },
+      "bindings": [
+        {
+          "Type": 5,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_ReadIdentity96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_ReadDecision96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_SrcLayers113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_AssignedDepth24"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_AssignedVisibility24"
+        },
+        {
+          "Type": 0,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 0,
+          "Dimension": 0,
+          "NumSamples": 0,
+          "Name": "$Globals"
+        }
+      ],
+      "bytecodeSHA256": "447a4cea547a25527ae9984901dc0803602625ac663470477bebccdd325057c0"
+    },
+    {
+      "entry": "ComposeRegion113",
+      "audit": {
+        "instructions": 250,
+        "privateArrayDeclarations": [],
+        "threads": [
+          8,
+          8,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "t0": 16,
+          "t1": 16,
+          "t2": 16,
+          "u0": 16,
+          "u1": 16,
+          "u6": 16
+        },
+        "loops": 3
+      },
+      "bindings": [
+        {
+          "Type": 5,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_ReadColour96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_ReadIdentity96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_ReadDecision96"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 3,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_CanvasRGBA102"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 4,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_CanvasMeta102"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 5,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_HairRGBA102"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 6,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_HairMeta102"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 7,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_HeadHairRGBA25"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 8,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_HeadHairMeta25"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_AssignedDepth24"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_AssignedVisibility24"
+        },
+        {
+          "Type": 4,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_EyeRGBA102"
+        },
+        {
+          "Type": 4,
+          "BindPoint": 3,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_EyeOwner102"
+        },
+        {
+          "Type": 4,
+          "BindPoint": 4,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_FinalRGBA102"
+        },
+        {
+          "Type": 4,
+          "BindPoint": 5,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_FinalOwner102"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 6,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Exposure113"
+        },
+        {
+          "Type": 0,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 0,
+          "Dimension": 0,
+          "NumSamples": 0,
+          "Name": "$Globals"
+        }
+      ],
+      "bytecodeSHA256": "151a24054467c2685f0391237bde46631805c0303bb7ed20864be465ac7878eb"
+    }
+  ],
+  "GPUDriverModules": [],
+  "compiledAssemblyExecuted": false,
+  "UnityCalls": 0,
+  "GPUDeviceCreated": false,
+  "surfaceShaderNotYetCompiled": true
+}

@@ -4,7 +4,7 @@ import datetime,hashlib,json,queue,subprocess,threading,time,sys
 H=Path(__file__).resolve().parent;G=H/'face33';PROJECT=Path(r'C:\Users\15352\Documents\work\Fantasy Survival Escape Game');PID=28080
 def save(p,obj):p.write_text(json.dumps(obj,indent=2),encoding='utf-8',newline='\n')
 def main():
- mode=sys.argv[1];assert mode in ['schema','console','console-after','details','import','capture','final','owned-completion'];root=G/mode;root.mkdir(parents=True,exist_ok=True)
+ mode=sys.argv[1];assert mode in ['schema','inventory','console','console-after','details','import','capture','final','owned-completion'];root=G/mode;root.mkdir(parents=True,exist_ok=True)
  marker=root/'REQUEST.json';assert not marker.exists(),'Inspect original outcome; no duplicate request'
  info=json.loads((Path(r'C:\Users\15352\.unity\mcp\connections')/f'bridge-9eee322a-{PID}.json').read_text(encoding='utf-8-sig'));assert info['editor_pid']==PID and Path(info['project_path'])==PROJECT
  args=[r'C:\Users\15352\.unity\relay\relay_win.exe','--mcp','--instance-id',str(PID),'--project-path',str(PROJECT),'--name','Codex Shop Read Capture']
@@ -26,6 +26,7 @@ def main():
   r=rpc('initialize',{'protocolVersion':'2024-11-05','capabilities':{},'clientInfo':{'name':'Codex Shop Read Capture','version':'1.0'}});assert'error'not in r
   p.stdin.write(json.dumps({'jsonrpc':'2.0','method':'notifications/initialized'})+'\n');p.stdin.flush();tools=rpc('tools/list',{}).get('result',{}).get('tools',[])
   selected=[t for t in tools if t['name']in ['Unity_GetConsoleLogs','Unity_RunCommand']];save(root/'SCHEMA.json',selected)
+  if mode=='inventory':save(root/'TOOLS.json',tools);print(json.dumps([{'name':t['name'],'description':t.get('description','')[:500]}for t in tools]));return
   if mode=='schema':print(json.dumps(selected));return
   if mode.startswith('console'):name='Unity_GetConsoleLogs';arguments=json.loads((root/'ARGS.json').read_text())
   else:

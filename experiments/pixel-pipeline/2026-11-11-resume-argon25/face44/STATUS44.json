@@ -1,0 +1,212 @@
+{
+  "baselineCommit": "1f31f2e5895216e3d9697547c5b2edbf1f15561e",
+  "cases": {
+    "base": {
+      "utc": "2026-11-11T15:14:19.6483228Z",
+      "actualConsecutiveFrames": 6,
+      "sourceSamples": [
+        13,
+        12,
+        11,
+        21,
+        13,
+        18
+      ],
+      "selected": [
+        13,
+        12,
+        11,
+        21,
+        13,
+        17
+      ],
+      "worldRejected": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "pairedLegacy": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "CPUExactFrames": 6,
+      "restored": true,
+      "nativeEqual": 46,
+      "nativeTotal": 47,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1837764224,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1658945536,
+        "reserved": 2611781632,
+        "utc": "2026-11-11T15:13:27.1155803Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1861034027,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1346252800,
+        "reserved": 2628689920,
+        "utc": "2026-11-11T15:14:19.6413074Z"
+      },
+      "allocatedMiBChange": 22.191813468933105
+    },
+    "world": {
+      "utc": "2026-11-11T15:21:10.1530313Z",
+      "actualConsecutiveFrames": 6,
+      "sourceSamples": [
+        13,
+        12,
+        11,
+        21,
+        13,
+        18
+      ],
+      "selected": [
+        2,
+        2,
+        1,
+        10,
+        11,
+        17
+      ],
+      "worldRejected": [
+        11,
+        10,
+        10,
+        11,
+        2,
+        0
+      ],
+      "pairedLegacy": [
+        {
+          "oldSourceSamples": 12,
+          "oldTOutsideSegment": 6,
+          "newTOutsideSegment": 0,
+          "addedLinePixels": 1,
+          "removedLinePixels": 0,
+          "commonSameSourceEdge": 12,
+          "depthDifferenceRange": [
+            -0.0009326934814453125,
+            0.000484466552734375
+          ]
+        },
+        {
+          "oldSourceSamples": 12,
+          "oldTOutsideSegment": 4,
+          "newTOutsideSegment": 0,
+          "addedLinePixels": 0,
+          "removedLinePixels": 0,
+          "commonSameSourceEdge": 12,
+          "depthDifferenceRange": [
+            -0.0008068084716796875,
+            0.0003910064697265625
+          ]
+        },
+        {
+          "oldSourceSamples": 11,
+          "oldTOutsideSegment": 4,
+          "newTOutsideSegment": 0,
+          "addedLinePixels": 0,
+          "removedLinePixels": 0,
+          "commonSameSourceEdge": 11,
+          "depthDifferenceRange": [
+            -0.0007877349853515625,
+            0.001171112060546875
+          ]
+        },
+        {
+          "oldSourceSamples": 21,
+          "oldTOutsideSegment": 12,
+          "newTOutsideSegment": 0,
+          "addedLinePixels": 0,
+          "removedLinePixels": 0,
+          "commonSameSourceEdge": 20,
+          "depthDifferenceRange": [
+            -0.0029134750366210938,
+            0.010751724243164062
+          ]
+        },
+        {
+          "oldSourceSamples": 13,
+          "oldTOutsideSegment": 7,
+          "newTOutsideSegment": 0,
+          "addedLinePixels": 0,
+          "removedLinePixels": 0,
+          "commonSameSourceEdge": 13,
+          "depthDifferenceRange": [
+            -0.0015897750854492188,
+            0.003928184509277344
+          ]
+        },
+        {
+          "oldSourceSamples": 18,
+          "oldTOutsideSegment": 11,
+          "newTOutsideSegment": 0,
+          "addedLinePixels": 1,
+          "removedLinePixels": 1,
+          "commonSameSourceEdge": 17,
+          "depthDifferenceRange": [
+            -0.0020294189453125,
+            0.005499839782714844
+          ]
+        }
+      ],
+      "CPUExactFrames": 6,
+      "restored": true,
+      "nativeEqual": 46,
+      "nativeTotal": 46,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1832153882,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1385533440,
+        "reserved": 2628558848,
+        "utc": "2026-11-11T15:19:57.2958635Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1866363919,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1343184896,
+        "reserved": 2628689920,
+        "utc": "2026-11-11T15:21:10.1443885Z"
+      },
+      "allocatedMiBChange": 32.62523365020752
+    }
+  },
+  "old42Provenance": {
+    "sourceSamples": 174,
+    "unknownOutsideSourceSegment": 88
+  },
+  "fixed44Provenance": {
+    "sourceSamples": 176,
+    "unknown": 0,
+    "maxDepthResidual": 9.536743e-07,
+    "twoUVCarriersRetained": 4
+  },
+  "newComputeKernels": 0,
+  "shaderOnlyImport": 1,
+  "projectCSharpImport": 0,
+  "consoleSameAs33": true,
+  "product77Changed": false,
+  "ownerHistoryReplaced": false,
+  "sourceKeyIsActorViewHistoryKey": false,
+  "fullPixelFootprintVisibilityProven": false,
+  "facePaletteComplete": false,
+  "variableThicknessComplete": false,
+  "artTemporalStabilityPassed": false,
+  "GPUTimeMeasured": false,
+  "GPU115": 0,
+  "CUA": 0,
+  "SaveAssets": 0,
+  "killResetDriverGC": 0,
+  "push": false
+}

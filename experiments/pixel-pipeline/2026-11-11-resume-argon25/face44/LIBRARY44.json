@@ -1,0 +1,108 @@
+{
+  "utc": "2026-11-11T15:29:57.420Z",
+  "operation": "create new unique artifacts; no replacement",
+  "results": [
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/FACE_NATIVE_FINAL44.png",
+      "file_id": "file_0000000095c482129e0c76014c35cf70",
+      "library_file_id": "libfile_fde3_f-506ac3a93ad881918a7917b100b7b780_63ba02b4784c8191890f3a4c58eb6764",
+      "file_name": "FACE_NATIVE_FINAL44.png",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "personal-root:v1",
+      "mime_type": "image/png",
+      "library_artifact_type": "image",
+      "file_size_bytes": 61036
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/FACE_NATIVE_FINAL44_MOTION.webp",
+      "file_id": "file_00000000486482129cb49b205aa66c0c",
+      "library_file_id": "libfile_fde3_f-31e16b6a1cc08191823ea143f20b3349_63ba02b4784c8191890f3a4c58eb6764",
+      "file_name": "FACE_NATIVE_FINAL44_MOTION.webp",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "personal-root:v1",
+      "mime_type": "image/webp",
+      "library_artifact_type": "image",
+      "file_size_bytes": 89178
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/FACE_NATIVE_WORLD_OCCLUSION44.png",
+      "file_id": "file_0000000044b88212bd37f468d1f13e05",
+      "library_file_id": "libfile_fde3_f-fce6173ba0c8819192069732fb9747a6_63ba02b4784c8191890f3a4c58eb6764",
+      "file_name": "FACE_NATIVE_WORLD_OCCLUSION44.png",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "personal-root:v1",
+      "mime_type": "image/png",
+      "library_artifact_type": "image",
+      "file_size_bytes": 55214
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/FACE_NATIVE_WORLD_OCCLUSION44_MOTION.webp",
+      "file_id": "file_000000001a00821280b9b8a62a09ee63",
+      "library_file_id": "libfile_fde3_f-a3a36a8df17c8191843161be2bf3f5ff_63ba02b4784c8191890f3a4c58eb6764",
+      "file_name": "FACE_NATIVE_WORLD_OCCLUSION44_MOTION.webp",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "personal-root:v1",
+      "mime_type": "image/webp",
+      "library_artifact_type": "image",
+      "file_size_bytes": 91786
+    }
+  ],
+  "localXattrResults": [
+    {
+      "name": "FACE_NATIVE_FINAL44.png",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 419, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 406, in main\n    materializer.apply_xattrs(\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 335, in apply_xattrs\n    xattr.apply(path)\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 152, in apply\n    os.setxattr(path, self.name, encoded_value)\nAttributeError: module 'os' has no attribute 'setxattr'\n"
+    },
+    {
+      "name": "FACE_NATIVE_FINAL44_MOTION.webp",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 419, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 406, in main\n    materializer.apply_xattrs(\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 335, in apply_xattrs\n    xattr.apply(path)\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 152, in apply\n    os.setxattr(path, self.name, encoded_value)\nAttributeError: module 'os' has no attribute 'setxattr'\n"
+    },
+    {
+      "name": "FACE_NATIVE_WORLD_OCCLUSION44.png",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 419, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 406, in main\n    materializer.apply_xattrs(\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 335, in apply_xattrs\n    xattr.apply(path)\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 152, in apply\n    os.setxattr(path, self.name, encoded_value)\nAttributeError: module 'os' has no attribute 'setxattr'\n"
+    },
+    {
+      "name": "FACE_NATIVE_WORLD_OCCLUSION44_MOTION.webp",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 419, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 406, in main\n    materializer.apply_xattrs(\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 335, in apply_xattrs\n    xattr.apply(path)\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library37-helper\\library_file_transfer.py\", line 152, in apply\n    os.setxattr(path, self.name, encoded_value)\nAttributeError: module 'os' has no attribute 'setxattr'\n"
+    }
+  ]
+}

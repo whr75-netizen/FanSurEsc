@@ -1,0 +1,29 @@
+internal class CommandScript:IRunCommand {
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face54";
+ const string Project=@"C:\Users\15352\Documents\work\Fantasy Survival Escape Game";
+ static string Hash(string p){using(var h=SHA256.Create())using(var f=File.OpenRead(p))return BitConverter.ToString(h.ComputeHash(f)).Replace("-","").ToLowerInvariant();}
+ static UnityEngine.Object[] Dirty(){return Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).Where(o=>{var p=AssetDatabase.GetAssetPath(o);return p.StartsWith("Assets/")||p.StartsWith("ProjectSettings/");}).ToArray();}
+ public void Execute(ExecutionResult result){
+  if(!String.Equals(Path.GetFullPath(Path.GetDirectoryName(Application.dataPath)),Project,StringComparison.OrdinalIgnoreCase)||EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("54 stable correct Edit project required");
+  string backup=Path.Combine(Root,"backup"),output=Path.Combine(Root,"save");var verified=Json40.Parse(File.ReadAllText(Path.Combine(backup,"VERIFIED54.json")));if(!(bool)verified["backupVerified"]||Hash(Path.Combine(backup,"COMPLETE.json"))!=(string)verified["stateSHA"]||Hash(Path.Combine(backup,"NATIVE_BEFORE73.json"))!=(string)verified["manifestSHA"])throw new InvalidOperationException("54 external backup not verified");
+  var before=Json40.Parse(File.ReadAllText(Path.Combine(backup,"COMPLETE.json")));var targets=before["dirty"];var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var current=Dirty();if(targets.Count!=31||current.Length!=targets.Count)throw new InvalidOperationException("54 reviewed dirty set changed");
+  foreach(var row in targets)if(!current.Any(o=>o.GetEntityId().ToString()==(string)row["entityId"]&&AssetDatabase.GetAssetPath(o)==(string)row["path"]))throw new InvalidOperationException("54 dirty identity changed");
+  foreach(var scene in Enumerable.Range(0,SceneManager.sceneCount).Select(SceneManager.GetSceneAt))if(scene.isDirty)throw new InvalidOperationException("54 unexpected dirty scene; no automatic discard");
+  var disks=Json40.Parse(File.ReadAllText(Path.Combine(backup,"DISK_BEFORE.json")));foreach(var row in disks)if((bool)row["exists"]&&Hash(Path.Combine(Project,(string)row["path"]))!=(string)row["sha256"])throw new InvalidOperationException("54 disk content changed after backup");
+  var natives=Json40.Parse(File.ReadAllText(Path.Combine(backup,"NATIVE_BEFORE73.json")));var precheck=NativeSnapshot40.Compare(backup,(Arr40)natives);if(precheck.Any(x=>x["equal"]!=null&&!(bool)x["equal"]))throw new InvalidOperationException("54 native contents changed after backup");
+  var input=InputSystem.settings;string inputJSON=JsonUtility.ToJson(input);if(input.GetEntityId().ToString()!=(string)before["inputId"]||inputJSON!=File.ReadAllText(Path.Combine(backup,"INPUT_BEFORE.json")))throw new InvalidOperationException("54 input state changed after backup");
+  CreateOnly40.Text(Path.Combine(output,"STARTED.json"),new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["targets"]=targets,["API"]="AssetDatabase.SaveAssetIfDirty(GUID)",["SaveAssets"]=false,["sceneSave"]=false}.ToString());
+  var saved=new Arr40();int index=0;
+  foreach(var row in targets){
+   string path=(string)row["path"];var o=all.Single(x=>x&&x.GetEntityId().ToString()==(string)row["entityId"]);string guid;long local;
+   if(!AssetDatabase.TryGetGUIDAndLocalFileIdentifier(o,out guid,out local)||guid!=(string)row["guid"])throw new InvalidOperationException("54 save GUID changed");
+   CreateOnly40.Text(Path.Combine(output,"ITEM-"+index+"-BEFORE.json"),new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["path"]=path,["guid"]=guid}.ToString());
+   AssetDatabase.SaveAssetIfDirty(new GUID(guid));
+   var after=new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["path"]=path,["type"]=o.GetType().FullName,["APIreturned"]=true,["dirtyAfter"]=EditorUtility.IsDirty(o),["diskAfterSHA"]=Hash(Path.Combine(Project,path))};saved.Add(after);CreateOnly40.Text(Path.Combine(output,"ITEM-"+index+"-AFTER.json"),after.ToString());index++;
+  }
+  var checks=NativeSnapshot40.Compare(backup,(Arr40)natives);bool same=!checks.Any(x=>x["equal"]!=null&&!(bool)x["equal"]);var remaining=new Arr40(Dirty().Select(o=>new Obj40{["path"]=AssetDatabase.GetAssetPath(o),["type"]=o.GetType().FullName,["entityId"]=o.GetEntityId().ToString()}));
+  var state=new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["saveCallsReturned"]=saved.Count,["rows"]=saved,["remainingDirty"]=remaining,["allTargetsClean"]=remaining.Count==0,["nativeChecks"]=checks,["nativeContentsSame"]=same,["inputSame"]=input==InputSystem.settings&&inputJSON==JsonUtility.ToJson(input),["Edit"]=!EditorApplication.isPlayingOrWillChangePlaymode,["SaveAssets"]=false,["ClearDirty"]=false,["sceneSave"]=false,["ExitRequested"]=false};
+  CreateOnly40.Text(Path.Combine(output,"RESULT.json"),state.ToString());result.Log("54 exact GUID save calls returned="+saved.Count+" remainingDirty="+remaining.Count+" nativeSame="+same+"; no exit yet");
+ }
+}
+}

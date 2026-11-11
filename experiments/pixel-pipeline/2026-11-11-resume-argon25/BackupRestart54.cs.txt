@@ -1,0 +1,33 @@
+internal class CommandScript:IRunCommand {
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face54\backup";
+ const string H=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111";
+ const string Project=@"C:\Users\15352\Documents\work\Fantasy Survival Escape Game";
+ static string Hash(string p){using(var h=SHA256.Create())using(var f=File.OpenRead(p))return BitConverter.ToString(h.ComputeHash(f)).Replace("-","").ToLowerInvariant();}
+ static Arr40 Dirty(){return new Arr40(Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).Where(o=>{var p=AssetDatabase.GetAssetPath(o);return p.StartsWith("Assets/")||p.StartsWith("ProjectSettings/");}).OrderBy(o=>AssetDatabase.GetAssetPath(o)).Select(o=>{string guid;long local;bool ok=AssetDatabase.TryGetGUIDAndLocalFileIdentifier(o,out guid,out local);return new Obj40{["path"]=AssetDatabase.GetAssetPath(o),["type"]=o.GetType().FullName,["entityId"]=o.GetEntityId().ToString(),["guidAvailable"]=ok,["guid"]=ok?guid:"",["localId"]=ok?local:0};}));}
+ public void Execute(ExecutionResult result){
+  if(!String.Equals(Path.GetFullPath(Path.GetDirectoryName(Application.dataPath)),Project,StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("54 wrong project");
+  if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPaused)throw new InvalidOperationException("54 stable unpaused Edit required");
+  CreateOnly40.Text(Path.Combine(Root,"STARTED.json"),DateTime.UtcNow.ToString("O"));
+  var dirty=Dirty();var input=InputSystem.settings;string inputJSON=JsonUtility.ToJson(input);CreateOnly40.Text(Path.Combine(Root,"INPUT_BEFORE.json"),inputJSON);
+  var native=NativeSnapshot40.Backup(Root);var paths=new List<string>(native.Select(x=>(string)x["path"]));
+  foreach(string path in Json40.Parse(File.ReadAllText(Path.Combine(Root,"USER_PATHS54.json"))).Values<string>())paths.Add(path);
+  var scenes=new Arr40();for(int i=0;i<SceneManager.sceneCount;i++){var s=SceneManager.GetSceneAt(i);scenes.Add(new Obj40{["path"]=s.path,["dirty"]=s.isDirty,["active"]=s==SceneManager.GetActiveScene()});if(!String.IsNullOrEmpty(s.path))paths.Add(s.path);}
+  foreach(string p in new[]{"Packages/manifest.json","Packages/packages-lock.json","ProjectSettings/ProjectVersion.txt"})paths.Add(p);
+  foreach(string p in paths.ToArray())if(p.StartsWith("Assets/")&&File.Exists(Path.Combine(Project,p)+".meta"))paths.Add(p+".meta");
+  var disks=new Arr40();foreach(string relative in paths.Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(x=>x)){
+   string source=Path.GetFullPath(Path.Combine(Project,relative));if(!source.StartsWith(Project+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("54 backup path escapes project");
+   if(!File.Exists(source)){disks.Add(new Obj40{["path"]=relative,["exists"]=false});continue;}
+   string target=Path.Combine(Root,"disk",relative);Directory.CreateDirectory(Path.GetDirectoryName(target));File.Copy(source,target,false);string before=Hash(source);if(before!=Hash(target))throw new IOException("54 disk backup mismatch");disks.Add(new Obj40{["path"]=relative,["exists"]=true,["sha256"]=before,["bytes"]=new FileInfo(source).Length});
+  }
+  CreateOnly40.Text(Path.Combine(Root,"DISK_BEFORE.json"),disks.ToString());
+  var specs=Json40.Parse(File.ReadAllText(Path.Combine(H,"face29/run/GLOBAL_NAMES66.json"))).Select(o=>new GlobalJournal40.Spec{name=(string)o["name"],kind=(string)o["type"]=="Int"?GlobalJournal40.Kind.LegacyInt:(GlobalJournal40.Kind)Enum.Parse(typeof(GlobalJournal40.Kind),(string)o["type"])}).ToArray();
+  var journal=GlobalJournal40.Snapshot("restart54-readonly",Path.Combine(Root,"GLOBALS_BEFORE.bin"),specs);string globalSHA=journal.backupSHA256;journal.ReleaseHandleAfterVerified();
+  var checks=NativeSnapshot40.Compare(Root,native);if(checks.Any(x=>x["equal"]!=null&&!(bool)x["equal"]))throw new InvalidOperationException("54 native content changed during backup");
+  var after=Dirty();if(!dirty.Select(x=>(string)x["entityId"]).OrderBy(x=>x).SequenceEqual(after.Select(x=>(string)x["entityId"]).OrderBy(x=>x)))throw new InvalidOperationException("54 dirty set changed while reading; inspect backup before saving");
+  if(input!=InputSystem.settings||inputJSON!=JsonUtility.ToJson(input))throw new InvalidOperationException("54 input changed during backup");
+  string[] names={"31 owned source field_","31 owned depth_","33 immutable same-frame existing stage_"};var rt=Resources.FindObjectsOfTypeAll<RenderTexture>().Where(t=>t&&names.Any(n=>t.name.StartsWith(n,StringComparison.Ordinal))).Select(t=>new Obj40{["id"]=t.GetEntityId().ToString(),["name"]=t.name,["created"]=t.IsCreated()});
+  var state=new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["project"]=Project,["version"]=Application.unityVersion,["Edit"]=true,["dirty"]=dirty,["nativeCount"]=native.Count,["nativeChecks"]=checks,["scenes"]=scenes,["inputId"]=input.GetEntityId().ToString(),["inputAssetPath"]=AssetDatabase.GetAssetPath(input),["devices"]=new Arr40(InputSystem.devices.Select(d=>new Obj40{["id"]=d.deviceId,["layout"]=d.layout,["name"]=d.name})),["background"]=Application.runInBackground,["optionsEnabled"]=EditorSettings.enterPlayModeOptionsEnabled,["options"]=EditorSettings.enterPlayModeOptions.ToString(),["pipeline"]=AssetDatabase.GetAssetPath(GraphicsSettings.defaultRenderPipeline),["qualityPipeline"]=AssetDatabase.GetAssetPath(QualitySettings.renderPipeline),["timeScale"]=Time.timeScale,["fixedDeltaTime"]=Time.fixedDeltaTime,["globalCount"]=specs.Length,["globalSHA"]=globalSHA,["retainedDiagnosticRTs"]=new Arr40(rt),["GPUOperations"]=0,["assetsSaved"]=false};
+  CreateOnly40.Text(Path.Combine(Root,"COMPLETE.json"),state.ToString());result.Log("54 backup complete; dirty="+dirty.Count+" native="+native.Count+" no saving or GPU operations");
+ }
+}
+}

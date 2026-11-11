@@ -1,0 +1,14 @@
+{
+  "action": "Host relay54.py project-save-reviewed; standard AssetDatabase.SaveAssets after native/foreign extra review",
+  "target": "Fantasy Survival Escape Game / current Unity PID28080",
+  "status": "Denied by automatic approval review before CreateProcess",
+  "processStarted": false,
+  "RPCSubmitted": false,
+  "SaveAssetsExecuted": false,
+  "retried": false,
+  "reasonVerbatim": "Although the 31 project assets are authorized, the planned global SaveAssets call may also persist dirty package/foreign shader objects outside that approved set; classifying them as non-native does not prove they will not be written, and the user explicitly disallowed unrelated changes.",
+  "notUsedAsWorkarounds": ["EditorApplication.SaveAssets", "menu execution", "normal exit to trigger global saving", "private/reflection", "forced termination"],
+  "safeAlternativeAttempt": "Targeted native serializer to new workspace copies only; no project/package writes. Unity reported already-persistent objects are not supported; no exported copy was created.",
+  "currentUnfulfilled": ["verified persistence of current unsaved set", "normal Editor exit", "reopen", "resource drain verification", "additional actual GPU testing"],
+  "approvalScopeIfStandardSaveIsChosen": "One standard SaveAssets including builtin resources and generated foreign Shader objects outside reviewed31, with source/native backups and post-save source comparison; no manual package edits, source discard, ClearDirty, force quit or GPU during saving. Must have new relevant explicit authorization before retry."
+}

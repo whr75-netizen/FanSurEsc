@@ -1,0 +1,20 @@
+internal class CommandScript:IRunCommand {
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face54";
+ const string Project=@"C:\Users\15352\Documents\work\Fantasy Survival Escape Game";
+ static string Hash(string p){using(var h=SHA256.Create())using(var f=File.OpenRead(p))return BitConverter.ToString(h.ComputeHash(f)).Replace("-","").ToLowerInvariant();}
+ public void Execute(ExecutionResult result){
+  if(!String.Equals(Path.GetFullPath(Path.GetDirectoryName(Application.dataPath)),Project,StringComparison.OrdinalIgnoreCase)||EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("54 stable correct Edit project required");
+  string backup=Path.Combine(Root,"backup"),output=Path.Combine(Root,"project-save");var before=Json40.Parse(File.ReadAllText(Path.Combine(backup,"COMPLETE.json")));var targets=before["dirty"];var previous=Json40.Parse(File.ReadAllText(Path.Combine(Root,"save","RESULT.json")));if((int)previous["saveCallsReturned"]!=31||!(bool)previous["nativeContentsSame"])throw new InvalidOperationException("54 prior result must be known and preserved");
+  var dirty=Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)&&!String.IsNullOrEmpty(AssetDatabase.GetAssetPath(o))).ToArray();
+  if(dirty.Length!=31||dirty.Any(o=>!targets.Any(row=>(string)row["entityId"]==o.GetEntityId().ToString()&&(string)row["path"]==AssetDatabase.GetAssetPath(o))))throw new InvalidOperationException("54 standard save would include an unreviewed dirty asset; not submitted");
+  var natives=(Arr40)Json40.Parse(File.ReadAllText(Path.Combine(backup,"NATIVE_BEFORE73.json")));var pre=NativeSnapshot40.Compare(backup,natives);if(pre.Any(x=>x["equal"]!=null&&!(bool)x["equal"]))throw new InvalidOperationException("54 native changed");
+  for(int i=0;i<SceneManager.sceneCount;i++)if(SceneManager.GetSceneAt(i).isDirty)throw new InvalidOperationException("54 scene unexpectedly dirty");
+  var input=InputSystem.settings;string inputJSON=JsonUtility.ToJson(input);CreateOnly40.Text(Path.Combine(output,"STARTED.json"),new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["reviewedDirtyCount"]=dirty.Length,["API"]="AssetDatabase.SaveAssets once"}.ToString());
+  AssetDatabase.SaveAssets();
+  CreateOnly40.Text(Path.Combine(output,"API_RETURNED.json"),DateTime.UtcNow.ToString("O"));
+  var checks=NativeSnapshot40.Compare(backup,natives);var after=Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)&&!String.IsNullOrEmpty(AssetDatabase.GetAssetPath(o))).ToArray();var disks=Json40.Parse(File.ReadAllText(Path.Combine(backup,"DISK_BEFORE.json")));var changes=new Arr40();
+  foreach(var row in disks)if((bool)row["exists"]){string path=(string)row["path"],now=Hash(Path.Combine(Project,path));if(now!=(string)row["sha256"])changes.Add(new Obj40{["path"]=path,["beforeSHA"]=(string)row["sha256"],["afterSHA"]=now});}
+  var state=new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["APIreturned"]=true,["dirtyAfter"]=new Arr40(after.Select(o=>new Obj40{["path"]=AssetDatabase.GetAssetPath(o),["type"]=o.GetType().FullName})),["nativeChecks"]=checks,["nativeContentsSame"]=!checks.Any(x=>x["equal"]!=null&&!(bool)x["equal"]),["diskChanges"]=changes,["inputSame"]=input==InputSystem.settings&&inputJSON==JsonUtility.ToJson(input),["GPUOperations"]=0,["ClearDirty"]=false,["ExitRequested"]=false};CreateOnly40.Text(Path.Combine(output,"RESULT.json"),state.ToString());result.Log("54 standard save returned; remainingDirty="+after.Length+" diskChanges="+changes.Count+"; contents and normal exit still to be reviewed");
+ }
+}
+}

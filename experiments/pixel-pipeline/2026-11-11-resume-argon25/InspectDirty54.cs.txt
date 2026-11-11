@@ -1,0 +1,8 @@
+internal class CommandScript:IRunCommand {
+ public void Execute(ExecutionResult result){
+  const string file=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face54\dirty-inspect\RESULT.json";
+  var rows=new Arr40(Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).Select(o=>new Obj40{["path"]=AssetDatabase.GetAssetPath(o),["type"]=o.GetType().FullName,["entityId"]=o.GetEntityId().ToString(),["physicalFileExists"]=File.Exists(AssetDatabase.GetAssetPath(o))}));
+  CreateOnly40.Text(file,new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["dirty"]=rows,["ReadOnly"]=true,["Edit"]=!EditorApplication.isPlayingOrWillChangePlaymode,["compiling"]=EditorApplication.isCompiling,["updating"]=EditorApplication.isUpdating}.ToString());result.Log("54 read all persistent dirty metadata only: "+rows.Count);
+ }
+}
+}

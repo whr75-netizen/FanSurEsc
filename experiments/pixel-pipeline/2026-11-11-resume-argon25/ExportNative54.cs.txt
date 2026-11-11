@@ -1,0 +1,20 @@
+internal class CommandScript:IRunCommand {
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face54";
+ static string Hash(string p){using(var h=SHA256.Create())using(var f=File.OpenRead(p))return BitConverter.ToString(h.ComputeHash(f)).Replace("-","").ToLowerInvariant();}
+ public void Execute(ExecutionResult result){
+  if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("54 stable Edit required");
+  string backup=Path.Combine(Root,"backup"),output=Path.Combine(Root,"native-export");var before=Json40.Parse(File.ReadAllText(Path.Combine(backup,"COMPLETE.json")));var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var rows=new Arr40();var natives=(Arr40)Json40.Parse(File.ReadAllText(Path.Combine(backup,"NATIVE_BEFORE73.json")));var check=NativeSnapshot40.Compare(backup,natives);if(check.Any(x=>x["equal"]!=null&&!(bool)x["equal"]))throw new InvalidOperationException("54 changed native before export");
+  var input=InputSystem.settings;string inputJSON=JsonUtility.ToJson(input);CreateOnly40.Text(Path.Combine(output,"STARTED.json"),DateTime.UtcNow.ToString("O"));int index=0;
+  foreach(var row in before["dirty"]){
+   var o=all.Single(x=>x&&x.GetEntityId().ToString()==(string)row["entityId"]);string path=AssetDatabase.GetAssetPath(o);if(path!=(string)row["path"])throw new InvalidOperationException("54 identity/path changed");
+   bool foreign=AssetDatabase.IsForeignAsset(o),native=AssetDatabase.IsNativeAsset(o);var record=new Obj40{["path"]=path,["type"]=o.GetType().FullName,["foreignAsset"]=foreign,["nativeAsset"]=native};
+   if(o is Shader){record["action"]="source and serialized state already backed up; never serialize Shader object over shader source";rows.Add(record);continue;}
+   if(!(o is UnityEngine.Mesh)&&!path.StartsWith("ProjectSettings/"))throw new InvalidOperationException("54 unreviewed native type");
+   string target=Path.Combine(output,"native-"+(index++)+".asset");if(File.Exists(target))throw new IOException("54 export output exists");
+   UnityEditorInternal.InternalEditorUtility.SaveToSerializedFileAndForget(new[]{o},target,true);
+   if(!File.Exists(target))throw new IOException("54 native export missing");record["export"]=target;record["exportSHA"]=Hash(target);record["bytes"]=new FileInfo(target).Length;record["action"]="native serializer writes new workspace copy only, not project/package";rows.Add(record);
+  }
+  var after=NativeSnapshot40.Compare(backup,natives);bool same=!after.Any(x=>x["equal"]!=null&&!(bool)x["equal"]);CreateOnly40.Text(Path.Combine(output,"RESULT.json"),new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["rows"]=rows,["exported"]=index,["nativeUnchanged"]=same,["nativeChecks"]=after,["inputSame"]=input==InputSystem.settings&&inputJSON==JsonUtility.ToJson(input),["projectOrPackageWrites"]=false,["GPUOperations"]=0,["ExitRequested"]=false}.ToString());result.Log("54 targeted native exports="+index+"; project/package files not written; input/native preserved="+same);
+ }
+}
+}

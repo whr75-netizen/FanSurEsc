@@ -1,0 +1,459 @@
+{
+  "UnityCounterAPIs": {
+    "allocated": "Profiler.GetTotalAllocatedMemoryLong",
+    "reserved": "Profiler.GetTotalReservedMemoryLong",
+    "mono": "Profiler.GetMonoUsedSizeLong",
+    "renderTextureCount": "Resources.FindObjectsOfTypeAll<RenderTexture>().Length"
+  },
+  "runs": [
+    {
+      "run": "phase-run",
+      "frames": 2,
+      "captureError": null,
+      "before": {
+        "allocated": 1608594365,
+        "mono": 1461686272,
+        "renderTextureCount": 30,
+        "reserved": 2177003520,
+        "utc": "2026-11-11T05:03:58.4421920Z"
+      },
+      "after": {
+        "allocated": 1672908409,
+        "mono": 1336246272,
+        "renderTextureCount": 30,
+        "reserved": 2218823680,
+        "utc": "2026-11-11T05:04:12.9764045Z"
+      },
+      "delta": {
+        "allocated": 64314044,
+        "reserved": 41820160,
+        "mono": -125440000,
+        "renderTextureCount": 0
+      },
+      "nativeEqual": 44,
+      "nativeUnavailable": [
+        {
+          "equal": null,
+          "path": "ProjectSettings/ProjectSettings.asset",
+          "status": "Unavailable",
+          "type": "UnityEditor.AssetImporter"
+        }
+      ],
+      "nativeUnequal": [],
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "inputReferenceAndJSON": true,
+      "settingsRestored": true,
+      "ownedForwardDisposed": true,
+      "observerRemoved": true
+    },
+    {
+      "run": "gate/phase-run",
+      "frames": 4,
+      "captureError": null,
+      "before": {
+        "allocated": 1644498768,
+        "mono": 1492176896,
+        "renderTextureCount": 30,
+        "reserved": 2250149888,
+        "utc": "2026-11-11T05:15:29.6297084Z"
+      },
+      "after": {
+        "allocated": 1681446502,
+        "mono": 1347833856,
+        "renderTextureCount": 30,
+        "reserved": 2252378112,
+        "utc": "2026-11-11T05:15:48.3347067Z"
+      },
+      "delta": {
+        "allocated": 36947734,
+        "reserved": 2228224,
+        "mono": -144343040,
+        "renderTextureCount": 0
+      },
+      "nativeEqual": 44,
+      "nativeUnavailable": [],
+      "nativeUnequal": [],
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "inputReferenceAndJSON": true,
+      "settingsRestored": true,
+      "ownedForwardDisposed": true,
+      "observerRemoved": true
+    },
+    {
+      "run": "gate-alpha/phase-run",
+      "frames": 4,
+      "captureError": null,
+      "before": {
+        "allocated": 1653077993,
+        "mono": 1491906560,
+        "renderTextureCount": 30,
+        "reserved": 2269024256,
+        "utc": "2026-11-11T05:19:10.4449175Z"
+      },
+      "after": {
+        "allocated": 1689660946,
+        "mono": 1345196032,
+        "renderTextureCount": 30,
+        "reserved": 2269159424,
+        "utc": "2026-11-11T05:19:29.3443744Z"
+      },
+      "delta": {
+        "allocated": 36582953,
+        "reserved": 135168,
+        "mono": -146710528,
+        "renderTextureCount": 0
+      },
+      "nativeEqual": 44,
+      "nativeUnavailable": [],
+      "nativeUnequal": [],
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "inputReferenceAndJSON": true,
+      "settingsRestored": true,
+      "ownedForwardDisposed": true,
+      "observerRemoved": true
+    },
+    {
+      "run": "gate-alpha/motion-run",
+      "frames": 28,
+      "captureError": null,
+      "before": {
+        "allocated": 1659523585,
+        "mono": 1409019904,
+        "renderTextureCount": 30,
+        "reserved": 2269028352,
+        "utc": "2026-11-11T05:23:29.3501517Z"
+      },
+      "after": {
+        "allocated": 1681837286,
+        "mono": 1343651840,
+        "renderTextureCount": 30,
+        "reserved": 2269159424,
+        "utc": "2026-11-11T05:24:19.3868081Z"
+      },
+      "delta": {
+        "allocated": 22313701,
+        "reserved": 131072,
+        "mono": -65368064,
+        "renderTextureCount": 0
+      },
+      "nativeEqual": 44,
+      "nativeUnavailable": [],
+      "nativeUnequal": [],
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "inputReferenceAndJSON": true,
+      "settingsRestored": true,
+      "ownedForwardDisposed": true,
+      "observerRemoved": true
+    },
+    {
+      "run": "native-proof/phase-run",
+      "frames": 0,
+      "captureError": "System.InvalidOperationException: 107 bounded source readback\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.JointSlice107 (System.String name, UnityEngine.GraphicsBuffer b, System.Int32 start, System.Int32 count) [0x0003c] in <26e1e4527fbb4e1e863d4e8010d30c4e>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.CaptureColumns26 () [0x000aa] in <26e1e4527fbb4e1e863d4e8010d30c4e>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.CaptureFull113 (NativePlayer395 n, Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CpuSourceCapture64+Frame hf, EyeFeature348 e) [0x00001] in <26e1e4527fbb4e1e863d4e8010d30c4e>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Capture (NativePlayer395 n, Gameplay397 gp) [0x00bc7] in <26e1e4527fbb4e1e863d4e8010d30c4e>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x008e4] in <26e1e4527fbb4e1e863d4e8010d30c4e>:0 ",
+      "before": {
+        "allocated": 1664447768,
+        "mono": 1649491968,
+        "renderTextureCount": 30,
+        "reserved": 2269028352,
+        "utc": "2026-11-11T06:12:07.1058979Z"
+      },
+      "after": {
+        "allocated": 1690251056,
+        "mono": 1348866048,
+        "renderTextureCount": 30,
+        "reserved": 2286600192,
+        "utc": "2026-11-11T06:12:21.0492910Z"
+      },
+      "delta": {
+        "allocated": 25803288,
+        "reserved": 17571840,
+        "mono": -300625920,
+        "renderTextureCount": 0
+      },
+      "nativeEqual": 44,
+      "nativeUnavailable": [
+        {
+          "equal": null,
+          "path": "ProjectSettings/ProjectSettings.asset",
+          "status": "Unavailable",
+          "type": "UnityEditor.AssetImporter"
+        }
+      ],
+      "nativeUnequal": [],
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "inputReferenceAndJSON": true,
+      "settingsRestored": true,
+      "ownedForwardDisposed": true,
+      "observerRemoved": true
+    },
+    {
+      "run": "native-proof/readback-run",
+      "frames": 0,
+      "captureError": "System.InvalidOperationException: 107 bounded source readback\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.JointSlice107 (System.String name, UnityEngine.GraphicsBuffer b, System.Int32 start, System.Int32 count) [0x0003c] in <9ba8197e85b74e5481d307e951111047>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.CaptureColumns26 () [0x00094] in <9ba8197e85b74e5481d307e951111047>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.CaptureFull113 (NativePlayer395 n, Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CpuSourceCapture64+Frame hf, EyeFeature348 e) [0x00001] in <9ba8197e85b74e5481d307e951111047>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Capture (NativePlayer395 n, Gameplay397 gp) [0x00bc7] in <9ba8197e85b74e5481d307e951111047>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x008e4] in <9ba8197e85b74e5481d307e951111047>:0 ",
+      "before": {
+        "allocated": 1659762912,
+        "mono": 1464930304,
+        "renderTextureCount": 30,
+        "reserved": 2286469120,
+        "utc": "2026-11-11T06:13:29.6481519Z"
+      },
+      "after": {
+        "allocated": 1697684940,
+        "mono": 1359872000,
+        "renderTextureCount": 30,
+        "reserved": 2269822976,
+        "utc": "2026-11-11T06:13:45.2023423Z"
+      },
+      "delta": {
+        "allocated": 37922028,
+        "reserved": -16646144,
+        "mono": -105058304,
+        "renderTextureCount": 0
+      },
+      "nativeEqual": 44,
+      "nativeUnavailable": [],
+      "nativeUnequal": [],
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "inputReferenceAndJSON": true,
+      "settingsRestored": true,
+      "ownedForwardDisposed": true,
+      "observerRemoved": true
+    },
+    {
+      "run": "native-proof/typed-run",
+      "frames": 4,
+      "captureError": null,
+      "before": {
+        "allocated": 1667236578,
+        "mono": 1444761600,
+        "renderTextureCount": 30,
+        "reserved": 2269691904,
+        "utc": "2026-11-11T06:14:54.1851966Z"
+      },
+      "after": {
+        "allocated": 1705208338,
+        "mono": 1345990656,
+        "renderTextureCount": 30,
+        "reserved": 2269822976,
+        "utc": "2026-11-11T06:15:14.1705434Z"
+      },
+      "delta": {
+        "allocated": 37971760,
+        "reserved": 131072,
+        "mono": -98770944,
+        "renderTextureCount": 0
+      },
+      "nativeEqual": 44,
+      "nativeUnavailable": [],
+      "nativeUnequal": [],
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "inputReferenceAndJSON": true,
+      "settingsRestored": true,
+      "ownedForwardDisposed": true,
+      "observerRemoved": true
+    },
+    {
+      "run": "native-proof/motion-run",
+      "frames": 28,
+      "captureError": null,
+      "before": {
+        "allocated": 1674915819,
+        "mono": 1446993920,
+        "renderTextureCount": 30,
+        "reserved": 2269696000,
+        "utc": "2026-11-11T06:16:56.8432899Z"
+      },
+      "after": {
+        "allocated": 1712875490,
+        "mono": 1356349440,
+        "renderTextureCount": 30,
+        "reserved": 2303381504,
+        "utc": "2026-11-11T06:17:48.0066150Z"
+      },
+      "delta": {
+        "allocated": 37959671,
+        "reserved": 33685504,
+        "mono": -90644480,
+        "renderTextureCount": 0
+      },
+      "nativeEqual": 44,
+      "nativeUnavailable": [],
+      "nativeUnequal": [],
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "inputReferenceAndJSON": true,
+      "settingsRestored": true,
+      "ownedForwardDisposed": true,
+      "observerRemoved": true
+    }
+  ],
+  "separatePublicPointBefore": {
+    "utc": "2026-11-11T05:02:57.5572001Z",
+    "version": "6000.5.9f1",
+    "project": "C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets",
+    "playing": false,
+    "paused": false,
+    "transitioning": false,
+    "compiling": false,
+    "updating": false,
+    "allocated": 1639751293,
+    "reserved": 2172555264,
+    "mono": 1432928256,
+    "renderTextureCount": 30,
+    "ownedHairMaterials25": 0,
+    "createdHairTextures25": 0
+  },
+  "separatePublicPointAfter": {
+    "utc": "2026-11-11T06:19:13.4426302Z",
+    "version": "6000.5.9f1",
+    "project": "C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets",
+    "playing": false,
+    "paused": false,
+    "transitioning": false,
+    "compiling": false,
+    "updating": false,
+    "allocated": 1711364970,
+    "reserved": 2303250432,
+    "mono": 1363103744,
+    "renderTextureCount": 30,
+    "ownedHairMaterials25": 0,
+    "createdHairTextures25": 0
+  },
+  "pointDifferenceNotSumOfRunSpikes": {
+    "allocated": 71613677,
+    "reserved": 130695168,
+    "mono": -69824512,
+    "renderTextureCount": 0
+  },
+  "osSinglePoint": {
+    "Utc": "2026-11-11T06:21:30.4225545Z",
+    "Id": 28080,
+    "Responding": true,
+    "CPU": 522.40625,
+    "WorkingSet64": 3294728192,
+    "PrivateMemorySize64": 6489722880,
+    "note": "WorkingSet64 includes shared resident pages; PrivateMemorySize64 is private commit, not private working set"
+  },
+  "newHeadHairRTsTotalActualBytes": 387072,
+  "codeLifetime": "HeadHair25 owns four material clones and RTs per instance; both continuous and expanded physical instances Dispose. RegionDriver shared16,928B and column16,384B buffers use B()/owned buffer list. SourcePigment owns native27,072B buffer/CPU array, constructor failure and Dispose release buffer, Dispose nulls array. New per-view native resources43,456B. Existing model/view/topology checks invalidate stale owners. Release76 disposes and nulls Forward/Layer/Motion. No new static arrays or GPU feedback.",
+  "causeNotDetermined": "Public named material/RT counts are0, but retained native allocations/Editor caches/managed roots were not profiled. A decrease after idle is not proof that every allocation is freed. No forced GC, Unload, private reflection, profiler dump or cleanup was used.",
+  "scenePublicProbeNote": "JsonUtility log omitted the dynamic scenes array. Scene preservation is evidenced by the completed capture beforeScenes/afterScenes, not by an inferred empty scene list."
+}

@@ -1,0 +1,19 @@
+{
+  "captureSourceSHA256": "8979bb50c650c06fb6c5bce4b3565e67ca24808f867da7ed63946636f2837425",
+  "compiledCPU": true,
+  "shaderChanged": false,
+  "newImport": false,
+  "GPUExecuted": false,
+  "curveInputCPURecordBytes": 27072,
+  "GPUColumnReadbackBytes": 576,
+  "originalFailurePreserved": true,
+  "unavailableNativeComparison": [
+    {
+      "equal": null,
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "status": "Unavailable",
+      "type": "UnityEditor.AssetImporter"
+    }
+  ],
+  "fixesFailure": "Original readback helper accepts only stride16, not stride32. CPU upload array serialized with exact stride32; GPU query remains bounded stride16."
+}

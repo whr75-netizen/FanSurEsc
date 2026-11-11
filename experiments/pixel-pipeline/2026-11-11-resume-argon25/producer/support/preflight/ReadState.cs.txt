@@ -1,0 +1,27 @@
+using System;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEngine.Profiling;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+ [Serializable]public class SupportScene26{public string path;public bool dirty,loaded;}
+ [Serializable]public class SupportState26{
+  public string utc,version,project;public bool playing,paused,transitioning,compiling,updating;
+  public long allocated,reserved,mono;public int renderTextureCount,ownedHairMaterials25,createdHairTextures25;
+  public SupportScene26[] scenes;
+ }
+ internal class CommandScript:IRunCommand{
+  public void Execute(ExecutionResult result){
+   var scenes=new SupportScene26[SceneManager.sceneCount];for(int i=0;i<scenes.Length;i++){var s=SceneManager.GetSceneAt(i);scenes[i]=new SupportScene26{path=s.path,dirty=s.isDirty,loaded=s.isLoaded};}
+   var state=new SupportState26{utc=DateTime.UtcNow.ToString("O"),version=Application.unityVersion,project=Application.dataPath,
+    playing=EditorApplication.isPlaying,paused=EditorApplication.isPaused,transitioning=EditorApplication.isPlayingOrWillChangePlaymode,
+    compiling=EditorApplication.isCompiling,updating=EditorApplication.isUpdating,scenes=scenes,
+    allocated=Profiler.GetTotalAllocatedMemoryLong(),reserved=Profiler.GetTotalReservedMemoryLong(),mono=Profiler.GetMonoUsedSizeLong(),
+    renderTextureCount=Resources.FindObjectsOfTypeAll<RenderTexture>().Length,
+    ownedHairMaterials25=Resources.FindObjectsOfTypeAll<Material>().Count(m=>m&&m.name.StartsWith("25 owned head-grid hair ",StringComparison.Ordinal)),
+    createdHairTextures25=Resources.FindObjectsOfTypeAll<RenderTexture>().Count(t=>t&&(t.name.StartsWith("25 head hair channel ",StringComparison.Ordinal)||t.name=="25 head hair depth")&&t.IsCreated())};
+   result.Log(JsonUtility.ToJson(state));
+  }
+ }
+}

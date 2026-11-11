@@ -1,0 +1,535 @@
+#pragma kernel ComposeWhole113
+#pragma kernel CurveColumns24
+#pragma kernel ColumnVisibility24
+#pragma kernel AssignedVisibility24
+StructuredBuffer<uint> _OwnSkin113,_SharedSkin26; int _ExposeOwn113; float2 _SocketLimit113;
+RWStructuredBuffer<float4> _QueryEvidence107;
+#pragma kernel PackPart
+#pragma kernel Refit
+#pragma kernel Query
+#pragma target 5.0
+
+// Owned per-view buffers. No global setters, RGB averaging or readback.
+struct Tri96 { int4 verticesMaterial; int4 source; float4 eyeOwners; };
+struct Mat96 { float4 atlas; float4 alphaCullWrap; float4 uvWrap; };
+StructuredBuffer<Tri96> _Triangles96;
+StructuredBuffer<Mat96> _Materials96;
+StructuredBuffer<float4> _World96;
+StructuredBuffer<float2> _UV96;
+StructuredBuffer<float4> _Rest96;
+StructuredBuffer<int> _PartTriangles96;
+StructuredBuffer<int4> _Nodes96;
+StructuredBuffer<int> _LevelNodes96;
+RWStructuredBuffer<float4> _Boxes96;
+RWStructuredBuffer<float4> _Layers96;
+RWStructuredBuffer<float4> _Visibility96;
+RWStructuredBuffer<float4> _CanonicalColour96;
+RWStructuredBuffer<float4> _CanonicalIdentity96;
+RWStructuredBuffer<float4> _Decision96;
+RWStructuredBuffer<int4> _Witness96;
+RWStructuredBuffer<uint> _Stats96;
+Texture2D<float4> _PartRGBA96,_PartMeta96,_PartRest96,_PartUV96,_PartShade96;
+int2 _Size96;
+int _Part96,_FlipY96,_AtlasOffset96,_AlphaWidth96,_AlphaHeight96;
+int _LevelOffset96,_LevelCount96,_NodeCount96,_FacePrimitiveStride96;
+int _ColdTie96; //0 unresolved,1 explicit iris comparison,4 explicit sclera comparison
+int _DirectQueries96;
+StructuredBuffer<float4> _Queries96;
+float4x4 _View96,_Projection96;
+float4 _SourceProjectionX96[2],_SourceProjectionY96[2];
+int2 _SourceEyeIds96;
+struct Record96 { float4 a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15; };
+StructuredBuffer<Record96> _Records96;
+Texture2D<float4> _BaseFinal96,_BaseOwner96,_BaseDepth96,_OldOwner96,_OldIntrinsic96;
+Texture2D<float4> _BackingColour96,_BackingMeta96,_BackingUV96;
+RWTexture2D<float4> _FinalColour96,_FinalOwner96,_FinalDepth96,_FinalAudit96;
+int4 _NativeROI96,_OldROI96,_BackingROI96,_RecordROI96;
+int _CroppedInputs96;
+int _UseUnderlay98,_UseWorld98;
+Texture2D<float4> _NonEyeColour98,_NonEyeMeta98,_NonEyeUV98,_PackedWorldColour98,_PackedWorldProof98;
+Texture2D<float4> _NativeWorldColour98;Texture2D<float> _NativeWorldDepth98;
+RWTexture2D<float4> _WorldColourOut98,_WorldProofOut98;
+float4 _WorldNearFar98;float2 _WorldDelta98;
+
+
+StructuredBuffer<float4> _ReadLayers96,_ReadVisibility96,_ReadColour96,_ReadIdentity96,_ReadDecision96;
+float4 _NativeOriginScale96,_JoinDelta96,_AnchorBounds96;
+float _DepthOffset96;
+// Runtime-candidate declarations and scalar geometry functions. NOT imported.
+// The existing Query traversal is copied mechanically as TraceExternal24 by
+// prepare_runtime.py; it keeps its bounded BVH stack32 and unknown overflow.
+struct CurveProof24 { float4 uv; uint4 primitive; };
+struct ColumnRecord24 { float4 midpoint,source,visibility; };
+StructuredBuffer<CurveProof24> _CurveProof24;
+RWStructuredBuffer<ColumnRecord24> _Columns24;
+RWStructuredBuffer<float4> _AssignedDepth24,_AssignedVisibility24;
+float4 _RingDepth24;
+int _PhysicalCount24;
+
+float SocketLimit24(int eye);
+float2 TraceExternal24(float2 queryPoint,float depth,int eye,bool allowShared26);
+[numthreads(8,8,1)]void PackWorld98(uint3 tid:SV_DispatchThreadID){int2 p=(int2)tid.xy;if(any(p>=_NativeROI96.zw))return;int2 absolute=p+_NativeROI96.xy;int2 q=(int2)floor((absolute+.5-_NativeOriginScale96.xy)/_NativeOriginScale96.z-_WorldDelta98);int2 samplePoint=clamp((int2)floor(_NativeOriginScale96.xy+(q+.5+_WorldDelta98)*_NativeOriginScale96.z),int2(0,0),int2(959,543));float device=_NativeWorldDepth98.Load(int3(samplePoint,0));float wd=lerp(_WorldNearFar98.x,_WorldNearFar98.y,_WorldNearFar98.z>.5?1-device:device);_WorldColourOut98[p]=_NativeWorldColour98.Load(int3(samplePoint,0));_WorldProofOut98[p]=float4(samplePoint,device,wd);}
+Texture2D<float4> _SourceAlpha96_0;
+Texture2D<float4> _SourceAlpha96_1;
+Texture2D<float4> _SourceAlpha96_2;
+Texture2D<float4> _SourceAlpha96_3;
+Texture2D<float4> _SourceAlpha96_4;
+Texture2D<float4> _SourceAlpha96_5;
+Texture2D<float4> _SourceAlpha96_6;
+Texture2D<float4> _SourceAlpha96_7;
+Texture2D<float4> _SourceAlpha96_8;
+Texture2D<float4> _SourceAlpha96_9;
+Texture2D<float4> _SourceAlpha96_10;
+Texture2D<float4> _SourceAlpha96_11;
+Texture2D<float4> _SourceAlpha96_12;
+Texture2D<float4> _SourceAlpha96_13;
+Texture2D<float4> _SourceAlpha96_14;
+Texture2D<float4> _SourceAlpha96_15;
+Texture2D<float4> _SourceAlpha96_16;
+Texture2D<float4> _SourceAlpha96_17;
+Texture2D<float4> _SourceAlpha96_18;
+Texture2D<float4> _SourceAlpha96_19;
+Texture2D<float4> _SourceAlpha96_20;
+Texture2D<float4> _SourceAlpha96_21;
+Texture2D<float4> _SourceAlpha96_22;
+Texture2D<float4> _SourceAlpha96_23;
+Texture2D<float4> _SourceAlpha96_24;
+Texture2D<float4> _SourceAlpha96_25;
+Texture2D<float4> _SourceAlpha96_26;
+Texture2D<float4> _SourceAlpha96_27;
+Texture2D<float4> _SourceAlpha96_28;
+Texture2D<float4> _SourceAlpha96_29;
+Texture2D<float4> _SourceAlpha96_30;
+Texture2D<float4> _SourceAlpha96_31;
+float AlphaTexel96(int index,int2 p){switch(index){case 0:return _SourceAlpha96_0.Load(int3(p,0)).a;case 1:return _SourceAlpha96_1.Load(int3(p,0)).a;case 2:return _SourceAlpha96_2.Load(int3(p,0)).a;case 3:return _SourceAlpha96_3.Load(int3(p,0)).a;case 4:return _SourceAlpha96_4.Load(int3(p,0)).a;case 5:return _SourceAlpha96_5.Load(int3(p,0)).a;case 6:return _SourceAlpha96_6.Load(int3(p,0)).a;case 7:return _SourceAlpha96_7.Load(int3(p,0)).a;case 8:return _SourceAlpha96_8.Load(int3(p,0)).a;case 9:return _SourceAlpha96_9.Load(int3(p,0)).a;case 10:return _SourceAlpha96_10.Load(int3(p,0)).a;case 11:return _SourceAlpha96_11.Load(int3(p,0)).a;case 12:return _SourceAlpha96_12.Load(int3(p,0)).a;case 13:return _SourceAlpha96_13.Load(int3(p,0)).a;case 14:return _SourceAlpha96_14.Load(int3(p,0)).a;case 15:return _SourceAlpha96_15.Load(int3(p,0)).a;case 16:return _SourceAlpha96_16.Load(int3(p,0)).a;case 17:return _SourceAlpha96_17.Load(int3(p,0)).a;case 18:return _SourceAlpha96_18.Load(int3(p,0)).a;case 19:return _SourceAlpha96_19.Load(int3(p,0)).a;case 20:return _SourceAlpha96_20.Load(int3(p,0)).a;case 21:return _SourceAlpha96_21.Load(int3(p,0)).a;case 22:return _SourceAlpha96_22.Load(int3(p,0)).a;case 23:return _SourceAlpha96_23.Load(int3(p,0)).a;case 24:return _SourceAlpha96_24.Load(int3(p,0)).a;case 25:return _SourceAlpha96_25.Load(int3(p,0)).a;case 26:return _SourceAlpha96_26.Load(int3(p,0)).a;case 27:return _SourceAlpha96_27.Load(int3(p,0)).a;case 28:return _SourceAlpha96_28.Load(int3(p,0)).a;case 29:return _SourceAlpha96_29.Load(int3(p,0)).a;case 30:return _SourceAlpha96_30.Load(int3(p,0)).a;case 31:return _SourceAlpha96_31.Load(int3(p,0)).a;default:return 0;}}
+float Cross96(float2 a,float2 b){return a.x*b.y-a.y*b.x;}
+float4 Layer96(int part,int field,int p){return _Layers96[(part*5+field)*(_Size96.x*_Size96.y)+p];}
+float3 Screen96(int i){float4 v=mul(_View96,_World96[i]);float4 c=mul(_Projection96,v);return float3((c.x/c.w*.5+.5)*480,(.5-c.y/c.w*.5)*272,-v.z);}
+int Wrap96(int x,int n,int mode){return mode==1?clamp(x,0,n-1):x-((int)floor((float)x/n))*n;}
+
+[numthreads(8,8,1)]void PackPart(uint3 thread:SV_DispatchThreadID){int3 id=(int3)thread;if(any(id.xy>=_Size96))return;int2 p=int2(id.xy);if(_FlipY96!=0)p.y=_Size96.y-1-p.y;int n=_Size96.x*_Size96.y,at=id.y*_Size96.x+id.x;_Layers96[(_Part96*5+0)*n+at]=_PartRGBA96.Load(int3(p,0));_Layers96[(_Part96*5+1)*n+at]=_PartMeta96.Load(int3(p,0));_Layers96[(_Part96*5+2)*n+at]=_PartRest96.Load(int3(p,0));_Layers96[(_Part96*5+3)*n+at]=_PartUV96.Load(int3(p,0));_Layers96[(_Part96*5+4)*n+at]=_PartShade96.Load(int3(p,0));}
+[numthreads(64,1,1)]void Refit(uint3 thread:SV_DispatchThreadID){int3 id=(int3)thread;if(id.x>=_LevelCount96)return;int ix=_LevelNodes96[_LevelOffset96+id.x];int4 node=_Nodes96[ix];float3 lo,hi;if(node.z>=0){Tri96 t=_Triangles96[node.z];float3 a=Screen96(t.verticesMaterial.x),b=Screen96(t.verticesMaterial.y),c=Screen96(t.verticesMaterial.z);lo=min(a,min(b,c));hi=max(a,max(b,c));}else{lo=min(_Boxes96[node.x*2].xyz,_Boxes96[node.y*2].xyz);hi=max(_Boxes96[node.x*2+1].xyz,_Boxes96[node.y*2+1].xyz);}_Boxes96[ix*2]=float4(lo,0);_Boxes96[ix*2+1]=float4(hi,0);}
+
+float2 AlphaBounds96(int material,float2 uv){Mat96 m=_Materials96[material];int mode=(int)m.atlas.w;if(mode==0)return 1;int w=(int)m.atlas.y,h=(int)m.atlas.z;int2 p=(int2)floor(uv*float2(w,h)-.5);float lo=1,hi=0;[unroll]for(int y=0;y<2;y++)[unroll]for(int x=0;x<2;x++){int xx=Wrap96(p.x+x,w,(int)m.alphaCullWrap.w),yy=Wrap96(p.y+y,h,(int)m.uvWrap.x);float a=AlphaTexel96((int)m.atlas.x,int2(xx,yy))*m.alphaCullWrap.x;lo=min(lo,a);hi=max(hi,a);}if(mode==1)return lo>=m.alphaCullWrap.y?1:hi<m.alphaCullWrap.y?0:float2(0,1);return saturate(float2(lo,hi));}
+
+[numthreads(64,1,1)]void Query(uint3 thread:SV_DispatchThreadID){int3 id=(int3)thread;int n=_Size96.x*_Size96.y;if(id.x>=n*4)return;int part=(int)((uint)id.x/(uint)n),p=(int)((uint)id.x%(uint)n);float4 meta=Layer96(part,1,p),rgba=Layer96(part,0,p);_Visibility96[id.x]=0;_QueryEvidence107[id.x*2]=0;_QueryEvidence107[id.x*2+1]=0;if(meta.x<=0||rgba.a<=0)return;
+ int primitive=(int)round(Layer96(part,3,p).z);int ti=_PartTriangles96[part*_FacePrimitiveStride96+primitive-1];Tri96 source=_Triangles96[ti];int3 vi=source.verticesMaterial.xyz;float3 r=Layer96(part,2,p).xyz,a=_Rest96[vi.x].xyz,b=_Rest96[vi.y].xyz,c=_Rest96[vi.z].xyz;float3 u=b-a,v=c-a,q=r-a;float aa=dot(u,u),ab=dot(u,v),bb=dot(v,v),aq=dot(u,q),bq=dot(v,q),den=aa*bb-ab*ab;float2 bc=float2(bb*aq-ab*bq,aa*bq-ab*aq)/den;float3 bary=float3(1-bc.x-bc.y,bc);float4 world=_World96[vi.x]*bary.x+_World96[vi.y]*bary.y+_World96[vi.z]*bary.z;float4 view=mul(_View96,world),clip=mul(_Projection96,view);float2 queryPoint=float2((clip.x/clip.w*.5+.5)*480,(.5-clip.y/clip.w*.5)*272);float depth=meta.x;int eye=(int)round(meta.z);if(_DirectQueries96!=0){float4 d=_Queries96[id.x];queryPoint=d.xy;depth=d.z;eye=(int)d.w;}
+ float2 trans=1;int stack[32],sp=0;stack[sp++]=0;uint visits=0,tests=0;bool overflow=false;
+ while(sp>0){int node=stack[--sp];visits++;if(_NodeCount96<=0||(uint)node>=(uint)_NodeCount96||visits>(uint)_NodeCount96){overflow=true;break;}float3 lo=_Boxes96[node*2].xyz,hi=_Boxes96[node*2+1].xyz;if(any(queryPoint<lo.xy-1e-4)||any(queryPoint>hi.xy+1e-4)||lo.z>=depth-3e-5)continue;int4 nd=_Nodes96[node];if(nd.z<0){if(sp>29){overflow=true;break;}stack[sp++]=nd.x;stack[sp++]=nd.y;continue;}
+  tests++;Tri96 t=_Triangles96[nd.z];if(t.source.x!=1||t.source.y!=3)continue; //102 external occlusion does not alter canonical eye allocation
+float3 s0=Screen96(t.verticesMaterial.x),s1=Screen96(t.verticesMaterial.y),s2=Screen96(t.verticesMaterial.z);float2 e0=s1.xy-s0.xy,e1=s2.xy-s0.xy,d=queryPoint-s0.xy;float determinant=Cross96(e0,e1);if(abs(determinant)<=1e-12)continue;int winding=determinant>0?1:-1;Mat96 m=_Materials96[t.verticesMaterial.w];int cull=(int)m.alphaCullWrap.z;if((cull==2&&winding!=1)||(cull==1&&winding==1))continue;float2 uvb=float2(Cross96(d,e1),Cross96(e0,d))/determinant;float3 weights=float3(1-uvb.x-uvb.y,uvb);if(min(weights.x,min(weights.y,weights.z))< -1e-7)continue;
+  float4 cv0=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.x])),cv1=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.y])),cv2=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.z]));if(min(cv0.w,min(cv1.w,cv2.w))<=0)continue;weights/=float3(cv0.w,cv1.w,cv2.w);weights/=weights.x+weights.y+weights.z;float zz=dot(weights,float3(s0.z,s1.z,s2.z));if(zz>=depth-3e-5)continue;
+  if(_ExposeOwn113!=0&&(_OwnSkin113[t.source.z-1]&(1u<<eye))!=0&&depth-zz<=SocketLimit24(eye))continue;
+  int otherEye=(int)floor(dot(weights,t.eyeOwners.xyz)+.5);if(t.source.x==1&&(t.source.y==1||t.source.y==2||t.source.y==4||t.source.y==6)&&otherEye==eye)continue;
+  float2 uv=_UV96[t.verticesMaterial.x]*weights.x+_UV96[t.verticesMaterial.y]*weights.y+_UV96[t.verticesMaterial.z]*weights.z;float2 abounds=AlphaBounds96(t.verticesMaterial.w,uv);if(abounds.y>0&&(_QueryEvidence107[id.x*2].x==0||zz<_QueryEvidence107[id.x*2].y)){_QueryEvidence107[id.x*2]=float4(nd.z+1,zz,t.verticesMaterial.w+1,abounds.x);_QueryEvidence107[id.x*2+1]=float4(uv,abounds.y,depth);}trans*=1-abounds.yx;if(trans.y<=0)break;
+ }
+ Mat96 candidate=_Materials96[source.verticesMaterial.w];float3 ca=Screen96(vi.x),cb=Screen96(vi.y),cc=Screen96(vi.z);int sign=Cross96(cb.xy-ca.xy,cc.xy-ca.xy)>0?1:-1;int cull=(int)candidate.alphaCullWrap.z;if((cull==2&&sign!=1)||(cull==1&&sign==1))trans=0;if(overflow)trans=float2(0,1);
+ _Visibility96[id.x]=float4(trans*rgba.a,depth,overflow?1:0);InterlockedAdd(_Stats96[0],1);InterlockedAdd(_Stats96[1],visits);InterlockedMax(_Stats96[2],visits);InterlockedAdd(_Stats96[3],tests);if(overflow)InterlockedAdd(_Stats96[4],1);
+}
+
+int4 SourceKey96(int part,int p){if(part!=1&&part!=2)return 0;float4 meta=Layer96(part,1,p),r=float4(Layer96(part,2,p).xyz,1);int owner=(int)round(meta.z),oi=owner==_SourceEyeIds96[0]?0:1;float2 xy=float2(dot(r,_SourceProjectionX96[oi]),dot(r,_SourceProjectionY96[oi]));float tol=16*1.192092896e-7*max(1,max(abs(xy.x),abs(xy.y)));if(min(abs(xy.x-round(xy.x)),abs(xy.y-round(xy.y)))<=tol)return 0;return int4(owner,part==1?1:4,(int2)floor(xy));}
+bool SameKey96(int4 a,int4 b){return all(a==b)&&a.x>0;}
+[numthreads(8,8,1)]void Select(uint3 thread:SV_DispatchThreadID){int3 id=(int3)thread;int2 cs=(_Size96>>2);if(any(id.xy>=cs))return;int cell=id.y*cs.x+id.x,n=_Size96.x*_Size96.y;float L[4]={0,0,0,0},U[4]={0,0,0,0};float weight[48];
+ [unroll]for(int sy=0;sy<4;sy++)[unroll]for(int sx=0;sx<4;sx++){int at=(id.y*4+sy)*_Size96.x+id.x*4+sx,si=sy*4+sx;float3 lo,hi,z;[unroll]for(int p=0;p<3;p++){float4 v=_Visibility96[(p+1)*n+at];lo[p]=v.x;hi[p]=v.y;z[p]=Layer96(p+1,1,at).x>0?v.z:3.402823e38;weight[p*16+si]=0;}int3 order=int3(0,1,2);[unroll]for(int a=1;a<3;a++){[unroll]for(int b=a;b>0;b--)if(z[order[b]]<z[order[b-1]]){int t=order[b];order[b]=order[b-1];order[b-1]=t;}}float tl=1,th=1;[unroll]for(int rank=0;rank<3;rank++){int p=order[rank];L[p]+=tl*lo[p];U[p]+=th*hi[p];weight[p*16+si]=tl*lo[p];tl*=1-hi[p];th*=1-lo[p];}L[3]+=tl;U[3]+=th;}
+
+ // Parent eye feature competes with canvas BEFORE its child parts compete.
+ // [iris2 + white7, canvas7] is a visible 9/16 eye, not an unresolved 7/7 tie.
+ int winner=-1,preferred=-1;bool usedWitness=false,coldChoice=false;
+ float eyeLower=16-U[3],eyeUpper=16-L[3];bool exact=true;
+ [unroll]for(int p=0;p<4;p++)if(L[p]!=U[p])exact=false;
+ if(L[3]>eyeUpper)winner=3;
+ bool parentVisible=eyeLower>U[3]||(exact&&eyeLower==U[3]&&eyeLower>0);
+ if(parentVisible){
+  [unroll]for(int p=0;p<3;p++){bool sure=true;[unroll]for(int q=0;q<3;q++)if(p!=q&&L[p]<=U[q])sure=false;if(sure)winner=p;}
+  if(winner<0&&exact){
+   float maximum=max(L[0],max(L[1],L[2]));float meanDepth[3];float nearest=3.402823e38;int front=-1;bool sameDepth=false;
+   [unroll]for(int p=0;p<3;p++){
+    meanDepth[p]=3.402823e38;
+    if(L[p]==maximum&&L[p]>0){float sum=0,total=0;
+     [unroll]for(int i=0;i<16;i++){float w=weight[p*16+i];if(w>0){int at=(id.y*4+(i>>2))*_Size96.x+id.x*4+(i&3);sum+=w*Layer96(p+1,1,at).x;total+=w;}}
+     if(total>0)meanDepth[p]=sum/total;
+     if(meanDepth[p]<nearest){nearest=meanDepth[p];front=p;sameDepth=false;}
+     else if(meanDepth[p]==nearest)sameDepth=true;
+    }
+   }
+   if(front>=0&&!sameDepth)winner=front;
+  }
+ }
+ // Exact half-coverage belongs to the foreground eye layer (inclusive .5),
+ // not a minimum pixel budget. Unknown intervals and exact source-depth ties
+ // remain explicit. No frame-order/array-order tie or RGB blending is used.
+ _CanonicalColour96[cell]=0;_CanonicalIdentity96[cell]=0;_Decision96[cell]=float4(winner<0?-1:winner==3?0:winner==0?1:winner==1?4:6,usedWitness?1:coldChoice?2:0,L[3],U[3]);
+ if(winner<0){InterlockedAdd(_Stats96[5],1);return;}if(winner==3)return;int pick=0;float best=-1;[unroll]for(int i=0;i<16;i++)if(weight[winner*16+i]>best){best=weight[winner*16+i];pick=i;}if(preferred>=0)pick=preferred;int at=(id.y*4+(pick>>2))*_Size96.x+id.x*4+(pick&3);float4 meta=Layer96(winner+1,1,at);int role=winner==0?1:winner==1?4:6;_CanonicalColour96[cell]=float4(Layer96(winner+1,0,at).rgb,1);_CanonicalIdentity96[cell]=float4(role,round(meta.z),meta.x,Layer96(winner+1,3,at).z);int4 key=SourceKey96(winner+1,at);if(key.x>0)_Witness96[cell]=key;
+}
+
+[numthreads(8,8,1)]void Compose(uint3 thread:SV_DispatchThreadID){int2 id=(int2)thread.xy;if(any(id>=_NativeROI96.zw))return;int2 absolute=id+_NativeROI96.xy;int2 bp=_CroppedInputs96!=0?id:absolute;float4 colour=_BaseFinal96.Load(int3(bp,0)),owner=_BaseOwner96.Load(int3(bp,0)),depth=_BaseDepth96.Load(int3(bp,0));float4 audit=0;
+ float2 bottom=(absolute+.5-_NativeOriginScale96.xy)/_NativeOriginScale96.z-_JoinDelta96.xy;float2 top=float2(bottom.x,272-bottom.y);float2 local=top-_AnchorBounds96.xy;int2 cell=(int2)floor(local),cs=(_Size96>>2);bool inside=all(cell>=0)&&all(cell<cs);int ci=clamp(cell.y,0,cs.y-1)*cs.x+clamp(cell.x,0,cs.x-1);float4 selected=_ReadIdentity96[ci],decision=_ReadDecision96[ci];bool newer=inside&&selected.x>0;float z=selected.z+_DepthOffset96;
+ int2 hp=(int2)floor(bottom);bool inHead=all(hp>=_OldROI96.xy)&&all(hp<_OldROI96.xy+_OldROI96.zw);int2 op=_CroppedInputs96!=0?hp-_OldROI96.xy:hp;float4 old=_OldOwner96.Load(int3(op,0)),intrinsic=_OldIntrinsic96.Load(int3(op,0));bool oldFeature=inHead&&((round(old.x)==2&&intrinsic.x>0)||round(old.x)==7);bool inRecord=all(hp>=0)&&hp.x<480&&hp.y<272;bool protectedLid=false;if(inRecord){int2 rp=_CroppedInputs96!=0?hp-_RecordROI96.xy:hp;int rw=_CroppedInputs96!=0?_RecordROI96.z:480;bool rin=_CroppedInputs96==0||(all(rp>=0)&&all(rp<_RecordROI96.zw));Record96 r=(Record96)0;if(rin)r=_Records96[rp.y*rw+rp.x];protectedLid=round(r.a3.x)==5&&(r.a14.z>.5||r.a14.w==77);}
+ bool foreignRole=owner.x==6||(owner.x>=8&&owner.x<=15);bool foreground=newer&&((foreignRole&&owner.z>0&&owner.z<z-3e-5)||z>depth.x+.0001);bool bad=inside&&decision.x<0&&(oldFeature||newer);
+ if(bad&&foreignRole&&depth.w>0&&owner.z>0){float closest=3.402823e38;int n=_Size96.x*_Size96.y;[unroll]for(int sy=0;sy<4;sy++)[unroll]for(int sx=0;sx<4;sx++)[unroll]for(int p=1;p<4;p++){int at=(cell.y*4+sy)*_Size96.x+cell.x*4+sx;float4 v=_ReadVisibility96[p*n+at];if(v.y>0)closest=min(closest,v.z+_DepthOffset96);}if(owner.z<closest-3e-5){bad=false;foreground=true;}}
+ if(newer&&!foreground&&!protectedLid&&!bad){colour=_ReadColour96[ci];owner=float4(selected.x+1,selected.y,z,selected.w);depth=float4(depth.x,z,1,1);audit.x=1;}
+ bool vacated=oldFeature&&!newer&&!protectedLid&&!foreground&&!bad;
+ if(vacated){int2 p=(int2)floor((bottom-float2(_BackingROI96.x,272-_BackingROI96.y-_BackingROI96.w))*2);int2 physicalP98=p;bool physicalInside=all(p>=0)&&all(p<_BackingROI96.zw*2);bool valid=false,uncertain=false,transported=false;float4 bc=0,bm=0;float primitive=0;int kind=2;
+  if(physicalInside){bc=_BackingColour96.Load(int3(p,0));bm=_BackingMeta96.Load(int3(p,0));valid=bm.x>0&&round(bm.y)==4&&bc.a==1;if(valid)primitive=_BackingUV96.Load(int3(p,0)).z;}
+
+  if(!valid&&!uncertain&&inside){p=(int2)floor(local*4);if(all(p>=0)&&all(p<_Size96)){int at=p.y*_Size96.x+p.x;float4 v=_ReadVisibility96[at];if(v.x>=1){bc=_ReadLayers96[at];bm=_ReadLayers96[_Size96.x*_Size96.y+at];valid=bc.a==1&&round(bm.y)==4;if(valid){transported=true;primitive=_ReadLayers96[3*_Size96.x*_Size96.y+at].z;kind=3;}}}}
+  if(!valid&&_UseUnderlay98!=0&&physicalInside){float4 nc=_NonEyeColour98.Load(int3(physicalP98,0)),nm=_NonEyeMeta98.Load(int3(physicalP98,0)),nu=_NonEyeUV98.Load(int3(physicalP98,0));int nr=(int)round(nm.y);bool nonEye=nr>0&&nr!=2&&nr!=3&&nr!=5&&nr!=7;bool front=nm.x>0&&(!valid||nm.x<bm.x-3e-5);if(front){bool exact=nonEye&&nc.a==1&&nm.w==1&&nu.z>0&&nu.w>=1;if(exact){valid=true;bc=nc;bm=nm;primitive=nu.z;kind=4;}else{valid=false;uncertain=true;}}}
+  if(valid){float zz=bm.x+_DepthOffset96;if(foreignRole&&owner.z>0&&owner.z<zz-3e-5)foreground=true;else if(zz>depth.x+.0001)bad=true;else{colour=bc;owner=float4(bm.y,bm.z,zz,primitive);depth=float4(depth.x,zz,1,1);audit.x=kind;}}
+  else if(!uncertain&&_UseUnderlay98!=0&&_UseWorld98!=0&&physicalInside){float4 proof=_PackedWorldProof98.Load(int3(id,0));if(proof.w>0){colour=_PackedWorldColour98.Load(int3(id,0));owner=0;depth=float4(proof.w,0,0,0);audit.x=5;}else bad=true;}
+  else bad=true;
+ }
+
+ audit.y=inside?selected.x:0;audit.z=protectedLid?1:0;audit.w=foreground?1:0;if(bad)audit.x=-1;_FinalColour96[id]=colour;_FinalOwner96[id]=owner;_FinalDepth96[id]=depth;_FinalAudit96[id]=audit;
+}
+
+// Source-local eye composition is finished before ANY hair texture is read.
+Texture2D<float4> _CanvasRGBA102,_CanvasMeta102,_HairRGBA102,_HairMeta102;
+RWTexture2D<float4> _EyeRGBA102,_EyeOwner102,_FinalRGBA102,_FinalOwner102;
+int4 _ForwardROI102;float4 _ForwardAnchor102;
+[numthreads(8,8,1)]void ComposeForward102(uint3 tid:SV_DispatchThreadID){
+ int2 p=(int2)tid.xy;if(any(p>=_ForwardROI102.zw))return;
+ int2 sample=p*4+1;float4 c=_CanvasRGBA102.Load(int3(sample,0)),m=_CanvasMeta102.Load(int3(sample,0));
+ float4 owner=m.x>0?float4(4,m.z,m.x,m.y):0;
+ float2 absolute=float2(_ForwardROI102.x+p.x+.5,272-(_ForwardROI102.y+p.y+.5));int2 cell=(int2)floor(absolute-_ForwardAnchor102.xy),size=_Size96>>2;
+ if(all(cell>=0)&&all(cell<size)){int at=cell.y*size.x+cell.x;float4 id=_ReadIdentity96[at],decision=_ReadDecision96[at];
+  if(id.x>0&&decision.x>=0){c=_ReadColour96[at];owner=float4(id.x+1,id.y,id.z,id.w);}
+ }
+ _EyeRGBA102[p]=c;_EyeOwner102[p]=owner;
+ // Hard visible choice. No lerp, screen-space history or eye-budget feedback.
+ float coverage=0,best=-1;float4 hc=0,hm=0;
+ [unroll]for(int y=0;y<4;y++)[unroll]for(int x=0;x<4;x++){
+  int2 s=p*4+int2(x,y);float4 h=_HairMeta102.Load(int3(s,0)),v=_HairRGBA102.Load(int3(s,0));
+  if(h.x>0&&h.w>0&&v.a>0&&(owner.z<=0||h.x<owner.z-3e-5)){
+   float weight=saturate(h.w);coverage+=weight;if(weight>best){best=weight;hc=v;hm=h;}
+  }
+ }
+ if(coverage>=8){c=float4(hc.rgb,1);owner=float4(round(hm.y),round(hm.z),hm.x,0);}
+ _FinalRGBA102[p]=c;_FinalOwner102[p]=owner;
+}
+
+// Same geometric support rule as105, evaluated live from current source curve.
+// Protect existing iris/white selections. No pose/Close-value gate or budget.
+struct CurveSegment106{float4 a,b;};
+StructuredBuffer<CurveSegment106> _Curves106;
+StructuredBuffer<float4> _BaselineColour106,_BaselineIdentity106,_BaselineDecision106;
+RWStructuredBuffer<float4> _CurveColour106,_CurveIdentity106,_CurveDecision106,_CurveAudit106;
+int _CurveCount106;
+int2 _CurveEyeIds106;
+bool Intersects106(float2 a,float2 b,int2 cell){
+ float lower=0,upper=1;float2 d=b-a;
+ [unroll]for(int axis=0;axis<2;axis++){
+  if(d[axis]==0){if(a[axis]<cell[axis]||a[axis]>cell[axis]+1)return false;}
+  else{float x=(cell[axis]-a[axis])/d[axis],y=(cell[axis]+1-a[axis])/d[axis];lower=max(lower,min(x,y));upper=min(upper,max(x,y));}
+ }
+ return upper>=lower&&dot(d,d)>0;
+}
+float Distance106(float2 p,float2 a,float2 b){float2 d=b-a;float t=saturate(dot(p-a,d)/max(dot(d,d),1e-30));float2 r=a+t*d-p;return dot(r,r);}
+[numthreads(8,8,1)]void ApplyCurve106(uint3 tid:SV_DispatchThreadID){
+ int2 p=tid.xy,cs=_Size96>>2;if(any(p>=cs))return;int cell=p.y*cs.x+p.x,n=_Size96.x*_Size96.y;
+ float4 colour=_BaselineColour106[cell],identity=_BaselineIdentity106[cell],decision=_BaselineDecision106[cell];
+ float4 audit=0;bool touched=false,has=false,tied=false;float bestD=3.402823e38,bestAlpha=-1;int chosen=-1,chosenEye=0;bool differentEyes=false;bool2 ownerTouched=false;int firstSupportedOwner=0;
+ for(int s=0;s<_CurveCount106;s++){
+  CurveSegment106 segment=_Curves106[s];if(!Intersects106(segment.a.xy,segment.b.xy,p))continue;touched=true;int owner=(int)round(segment.a.w);if(owner==_CurveEyeIds106.x)ownerTouched.x=true;if(owner==_CurveEyeIds106.y)ownerTouched.y=true;
+ }
+ if(touched){
+  [unroll]for(int y=0;y<4;y++)[unroll]for(int x=0;x<4;x++){
+   int2 q=p*4+int2(x,y);int at=q.y*_Size96.x+q.x;float4 visibility=_Visibility96[3*n+at],meta=Layer96(3,1,at);
+   int owner=(int)round(meta.z);bool selectedOwner=(ownerTouched.x&&owner==_CurveEyeIds106.x)||(ownerTouched.y&&owner==_CurveEyeIds106.y);
+   if(visibility.x<=0||visibility.x!=visibility.y||!selectedOwner)continue;
+   if(firstSupportedOwner==0)firstSupportedOwner=owner;else if(firstSupportedOwner!=owner)differentEyes=true;
+   float d=3.402823e38;for(int s=0;s<_CurveCount106;s++){CurveSegment106 segment=_Curves106[s];if(round(segment.a.w)==owner)d=min(d,Distance106((q+.5)*.25,segment.a.xy,segment.b.xy));}float alpha=visibility.x;
+   if(d<bestD||(d==bestD&&alpha>bestAlpha)){has=true;tied=false;bestD=d;bestAlpha=alpha;chosen=at;chosenEye=owner;}
+   else if(d==bestD&&alpha==bestAlpha&&chosen>=0){if(any(Layer96(3,0,at).rgb!=Layer96(3,0,chosen).rgb))tied=true;}
+  }
+ }
+ if(touched){
+  audit=float4(1,has?1:0,0,has?bestD:0);
+  // This protection is explicit and tested. A native curve that collides with
+  // another selected eye part is reported; no hidden lid-first overwrite.
+  if(round(identity.x)==1||round(identity.x)==4)audit.x=2;
+  else if(!has)audit.x=-1;
+  else if(differentEyes)audit.x=-3;
+  else if(tied)audit.x=-2;
+  else{
+   float4 meta=Layer96(3,1,chosen);colour=float4(Layer96(3,0,chosen).rgb,1);identity=float4(6,chosenEye,meta.x,Layer96(3,3,chosen).z);decision=float4(6,106,decision.zw);audit.x=3;audit.z=chosen+1;
+  }
+ }
+ _CurveColour106[cell]=colour;_CurveIdentity106[cell]=identity;_CurveDecision106[cell]=decision;_CurveAudit106[cell]=audit;
+}
+
+// Three source parts share identical external visibility and depth conditions.
+// The thin curve is a geometric constraint, not a blanket lid-first priority.
+int _CurveSampleScale107;
+void Contributions107(int at,out float4 lo,out float4 hi){
+ float3 a,b,z;int n=_Size96.x*_Size96.y;
+ [unroll]for(int loadPart107=0;loadPart107<3;loadPart107++){float4 v=_Visibility96[(loadPart107+1)*n+at];a[loadPart107]=v.x;b[loadPart107]=v.y;z[loadPart107]=Layer96(loadPart107+1,1,at).x;}
+ lo=float4(a,1);hi=float4(b,1);
+ [unroll]for(int part107=0;part107<3;part107++){
+  lo.w*=1-b[part107];hi.w*=1-a[part107];
+  [unroll]for(int other107=0;other107<3;other107++){
+   if(part107==other107||z[other107]<=0||b[other107]<=0)continue;
+   if(z[other107]<z[part107]-3e-5){lo[part107]*=1-b[other107];hi[part107]*=1-a[other107];}
+   else if(abs(z[other107]-z[part107])<=3e-5)lo[part107]*=1-b[other107];
+  }
+ }
+}
+[numthreads(8,8,1)]void ResolveCurve107(uint3 tid:SV_DispatchThreadID){
+ int2 p=tid.xy,cs=_Size96/_CurveSampleScale107;if(any(p>=cs))return;int cell=p.y*cs.x+p.x,n=_Size96.x*_Size96.y;
+ float4 colour=_BaselineColour106[cell],identity=_BaselineIdentity106[cell],decision=_BaselineDecision106[cell];
+ bool touched=false;bool2 owners=false;
+ for(int s=0;s<_CurveCount106;s++){CurveSegment106 v=_Curves106[s];if(Intersects106(v.a.xy,v.b.xy,p)){touched=true;int o=(int)round(v.a.w);if(o==_CurveEyeIds106.x)owners.x=true;if(o==_CurveEyeIds106.y)owners.y=true;}}
+ float4 audit=0;bool raw=false,blocked=false,unknown=false,tied=false,multiple=false;int chosen=-1,chosenEye=0,firstOwner=0;float bestD=3.402823e38,bestAlpha=-1;
+ if(touched){
+  for(int y=0;y<_CurveSampleScale107;y++)for(int x=0;x<_CurveSampleScale107;x++){
+   int2 q=p*_CurveSampleScale107+int2(x,y);int at=q.y*_Size96.x+q.x;float4 v=_Visibility96[3*n+at],meta=Layer96(3,1,at);int owner=(int)round(meta.z);
+   if(v.x<=0||v.x!=v.y||!((owners.x&&owner==_CurveEyeIds106.x)||(owners.y&&owner==_CurveEyeIds106.y)))continue;
+   raw=true;float4 lo,hi;Contributions107(at,lo,hi);
+   if(!(lo.z>max(hi.x,max(hi.y,hi.w)))){bool definite=lo.x>hi.z||lo.y>hi.z||lo.w>hi.z;blocked=blocked||definite;unknown=unknown||!definite;continue;}
+   if(firstOwner==0)firstOwner=owner;else if(firstOwner!=owner)multiple=true;
+   float d=3.402823e38;for(int s=0;s<_CurveCount106;s++){CurveSegment106 v=_Curves106[s];if(round(v.a.w)==owner)d=min(d,Distance106((q+.5)/_CurveSampleScale107,v.a.xy,v.b.xy));}
+   if(d<bestD||(d==bestD&&lo.z>bestAlpha)){bestD=d;bestAlpha=lo.z;chosen=at;chosenEye=owner;tied=false;}
+   else if(d==bestD&&lo.z==bestAlpha&&chosen>=0){if(any(Layer96(3,0,at).rgb!=Layer96(3,0,chosen).rgb))tied=true;}
+  }
+  int flag=chosen<0?(raw?(blocked&&!unknown?4:-4):-1):(multiple?-3:tied?-2:3);
+  audit=float4(flag,raw?1:0,0,chosen>=0?bestD:0);
+  if(flag==3){float4 meta=Layer96(3,1,chosen);colour=float4(Layer96(3,0,chosen).rgb,1);identity=float4(6,chosenEye,meta.x,Layer96(3,3,chosen).z);decision=float4(6,107,decision.zw);audit.z=chosen+1;}
+ }
+ _CurveColour106[cell]=colour;_CurveIdentity106[cell]=identity;_CurveDecision106[cell]=decision;_CurveAudit106[cell]=audit;
+}
+
+// Isolated live GPU region enumeration. Source visibility and destination
+// visibility are separate. Resource limits fail explicitly, never truncate.
+#pragma kernel PrepareCells113
+#pragma kernel GatherEye113
+#pragma kernel BuildSubsets113
+#pragma kernel Enumerate113
+#pragma kernel Reduce113
+#pragma kernel Write113
+#pragma kernel ComposeRegion113
+#pragma kernel CarrierQueries113
+#define K113 65536.0
+#define MAXP113 24
+#define GROUPS113 32768u
+struct Key113{float4 id,rgba,tag;};
+struct Group113{float4 score;uint4 masks,tail;};
+struct Subset113{uint4 a,b;};
+StructuredBuffer<Key113> _Keys113;
+int _KeyCount113;
+StructuredBuffer<float4> _SrcLayers113,_SrcVisibility113;
+StructuredBuffer<float4> _CarrierVisibility113;
+StructuredBuffer<float4> _CarrierLayers113;
+RWStructuredBuffer<float4> _Cells113;
+RWStructuredBuffer<uint4> _CellTags113,_Frame113,_Points113;
+RWStructuredBuffer<Group113> _Groups113,_Best113;
+RWStructuredBuffer<Subset113> _Subsets113;
+RWStructuredBuffer<float4> _Exposure113;
+RWStructuredBuffer<float4> _WriteQueries113;
+float4 _LidPalette113[2];
+float4 _CarrierOrigin113;
+int2 _CellsSize113,_SourceSize113;
+Texture2D<float4> _FullBase113,_CandidateTile113;
+RWTexture2D<float4> _FullOut113;
+int4 _TileRect113;
+float4 C113(int cell,int ch){return _Cells113[cell*7+ch];}
+
+float4 SL113(int part,int ch,int p){return _SrcLayers113[(part*5+ch)*(_SourceSize113.x*_SourceSize113.y)+p];}
+void Weight113(int at,out float3 lo,out float3 hi){
+ int n=_SourceSize113.x*_SourceSize113.y;float4 a=_SrcVisibility113[n+at],b=_SrcVisibility113[2*n+at],c=_SrcVisibility113[3*n+at];
+ float za=SL113(1,1,at).x,zb=SL113(2,1,at).x,zc=SL113(3,1,at).x;
+ float2 aa=a.xy,bb=b.xy,cc=c.xy;
+ if(zb>0&&b.y>0){if(zb<za-3e-5)aa*=1-b.yx;else if(abs(zb-za)<=3e-5)aa.x*=1-b.y;}
+ if(zc>0&&c.y>0){if(zc<za-3e-5)aa*=1-c.yx;else if(abs(zc-za)<=3e-5)aa.x*=1-c.y;}
+ if(za>0&&a.y>0){if(za<zb-3e-5)bb*=1-a.yx;else if(abs(za-zb)<=3e-5)bb.x*=1-a.y;}
+ if(zc>0&&c.y>0){if(zc<zb-3e-5)bb*=1-c.yx;else if(abs(zc-zb)<=3e-5)bb.x*=1-c.y;}
+ if(za>0&&a.y>0){if(za<zc-3e-5)cc*=1-a.yx;else if(abs(za-zc)<=3e-5)cc.x*=1-a.y;}
+ if(zb>0&&b.y>0){if(zb<zc-3e-5)cc*=1-b.yx;else if(abs(zb-zc)<=3e-5)cc.x*=1-b.y;}
+ lo=float3(aa.x,bb.x,cc.x);hi=float3(aa.y,bb.y,cc.y);
+}
+uint3 Encode113(float3 v){v=max(v,0);float3 c=float3(v.x<=.0031308?v.x*12.92:1.055*pow(v.x,1.0/2.4)-.055,v.y<=.0031308?v.y*12.92:1.055*pow(v.y,1.0/2.4)-.055,v.z<=.0031308?v.z*12.92:1.055*pow(v.z,1.0/2.4)-.055);return(uint3)round(saturate(c)*255);}
+int SourceKey113(int owner,int part,int at){
+ float4 r=float4(SL113(part,2,at).xyz,1);int oi=owner==_SourceEyeIds96.x?0:1;float4 px=_SourceProjectionX96[oi],py=_SourceProjectionY96[oi];float2 xy=float2(dot(r,px),dot(r,py));float2 eps=8*1.192092896e-7*float2(dot(abs(r),abs(px)),dot(abs(r),abs(py)));float3 rgb=SL113(part,0,at).rgb;int chosen=-1;
+ for(int k=0;k<_KeyCount113;k++){Key113 key=_Keys113[k];if(round(key.id.z)!=owner||round(key.id.w)!=(part==1?1:4))continue;if(all(xy>=key.id.xy-eps)&&all(xy<key.id.xy+1+eps)&&all(Encode113(rgb)==(uint3)round(key.tag.yzw))){if(chosen>=0)return -2;chosen=k;}}
+ return chosen;
+}
+bool Upper113(int owner,int x,out float mean){float total=0,mass=0;
+ for(int s=0;s<_CurveCount106;s++){CurveSegment106 v=_Curves106[s];if(round(v.a.w)!=owner)continue;float2 a=v.a.xy,b=v.b.xy,d=b-a;float u=0,t=1;if(abs(d.x)<1e-12){if(a.x<x||a.x>x+1)continue;}else{float p=(x-a.x)/d.x,q=(x+1-a.x)/d.x;u=max(0,min(p,q));t=min(1,max(p,q));if(t<=u)continue;}float2 aa=a+u*d,bb=a+t*d;float len=length(bb-aa);total+=len*(aa.y+bb.y)*.5;mass+=len;}
+ mean=mass>0?total/mass:0;return mass>1e-12;
+}
+[numthreads(8,8,1)]void PrepareCells113(uint3 tid:SV_DispatchThreadID){int2 p=tid.xy;if(any(p>=_CellsSize113))return;int cell=p.y*_CellsSize113.x+p.x;float3 witness26=0;float4 mass=0,ci=0,cw=0;float2 depth=0;uint4 tags=0;int owner=0,errors=0;float bi=-1,bw=-1;int ki=999,kw=999;
+ for(int y=0;y<8;y++)for(int x=0;x<8;x++){int at=(p.y*8+y)*_SourceSize113.x+p.x*8+x;float3 lo,hi;Weight113(at,lo,hi);
+  for(int part=1;part<=2;part++){int o=(int)round(SL113(part,1,at).z);if(lo[part-1]<=0)continue;if(owner==0)owner=o;else if(owner!=o)errors|=1;int key=SourceKey113(o,part,at);if(key<0){errors|=2;continue;}float lower=lo[part-1]*1024,upper=hi[part-1]*1024;
+   if(part==1){mass.xy+=float2(lower,upper);tags.x|=(uint)_Keys113[key].tag.x;tags.z|=1u<<key;if(lo.x>bi||(lo.x==bi&&key<ki)){bi=lo.x;ki=key;ci=_Keys113[key].rgba;depth.x=SL113(1,1,at).x;float2 sv26=_SrcVisibility113[_SourceSize113.x*_SourceSize113.y+at].xy;witness26.x=SL113(1,0,at).a>0&&all(sv26==SL113(1,0,at).a)?at+1:0;}}
+   else{mass.zw+=float2(lower,upper);tags.y|=(uint)_Keys113[key].tag.x;tags.w|=1u<<key;if(lo.y>bw||(lo.y==bw&&key<kw)){bw=lo.y;kw=key;cw=_Keys113[key].rgba;depth.y=SL113(2,1,at).x;float2 sv26=_SrcVisibility113[2*_SourceSize113.x*_SourceSize113.y+at].xy;witness26.y=SL113(2,0,at).a>0&&all(sv26==SL113(2,0,at).a)?at+1:0;}}
+  }
+ }
+
+ int boundaryOwner=0,row=0;ColumnRecord24 boundary;boundary.midpoint=0;boundary.source=0;boundary.visibility=0;
+ for(int i=0;i<2;i++){ColumnRecord24 c=_Columns24[i*_CellsSize113.x+p.x];if(c.midpoint.w>0&&p.y==(int)floor(c.visibility.z)){if(boundaryOwner!=0)errors|=8;boundaryOwner=(int)round(c.midpoint.w);row=(int)floor(c.visibility.z);boundary=c;}}
+ int policy=1;if(boundaryOwner>0){owner=boundaryOwner;policy=2;}else if(owner>0){int eye=owner==_CurveEyeIds106.x?0:1;ColumnRecord24 c=_Columns24[eye*_CellsSize113.x+p.x];if(c.midpoint.w>0){row=(int)floor(c.visibility.z);policy=p.y<row?-1:1;}}
+ float4 lid=0;float best=3.402823e38;int chosen=-1;
+ if(policy==2){for(int y=0;y<8;y++)for(int x=0;x<8;x++){int at=(p.y*8+y)*_SourceSize113.x+p.x*8+x;float4 v=_SrcVisibility113[3*_SourceSize113.x*_SourceSize113.y+at],m=SL113(3,1,at);if(round(m.z)!=owner||v.x<=0||v.x!=v.y)continue;float d=length((float2(p*8+int2(x,y))+.5)/8-boundary.midpoint.xy);if(d<best){best=d;chosen=at;lid=float4(_LidPalette113[owner==_CurveEyeIds106.x?0:1].rgb,m.x);witness26.z=SL113(3,0,at).a>0&&all(v.xy==SL113(3,0,at).a)?at+1:0;}}
+  if(chosen<0&&boundary.source.w>0&&boundary.visibility.x>0&&boundary.visibility.x==boundary.visibility.y){lid=float4(_LidPalette113[owner==_CurveEyeIds106.x?0:1].rgb,boundary.midpoint.z);witness26.z=all(boundary.visibility.xy==1)?-((owner==_CurveEyeIds106.x?0:1)*_CellsSize113.x+p.x+1):0;}
+ }
+ _Cells113[cell*7]=mass;_Cells113[cell*7+1]=ci;_Cells113[cell*7+2]=cw;_Cells113[cell*7+3]=float4(owner,depth,row);_Cells113[cell*7+4]=lid;_Cells113[cell*7+5]=float4(policy,chosen+1,errors,chosen<0&&lid.w>0?24:0);_Cells113[cell*7+6]=float4(witness26,26);_CellTags113[cell]=tags;
+}
+float Interval113(float value,float low,float high){return value<low?low-value:value>high?value-high:0;}
+uint AtBit113(uint a[16],int cell){return(a[cell>>5]>>(cell&31))&1;}
+bool RawConnected113(int owner,int part,uint bit){uint seen[16];for(int j=0;j<16;j++)seen[j]=0;int seed=-1,total=0,n=_CellsSize113.x*_CellsSize113.y;for(int i=0;i<n;i++)if(round(C113(i,3).x)==owner&&((_CellTags113[i][part]&bit)!=0)){seed=i;total++;}if(total<2)return true;seen[seed>>5]|=1u<<(seed&31);int count=1;
+ for(int iteration=0;iteration<512;iteration++){bool changed=false;for(int i=0;i<n;i++){if(AtBit113(seen,i)||round(C113(i,3).x)!=owner||(_CellTags113[i][part]&bit)==0)continue;int x=i%_CellsSize113.x;bool near=(x>0&&AtBit113(seen,i-1))||(x+1<_CellsSize113.x&&AtBit113(seen,i+1))||(i>=_CellsSize113.x&&AtBit113(seen,i-_CellsSize113.x))||(i+_CellsSize113.x<n&&AtBit113(seen,i+_CellsSize113.x));if(near){seen[i>>5]|=1u<<(i&31);count++;changed=true;}}if(!changed)break;}return count==total;
+}
+[numthreads(1,1,1)]void GatherEye113(uint3 tid:SV_DispatchThreadID){int eye=tid.x;if(eye>=2)return;int owner=_CurveEyeIds106[eye];uint np=0,ni=0,nw=0,bad=0;float4 mass=0;uint ai=0,aw=0,keys=0;
+ for(int i=0;i<32;i++)_Frame113[eye*32+i]=0;
+ int n=_CellsSize113.x*_CellsSize113.y;if(n>512)bad|=16;
+ float canvas=0;for(int cell=0;cell<n;cell++){float4 info=C113(cell,3);if(round(info.x)!=owner)continue;float4 v=C113(cell,0);mass+=v;uint4 bits=_CellTags113[cell];ai|=bits.x;aw|=bits.y;keys|=bits.z|bits.w;bad|=(uint)round(C113(cell,5).z);if(C113(cell,5).x!=1||v.x+v.z==0)continue;if(np>=MAXP113){bad|=32;continue;}canvas+=v.x+v.z;_Points113[eye*MAXP113+np]=uint4(cell,v.x>0?ni:0xffffffff,v.z>0?nw:0xffffffff,0);ni+=(v.x>0?1u:0u);nw+=(v.z>0?1u:0u);np++;}
+ if(ni+nw>21)bad|=64;if(ni>12||nw>12)bad|=128;
+ for(uint p=0;p<np;p++){uint4 q=_Points113[eye*MAXP113+p];uint cell=q.x,nb=0;for(uint k=0;k<np;k++){uint b=_Points113[eye*MAXP113+k].x;int2 d=int2(cell%_CellsSize113.x,cell/_CellsSize113.x)-int2(b%_CellsSize113.x,b/_CellsSize113.x);if(abs(d.x)+abs(d.y)==1)nb|=1u<<k;}q.w=nb;_Points113[eye*MAXP113+p]=q;}
+ for(uint part=0;part<2;part++)for(uint bit=0;bit<8;bit++){uint active=part==0?ai:aw,scope=0;if((active&(1u<<bit))&&RawConnected113(owner,part,1u<<bit)){for(uint p=0;p<np;p++)if(_CellTags113[_Points113[eye*MAXP113+p].x][part]&(1u<<bit))scope|=1u<<p;}_Frame113[eye*32+4+part*8+bit]=uint4(scope,0,0,0);}
+ _Frame113[eye*32]=uint4(np,ni,nw,bad);_Frame113[eye*32+1]=asuint(mass);_Frame113[eye*32+2]=uint4(ai,aw,keys,0);_Frame113[eye*32+3]=uint4(asuint(canvas),0,0,0);
+}
+bool Connected113(uint mask,int eye){if(mask==0)return true;uint reach=1u<<firstbitlow(mask);for(int i=0;i<MAXP113;i++){uint next=reach;for(int p=0;p<MAXP113;p++)if(reach&(1u<<p))next|=_Points113[eye*MAXP113+p].w&mask;if(next==reach)break;reach=next;}return reach==mask;}
+Group113 Invalid113(){Group113 v;v.score=3.402823e38;v.masks=0;v.tail=uint4(0xffffffff,0,0,0);return v;}
+bool Less113(Group113 a,Group113 b){for(int j=0;j<4;j++)if(a.score[j]!=b.score[j])return a.score[j]<b.score[j];if(asfloat(a.tail.z)!=asfloat(b.tail.z))return asfloat(a.tail.z)>asfloat(b.tail.z);return a.tail.x<b.tail.x;}
+Group113 Merge113(Group113 a,Group113 b){if(a.tail.y==0)return b;if(b.tail.y==0)return a;if(Less113(a,b))return a;if(Less113(b,a))return b;a.masks=uint4(a.masks.x&b.masks.x,a.masks.y|b.masks.y,a.masks.z&b.masks.z,a.masks.w|b.masks.w);a.tail.y+=b.tail.y;return a;}
+groupshared Group113 Shared113[64];
+[numthreads(64,1,1)]void BuildSubsets113(uint3 tid:SV_DispatchThreadID){int eye=tid.y/2,part=tid.y%2;uint state=tid.x;uint4 head=_Frame113[eye*32];Subset113 outValue;outValue.a=0;outValue.b=0;uint count=part==0?head.y:head.z;if(head.w==0&&state<(1u<<count)){uint mask=0,component=0,keys=0,n=0;float cost=0,directMass24=0;bool valid=true;for(uint p=0;p<head.x;p++){uint4 entry113=_Points113[eye*MAXP113+p];uint index=part==0?entry113.y:entry113.z;if(index==0xffffffff||!(state&(1u<<index)))continue;float4 mass=C113(entry113.x,0);uint4 tag=_CellTags113[entry113.x];mask|=1u<<p;n++;component|=tag[part];keys|=tag[part+2];cost+=K113-mass.x-mass.z-(part==0?mass.x:mass.z);directMass24+=part==0?mass.x:mass.z;}for(int bit=0;bit<8;bit++){uint scope=_Frame113[eye*32+4+part*8+bit].x;if(scope&&!Connected113(mask&scope,eye))valid=false;}outValue.a=uint4(mask,component,keys,n);outValue.b=uint4(asuint(cost),valid?1:0,asuint(directMass24),0);}_Subsets113[(eye*2+part)*4096+state]=outValue;}
+[numthreads(64,1,1)]void Enumerate113(uint3 gid:SV_GroupID,uint3 local:SV_GroupThreadID){int eye=gid.y;uint state=gid.x*64+local.x;uint4 header=_Frame113[eye*32];Group113 r=Invalid113();
+ if(header.w==0&&state<(1u<<(header.y+header.z))){uint si=state&((1u<<header.y)-1),sw=state>>header.y;Subset113 a=_Subsets113[eye*8192+si],b=_Subsets113[eye*8192+4096+sw];if(a.b.y&&b.b.y&&(a.a.x&b.a.x)==0){float4 mass=asfloat(_Frame113[eye*32+1]);uint4 active=_Frame113[eye*32+2];float reconstruction=asfloat(_Frame113[eye*32+3].x)+asfloat(a.b.x)+asfloat(b.b.x);r.score=float4(countbits(active.x&~a.a.y)+countbits(active.y&~b.a.y),Interval113((a.a.w+b.a.w)*K113,mass.x+mass.z,mass.y+mass.w),Interval113(a.a.w*K113,mass.x,mass.y)+Interval113(b.a.w*K113,mass.z,mass.w),max(reconstruction,0));r.masks=uint4(a.a.x,a.a.x,b.a.x,b.a.x);r.tail=uint4(countbits(active.z&~(a.a.z|b.a.z)),1,asuint(asfloat(a.b.z)+asfloat(b.b.z)),0);}
+ }
+ Shared113[local.x]=r;GroupMemoryBarrierWithGroupSync();for(uint stride=32;stride>0;stride>>=1){if(local.x<stride)Shared113[local.x]=Merge113(Shared113[local.x],Shared113[local.x+stride]);GroupMemoryBarrierWithGroupSync();}if(local.x==0)_Groups113[eye*GROUPS113+gid.x]=Shared113[0];
+}
+[numthreads(64,1,1)]void Reduce113(uint3 gid:SV_GroupID,uint3 local:SV_GroupThreadID){int eye=gid.x;Group113 r=Invalid113();for(uint i=local.x;i<GROUPS113;i+=64)r=Merge113(r,_Groups113[eye*GROUPS113+i]);Shared113[local.x]=r;GroupMemoryBarrierWithGroupSync();for(uint stride=32;stride>0;stride>>=1){if(local.x<stride)Shared113[local.x]=Merge113(Shared113[local.x],Shared113[local.x+stride]);GroupMemoryBarrierWithGroupSync();}if(local.x==0)_Best113[eye]=Shared113[0];}
+[numthreads(8,8,1)]void Write113(uint3 tid:SV_DispatchThreadID){int2 p=tid.xy;if(any(p>=_CellsSize113))return;int cell=p.y*_CellsSize113.x+p.x;float4 info=C113(cell,3),policy=C113(cell,5);int owner=(int)round(info.x),eye=owner==_CurveEyeIds106.x?0:1;float4 colour=0,id=0,decision=0,audit=0;
+ if(owner>0&&_Frame113[eye*32].w==0){if(policy.x==2){float4 lid=C113(cell,4);if(lid.w>0){colour=float4(lid.rgb,1);id=float4(6,owner,lid.w,0);decision=float4(6,113,0,0);audit.x=3;}else audit.x=-1;}else if(policy.x==1){uint4 header=_Frame113[eye*32];Group113 best=_Best113[eye];for(uint k=0;k<header.x;k++)if(_Points113[eye*MAXP113+k].x==cell){uint bit=1u<<k;bool isI=(best.masks.x&bit)!=0,isW=(best.masks.z&bit)!=0;bool uncertain=((best.masks.y^best.masks.x)|(best.masks.w^best.masks.z))&bit;if(uncertain){decision.x=-1;audit.x=-2;}else if(isI||isW){colour=C113(cell,isI?1:2);id=float4(isI?1:4,owner,isI?info.y:info.z,0);decision=float4(isI?1:4,113,0,0);audit.x=1;}break;}}}
+ else if(owner>0){decision.x=-1;audit=float4(-64,_Frame113[eye*32].w,_Frame113[eye*32].y,_Frame113[eye*32].z);}
+ _CurveColour106[cell]=colour;_CurveIdentity106[cell]=id;_CurveDecision106[cell]=decision;_CurveAudit106[cell]=audit;
+}
+[numthreads(8,8,1)]void ComposeWhole113(uint3 tid:SV_DispatchThreadID){int2 p=tid.xy;if(any(p>=int2(480,272)))return;float4 c=_FullBase113.Load(int3(p,0));int2 q=p-_TileRect113.xy;if(all(q>=0)&&all(q<_TileRect113.zw)){float4 tile=_CandidateTile113.Load(int3(q,0));if(tile.a>0)c=tile;}_FullOut113[p]=c;}
+
+
+float2 TraceExternal24(float2 queryPoint,float depth,int eye,bool allowShared26){
+ float2 trans=1;int stack[32],sp=0;stack[sp++]=0;uint visits=0,tests=0;bool overflow=false;
+ while(sp>0){int node=stack[--sp];visits++;if(_NodeCount96<=0||(uint)node>=(uint)_NodeCount96||visits>(uint)_NodeCount96){overflow=true;break;}float3 lo=_Boxes96[node*2].xyz,hi=_Boxes96[node*2+1].xyz;if(any(queryPoint<lo.xy-1e-4)||any(queryPoint>hi.xy+1e-4)||lo.z>=depth-3e-5)continue;int4 nd=_Nodes96[node];if(nd.z<0){if(sp>29){overflow=true;break;}stack[sp++]=nd.x;stack[sp++]=nd.y;continue;}
+  tests++;Tri96 t=_Triangles96[nd.z];if(t.source.x!=1||t.source.y!=3)continue;
+float3 s0=Screen96(t.verticesMaterial.x),s1=Screen96(t.verticesMaterial.y),s2=Screen96(t.verticesMaterial.z);float2 e0=s1.xy-s0.xy,e1=s2.xy-s0.xy,d=queryPoint-s0.xy;float determinant=Cross96(e0,e1);if(abs(determinant)<=1e-12)continue;int winding=determinant>0?1:-1;Mat96 m=_Materials96[t.verticesMaterial.w];int cull=(int)m.alphaCullWrap.z;if((cull==2&&winding!=1)||(cull==1&&winding==1))continue;float2 uvb=float2(Cross96(d,e1),Cross96(e0,d))/determinant;float3 weights=float3(1-uvb.x-uvb.y,uvb);if(min(weights.x,min(weights.y,weights.z))< -1e-7)continue;
+  float4 cv0=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.x])),cv1=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.y])),cv2=mul(_Projection96,mul(_View96,_World96[t.verticesMaterial.z]));if(min(cv0.w,min(cv1.w,cv2.w))<=0)continue;weights/=float3(cv0.w,cv1.w,cv2.w);weights/=weights.x+weights.y+weights.z;float zz=dot(weights,float3(s0.z,s1.z,s2.z));if(zz>=depth-3e-5)continue;
+  if(((_OwnSkin113[t.source.z-1]&(1u<<eye))!=0||(allowShared26&&(_SharedSkin26[t.source.z-1]&(1u<<eye))!=0))&&depth-zz<=SocketLimit24(eye))continue;
+  int otherEye=(int)floor(dot(weights,t.eyeOwners.xyz)+.5);if(t.source.x==1&&(t.source.y==1||t.source.y==2||t.source.y==4||t.source.y==6)&&otherEye==eye)continue;
+  float2 uv=_UV96[t.verticesMaterial.x]*weights.x+_UV96[t.verticesMaterial.y]*weights.y+_UV96[t.verticesMaterial.z]*weights.z;float2 abounds=AlphaBounds96(t.verticesMaterial.w,uv);trans*=1-abounds.yx;if(trans.y<=0)break;
+ }
+
+return overflow?float2(0,1):trans;
+}
+
+float SocketLimit24(int eye){return eye==_CurveEyeIds106.x?_SocketLimit113.x:eye==_CurveEyeIds106.y?_SocketLimit113.y:0;}
+float2 RingDepth24(int eye){return eye==_CurveEyeIds106.x?_RingDepth24.xy:eye==_CurveEyeIds106.y?_RingDepth24.zw:float2(1,0);}
+bool Clip24(float3 a,float3 b,int x,out float low,out float high,out float arc){
+ low=0;high=1;arc=0;float3 d=b-a;
+ if(abs(d.x)<1e-12){if(a.x<x||a.x>x+1)return false;}
+ else{float p=(x-a.x)/d.x,q=(x+1-a.x)/d.x;low=max(0,min(p,q));high=min(1,max(p,q));if(high<=low)return false;}
+ arc=length(d.xy)*(high-low);return arc>0;
+}
+bool ClipCell24(float3 a,float3 b,int x,int y,out float low,out float high,out float arc){
+ if(!Clip24(a,b,x,low,high,arc))return false;float3 d=b-a;
+ if(abs(d.y)<1e-12){if(a.y<y||a.y>y+1)return false;}
+ else{float p=(y-a.y)/d.y,q=(y+1-a.y)/d.y;low=max(low,min(p,q));high=min(high,max(p,q));if(high<=low)return false;}
+ arc=length(d.xy)*(high-low);return arc>0;
+}
+
+// Each source-ordered clipped path is reduced to its arc-length midpoint,
+// which stays on ONE actual segment rather than averaging disconnected paths.
+[numthreads(64,1,1)]void CurveColumns24(uint3 tid:SV_DispatchThreadID){
+ uint at=tid.x;if(at>=(uint)_CellsSize113.x*2)return;int eye=at/_CellsSize113.x,x=at%_CellsSize113.x,owner=_CurveEyeIds106[eye];
+ ColumnRecord24 r;r.midpoint=0;r.source=0;r.visibility=0;float total=0,meanY=0;
+ for(int s=0;s<_CurveCount106;s++)if(round(_Curves106[s].a.w)==owner){float low,high,arc;if(Clip24(_Curves106[s].a.xyz,_Curves106[s].b.xyz,x,low,high,arc)){total+=arc;meanY+=arc*lerp(_Curves106[s].a.y,_Curves106[s].b.y,(low+high)*.5);}}
+ if(total<=0){_Columns24[at]=r;return;}meanY/=total;int row=(int)floor(meanY);
+ // Boundary classification keeps113's arc-weighted mean. A recovery point
+ // must separately lie on a real curve piece INSIDE that already chosen cell.
+ r.midpoint=float4(x+.5,meanY,0,owner);r.visibility.z=meanY;float cellArc=0;
+ for(int t0=0;t0<_CurveCount106;t0++)if(round(_Curves106[t0].a.w)==owner){float low,high,arc;if(ClipCell24(_Curves106[t0].a.xyz,_Curves106[t0].b.xyz,x,row,low,high,arc))cellArc+=arc;}
+ float cursor=0;bool chosen=false;
+ for(int t=0;t<_CurveCount106;t++)if(!chosen&&round(_Curves106[t].a.w)==owner){float low,high,arc;
+  if(!ClipCell24(_Curves106[t].a.xyz,_Curves106[t].b.xyz,x,row,low,high,arc))continue;
+  if(cursor+arc<cellArc*.5){cursor+=arc;continue;}chosen=true;
+  float u=lerp(low,high,saturate((cellArc*.5-cursor)/arc));float3 mid=lerp(_Curves106[t].a.xyz,_Curves106[t].b.xyz,u);
+  CurveProof24 proof=_CurveProof24[t];float2 uv=lerp(proof.uv.xy,proof.uv.zw,u);
+  // Source proof uses the original native face primitive's material, not a
+  // screenshot colour or a fabricated carrier at the destination.
+  uint primitive=proof.primitive.x;float2 alpha=0;
+  if(primitive>0&&primitive<=(uint)_FacePrimitiveStride96&&proof.primitive.y<4){int ti=_PartTriangles96[proof.primitive.y*_FacePrimitiveStride96+primitive-1];if(ti>=0){Tri96 t=_Triangles96[ti];if(t.source.x==(int)proof.primitive.w&&t.source.y==(int)proof.primitive.z&&t.source.z==(int)primitive)alpha=AlphaBounds96(t.verticesMaterial.w,uv);}}
+  r.midpoint=float4(mid,owner);r.source=float4(uv,primitive,alpha.x);
+  r.visibility=float4(0,0,meanY,alpha.y);
+ }
+ _Columns24[at]=r;
+}
+[numthreads(64,1,1)]void ColumnVisibility24(uint3 tid:SV_DispatchThreadID){
+ uint at=tid.x;if(at>=(uint)_CellsSize113.x*2)return;ColumnRecord24 r=_Columns24[at];
+ if(r.midpoint.w>0&&r.source.w>0)r.visibility.xy=TraceExternal24(_ForwardAnchor102.xy+r.midpoint.xy,r.midpoint.z,(int)round(r.midpoint.w),false);
+ _Columns24[at]=r;
+}
+
+// The same function defines coordinates in producer and consumer. Y is the
+// existing physical top-down view convention; no 8x pixel-centre surrogate.
+Texture2D<float4> _HeadHairRGBA25,_HeadHairMeta25;int2 _HeadHairSize25;
+// Full319View335.Project basis: X right/Y DOWN. Raw RT address Y is reversed.
+float2 Destination24(int2 p,int si){
+ float2 centre=float2(_ForwardROI102.x+p.x+.5,272-(_ForwardROI102.y+p.y+.5));
+ int2 cell=(int2)floor(centre-_ForwardAnchor102.xy);uint x=(uint)si%4u,y=(uint)si/4u;
+ return _ForwardAnchor102.xy+float2(cell)+float2((x+.5)/4,1-(y+.5)/4);
+}
+float DirectDepth24(int2 p,int si,int part,int owner){
+ float2 xy=Destination24(p,si);int2 q=(int2)floor((xy-_CarrierOrigin113.xy)*8);
+ if(any(q<0)||any(q>=_SourceSize113))return 0;int n=_SourceSize113.x*_SourceSize113.y;
+ float4 m=_SrcLayers113[(part*5+1)*n+q.y*_SourceSize113.x+q.x];
+ return m.x>0&&round(m.z)==owner?m.x:0;
+}
+[numthreads(64,1,1)]void CarrierQueries113(uint3 tid:SV_DispatchThreadID){
+ uint sample=tid.x;if(sample>=(uint)_PhysicalCount24*16u)return;uint pixel=sample/16u;int si=(int)(sample%16u);int2 p=int2(pixel%(uint)_ForwardROI102.z,pixel/(uint)_ForwardROI102.z);
+ float2 xy=Destination24(p,si);float4 query=0,visibility=0;
+ float2 centre=float2(_ForwardROI102.x+p.x+.5,272-(_ForwardROI102.y+p.y+.5));int2 cell=(int2)floor(centre-_ForwardAnchor102.xy);
+ if(all(cell>=0)&&all(cell<_CellsSize113)){
+  int at=cell.y*_CellsSize113.x+cell.x;float4 id=_ReadIdentity96[at],decision=_ReadDecision96[at];
+  int role=(int)round(id.x),owner=(int)round(id.y),part=role==1?1:role==4?2:role==6?3:0;
+  if(part>0&&decision.x>=0){float sum=0;uint count=0;for(int i=0;i<16;i++){float z=DirectDepth24(p,i,part,owner);if(z>0){sum+=z;count++;}}
+   float z=DirectDepth24(p,si,part,owner);float2 range=RingDepth24(owner);
+   if(z<=0)z=count>0?sum/count:((role==6||id.z>=range.x&&id.z<=range.y)?id.z:0);
+   if(isfinite(z)&&z>0){query=float4(xy,z,owner);visibility=float4(0,0,z,count>0?1:2);}
+  }
+ }
+ _AssignedDepth24[sample]=query;_AssignedVisibility24[sample]=visibility;
+}
+[numthreads(64,1,1)]void AssignedVisibility24(uint3 tid:SV_DispatchThreadID){
+ int sample=(int)tid.x;if(sample>=_PhysicalCount24*16)return;float4 q=_AssignedDepth24[sample],v=_AssignedVisibility24[sample];
+ if(q.z>0&&q.w>0){int pixel=sample/16;int2 p=int2(pixel%_ForwardROI102.z,pixel/_ForwardROI102.z);
+  float2 centre=float2(_ForwardROI102.x+p.x+.5,272-(_ForwardROI102.y+p.y+.5));int2 cell=(int2)floor(centre-_ForwardAnchor102.xy);bool allowed26=false;
+  if(all(cell>=0)&&all(cell<_CellsSize113)){int at=cell.y*_CellsSize113.x+cell.x;float4 id=_ReadIdentity96[at],cert=C113(at,6);int role=(int)round(id.x),owner=(int)round(id.y);float witness=role==1?cert.x:role==4?cert.y:role==6?cert.z:0;allowed26=cert.w==26&&owner==(int)round(q.w)&&witness!=0;}
+  v.xy=TraceExternal24(q.xy,q.z,(int)round(q.w),allowed26);}_AssignedVisibility24[sample]=v;
+}
+
+[numthreads(8,8,1)]void ComposeRegion113(uint3 tid:SV_DispatchThreadID){
+ int2 p=tid.xy;if(any(p>=_ForwardROI102.zw))return;
+ float4 c=_CanvasRGBA102.Load(int3(p*4+1,0)),m=_CanvasMeta102.Load(int3(p*4+1,0));float4 owner=m.x>0?float4(4,m.z,m.x,m.y):0;
+ float2 centre=float2(_ForwardROI102.x+p.x+.5,272-(_ForwardROI102.y+p.y+.5));int2 cell=(int2)floor(centre-_ForwardAnchor102.xy);
+ int chosenPart=0,chosenOwner=0;float faceLo=0,faceHi=0,minDepth=3.402823e38;int valid=0;
+ if(all(cell>=0)&&all(cell<_CellsSize113)){int at=cell.y*_CellsSize113.x+cell.x;float4 id=_ReadIdentity96[at],decision=_ReadDecision96[at];
+  if(id.x>0&&decision.x>=0){chosenPart=round(id.x)==1?1:round(id.x)==4?2:3;chosenOwner=round(id.y);
+   for(int i=0;i<16;i++){int n=(p.y*_ForwardROI102.z+p.x)*16+i;float4 q=_AssignedDepth24[n],v=_AssignedVisibility24[n];
+    if(q.z>0&&round(q.w)==chosenOwner&&all(q.xy==Destination24(p,i))){faceLo+=v.x;faceHi+=v.y;minDepth=min(minDepth,q.z);valid++;}}
+   if(valid==16&&faceLo>=8){c=_ReadColour96[at];owner=float4(round(id.x)+1,chosenOwner,minDepth,id.w);}
+   else{owner.w=valid<16?-116:faceHi>=8?-114:-117;chosenPart=0;}
+  }
+ }
+ _EyeRGBA102[p]=c;_EyeOwner102[p]=owner;float hairLo=0,hairHi=0,best=-1;float4 hc=0,hm=0;
+ for(int y=0;y<4;y++)for(int x=0;x<4;x++){int i=y*4+x;float4 h,v;
+  if(chosenPart>0){
+   int2 hp=int2(cell.x*4+x,(_CellsSize113.y-1-cell.y)*4+y);
+   if(any(_HeadHairSize25!=_CellsSize113*4)||any(hp<0)||any(hp>=_HeadHairSize25)){hairHi+=1;continue;}
+   h=_HeadHairMeta25.Load(int3(hp,0));v=_HeadHairRGBA25.Load(int3(hp,0));
+  }else{h=_HairMeta102.Load(int3(p*4+int2(x,y),0));v=_HairRGBA102.Load(int3(p*4+int2(x,y),0));}
+  if(h.x<=0||h.w<=0||v.a<=0)continue;
+  float4 q=_AssignedDepth24[(p.y*_ForwardROI102.z+p.x)*16+i];float weight=saturate(h.w);bool front=chosenPart>0?q.z>0&&h.x<q.z-3e-5:owner.z<=0||h.x<owner.z-3e-5;bool uncertain=chosenPart>0&&q.z<=0;
+  if(front){hairLo+=weight;hairHi+=weight;}else if(uncertain)hairHi+=weight;if((front||uncertain)&&weight>best){best=weight;hc=v;hm=h;}
+ }
+ if(hairLo>=8){c=float4(hc.rgb,1);owner=float4(round(hm.y),round(hm.z),hm.x,0);}else if(hairHi>=8){c=_CanvasRGBA102.Load(int3(p*4+1,0));owner=float4(4,m.z,m.x,-113);}
+ int e=(p.y*_ForwardROI102.z+p.x)*2;_Exposure113[e]=float4(faceLo,faceHi,hairLo,hairHi);_Exposure113[e+1]=float4(chosenPart,chosenOwner,valid,owner.w);
+ _FinalRGBA102[p]=c;_FinalOwner102[p]=owner;
+}

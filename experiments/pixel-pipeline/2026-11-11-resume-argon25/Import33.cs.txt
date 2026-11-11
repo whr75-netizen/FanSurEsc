@@ -1,0 +1,27 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+internal class CommandScript : IRunCommand {
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face33\import";
+ const string Sources=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face33\shaders";
+ const string Target="Assets/EUnityValidation01/SourceBoundary33";
+ public void Execute(ExecutionResult result){
+  if(File.Exists(Path.Combine(Root,"STARTED.json")))throw new InvalidOperationException("Inspect original import; no repeat");
+  CreateOnly33.Text(Path.Combine(Root,"STARTED.json"),DateTime.UtcNow.ToString("O"));
+  var report=new Obj33();try{
+   if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required");
+   if(Enumerable.Range(0,SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Any(s=>s.isDirty))throw new InvalidOperationException("Scene dirty; no import");
+   var input=InputSystem.settings;string json=JsonUtility.ToJson(input);bool options=EditorSettings.enterPlayModeOptionsEnabled;var flags=EditorSettings.enterPlayModeOptions;
+   if(Directory.Exists(Target)||File.Exists(Target+".meta")||AssetDatabase.IsValidFolder(Target)||!String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(Target)))throw new IOException("New destination required; no overwrite");
+   var before=NativeSnapshot33.Backup(Root);var imported=new Arr33();var names=new[]{"SourceOutline33.shader","QMeta33.shader","LineClass33.compute"};
+   foreach(string name in names)if(!File.Exists(Path.Combine(Sources,name)))throw new FileNotFoundException(name);
+   string guid=AssetDatabase.CreateFolder("Assets/EUnityValidation01","SourceBoundary33");if(String.IsNullOrEmpty(guid))throw new IOException("CreateFolder failed");
+   foreach(string name in names){string path=Target+"/"+name;using(var dst=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read))using(var src=File.OpenRead(Path.Combine(Sources,name)))src.CopyTo(dst);AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport);string id=AssetDatabase.AssetPathToGUID(path);if(String.IsNullOrEmpty(id)||AssetDatabase.GUIDToAssetPath(id)!=path)throw new IOException("GUID mapping failed");imported.Add(new Obj33{["path"]=path,["guid"]=id});}
+   var messages=new Arr33();foreach(string name in names.Take(2)){var shader=AssetDatabase.LoadAssetAtPath<Shader>(Target+"/"+name);if(!shader||!shader.isSupported)throw new InvalidOperationException("Unsupported shader "+name);foreach(var m in ShaderUtil.GetShaderMessages(shader)){messages.Add(new Obj33{["asset"]=name,["severity"]=m.severity.ToString(),["line"]=m.line,["message"]=m.message});if(m.severity.ToString()=="Error")throw new InvalidOperationException(m.message);}}
+   var compute=AssetDatabase.LoadAssetAtPath<ComputeShader>(Target+"/LineClass33.compute");if(!compute)throw new InvalidOperationException("Compute import failed");int kernel=compute.FindKernel("Classify31");compute.GetKernelThreadGroupSizes(kernel,out uint x,out uint y,out uint z);if(x!=8||y!=8||z!=1)throw new InvalidOperationException("Classifier ABI mismatch");
+   var checks=NativeSnapshot33.Compare(Root,before);if(checks.Any(c=>c["equal"]!=null&&!(bool)c["equal"]))throw new InvalidOperationException("Existing native contents changed");
+   if(!Object.ReferenceEquals(InputSystem.settings,input)||JsonUtility.ToJson(input)!=json||options!=EditorSettings.enterPlayModeOptionsEnabled||flags!=EditorSettings.enterPlayModeOptions||EditorApplication.isCompiling)throw new InvalidOperationException("Unexpected input/options/compilation change");
+   report["utc"]=DateTime.UtcNow.ToString("O");report["imported"]=imported;report["messages"]=messages;report["nativeChecks"]=checks;report["inputUnchanged"]=true;report["optionsUnchanged"]=true;report["CSharpImport"]=false;report["dispatches"]=0;
+   CreateOnly33.Text(Path.Combine(Root,"COMPLETE.json"),report.ToString());result.Log("33 shader-only import complete; existing native contents/input/options unchanged; no dispatch or Play");
+  }catch(Exception e){report["error"]=e.ToString();CreateOnly33.Text(Path.Combine(Root,"FAILED.json"),report.ToString());result.Log("33 import stopped: "+e.Message);}
+ }
+}
+}

@@ -1,0 +1,10 @@
+using System;using System.IO;using System.Linq;using UnityEngine;using UnityEditor;using UnityEngine.SceneManagement;using UnityEngine.Rendering;using UnityEngine.InputSystem;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+internal class CommandScript:IRunCommand {
+ public void Execute(ExecutionResult result){
+  var path=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face33\final\PUBLIC_AFTER.txt";
+  var lines=new[]{"utc="+DateTime.UtcNow.ToString("O"),"playing="+EditorApplication.isPlaying,"transition="+EditorApplication.isPlayingOrWillChangePlaymode,"compiling="+EditorApplication.isCompiling,"updating="+EditorApplication.isUpdating,"pause="+EditorApplication.isPaused,"background="+Application.runInBackground,"options="+EditorSettings.enterPlayModeOptionsEnabled+"/"+EditorSettings.enterPlayModeOptions,"pipeline="+AssetDatabase.GetAssetPath(GraphicsSettings.defaultRenderPipeline)+"/"+AssetDatabase.GetAssetPath(QualitySettings.renderPipeline),"input="+(InputSystem.settings?InputSystem.settings.GetEntityId().ToString():"null"),"inputJSON="+JsonUtility.ToJson(InputSystem.settings),"projectDirty="+Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Count(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)&&(AssetDatabase.GetAssetPath(o).StartsWith("Assets/")||AssetDatabase.GetAssetPath(o).StartsWith("ProjectSettings/"))),"scenes="+String.Join(";",Enumerable.Range(0,SceneManager.sceneCount).Select(i=>{var s=SceneManager.GetSceneAt(i);return s.path+"/dirty="+s.isDirty;}))};
+  using(var f=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read))using(var w=new StreamWriter(f)){w.Write(String.Join("\n",lines));}result.Log(String.Join("\n",lines.Where(s=>!s.StartsWith("inputJSON="))));
+ }
+}
+}

@@ -1,0 +1,18 @@
+using System;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+ [Serializable] public class ResumeScene {public string path;public bool dirty,loaded;}
+ [Serializable] public class ResumeState {public string utc,version,project;public bool playing,paused,transitioning,compiling,updating;public ResumeScene[] scenes;}
+ internal class CommandScript : IRunCommand {
+  public void Execute(ExecutionResult result) {
+   var scenes=new ResumeScene[SceneManager.sceneCount];
+   for(int i=0;i<scenes.Length;i++){var scene=SceneManager.GetSceneAt(i);scenes[i]=new ResumeScene{path=scene.path,dirty=scene.isDirty,loaded=scene.isLoaded};}
+   var state=new ResumeState{utc=DateTime.UtcNow.ToString("O"),version=Application.unityVersion,project=Application.dataPath,
+    playing=EditorApplication.isPlaying,paused=EditorApplication.isPaused,transitioning=EditorApplication.isPlayingOrWillChangePlaymode,
+    compiling=EditorApplication.isCompiling,updating=EditorApplication.isUpdating,scenes=scenes};
+   result.Log(JsonUtility.ToJson(state));
+  }
+ }
+}

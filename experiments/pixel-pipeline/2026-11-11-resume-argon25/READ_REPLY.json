@@ -1,0 +1,25 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"message\": \"Command executed successfully.\",\n  \"data\": {\n    \"isCompilationSuccessful\": true,\n    \"isExecutionSuccessful\": true,\n    \"executionId\": 1,\n    \"compilationLogs\": \"\",\n    \"executionLogs\": \"[Log] {\\\"utc\\\":\\\"2026-11-11T03:57:14.0418977Z\\\",\\\"version\\\":\\\"6000.5.9f1\\\",\\\"project\\\":\\\"C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets\\\",\\\"playing\\\":false,\\\"paused\\\":false,\\\"transitioning\\\":false,\\\"compiling\\\":false,\\\"updating\\\":false}\",\n    \"localFixedCode\": \"using System;\\nusing UnityEngine;\\nusing UnityEditor;\\nusing UnityEngine.SceneManagement;\\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {\\n [Serializable] public class ResumeScene {public string path;public bool dirty,loaded;}\\n [Serializable] public class ResumeState {public string utc,version,project;public bool playing,paused,transitioning,compiling,updating;public ResumeScene[] scenes;}\\n internal class CommandScript : IRunCommand {\\n  public void Execute(ExecutionResult result) {\\n   var scenes=new ResumeScene[SceneManager.sceneCount];\\n   for(int i=0;i<scenes.Length;i++){var scene=SceneManager.GetSceneAt(i);scenes[i]=new ResumeScene{path=scene.path,dirty=scene.isDirty,loaded=scene.isLoaded};}\\n   var state=new ResumeState{utc=DateTime.UtcNow.ToString(\\\"O\\\"),version=Application.unityVersion,project=Application.dataPath,\\n    playing=EditorApplication.isPlaying,paused=EditorApplication.isPaused,transitioning=EditorApplication.isPlayingOrWillChangePlaymode,\\n    compiling=EditorApplication.isCompiling,updating=EditorApplication.isUpdating,scenes=scenes};\\n   result.Log(JsonUtility.ToJson(state));\\n  }\\n }\\n}\\n\",\n    \"result\": \"Command executed successfully.\"\n  }\n}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Command executed successfully.",
+      "data": {
+        "isCompilationSuccessful": true,
+        "isExecutionSuccessful": true,
+        "executionId": 1,
+        "compilationLogs": "",
+        "executionLogs": "[Log] {\"utc\":\"2026-11-11T03:57:14.0418977Z\",\"version\":\"6000.5.9f1\",\"project\":\"C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets\",\"playing\":false,\"paused\":false,\"transitioning\":false,\"compiling\":false,\"updating\":false}",
+        "localFixedCode": "using System;\nusing UnityEngine;\nusing UnityEditor;\nusing UnityEngine.SceneManagement;\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {\n [Serializable] public class ResumeScene {public string path;public bool dirty,loaded;}\n [Serializable] public class ResumeState {public string utc,version,project;public bool playing,paused,transitioning,compiling,updating;public ResumeScene[] scenes;}\n internal class CommandScript : IRunCommand {\n  public void Execute(ExecutionResult result) {\n   var scenes=new ResumeScene[SceneManager.sceneCount];\n   for(int i=0;i<scenes.Length;i++){var scene=SceneManager.GetSceneAt(i);scenes[i]=new ResumeScene{path=scene.path,dirty=scene.isDirty,loaded=scene.isLoaded};}\n   var state=new ResumeState{utc=DateTime.UtcNow.ToString(\"O\"),version=Application.unityVersion,project=Application.dataPath,\n    playing=EditorApplication.isPlaying,paused=EditorApplication.isPaused,transitioning=EditorApplication.isPlayingOrWillChangePlaymode,\n    compiling=EditorApplication.isCompiling,updating=EditorApplication.isUpdating,scenes=scenes};\n   result.Log(JsonUtility.ToJson(state));\n  }\n }\n}\n",
+        "result": "Command executed successfully."
+      }
+    }
+  },
+  "jsonrpc": "2.0",
+  "id": 3
+}

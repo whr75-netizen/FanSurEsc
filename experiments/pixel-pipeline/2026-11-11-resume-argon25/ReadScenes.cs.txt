@@ -1,0 +1,14 @@
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+ internal class CommandScript : IRunCommand {
+  public void Execute(ExecutionResult result) {
+   result.Log("SceneCount="+SceneManager.sceneCount+"; Edit="+(!EditorApplication.isPlaying)+"; compiling="+EditorApplication.isCompiling+"; transitioning="+EditorApplication.isPlayingOrWillChangePlaymode);
+   for(int i=0;i<SceneManager.sceneCount;i++) {
+    var s=SceneManager.GetSceneAt(i);
+    result.Log("Scene["+i+"] path="+s.path+"; loaded="+s.isLoaded+"; dirty="+s.isDirty+"; active="+(s==SceneManager.GetActiveScene()));
+   }
+  }
+ }
+}

@@ -1,0 +1,25 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"message\": \"Command executed successfully.\",\n  \"data\": {\n    \"isCompilationSuccessful\": true,\n    \"isExecutionSuccessful\": true,\n    \"executionId\": 1,\n    \"compilationLogs\": \"\",\n    \"executionLogs\": \"[Log] SceneCount=1; Edit=True; compiling=False; transitioning=False\\n[Log] Scene[0] path=Assets/Scenes/GameMap1.unity; loaded=True; dirty=False; active=True\",\n    \"localFixedCode\": \"using UnityEditor;\\nusing UnityEngine;\\nusing UnityEngine.SceneManagement;\\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {\\n internal class CommandScript : IRunCommand {\\n  public void Execute(ExecutionResult result) {\\n   result.Log(\\\"SceneCount=\\\"+SceneManager.sceneCount+\\\"; Edit=\\\"+(!EditorApplication.isPlaying)+\\\"; compiling=\\\"+EditorApplication.isCompiling+\\\"; transitioning=\\\"+EditorApplication.isPlayingOrWillChangePlaymode);\\n   for(int i=0;i<SceneManager.sceneCount;i++) {\\n    var s=SceneManager.GetSceneAt(i);\\n    result.Log(\\\"Scene[\\\"+i+\\\"] path=\\\"+s.path+\\\"; loaded=\\\"+s.isLoaded+\\\"; dirty=\\\"+s.isDirty+\\\"; active=\\\"+(s==SceneManager.GetActiveScene()));\\n   }\\n  }\\n }\\n}\\n\",\n    \"result\": \"Command executed successfully.\"\n  }\n}"
+      }
+    ],
+    "structuredContent": {
+      "success": true,
+      "message": "Command executed successfully.",
+      "data": {
+        "isCompilationSuccessful": true,
+        "isExecutionSuccessful": true,
+        "executionId": 1,
+        "compilationLogs": "",
+        "executionLogs": "[Log] SceneCount=1; Edit=True; compiling=False; transitioning=False\n[Log] Scene[0] path=Assets/Scenes/GameMap1.unity; loaded=True; dirty=False; active=True",
+        "localFixedCode": "using UnityEditor;\nusing UnityEngine;\nusing UnityEngine.SceneManagement;\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {\n internal class CommandScript : IRunCommand {\n  public void Execute(ExecutionResult result) {\n   result.Log(\"SceneCount=\"+SceneManager.sceneCount+\"; Edit=\"+(!EditorApplication.isPlaying)+\"; compiling=\"+EditorApplication.isCompiling+\"; transitioning=\"+EditorApplication.isPlayingOrWillChangePlaymode);\n   for(int i=0;i<SceneManager.sceneCount;i++) {\n    var s=SceneManager.GetSceneAt(i);\n    result.Log(\"Scene[\"+i+\"] path=\"+s.path+\"; loaded=\"+s.isLoaded+\"; dirty=\"+s.isDirty+\"; active=\"+(s==SceneManager.GetActiveScene()));\n   }\n  }\n }\n}\n",
+        "result": "Command executed successfully."
+      }
+    }
+  },
+  "jsonrpc": "2.0",
+  "id": 3
+}

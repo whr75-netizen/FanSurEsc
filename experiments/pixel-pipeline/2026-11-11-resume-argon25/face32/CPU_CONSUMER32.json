@@ -1,0 +1,42 @@
+{
+  "checks": 30,
+  "passed": [
+    "producer completion alone does not release a later consumer",
+    "only one bounded consumer may be in flight",
+    "successful consumer completion releases its own lease",
+    "previous request callback cannot release next consumer",
+    "valid drain can finish after foreign callback but output stays invalid",
+    "failed owner cannot restart observation",
+    "normal exit seals new reads without releasing pending consumer",
+    "sealed observer cannot append another read",
+    "late successful callback permits drain after exit",
+    "error callback does not prove consumer release",
+    "error does not automatically retry consumer request",
+    "duplicate corrected callback cannot replace a failed receipt",
+    "mismatched byte count cannot release consumer",
+    "pending is not a successful completion",
+    "enqueue exception retains uncertain consumer",
+    "CPU file/copy failure invalidates output but known GPU completion permits release",
+    "cancel before any consumer needs no GPU acknowledgement",
+    "another book token cannot release a same-size consumer",
+    "independent producer/view consumer books drain independently",
+    "normal exit/Edit restore proceed while consumer resources stay retained",
+    "same original Exit coordinator drains after consumer completion",
+    "existing32-row colour strip stays within bound",
+    "last single-pixel ROI has exact byte count",
+    "large colour strip rejected before submission",
+    "overflowing rectangle rejected",
+    "negative rectangle rejected",
+    "zero byte request rejected",
+    "pixel budget checked before byte multiplication can overflow",
+    "worker callback only queues exit and cannot invoke Editor actions",
+    "creating observer thread drains normal exit exactly once"
+  ],
+  "UnityGPUCalls": 0,
+  "actualConsumerReadbackObserved": false,
+  "sources": {
+    "ProducerLifetime31.cs": "b183a71abd0f1adfe03b998b551309cd01f60a41fa60395d75d61ad5b28b7440",
+    "ConsumerReads32.cs": "65a0d2a4a236e70aeb3259330268d8e155de302715d7f3872c9692287d750cbb",
+    "ConsumerTests32.cs": "50935bc9e41f34aee0232fe0ca41b99004c914eeacf24ffa7ce012f1c4bf5c32"
+  }
+}

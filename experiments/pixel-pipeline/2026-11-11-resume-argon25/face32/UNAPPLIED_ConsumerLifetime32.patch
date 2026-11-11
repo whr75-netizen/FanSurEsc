@@ -1,0 +1,56 @@
+--- a/experiments/pixel-pipeline/2026-11-11-resume-argon25/SourceOutline31.cs
++++ b/experiments/pixel-pipeline/2026-11-11-resume-argon25/SourceOutline31.cs
+@@ -10,0 +11 @@
++ readonly ConsumerReads32 consumers32=new ConsumerReads32();
+@@ -13,2 +14,2 @@
+- public readonly RTHandle[] Fields=new RTHandle[8],QFields=new RTHandle[5];
+- public RTHandle Classification{get;private set;}RTHandle depth,qDepth;
++ readonly RTHandle[] Fields=new RTHandle[8],QFields=new RTHandle[5];
++ RTHandle Classification{get;set;}RTHandle depth,qDepth;
+@@ -18,2 +19,2 @@
+- public bool CanRelease=>submission==null||submission.CanRelease;
+- public bool CanUsePixels=>!Disposed&&!stopped&&submission!=null&&submission.CanUsePixels&&Failure==null;
++ public bool CanRelease=>(submission==null||submission.CanRelease)&&consumers32.CanRelease;
++ public bool CanUsePixels=>!Disposed&&!stopped&&submission!=null&&submission.CanUsePixels&&Failure==null&&!consumers32.HasError;
+@@ -33,0 +35 @@
++  ReadbackPreflight32.RequireCapabilities();
+@@ -74,0 +77 @@
++  foreach(var t in Fields.Concat(QFields).Concat(new[]{Classification}))ReadbackPreflight32.RequireColourSource(t.rt,0,0,1,1);
+@@ -124 +127,20 @@
+- public void StopRecording(){stopped=true;submission?.Stop();}
++
++ // No raw owned RT escapes this variant. Copy at most262144B into managed data
++ // during the callback; borrowed NativeArray/request lifetime cannot escape.
++ public void RequestFieldReadback32(bool qField,int index,RectInt rect,Action<byte[]> receive){
++  var fields=qField?QFields:Fields;if(index<0||index>=fields.Length)throw new ArgumentOutOfRangeException(nameof(index));RequestOwned32(fields[index],rect,receive);
++ }
++ public void RequestClassificationReadback32(RectInt rect,Action<byte[]> receive){RequestOwned32(Classification,rect,receive);}
++ void RequestOwned32(RTHandle target,RectInt rect,Action<byte[]> receive){
++  RequireCompleted();if(receive==null)throw new ArgumentNullException(nameof(receive));
++  int bytes=ReadbackPreflight32.RequireColourSource(target.rt,rect.x,rect.y,rect.width,rect.height);var ticket=consumers32.Begin(bytes);
++  try{AsyncGPUReadback.Request(target.rt,0,rect.x,rect.width,rect.y,rect.height,0,1,r=>{
++   bool done=false,error=true;int actual=0;
++   try{done=r.done;error=r.hasError;if(done&&!error)actual=r.layerDataSize;
++    if(!done||error||actual!=bytes)throw new InvalidOperationException("32 consumer readback incomplete/error/byte mismatch; retain resource");
++    var data=r.GetData<byte>();if(data.Length!=bytes){actual=-1;throw new InvalidOperationException("32 unexpected payload length");}
++    var copy=new byte[bytes];data.CopyTo(copy);receive(copy);
++   }catch(Exception e){consumers32.Fail();Fail(e);}finally{consumers32.Complete(ticket,done,error,actual);}
++  });}catch(Exception e){consumers32.Fail();Fail(e);throw;} // uncertain enqueue: no release/retry
++ }
++ public void StopRecording(){stopped=true;consumers32.Seal();submission?.Stop();}
+--- a/experiments/pixel-pipeline/2026-11-11-resume-argon25/SourceCaptureHost31.cs
++++ b/experiments/pixel-pipeline/2026-11-11-resume-argon25/SourceCaptureHost31.cs
+@@ -8,0 +9 @@
++ readonly EditorExitRequest32 exitRequest32=new EditorExitRequest32();
+@@ -11,2 +12,2 @@
+- public void Arm(){if(armed||stopped)throw new InvalidOperationException("31 host cannot rearm");if(!EditorApplication.isPlaying||!EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("31 requires existing stable Play; does not enter Play");if(!EditorSettings.enterPlayModeOptionsEnabled||(EditorSettings.enterPlayModeOptions&EnterPlayModeOptions.DisableDomainReload)==0)throw new InvalidOperationException("31 pending callback roots must survive normal Play exit; domain reload must already be disabled by the permitted outer scope");pendingOwners.Acquire(producer.ViewIdentity,this);armed=true;RenderPipelineManager.beginCameraRendering+=Enqueue;}
+- void Enqueue(ScriptableRenderContext unused,Camera camera){if(stopped||producer.Failure!=null||camera!=producer.Camera)return;try{camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(producer);}catch(Exception e){producer.ReportFailure(e);}}
++ public void Arm(){exitRequest32.RequireOwner();if(armed||stopped)throw new InvalidOperationException("31 host cannot rearm");if(!EditorApplication.isPlaying||!EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("31 requires existing stable Play; does not enter Play");if(!EditorSettings.enterPlayModeOptionsEnabled||(EditorSettings.enterPlayModeOptions&EnterPlayModeOptions.DisableDomainReload)==0)throw new InvalidOperationException("31 pending callback roots must survive normal Play exit; domain reload must already be disabled by the permitted outer scope");pendingOwners.Acquire(producer.ViewIdentity,this);armed=true;RenderPipelineManager.beginCameraRendering+=Enqueue;}
++ void Enqueue(ScriptableRenderContext unused,Camera camera){if(stopped||exitRequest32.Requested||producer.Failure!=null||camera!=producer.Camera)return;try{camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(producer);}catch(Exception e){producer.ReportFailure(e);}}
+@@ -14 +15 @@
+- public void BeginExit(){exit.Begin(Stop,restoreBeforeExit,()=>{if(EditorApplication.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode)EditorApplication.ExitPlaymode();});}
++ void BeginExitOnEditor32(){exit.Begin(Stop,restoreBeforeExit,()=>{if(EditorApplication.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode)EditorApplication.ExitPlaymode();});}
+@@ -16 +17,2 @@
+- public void PumpExit(){exit.Pump(!EditorApplication.isPlaying&&!EditorApplication.isPlayingOrWillChangePlaymode&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating,()=>producer.CanRelease,()=>{if(!producer.TryReleaseOwned())throw new InvalidOperationException("31 owned resources retained; release failure");},restoreAfterEdit);if(exit.Finished&&armed&&!rootReleased){pendingOwners.Release(producer.ViewIdentity,this);rootReleased=true;}}
++ public void BeginExit(){exitRequest32.Request();}
++ public void PumpExit(){exitRequest32.RequireOwner();exitRequest32.Drain(BeginExitOnEditor32);exit.Pump(!EditorApplication.isPlaying&&!EditorApplication.isPlayingOrWillChangePlaymode&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating,()=>producer.CanRelease,()=>{if(!producer.TryReleaseOwned())throw new InvalidOperationException("31 owned resources retained; release failure");},restoreAfterEdit);if(exit.Finished&&armed&&!rootReleased){pendingOwners.Release(producer.ViewIdentity,this);rootReleased=true;}}

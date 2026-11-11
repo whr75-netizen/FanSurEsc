@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "cea8f19a",
+  "UnityRelayGPUCalls": 0,
+  "AssetsWrites": 0,
+  "patchesApplied": false,
+  "runtimeValidated": false,
+  "safetyStopHeld": true,
+  "CPU": {"QScenarios":37,"binaryRingPatterns":256,"legacySchemaRangeCases":108,"consumerChecks":30,"staticChecks":12,"reviewCSharpMetadataCompile":"passed"},
+  "confirmedCodeFindings": [
+    "Q0/proposal/appliedQprime are distinct stages; conditional Apply equation documented",
+    "Legacy502 classifier.y role+1 conflicts with ShadeBoundary continuous-light interpretation in that route",
+    "Initial-Q halo1 does not supply the halo3 context for logical Qprime transition queries",
+    "Producer completion does not cover later observer readbacks; consumer lease and main-thread exit queue prepared",
+    "Blend One Zero in current source prevents framebuffer alpha mixing of MRT fields"
+  ],
+  "notObserved": [
+    "Current live Legacy502 route and current private URP job state",
+    "Actual same-frame Q0/proposal/Qprime numerical delta",
+    "Actual shader variants, five-MRT format support and raster/lighting correspondence",
+    "Actual GPU callback/consumer completion, main-thread Editor exit and preservation",
+    "GPU reset root cause and memory lifetime measurements"
+  ],
+  "minimumFutureQInput": {
+    "identity":"one sourceId/view/frame/model with actual producer route per material/role",
+    "stages":["Q0 before ShadeBoundary","proposal mask","Qprime after Apply"],
+    "context":["role/owner/depth","normal","UV membership when relevant","projection/sample grid/alpha/clip","lighting/keyword/mode/levels/worldPixel"],
+    "logical480Halo":3,
+    "nativeStride2LogicalNeighbourHalo":6,
+    "sameSourceRequired":true
+  },
+  "nextPermittedExecutionOrder": [
+    "Fresh public Editor/state preservation preflight and no unsettled owner; no private-job cleanup or reset",
+    "Review patch/observer integration, existing external journal, creating-thread pump and format/variant checks",
+    "Minimum one-frame producer plus bounded consumer acknowledgement and normal exit/restoration verification",
+    "Only then compare captured Q stages with matching producer kind and full neighbourhood context"
+  ],
+  "automaticExecutionOrRetry":false
+}

@@ -1,0 +1,178 @@
+{
+  "source": {
+    "initial335": {
+      "path": "Assets/EUnityValidation01/MinimalRestore335/Shaders/LegacySignals335.shader",
+      "SHA256": "4d176bcb44cc0afbcad24c3c2c465304dc8f1e016c6aee21c84f0df8accd7969",
+      "lines": [
+        {
+          "line": 84,
+          "text": "Blend One Zero"
+        },
+        {
+          "line": 129,
+          "text": "struct O335{half4 colour:SV_Target0;half4 lit:SV_Target1;half4 shade:SV_Target2;float4 classifier:SV_Target3;};"
+        },
+        {
+          "line": 130,
+          "text": "O335 Eye333Fragment(const Varyings v,bool facing:SV_IsFrontFace){FragmentInput f;f.varyings=v;f.facing=facing?1:-1;float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;MToonInput m;m.uv=uv;m.normalWS=GetMToonGeometry_Normal(v,f.facing,uv);m.viewDirWS=normalize(v.viewDirWS);m.litColor=src.rgb;m.alpha=alpha;half3 lit,shade;Auto245Palette(uv,src.rgb,lit,shade);O335 o;if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){float continuous=ContinuousSurfaceLight335(v,m);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);o.colour=float4(SurfaceLayerOutput335(lit,factor,continuous,level),alpha);o.lit=float4(lit,alpha);o.shade=float4(factor,alpha);o.classifier=float4(level,continuous,-TransformWorldToView(v.positionWS).z,alpha);return o;}half shadow=Auto245Shadow(v,m);o.colour=MToonFragment(f);o.lit=half4(lit,alpha);o.shade=half4(shade,alpha);o.classifier=float4(shadow>.5?0:1,_Auto245Role+1,-TransformWorldToView(v.positionWS).z,alpha);return o;}"
+        }
+      ]
+    },
+    "initial502": {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/Legacy502.shader",
+      "SHA256": "149c5ac5dee510bc1b1ad5039657d0592c6cc0c03bf64b2163b37e318941ea4f",
+      "lines": [
+        {
+          "line": 84,
+          "text": "Blend One Zero"
+        },
+        {
+          "line": 108,
+          "text": "#pragma multi_compile _ _FORWARD_PLUS"
+        },
+        {
+          "line": 131,
+          "text": "O335 Eye333Fragment(const Varyings v,bool facing:SV_IsFrontFace){Region502Clip(v);FragmentInput f;f.varyings=v;f.facing=facing?1:-1;float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;MToonInput m;m.uv=uv;m.normalWS=GetMToonGeometry_Normal(v,f.facing,uv);m.viewDirWS=normalize(v.viewDirWS);m.litColor=src.rgb;m.alpha=alpha;half3 lit,shade;Auto245Palette(uv,src.rgb,lit,shade);half shadow=Auto245Shadow(v,m);O335 o;o.colour=MToonFragment(f);o.lit=half4(lit,alpha);o.shade=half4(shade,alpha);o.classifier=float4(shadow>.5?0:1,_Auto245Role+1,-TransformWorldToView(v.positionWS).z,alpha);return o;}"
+        }
+      ]
+    },
+    "correction335": {
+      "path": "Assets/EUnityValidation01/MinimalRestore335/Shaders/RestoreStyle335.compute",
+      "SHA256": "554b503349f5bf7c48150ab32fdf5f6171b8380455bf7407b926084d928ec2af",
+      "lines": [
+        {
+          "line": 34,
+          "text": "bool ShadeNeighbour335(int2 p,int2 t,float4 m,float3 n,float depth){"
+        },
+        {
+          "line": 66,
+          "text": "bool uncertain=abs(c.y-threshold)<=step*.1;"
+        },
+        {
+          "line": 70,
+          "text": "int2 t=p+back,u=p+2*back;"
+        },
+        {
+          "line": 83,
+          "text": "float old=cls.x,q=mask.x;if(abs(old-q)<.01)return;"
+        },
+        {
+          "line": 94,
+          "text": "_ShadeColourOut335[p]=float4(result,colour.a);_ShadeFactorOut335[p]=factor;_ShadeClassOut335[p]=cls;"
+        }
+      ]
+    },
+    "routing502": {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs",
+      "SHA256": "3dadb4facd28ea5f492df1c31830445cb23fdfcb83a58f805bd29eae7d079099",
+      "lines": [
+        {
+          "line": 420,
+          "text": "public static bool Draw(RasterCommandBuffer cmd, Full319View335 f, int renderer, int sm, Mesh original, Matrix4x4 matrix, Material material, int kind, int part = 0, float rasterScale = 1)"
+        },
+        {
+          "line": 422,
+          "text": "if (!Ready || current != f || renderer == 0) return false;"
+        },
+        {
+          "line": 428,
+          "text": "var shader = Shader.Find(provider580 ? \"EValidation/HeadRegion502LegacyProvider580\" : \"EValidation/HeadRegion502\" + ShaderNames[kind]); if (!shader) throw new Exception(\"502 shader missing: \" + ShaderNames[kind]);"
+        },
+        {
+          "line": 435,
+          "text": "if (renderer == 2) cmd.DrawMesh(pieces[sm, part].mesh, matrix, owned, 0, 0); else cmd.DrawMesh(original, matrix, owned, sm, 0);"
+        }
+      ]
+    },
+    "pipeline367": {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs",
+      "SHA256": "8dea00db4dfff7bed00569a6e86d3314c6828264959d365dd46c1c50f75cf8a5",
+      "lines": [
+        {
+          "line": 18,
+          "text": "sealed class LegacySignals:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;for(int pass=0;pass<2;pass++){using var b=g.AddRasterRenderPass<D>(\"335 existing302 colour endpoints and classifier \"+pass,out var d);d.v=v;d.part=pass;var targets=pass==0?v.style480:v.style960;for(int i=0;i<4;i++)b.SetRenderAttachment(g.ImportTexture(targets[i]),i,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(pass==0?v.styleDepth480:v.styleDepth960),AccessFlags.Write);Shadows(b,g,f);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{var v=d.v;SurfaceLayerGlobals(c.cmd,v,d.part!=0);c.cmd.SetGlobalFloat(\"_Auto245Stage\",2);c.cmd.SetGlobalFloat(\"_Auto245Local\",0);c.cmd.SetGlobalFloat(\"_Auto245MembershipEnabled\",1);c.cmd.SetGlobalFloat(\"_Auto249VisibilityOne\",0);c.cmd.SetGlobalFloat(\"_Auto249Probe\",0);c.cmd.SetGlobalFloat(\"_Style297Enabled\",1);c.cmd.SetGlobalFloat(\"_Style297SkinMode\",1);c.cmd.SetGlobalFloat(\"_Style297OwnShade\",.72f);c.cmd.SetGlobalVector(\"_Auto245StockLit\",v.stockLit);c.cmd.SetGlobalVector(\"_Auto245StockShade\",v.stockShade);c.cmd.SetGlobalVector(\"_Auto245CreamShade\",v.creamShade);c.cmd.SetGlobalVector(\"_Auto245SkinShade\",v.skinShade);c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalVector(\"_ClipShift333\",d.part==0?v.motion.clipShift:v.nativeShift);int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<v.motion.surface.outputs[r].sharedMesh.subMeshCount;sm++){if(!HeadLocal367.DrawSource(d.v,r)){k++;continue;}var mf=v.motion.surface.outputs[r];var mat=v.legacySignalsMats[k++];if(!HeadRegion502.Draw(c.cmd,v,r,sm,mf.sharedMesh,mf.transform.localToWorldMatrix,mat,4,0,d.part==0?1:2))c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,mat,sm,0);}if(d.part==0)ClothSurface525.Draw(c.cmd,v,v.legacySignalsMats[3],4);});}}}"
+        },
+        {
+          "line": 28,
+          "text": "cmd.SetComputeIntParams(cs,\"_ShadeSize335\",native?960:480,native?544:272);cmd.SetComputeIntParam(cs,\"_ShadeStride335\",native?2:1);"
+        },
+        {
+          "line": 29,
+          "text": "cmd.SetComputeIntParam(cs,\"_ShadeCurvature335\",v.layeredSurface&&v.styleEnabled&&v.shadeCurvature?1:0);"
+        },
+        {
+          "line": 32,
+          "text": "cmd.SetComputeTextureParam(cs,k,\"_ShadeClass335\",st[3]);T(k,\"_ShadeMeta335\",raw[5].rt);T(k,\"_ShadeNormal335\",raw[2].rt);T(k,\"_ShadeMaskOut335\",mask.rt);"
+        },
+        {
+          "line": 35,
+          "text": "k=cs.FindKernel(\"ApplyShadeBoundary\");cmd.SetComputeIntParam(cs,\"_ShadeApply335\",v.layeredSurface&&v.styleEnabled?1:0);"
+        }
+      ]
+    },
+    "region502": {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/Region502.hlsl",
+      "SHA256": "a521ba19aa96e31878aabf7ad84c3c11871ba97de5a106ba1d6c2e677cec4faa",
+      "lines": [
+        {
+          "line": 8,
+          "text": "Varyings Region502Vertex(const Attributes v)"
+        },
+        {
+          "line": 18,
+          "text": "void Region502Clip(Varyings v)"
+        },
+        {
+          "line": 24,
+          "text": "float4 m=_Region502Mask.Load(int3(p,0));"
+        }
+      ]
+    }
+  },
+  "QprimeEquation": "Qprime=proposal iff apply && ShadeRole(meta) && abs(Q0-proposal)>=0.01; otherwise Qprime=Q0. This assumes initial inputs/producer schema match.",
+  "conditionalSchemaDefect": "Legacy502 outputs classifier=(binary shadow,role+1,depth,alpha), whereas ShadeBoundary reads classifier.y as continuous illumination. For supported roles3,7..14 Y>=4, threshold in[0,1], uncertainty radius<=0.1: proposal cannot change under binary labels.",
+  "conditionalRoute": "FullFeature367 LegacySignals calls HeadRegion502.Draw(kind4). Ready/current renderer1 or2 uses Legacy502; renderer0 or inactive route falls through. Present live route was not queried.",
+  "haloContract": {
+    "logicalInitialTransition": 1,
+    "logicalQprimeCentre": 2,
+    "logicalQprimeTransition": 3,
+    "generalOnePass": "2*ShadeStride + queryRadius",
+    "nativeStride2LogicalQuery2": 6
+  },
+  "MRTReview": {
+    "blendOneZero": true,
+    "QMeta31Stage": "initial Q only",
+    "QMeta31OwnerChannel": "constant0, not a substitute for original per-surface/feature owner",
+    "missingForQprime": [
+      "same shader/geometry/clip/alpha/sample domain",
+      "actual initial Q and continuous Y",
+      "original owner/depth/normal/UV membership used by ShadeNeighbour",
+      "matching light/keyword/mode/level/world-pixel inputs"
+    ],
+    "formatCapabilities": "ReadbackPreflight32 review checks render/load-store/readpixels and exact target format; not executed"
+  },
+  "savedPacket": {
+    "sourceId": "geometry24-20261111T065428674Z-6a7c5cf0-frame99",
+    "frame": 99,
+    "manifestSHA256": "e93f28fc734d4f1127623bba223fcd570e6b6b04b0fa4a4a7962ca98ef88a3de",
+    "initialProposalQprimePlaneNames": [],
+    "routeFlagKeys": [],
+    "realFrameDeltaMeasured": false
+  },
+  "callbackReview": {
+    "foundGap": "producer end barrier does not cover later observer readbacks",
+    "reviewPatch": "UNAPPLIED_ConsumerLifetime32.patch",
+    "policy": "all public consumers go through a bounded opaque-ticket lease; copy native data during callback; release lease after callback; producer+consumer both required before RT release",
+    "exitDispatch": "callback only queues; explicit observer pump validates creating-thread identity before Editor actions",
+    "remaining": [
+      "actual GPU callback/exit lifetime",
+      "actual constructor/pump placement on Editor main thread",
+      "domain/assembly reload and device error",
+      "current private URP job ownership",
+      "actual shader import/MRT variants/raster-lighting parity"
+    ]
+  },
+  "UnityGPUCalls": 0,
+  "AssetsWrites": 0,
+  "patchesApplied": false
+}

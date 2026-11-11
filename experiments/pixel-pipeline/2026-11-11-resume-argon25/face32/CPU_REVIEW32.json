@@ -1,0 +1,35 @@
+{
+  "baseSource31SHA256": "a8533b6ce8ad8354cbfab7e54579247324c9569cb2ea645b22fde4e2ca6739d1",
+  "baseHost31SHA256": "a07a39b9659dad5203016ab662307b56e21207145bcc033d5d6b42ac8428bbcc",
+  "originalLegacy502SHA256": "149c5ac5dee510bc1b1ad5039657d0592c6cc0c03bf64b2163b37e318941ea4f",
+  "baseLegacy335SHA256": "4d176bcb44cc0afbcad24c3c2c465304dc8f1e016c6aee21c84f0df8accd7969",
+  "reviewSourceSHA256": "2236d537f56d451a02eda98beb6d6cf314542c88623f08a6bcd54b2759ac2071",
+  "reviewHostSHA256": "3d659276cee4f68e2b19b83de82d6732dd50d3748cc8611244723fe500b44c86",
+  "CPUCompile": "passed",
+  "staticChecks": {
+    "legacy502OriginalClassifierYIsRole": true,
+    "layeredParityExactExceptRegionClip": true,
+    "regionVertexAndClipRetained": true,
+    "clusterKeywordMatchesBase": true,
+    "opaqueMRTBlendAlreadyUsed": true,
+    "consumerPrivateTargets": true,
+    "consumerGatesReleaseAndOutput": true,
+    "consumerPayloadBoundedAndCopied": true,
+    "consumerCompleteAfterReceive": true,
+    "consumerUnknownEnqueueNeverReleased": true,
+    "callbackQueuesExitNotEditorCall": true,
+    "noBlockingWaitOr115": true
+  },
+  "actualShaderCompileImportOrGPU": false,
+  "UnityGPUCalls": 0,
+  "AssetsWrites": 0,
+  "patchesApplied": false,
+  "reviewFiles": {
+    "ProducerLifetime31.cs": "b183a71abd0f1adfe03b998b551309cd01f60a41fa60395d75d61ad5b28b7440",
+    "ProducerContracts30.cs": "42a3c0ab5868b823279307b21d25f3d3eded64adcf50bc76672ba1d9479060f4",
+    "Projection31.cs": "f7d236a994c5e1a8da452aaae9b5c969744194f39735fd8d607f1ac7ad13f757",
+    "face31/Json58Reference31.cs": "0189f1eb1d81eac7622a195e1c0ab8b409ea7fad5bd0ec2e6a5d1edf0179f647",
+    "ConsumerReads32.cs": "65a0d2a4a236e70aeb3259330268d8e155de302715d7f3872c9692287d750cbb",
+    "ReadbackPreflight32.cs": "3d3347b949d1aeaf3417919bc5f85a48e6c8485ffbb66c623eb4276f05fcd622"
+  }
+}

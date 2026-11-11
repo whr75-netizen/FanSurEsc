@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "f7a4ea8480312510f2c6d25ee9d7c887e5e6698b",
+  "runtimeReady": false,
+  "actualUnityRelayCalls": 0,
+  "actualGPUCalls": 0,
+  "AssetsWrites": 0,
+  "newCommandRunnerGenerated": false,
+  "currentEditorOrPrivateJobStateObserved": false,
+  "verified": {
+    "managedContractChecks": 38,
+    "shaderABIStaticChecks": 6,
+    "installedURPSourceChecks": 6,
+    "externalCandidateMetadataCompile": "passed",
+    "physicalPositiveFixture": "synthetic CPU descriptor from saved27 camera; not GPU evidence"
+  },
+  "notIntegrated": [
+    "Actual GPU end barrier and frame identity acknowledgement spanning both hair producers and classifier",
+    "Resource reallocation/disposal gate for pending, partial, failed and cancelled GPU work",
+    "Normal Play exit separated from deferred owned-resource drain",
+    "Q/meta sampling phase and geometry/alpha domain proof",
+    "Same-object texture/material content-generation invalidation",
+    "Physical pigment shader patch29, intentionally not applied"
+  ],
+  "resumeOrder": [
+    "Complete and CPU-test the missing lifetime/exit/input contracts without activating the runner",
+    "Under a separately permitted execution phase, verify fresh public Editor state and external preservation baseline; do not infer private job safety",
+    "Stop on unexpected public state/error; do not recreate renderer, force Complete, restart or clear data",
+    "Only after gates pass, consider the minimum own source producer frame with actual identity/projection/lattice descriptors and explicit GPU completion evidence",
+    "Verify normal exit and preserved user/input/settings/assets before considering any later stage"
+  ],
+  "limits": [
+    "Static URP mechanism supports missed ownership recovery; current private handle is unobserved",
+    "No exact GPU reset or memory-spike cause proven",
+    "No new image, rendering quality or temporal stability result"
+  ]
+}

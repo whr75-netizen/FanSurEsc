@@ -1,0 +1,27 @@
+{
+  "sourceSHA256": "9dd3b6520476312c85cd2c649613412fc4a5eb4b409bd478b28bfa4b9f315454",
+  "contractsSHA256": "42a3c0ab5868b823279307b21d25f3d3eded64adcf50bc76672ba1d9479060f4",
+  "metadataDependencySHA256": "7120b42f0f8835abcec3945ab0117260d75c597c510cd458f0e792e23ec9c5b4",
+  "CPUCompile": "passed",
+  "shaderABIStaticChecks": {
+    "existingOutlineAssetPathRetained": true,
+    "existingOutlinePropertyRetained": true,
+    "existingClassifierAssetRetained": true,
+    "existingClassifierKernelRetained": true,
+    "noInventedOutlineAssetOrProperty": true,
+    "gridGuardBeforeAllOwnPasses": true
+  },
+  "UnityCalls": 0,
+  "AssetsChanges": 0,
+  "producerGridGuardIntegrated": true,
+  "managedFailureBoundaryIntegrated": true,
+  "liveGpuCompletionDisposeGateIntegrated": false,
+  "runtimeReady": false,
+  "noCommandRunnerGenerated": true,
+  "limitations": [
+    "GPU frame-stamp/fence acknowledgement not implemented in runner.",
+    "Failure exit still releases resources without an explicit pending-work proof; do not activate this candidate.",
+    "Q/meta raster phase and source-domain equivalence need actual producer descriptors; do not assume2x sample matching.",
+    "Same-object material/texture content generation invalidation incomplete."
+  ]
+}

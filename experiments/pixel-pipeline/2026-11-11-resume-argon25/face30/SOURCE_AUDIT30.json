@@ -1,0 +1,102 @@
+{
+  "staticObligations": {
+    "PreSetupChecksIsCompletedBeforeMemClear": true,
+    "LightingCompleteIsInExecutionCallback": true,
+    "ClusteringDependenciesIncludeBothBranches": true,
+    "CleanupAlsoCompletesHandle": true,
+    "RecordingBeforeGraphExecute": true,
+    "GraphCatchLogsResetNotForwardLightsCleanup": true
+  },
+  "staticObligationsPassed": 6,
+  "installedSource": [
+    {
+      "path": "Library\\PackageCache\\com.unity.render-pipelines.universal@d7774c218bdf\\Runtime\\ForwardLights.cs",
+      "SHA256": "3131afcecbe0dd7cdd35e5e65b5656ae6241fc9c629dd9d057a526f9d9d9dd32",
+      "evidence": [
+        {
+          "line": 387,
+          "text": "if (!m_CullingHandle.IsCompleted)"
+        },
+        {
+          "line": 404,
+          "text": "UnsafeUtility.MemClear(m_ZBins.GetUnsafePtr(), m_ZBins.Length * sizeof(uint));"
+        },
+        {
+          "line": 471,
+          "text": "data.forwardLights.SetupLights(rgContext.cmd, data.renderingData, data.cameraData, data.lightData);"
+        },
+        {
+          "line": 491,
+          "text": "m_CullingHandle.Complete();"
+        },
+        {
+          "line": 576,
+          "text": "internal void Cleanup()"
+        },
+        {
+          "line": 580,
+          "text": "m_CullingHandle.Complete();"
+        }
+      ]
+    },
+    {
+      "path": "Library\\PackageCache\\com.unity.render-pipelines.universal@d7774c218bdf\\Runtime\\UniversalRenderPipelineRenderGraph.cs",
+      "SHA256": "34fc87821f56e449a35833cd1b0c9aef5ba2fb531e3e37dceeed30b942238b2b",
+      "evidence": [
+        {
+          "line": 27,
+          "text": "renderer.RecordRenderGraph(renderGraph, context);"
+        },
+        {
+          "line": 28,
+          "text": "renderGraph.EndRecordingAndExecute();"
+        },
+        {
+          "line": 32,
+          "text": "if (renderGraph.ResetGraphAndLogException(e))"
+        }
+      ]
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\MinimalRestore335\\Runtime\\Full319View335.cs",
+      "SHA256": "755cfb99ef658359e67c555a0253bcb7a70e9d8d584b14ba1b81f78f4bb8d6b7",
+      "evidence": [
+        {
+          "line": 57,
+          "text": "var cam=motion.camera;var gpu=GL.GetGPUProjectionMatrix(cam.projectionMatrix,true);float flip=gpu[1,1]/cam.projectionMatrix[1,1];nativeShift=motion.clipShift+new Vector4(.5f/480,.5f/272*flip,0,0);"
+        }
+      ]
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadLocal367\\Runtime\\FullFeature367.cs",
+      "SHA256": "8dea00db4dfff7bed00569a6e86d3314c6828264959d365dd46c1c50f75cf8a5",
+      "evidence": [
+        {
+          "line": 12,
+          "text": "sealed class Native:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;for(int pass=0;pass<2;pass++){using var b=g.AddRasterRenderPass<D>(pass==0?\"333 same-grid native source\":\"333 same-grid source world correspondence\",out var d);d.v=v;d.part=pass;if(pass==0){for(int i=0;i<7;i++)b.SetRenderAttachment(g.ImportTexture(v.native[i]),i,AccessFlags.Write);}else b.SetRenderAttachment(g.ImportTexture(v.native[7]),0,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(v.nativeDepth),AccessFlags.Write);Shadows(b,g,f);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{var v=d.v;var m=v.motion;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalInt(\"_ProbeRole331\",0);c.cmd.SetGlobalInt(\"_ProbeSide331\",0);c.cmd.SetGlobalVector(\"_ClipShift331\",v.nativeShift);int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<m.surface.outputs[r].sharedMesh.subMeshCount;sm++){if(!HeadLocal367.DrawSource(d.v,r)){k++;continue;}c.cmd.SetGlobalVector(\"_Source329Metadata\",new Vector4(Role(r,sm),r,0,0));var mat=(d.part==0?v.nativeMats:v.worldMats)[k++];if(!HeadRegion502.Draw(c.cmd,v,r,sm,m.surface.outputs[r].sharedMesh,m.surface.outputs[r].transform.localToWorldMatrix,mat,d.part==0?1:2))c.cmd.DrawMesh(m.surface.outputs[r].sharedMesh,m.surface.outputs[r].transform.localToWorldMatrix,mat,sm,0);}});}}}"
+        },
+        {
+          "line": 18,
+          "text": "sealed class LegacySignals:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;for(int pass=0;pass<2;pass++){using var b=g.AddRasterRenderPass<D>(\"335 existing302 colour endpoints and classifier \"+pass,out var d);d.v=v;d.part=pass;var targets=pass==0?v.style480:v.style960;for(int i=0;i<4;i++)b.SetRenderAttachment(g.ImportTexture(targets[i]),i,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(pass==0?v.styleDepth480:v.styleDepth960),AccessFlags.Write);Shadows(b,g,f);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{var v=d.v;SurfaceLayerGlobals(c.cmd,v,d.part!=0);c.cmd.SetGlobalFloat(\"_Auto245Stage\",2);c.cmd.SetGlobalFloat(\"_Auto245Local\",0);c.cmd.SetGlobalFloat(\"_Auto245MembershipEnabled\",1);c.cmd.SetGlobalFloat(\"_Auto249VisibilityOne\",0);c.cmd.SetGlobalFloat(\"_Auto249Probe\",0);c.cmd.SetGlobalFloat(\"_Style297Enabled\",1);c.cmd.SetGlobalFloat(\"_Style297SkinMode\",1);c.cmd.SetGlobalFloat(\"_Style297OwnShade\",.72f);c.cmd.SetGlobalVector(\"_Auto245StockLit\",v.stockLit);c.cmd.SetGlobalVector(\"_Auto245StockShade\",v.stockShade);c.cmd.SetGlobalVector(\"_Auto245CreamShade\",v.creamShade);c.cmd.SetGlobalVector(\"_Auto245SkinShade\",v.skinShade);c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalVector(\"_ClipShift333\",d.part==0?v.motion.clipShift:v.nativeShift);int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<v.motion.surface.outputs[r].sharedMesh.subMeshCount;sm++){if(!HeadLocal367.DrawSource(d.v,r)){k++;continue;}var mf=v.motion.surface.outputs[r];var mat=v.legacySignalsMats[k++];if(!HeadRegion502.Draw(c.cmd,v,r,sm,mf.sharedMesh,mf.transform.localToWorldMatrix,mat,4,0,d.part==0?1:2))c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,mat,sm,0);}if(d.part==0)ClothSurface525.Draw(c.cmd,v,v.legacySignalsMats[3],4);});}}}"
+        }
+      ]
+    }
+  ],
+  "observedRoot": "Saved29 SourceOutline29.Record guard error precedes ZBinningJob safety errors; the classifier pass was not recorded.",
+  "mechanism": "Own recording exception skips EndRecordingAndExecute and therefore the recorded SetupLights callback. Next PreSetup passed IsCompleted then failed at MemClear/GetUnsafePtr. Execution completion and NativeContainer ownership recovery are distinct.",
+  "inferenceLimit": "Explains the observed failure sequence. Does not observe whether the present private handle remains uncompleted, nor prove GPU reset or the transient memory spike cause.",
+  "nativeShiftFinding": "Do not call2p+1 an unconditional quarter-cell bug: nativeShift adds a half-native-pixel compensation on X and a backend-flip term on Y. Actual Q/meta lattice still needs complete producer descriptors/validation.",
+  "newSafetyGaps": [
+    "Producer command-recorded flags are not GPU completion evidence.",
+    "Draw/classify failure can occur after partial command recording; unconditional Dispose has no explicit end-barrier proof.",
+    "BeginExit sets exiting before Release76; making Dispose throw on pending work would skip ExitPlaymode unless exit flow is refactored.",
+    "Classify depends on hair-ON textures only; an end barrier there must not be assumed to cover an unordered hair-OFF producer.",
+    "Q role metadata sample phase/geometry/alpha must be proven against the Q producer, not just matched texture dimensions."
+  ],
+  "officialAPIRule": {
+    "URL": "https://docs.unity3d.com/2021.2/Documentation/Manual/JobSystemTroubleshooting.html",
+    "section": "Call JobHandle.Complete to regain ownership",
+    "scope": "General API rule, cross-checked against installed17.5 source; not an observed live handle or version-specific issue claim"
+  },
+  "UnityGPUCalls": 0
+}

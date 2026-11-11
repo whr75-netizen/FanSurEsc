@@ -1,0 +1,31 @@
+#pragma kernel ResolveOutline39
+// Separate experiment: a native MToon silhouette ribbon is rasterized with
+// explicit grid-scale geometry first. This pass only resolves that geometry.
+// It does not classify pigment/skin/shading or replace the product outline.
+Texture2D<float4> _InkOn39,_InkOff39,_FinalBefore39;
+RWTexture2D<float4> _FinalCandidate39,_OutlineMeta39;
+int2 _QSize39,_InkSize39,_InkOffset39;
+float3 _SourceInkRGB39;
+[numthreads(8,8,1)]
+void ResolveOutline39(uint3 id:SV_DispatchThreadID){
+ if(any(id.xy>=(uint2)_QSize39))return;
+ int2 p=int2(id.xy),local=p-_InkOffset39;
+ float4 old=_FinalBefore39.Load(int3(p,0));
+ _FinalCandidate39[p]=old;_OutlineMeta39[p]=0;
+ if(any(local<0)||any(local>=_InkSize39))return;
+ float on=0,off=0;bool invalid=false;
+ [unroll]for(int y=0;y<8;y++){
+  [unroll]for(int x=0;x<8;x++){
+   int2 s=local*8+int2(x,y);
+   float a=_InkOn39.Load(int3(s,0)).a,b=_InkOff39.Load(int3(s,0)).a;
+   if(!isfinite(a)||!isfinite(b)||a<0||a>1||b<0||b>1||a>b)invalid=true;
+   on+=a;off+=b;
+  }
+ }
+ if(invalid){_OutlineMeta39[p]=float4(on/64,off/64,0,-1);return;}
+ // 1-bit least-squares fit of the already-rasterized silhouette geometry.
+ // Exact ties retain the existing pixel and are labelled unresolved.
+ bool selected=on>32;float status=on==32?2:(off>32&&on<=32?3:1);
+ if(selected)_FinalCandidate39[p]=float4(_SourceInkRGB39,1);
+ _OutlineMeta39[p]=float4(on/64,off/64,selected?1:0,status);
+}

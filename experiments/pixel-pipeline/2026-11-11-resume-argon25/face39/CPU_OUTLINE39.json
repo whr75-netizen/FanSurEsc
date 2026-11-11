@@ -1,0 +1,26 @@
+{
+  "checks": 18,
+  "passed": [
+    "empty ribbon preserves exact existing RGB",
+    "full visibility is exact source ink without LineTone",
+    "thin native sample alone is not claimed a full visible pixel",
+    "real hair occlusion overrides an otherwise visible ribbon",
+    "exact half is unresolved not arbitrary ink",
+    "D4 visibility (0, False)",
+    "D4 visibility (0, True)",
+    "D4 visibility (1, False)",
+    "D4 visibility (1, True)",
+    "D4 visibility (2, False)",
+    "D4 visibility (2, True)",
+    "D4 visibility (3, False)",
+    "D4 visibility (3, True)",
+    "on/off visibility contradiction blocks overlay",
+    "nonfinite visibility blocks overlay",
+    "source palette independent [1, 0, 0]",
+    "source palette independent [0, 1, 0]",
+    "source palette independent [0.19, 0.42, 0.81]"
+  ],
+  "GPUUnityCalls": 0,
+  "importantPigmentAllocator": false,
+  "geometryMinimumWidthIsExperimental": true
+}

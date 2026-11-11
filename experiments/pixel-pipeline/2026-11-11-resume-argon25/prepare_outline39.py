@@ -1,0 +1,49 @@
+from pathlib import Path
+import ctypes as C,hashlib,json,re,sys
+H=Path(__file__).resolve().parent;G=H/'face39';sys.path.insert(0,str(H))
+from prepare_review30 import compile_source
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def main():
+ G.mkdir(exist_ok=True);(G/'build').mkdir(exist_ok=True);(G/'shaders').mkdir(exist_ok=True)
+ sys.path.insert(0,str(H.parent/'bounded-form115/prefix24'));import compile_hlsl_cpu as api
+ dll=C.WinDLL(str(api.DLL),winmode=0x800);fn=dll.D3DCompile;fn.argtypes=[C.c_void_p,C.c_size_t,C.c_char_p,C.c_void_p,C.c_void_p,C.c_char_p,C.c_char_p,C.c_uint,C.c_uint,C.POINTER(C.c_void_p),C.POINTER(C.c_void_p)];fn.restype=C.c_long;raw=(H/'OutlineResolve39.compute').read_bytes();blob=C.c_void_p();err=C.c_void_p()
+ try:
+  hr=fn(raw,len(raw),b'OutlineResolve39',None,None,b'ResolveOutline39',b'cs_5_0',(1<<11)|(1<<15),0,C.byref(blob),C.byref(err));diag=api.blob(err).decode(errors='replace');assert hr>=0,diag;audit=api.token_audit(api.blob(blob));assert audit['threads']==[8,8,1]and not audit['privateArrayDeclarations'];(G/'OutlineResolve39.cpu.dxbc').write_bytes(api.blob(blob))
+ finally:api.release(blob);api.release(err)
+ (G/'shaders/OutlineResolve39.compute').write_bytes(raw)
+ old=(H/'face37/capture/RUN.cs.txt').read_text();names=['Json','Obj','Arr','SerializedContent','CreateOnly','NativeSnapshot','GlobalJournal','GridBinding','GridSpace','Submission','ExitCoordinator','PendingViews','QMetaLattice','Projection','ConsumerReads','EditorExitRequest','ReadbackPreflight','SourceOutline','SourceCaptureHost','SourceSequenceHost','FrameInfo','LegacyInputs','ConsumerPending','TargetFrame','RequestFieldReadback','RequestClassificationReadback','FieldExtent'];m={n+'37':n+'39'for n in names};code=re.sub(r'\b('+'|'.join(m)+r')\b',lambda x:m[x[0]],old).replace('face37\\capture','face39\\capture').replace('id="face37-"','id="face39-"')
+ def rep(a,b):
+  nonlocal code
+  assert code.count(a)==1,(a,code.count(a));code=code.replace(a,b)
+ rep('readonly RTHandle[] Fields=new RTHandle[8],QFields=new RTHandle[19];','readonly RTHandle[] Fields=new RTHandle[12],QFields=new RTHandle[22];Material inkStyle39;ComputeShader outline39;int outlineKernel39;RTHandle styleDepth39;float styleWidth39;')
+ rep('if(pigment.FindPass("SourcePigment29")!=2)', 'inkStyle39=Clone(originals[renderer][submesh],shader);inkStyle39.SetVector("_SourceOutline29",sourceInk);var outlineAsset39=AssetDatabase.LoadAssetAtPath<ComputeShader>("Assets/EUnityValidation01/SourceBoundary39/OutlineResolve39.compute");if(!outlineAsset39)throw new InvalidOperationException("39 owned silhouette resolve asset missing");outline39=UnityEngine.Object.Instantiate(outlineAsset39);outlineKernel39=outline39.FindKernel("ResolveOutline39");outline39.GetKernelThreadGroupSizes(outlineKernel39,out uint ox39,out uint oy39,out uint oz39);if(ox39!=8||oy39!=8||oz39!=1)throw new InvalidOperationException("39 ABI mismatch");if(pigment.FindPass("SourcePigment29")!=2)')
+ rep('var normalMatrix=transform.inverse.transpose;PrepareAnchor37','var normalMatrix=transform.inverse.transpose;if(!camera.orthographic)throw new NotSupportedException("39 orthographic trial required");styleWidth39=Math.Max(width,camera.orthographicSize*2/272);inkStyle39.SetFloat("_OutlineWidth",styleWidth39);PrepareAnchor37')
+ rep('new[]{p,p+n*width}','new[]{p,p+n*styleWidth39}')
+ rep('depth=Target(ROI.width*8,ROI.height*8,true);Classification=', 'depth=Target(ROI.width*8,ROI.height*8,true);styleDepth39=Target(ROI.width*8,ROI.height*8,true);Classification=')
+ rep('QFields[18]=Target(QROI.width,QROI.height,uav:true);','QFields[18]=Target(QROI.width,QROI.height,uav:true);QFields[19]=Target(QROI.width,QROI.height);QFields[20]=Target(QROI.width,QROI.height,uav:true);QFields[21]=Target(QROI.width,QROI.height,uav:true);')
+ rep('foreach(var t in Fields.Concat(QFields).Concat(new[]{Classification}))','if(eye.full.colour.rt.width!=480||eye.full.colour.rt.height!=272||eye.full.colour.rt.graphicsFormat!=QFields[19].rt.graphicsFormat)throw new InvalidOperationException("39 final colour copy format/grid mismatch");foreach(var t in Fields.Concat(QFields).Concat(new[]{Classification}))')
+ rep('if(stage==4)DrawQ(context);else DrawSource(context,stage==1);','if(stage==4)DrawQ(context);else{DrawSource(context,stage==1);DrawStyle39(context,stage==1);}')
+ token=' void DrawQ(UnsafeGraphContext context)';assert code.count(token)==1
+ style=''' void DrawStyle39(UnsafeGraphContext context,bool hair){var cmd=CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);int first=hair?8:10;var props=SourceProperties();cmd.SetRenderTarget(new[]{new RenderTargetIdentifier(Fields[first].rt),new RenderTargetIdentifier(Fields[first+1].rt)},styleDepth39.rt);cmd.SetViewport(new Rect(0,0,ROI.width*8,ROI.height*8));cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);for(int r=0;r<meshes.Length;r++){if(!hair&&r==2)continue;for(int sm=0;sm<depthMats[r].Length;sm++)cmd.DrawMesh(meshes[r],matrices[r],depthMats[r][sm],sm,0,props);}cmd.DrawMesh(meshes[renderer],matrices[renderer],inkStyle39,submesh,1,props);}
+'''
+ code=code.replace(token,style+token)
+ rep('["sourceAnchor"]=Anchor37,','["sourceAnchor"]=Anchor37,["nativeOutlineWidthMetres39"]=width,["trialGeometryWidthMetres39"]=styleWidth39,["trialMinimumGridUnits39"]=1,["sourceOutlineRGB39"]=new Arr39(sourceInk.x,sourceInk.y,sourceInk.z),["trialNotAdopted39"]=true,')
+ rep('b.UseTexture(graph.ImportTexture(depth),AccessFlags.Write);}', 'b.UseTexture(graph.ImportTexture(depth),AccessFlags.Write);b.UseTexture(graph.ImportTexture(styleDepth39),AccessFlags.Write);int st39=stage==1?8:10;b.UseTexture(graph.ImportTexture(Fields[st39]),AccessFlags.Write);b.UseTexture(graph.ImportTexture(Fields[st39+1]),AccessFlags.Write);}')
+ rep('b.UseTexture(graph.ImportTexture(QFields[18]),AccessFlags.Write);','b.UseTexture(graph.ImportTexture(QFields[18]),AccessFlags.Write);b.UseTexture(graph.ImportTexture(eye.full.colour),AccessFlags.Read);for(int q39=19;q39<22;q39++)b.UseTexture(graph.ImportTexture(QFields[q39]),AccessFlags.ReadWrite);')
+ rep('new[]{Classification,depth,qDepth,fineDepth}','new[]{Classification,depth,qDepth,fineDepth,styleDepth39}')
+ rep('submission.StageRecorded(8);','''cmd.CopyTexture(eye.full.colour.rt,0,0,QROI.x,272-QROI.y-QROI.height,QROI.width,QROI.height,QFields[19].rt,0,0,0,0);cmd.SetComputeTextureParam(outline39,outlineKernel39,"_InkOn39",Fields[8].rt);cmd.SetComputeTextureParam(outline39,outlineKernel39,"_InkOff39",Fields[10].rt);cmd.SetComputeTextureParam(outline39,outlineKernel39,"_FinalBefore39",QFields[19].rt);cmd.SetComputeTextureParam(outline39,outlineKernel39,"_FinalCandidate39",QFields[20].rt);cmd.SetComputeTextureParam(outline39,outlineKernel39,"_OutlineMeta39",QFields[21].rt);cmd.SetComputeIntParams(outline39,"_QSize39",QROI.width,QROI.height);cmd.SetComputeIntParams(outline39,"_InkSize39",ROI.width,ROI.height);cmd.SetComputeIntParams(outline39,"_InkOffset39",ROI.x-QROI.x,QROI.height-(ROI.y-QROI.y)-ROI.height);cmd.SetComputeVectorParam(outline39,"_SourceInkRGB39",sourceInk);cmd.DispatchCompute(outline39,outlineKernel39,(QROI.width+7)/8,(QROI.height+7)/8,1);submission.StageRecorded(8);''')
+ rep('if(area36)UnityEngine.Object.DestroyImmediate(area36);','if(area36)UnityEngine.Object.DestroyImmediate(area36);if(inkStyle39)UnityEngine.Object.DestroyImmediate(inkStyle39);if(outline39)UnityEngine.Object.DestroyImmediate(outline39);')
+ code=code.replace('producers.Length!=6','producers.Length!=1').replace('cohort=new SourceOutline39[6]','cohort=new SourceOutline39[1]').replace('for(int i=0;i<6;i++){cohort[i]','for(int i=0;i<1;i++){cohort[i]')
+ start=code.index('foreach(int i in (cohortRead==0?');end=code.index('report["frameInfo"]=',start)
+ code=code[:start]+'''foreach(int i in new[]{6,7,9,11,12,18,19,20,21}){var extent=producer.FieldExtent39(true,i);tasks.Add(new Plane(true,i,"q"+i,extent.x,extent.y));}foreach(int i in new[]{0,2,8,9,10,11}){var extent=producer.FieldExtent39(false,i);tasks.Add(new Plane(false,i,"source"+i,extent.x,extent.y));}'''+code[end:]
+ # Bind the unchanged registered37 anchor; it is a provenance input, not a new
+ # source colour region. Existing ABI names/paths stay unchanged.
+ assert set(re.findall(r'"(_[A-Za-z0-9_]+)"',old))<=set(re.findall(r'"(_[A-Za-z0-9_]+)"',code))
+ for forbidden in ['EvaluateForm115','BoundRun115','InputSystem.settings=','RenderPose(']:assert forbidden not in code
+ c=G/'capture';c.mkdir(exist_ok=True);assert not(c/'REQUEST.json').exists();(c/'RUN.cs.txt').write_text(code,encoding='utf-8',newline='\n');compile_source([c/'RUN.cs.txt'],G/'build/capture39.dll')
+ imp=(H/'face36/import/RUN.cs.txt').read_text();start=imp.index('internal class CommandScript');imp=code[:code.index('internal class CommandScript')]+imp[start:];imp=imp.replace('CreateOnly36','CreateOnly39').replace('Obj36','Obj39').replace('Arr36','Arr39').replace('NativeSnapshot36','NativeSnapshot39').replace('face36\\import','face39\\import').replace('face36\\shaders','face39\\shaders').replace('SourceBoundary36','SourceBoundary39').replace('SourceArea36.compute','OutlineResolve39.compute').replace('ResolveArea36','ResolveOutline39')
+ i=G/'import';i.mkdir(exist_ok=True)
+ if not(i/'REQUEST.json').exists():(i/'RUN.cs.txt').write_text(imp,encoding='utf-8',newline='\n')
+ compile_source([i/'RUN.cs.txt'],G/'build/import39.dll')
+ out={'captureSHA256':sha(c/'RUN.cs.txt'),'importSHA256':sha(i/'RUN.cs.txt'),'shaderSHA256':sha(H/'OutlineResolve39.compute'),'HLSLAudit':audit,'CPUCompile':'passed','newComputeAssets':1,'actualUnityGPURun':False,'trial':'native silhouette 3D ribbon with minimum width of one output grid unit; not approved/adopted design','unknown':'connectivity and motion/rotation quality not established','noAdditionalBuffers':True};(G/'PREPARED39.json').write_text(json.dumps(out,indent=2),encoding='utf-8',newline='\n');print(json.dumps(out))
+if __name__=='__main__':main()

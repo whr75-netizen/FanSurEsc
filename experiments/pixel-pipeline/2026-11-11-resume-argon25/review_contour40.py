@@ -1,0 +1,22 @@
+from pathlib import Path
+import json,hashlib,numpy as np
+import sys
+from PIL import Image,ImageDraw
+from review_outline39 import cc
+H=Path(__file__).resolve().parent;G=H/'face40';authored='--authored'in sys.argv;directed='--directed'in sys.argv or authored;motion='--motion'in sys.argv or directed;C=G/('authored/capture'if authored else'directed/capture'if directed else'motion/capture'if motion else'compat/capture');O=G/('analysis-authored'if authored else'analysis-directed'if directed else'analysis-motion'if motion else'analysis')
+def main():
+ r=json.loads((C/'COMPLETE.json').read_text());assert r['restorationChecksPass']and r['ownedResourcesReleased']and r['actualConsecutive']and not r['errors'];O.mkdir(exist_ok=True);rows=[];frames=[];allHashes=[]
+ for f in r['frames']:
+  n=f['frame'];planes=[p for p in r['planes']if p['frame']==n];assert len(planes)==1;record=planes[0];a=np.fromfile(C/record['file'],dtype='<f4').reshape(record['height'],record['width'],4);qx,qy,w,h=f['QROI'];assert record['width']==w*9;fields=[a[:,i*w:(i+1)*w].copy()for i in range(9)];before,after,meta,on,proof,off,offproof,sourceMeta,uv=fields;ink=np.asarray(f['frameInfo']['sourceOutlineRGB39'],np.float32);valid=((on[:,:,3]==0)|(on[:,:,3]==1))&((off[:,:,3]==0)|(off[:,:,3]==1))&(on[:,:,3]<=off[:,:,3]);valid&=(on[:,:,3]==0)|np.all(on[:,:,:3]==ink,axis=2);selected=valid&(on[:,:,3]==1);expected=before.copy();expected[selected]=on[selected];expectedMeta=np.stack([on[:,:,3],off[:,:,3],selected,np.where(~valid,-1,np.where(off[:,:,3]>on[:,:,3],3,1))],2).astype(np.float32);assert expected.tobytes()==after.tobytes()and expectedMeta.tobytes()==meta.tobytes()
+  rows.append({'frame':n,'sourceId':f['sourceId'],'selectedCells':int(selected.sum()),'lineSourceIDs':sorted(set(map(int,proof[:,:,1][selected]))),'occludedCells':int((meta[:,:,3]==3).sum()),'invalidCells':int((meta[:,:,3]<0).sum()),'CC4':cc(selected),'CC8':cc(selected,True),'paletteMismatch':int(np.any(after[selected,:3]!=ink,axis=1).sum()),'unselectedChanged':int(np.any(before[~selected]!=after[~selected],axis=1).sum()),'sourceGeometry':f['frameInfo']['geometryContour40'],'RGBByteMatch':True,'metaByteMatch':True,'motion':f['frameInfo'].get('motion40')});allHashes.append(hashlib.sha256(a.tobytes()).hexdigest())
+  def display(z):
+   z=np.clip(z[::-1,:,:3],0,1);z=np.where(z<=.0031308,12.92*z,1.055*z**(1/2.4)-.055);return Image.fromarray(np.uint8(np.rint(z*255)))
+  board=Image.new('RGB',(720,310),(35,37,43));d=ImageDraw.Draw(board)
+  for k,(title,z)in enumerate([('Actual product77 head RGB',before),('GPU geometry contour candidate',after)]):
+   im=display(z);board.paste(im,(k*360+8,30));board.paste(im.resize((w*8,h*8),Image.Resampling.NEAREST),(k*360+72,30));d.text((k*360+5,7),title+' F'+str(n),fill='white')
+  board.save(O/('frame'+str(n)+'.png'));frames.append(board)
+ observed=[p['motion']for p in rows];motionSummary=None
+ if motion:
+  assert all(p is not None for p in observed);pos=np.array([p['playerPosition']for p in observed]);quat=np.array([p['avatarRotation']for p in observed]);motionSummary={'inputMatches':[p['matches']for p in observed],'stages':[p['stage']for p in observed],'playerPositionRange':np.ptp(pos,axis=0).tolist(),'avatarRotationFromFirstDegrees':(2*np.degrees(np.arccos(np.clip(abs(quat@quat[0]),0,1)))).tolist(),'sourceDeltaTime':[p['deltaTime']for p in observed],'settingsObjectIDs':list(set(p['inputReference']for p in observed)),'allInputMatches':all(p['matches']for p in observed),'movementAndRotationObserved':bool(np.ptp(pos,axis=0).max()>0 and np.ptp(quat,axis=0).max()>0)}
+ report={'actualFrames':[p['frame']for p in rows],'CPUByteMatches':len(rows),'wholeAtlasUniqueHashes':len(set(allHashes)),'samePoseControl':not motion,'normalInputMotionObserved':motionSummary,'authoredWidthSource':r['frameInfo'].get('authoredWidth40'),'artOrTimeStabilityPassed':False,'source':'Actual evaluated source geometry front/back edge producer, not a MToon inverted hull; mesh pixel line raster with actual endpoint depth','product77Changed':False,'records':rows};(O/'ACTUAL_CONTOUR40.json').write_text(json.dumps(report,indent=2),encoding='utf-8',newline='\n');frames[0].save(O/'CONTOUR_SEQUENCE40.webp',save_all=True,append_images=frames[1:],duration=200,loop=0,lossless=True);print(json.dumps({k:v for k,v in report.items()if k!='records'},indent=2));print('perFrame',[(p['frame'],p['selectedCells'],p['occludedCells'],p['CC8'])for p in rows])
+if __name__=='__main__':main()

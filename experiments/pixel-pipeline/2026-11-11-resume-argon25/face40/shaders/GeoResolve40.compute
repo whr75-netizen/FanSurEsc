@@ -1,0 +1,13 @@
+#pragma kernel ResolveGeometry40
+Texture2D<float4> _LineOn40,_LineOff40,_Before40;
+RWTexture2D<float4> _After40,_Meta40;
+int2 _Size40;float3 _Ink40;
+[numthreads(8,8,1)]
+void ResolveGeometry40(uint3 i:SV_DispatchThreadID){
+ if(any(i.xy>=(uint2)_Size40))return;
+ int2 p=int2(i.xy);float4 a=_LineOn40.Load(int3(p,0)),b=_LineOff40.Load(int3(p,0)),old=_Before40.Load(int3(p,0));
+ bool invalid=(a.a!=0&&a.a!=1)||(b.a!=0&&b.a!=1)||a.a>b.a;
+ if(a.a==1&&any(a.rgb!=_Ink40))invalid=true;
+ _After40[p]=!invalid&&a.a==1?a:old;
+ _Meta40[p]=float4(a.a,b.a,!invalid&&a.a==1?1:0,invalid?-1:(b.a>a.a?3:1));
+}

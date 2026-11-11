@@ -1,0 +1,7 @@
+from pathlib import Path
+import json,subprocess,shutil,hashlib
+H=Path(__file__).resolve().parent;G=H/'face40/build';G.mkdir(parents=True,exist_ok=True)
+refs=Path(r'C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\10.0.13\ref\net10.0');engine=Path(r'C:\Users\15352\Documents\work\6000.5.9f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll');sources=[H/'Contour40.cs',H/'ContourTests40.cs'];dll=G/'ContourTests40.dll';args=['/nologo','/nostdlib+','/target:exe','/langversion:latest','/utf8output','/out:'+str(dll)]+['/reference:'+str(p)for p in refs.glob('*.dll')]+['/reference:'+str(engine)]+list(map(str,sources));rsp=G/'contour.rsp';rsp.write_text('\n'.join('"'+v+'"'for v in args),encoding='utf-8');dotnet=r'C:\Program Files\dotnet\dotnet.exe';compiler=r'C:\Program Files\dotnet\sdk\10.0.402\Roslyn\bincore\csc.dll';r=subprocess.run([dotnet,'exec',compiler,'/noconfig','@'+str(rsp)],capture_output=True,text=True);assert r.returncode==0,r.stdout+r.stderr
+target=G/engine.name
+if not target.exists():shutil.copyfile(engine,target)
+(G/'ContourTests40.runtimeconfig.json').write_text(json.dumps({'runtimeOptions':{'tfm':'net10.0','framework':{'name':'Microsoft.NETCore.App','version':'10.0.13'}}}),encoding='utf-8');r=subprocess.run([dotnet,str(dll)],capture_output=True,text=True);assert r.returncode==0,r.stdout+r.stderr;out=json.loads(r.stdout);out['sources']={p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in sources};(G.parent/'CPU_CONTOUR40_COMPAT.json').write_text(json.dumps(out,indent=2),encoding='utf-8',newline='\n');print(json.dumps(out))

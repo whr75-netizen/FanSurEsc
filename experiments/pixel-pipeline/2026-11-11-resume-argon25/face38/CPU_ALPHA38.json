@@ -1,0 +1,26 @@
+{
+  "checks": 18,
+  "passed": [
+    "partial native pigment is not rejected as nonopaque",
+    "positive bilinear AA carries original identity",
+    "empty footprint stays absent",
+    "diagonal components do not become one family",
+    "transparent hole survives support extraction",
+    "repeat is source sampler topology",
+    "D4 source partition (False, 0)",
+    "D4 source partition (False, 1)",
+    "D4 source partition (False, 2)",
+    "D4 source partition (False, 3)",
+    "D4 source partition (True, 0)",
+    "D4 source partition (True, 1)",
+    "D4 source partition (True, 2)",
+    "D4 source partition (True, 3)",
+    "nonfinite UV rejected",
+    "texel count and alpha retained",
+    "footprint ambiguity is not hidden by zero ideal weight",
+    "source alpha envelope remains independent of identity"
+  ],
+  "UnityGPUCalls": 0,
+  "colourFamilyDefined": false,
+  "finalPixelOwnerDefined": false
+}

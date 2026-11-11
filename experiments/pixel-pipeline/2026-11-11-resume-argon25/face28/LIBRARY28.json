@@ -1,0 +1,150 @@
+{
+  "result": {
+    "results": [
+      {
+        "operation": "create_library_file",
+        "status": "succeeded",
+        "path": "/FACE_STAGES28.png",
+        "file_id": "file_00000000c17881fd9aff00d01ac81fc3",
+        "library_file_id": "libfile_fde3_f-01e08aa0dad481919f91820199eae043_63ba02b4784c8191890f3a4c58eb6764",
+        "file_name": "FACE_STAGES28.png",
+        "current_version_number": 0,
+        "restored_from_version_number": null,
+        "xattrs": [
+          {
+            "name": "user.library-file-version",
+            "value": "0"
+          }
+        ],
+        "directory_id": "personal-root:v1",
+        "mime_type": "image/png",
+        "library_artifact_type": "image",
+        "file_size_bytes": 3925
+      },
+      {
+        "operation": "create_library_file",
+        "status": "succeeded",
+        "path": "/ROTATION_OCCLUSION28.png",
+        "file_id": "file_000000007fcc81fd937f8ebe9ec5769d",
+        "library_file_id": "libfile_fde3_f-5db6226afa808191a51db93d437b6b2e_63ba02b4784c8191890f3a4c58eb6764",
+        "file_name": "ROTATION_OCCLUSION28.png",
+        "current_version_number": 0,
+        "restored_from_version_number": null,
+        "xattrs": [
+          {
+            "name": "user.library-file-version",
+            "value": "0"
+          }
+        ],
+        "directory_id": "personal-root:v1",
+        "mime_type": "image/png",
+        "library_artifact_type": "image",
+        "file_size_bytes": 13225
+      },
+      {
+        "operation": "create_library_file",
+        "status": "succeeded",
+        "path": "/WEAK_SOURCE28.png",
+        "file_id": "file_00000000a07c81fd9b748e8aff570c14",
+        "library_file_id": "libfile_fde3_f-1bbcbccf97348191aee59694a9758ce6_63ba02b4784c8191890f3a4c58eb6764",
+        "file_name": "WEAK_SOURCE28.png",
+        "current_version_number": 0,
+        "restored_from_version_number": null,
+        "xattrs": [
+          {
+            "name": "user.library-file-version",
+            "value": "0"
+          }
+        ],
+        "directory_id": "personal-root:v1",
+        "mime_type": "image/png",
+        "library_artifact_type": "image",
+        "file_size_bytes": 23341
+      }
+    ],
+    "warnings": [],
+    "external_connectors_accessed": false
+  },
+  "localFiles": [
+    "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face28\\FACE_STAGES28.png",
+    "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face28\\ROTATION_OCCLUSION28.png",
+    "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face28\\WEAK_SOURCE28.png"
+  ],
+  "records": [
+    {
+      "local": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face28\\FACE_STAGES28.png",
+      "metadata": {
+        "operation": "create_library_file",
+        "status": "succeeded",
+        "path": "/FACE_STAGES28.png",
+        "file_id": "file_00000000c17881fd9aff00d01ac81fc3",
+        "library_file_id": "libfile_fde3_f-01e08aa0dad481919f91820199eae043_63ba02b4784c8191890f3a4c58eb6764",
+        "file_name": "FACE_STAGES28.png",
+        "current_version_number": 0,
+        "restored_from_version_number": null,
+        "xattrs": [
+          {
+            "name": "user.library-file-version",
+            "value": "0"
+          }
+        ],
+        "directory_id": "personal-root:v1",
+        "mime_type": "image/png",
+        "library_artifact_type": "image",
+        "file_size_bytes": 3925
+      },
+      "helperExit": 1,
+      "helperOutput": "Traceback (most recent call last):\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 419, in <module>\r\n    raise SystemExit(main(sys.argv[1:]))\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 406, in main\r\n    materializer.apply_xattrs(\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 335, in apply_xattrs\r\n    xattr.apply(path)\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 152, in apply\r\n    os.setxattr(path, self.name, encoded_value)\r\nAttributeError: module 'os' has no attribute 'setxattr'\r\n"
+    },
+    {
+      "local": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face28\\ROTATION_OCCLUSION28.png",
+      "metadata": {
+        "operation": "create_library_file",
+        "status": "succeeded",
+        "path": "/ROTATION_OCCLUSION28.png",
+        "file_id": "file_000000007fcc81fd937f8ebe9ec5769d",
+        "library_file_id": "libfile_fde3_f-5db6226afa808191a51db93d437b6b2e_63ba02b4784c8191890f3a4c58eb6764",
+        "file_name": "ROTATION_OCCLUSION28.png",
+        "current_version_number": 0,
+        "restored_from_version_number": null,
+        "xattrs": [
+          {
+            "name": "user.library-file-version",
+            "value": "0"
+          }
+        ],
+        "directory_id": "personal-root:v1",
+        "mime_type": "image/png",
+        "library_artifact_type": "image",
+        "file_size_bytes": 13225
+      },
+      "helperExit": 1,
+      "helperOutput": "Traceback (most recent call last):\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 419, in <module>\r\n    raise SystemExit(main(sys.argv[1:]))\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 406, in main\r\n    materializer.apply_xattrs(\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 335, in apply_xattrs\r\n    xattr.apply(path)\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 152, in apply\r\n    os.setxattr(path, self.name, encoded_value)\r\nAttributeError: module 'os' has no attribute 'setxattr'\r\n"
+    },
+    {
+      "local": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face28\\WEAK_SOURCE28.png",
+      "metadata": {
+        "operation": "create_library_file",
+        "status": "succeeded",
+        "path": "/WEAK_SOURCE28.png",
+        "file_id": "file_00000000a07c81fd9b748e8aff570c14",
+        "library_file_id": "libfile_fde3_f-1bbcbccf97348191aee59694a9758ce6_63ba02b4784c8191890f3a4c58eb6764",
+        "file_name": "WEAK_SOURCE28.png",
+        "current_version_number": 0,
+        "restored_from_version_number": null,
+        "xattrs": [
+          {
+            "name": "user.library-file-version",
+            "value": "0"
+          }
+        ],
+        "directory_id": "personal-root:v1",
+        "mime_type": "image/png",
+        "library_artifact_type": "image",
+        "file_size_bytes": 23341
+      },
+      "helperExit": 1,
+      "helperOutput": "Traceback (most recent call last):\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 419, in <module>\r\n    raise SystemExit(main(sys.argv[1:]))\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 406, in main\r\n    materializer.apply_xattrs(\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 335, in apply_xattrs\r\n    xattr.apply(path)\r\n  File \"C:\\Users\\15352\\AppData\\Local\\Packages\\openai.codex_2p2nqsd0c76g0\\AC\\#!sandbox.{64d2d184-57ef-4402-b850-fc8933f91255}\\Temp\\codex-library-26-sindlz_9\\library_file_transfer.py\", line 152, in apply\r\n    os.setxattr(path, self.name, encoded_value)\r\nAttributeError: module 'os' has no attribute 'setxattr'\r\n"
+    }
+  ]
+}

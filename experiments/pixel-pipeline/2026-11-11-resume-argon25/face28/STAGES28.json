@@ -1,0 +1,423 @@
+{
+  "sourceId": "geometry24-20261111T073713778Z-bd898f51-frame99",
+  "frame": 99,
+  "serial": 6,
+  "stageContract": {
+    "frame": 99,
+    "headSerial": 0,
+    "headSplit": true,
+    "lineTone": 0.550000011920929,
+    "linesAsset": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/OwnerLines333.compute",
+    "linesSHA": "be1cfa3fee35fc195e07eb80152bebc4f3520e7aa37fdf6aaa93549f3ae2c5c9",
+    "mainSerial": 6,
+    "newDispatches": 0,
+    "order": "Restore -> JoinBare -> main OwnerLines -> MainToHead -> head eyes -> EyesToMain; head has no independent OwnerLines",
+    "usePalette": true
+  },
+  "stageColourCounts": {
+    "M": {
+      "face": {
+        "beforeStyle": {
+          "notComparable": "before JoinBare, whereas role mask is after JoinBare; pre-join body/head domains differ"
+        },
+        "prepared": {
+          "cells": 59,
+          "linearRGBExact": 53,
+          "sRGB8": 32,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 59,
+          "linearRGBExact": 53,
+          "sRGB8": 32,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 59,
+          "linearRGBExact": 51,
+          "sRGB8": 33,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      },
+      "iris": {
+        "beforeStyle": {
+          "notComparable": "before JoinBare, whereas role mask is after JoinBare; pre-join body/head domains differ"
+        },
+        "prepared": {
+          "cells": 4,
+          "linearRGBExact": 4,
+          "sRGB8": 4,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 4,
+          "linearRGBExact": 4,
+          "sRGB8": 4,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 4,
+          "linearRGBExact": 4,
+          "sRGB8": 4,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      },
+      "sclera": {
+        "beforeStyle": {
+          "notComparable": "before JoinBare, whereas role mask is after JoinBare; pre-join body/head domains differ"
+        },
+        "prepared": {
+          "cells": 2,
+          "linearRGBExact": 2,
+          "sRGB8": 2,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 2,
+          "linearRGBExact": 2,
+          "sRGB8": 2,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 2,
+          "linearRGBExact": 2,
+          "sRGB8": 2,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      },
+      "nativeLid": {
+        "beforeStyle": {
+          "notComparable": "before JoinBare, whereas role mask is after JoinBare; pre-join body/head domains differ"
+        },
+        "prepared": {
+          "cells": 3,
+          "linearRGBExact": 3,
+          "sRGB8": 3,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 3,
+          "linearRGBExact": 3,
+          "sRGB8": 3,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 3,
+          "linearRGBExact": 3,
+          "sRGB8": 3,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      },
+      "hair": {
+        "beforeStyle": {
+          "notComparable": "before JoinBare, whereas role mask is after JoinBare; pre-join body/head domains differ"
+        },
+        "prepared": {
+          "cells": 361,
+          "linearRGBExact": 26,
+          "sRGB8": 26,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 361,
+          "linearRGBExact": 33,
+          "sRGB8": 32,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 361,
+          "linearRGBExact": 34,
+          "sRGB8": 32,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      }
+    },
+    "H": {
+      "face": {
+        "beforeStyle": {
+          "cells": 59,
+          "linearRGBExact": 56,
+          "sRGB8": 20,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "prepared": {
+          "cells": 59,
+          "linearRGBExact": 53,
+          "sRGB8": 32,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 59,
+          "linearRGBExact": 53,
+          "sRGB8": 32,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 59,
+          "linearRGBExact": 51,
+          "sRGB8": 33,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      },
+      "iris": {
+        "beforeStyle": {
+          "cells": 4,
+          "linearRGBExact": 4,
+          "sRGB8": 4,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "prepared": {
+          "cells": 4,
+          "linearRGBExact": 4,
+          "sRGB8": 4,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 4,
+          "linearRGBExact": 4,
+          "sRGB8": 4,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 4,
+          "linearRGBExact": 4,
+          "sRGB8": 4,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      },
+      "sclera": {
+        "beforeStyle": {
+          "cells": 2,
+          "linearRGBExact": 2,
+          "sRGB8": 2,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "prepared": {
+          "cells": 2,
+          "linearRGBExact": 2,
+          "sRGB8": 2,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 2,
+          "linearRGBExact": 2,
+          "sRGB8": 2,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 2,
+          "linearRGBExact": 2,
+          "sRGB8": 2,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      },
+      "nativeLid": {
+        "beforeStyle": {
+          "cells": 3,
+          "linearRGBExact": 3,
+          "sRGB8": 3,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "prepared": {
+          "cells": 3,
+          "linearRGBExact": 3,
+          "sRGB8": 3,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 3,
+          "linearRGBExact": 3,
+          "sRGB8": 3,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 3,
+          "linearRGBExact": 3,
+          "sRGB8": 3,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      },
+      "hair": {
+        "beforeStyle": {
+          "cells": 361,
+          "linearRGBExact": 349,
+          "sRGB8": 146,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "prepared": {
+          "cells": 361,
+          "linearRGBExact": 26,
+          "sRGB8": 26,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "postLine": {
+          "cells": 361,
+          "linearRGBExact": 33,
+          "sRGB8": 32,
+          "alphaValues": [
+            1.0
+          ]
+        },
+        "final": {
+          "cells": 361,
+          "linearRGBExact": 34,
+          "sRGB8": 32,
+          "alphaValues": [
+            1.0
+          ]
+        }
+      }
+    }
+  },
+  "lineAttribution": {
+    "M": {
+      "preparedToPostLineCells": 459,
+      "byPreparedRole": {
+        "9": 47,
+        "7": 226,
+        "8": 18,
+        "10": 117,
+        "13": 50,
+        "12": 1
+      },
+      "faceCellsChanged": 0,
+      "auditReasons": {
+        "1": 412,
+        "0": 2582,
+        "2": 47
+      },
+      "allChangedHaveLineAudit": true,
+      "meaning": "actual joined OwnerLines colour pair"
+    },
+    "H": {
+      "preparedToPostLineCells": 2661,
+      "byPreparedRole": {
+        "9": 137,
+        "7": 1066,
+        "8": 290,
+        "10": 1117,
+        "13": 50,
+        "12": 1
+      },
+      "faceCellsChanged": 0,
+      "auditReasons": {
+        "0": 3041
+      },
+      "allChangedHaveLineAudit": false,
+      "meaning": "Includes MainToHead reproject/copy of main postLine; NOT an independent head line pass or a line-error count"
+    }
+  },
+  "faceCropTopLeft": [
+    211,
+    43,
+    230,
+    62
+  ],
+  "visibleSourceEvidence": {
+    "faceCells": 59,
+    "cellsWithPositiveNativeWitness": 8,
+    "regionFamilyBindingsAdded": 0
+  },
+  "paletteStatus": "Face/lid source-region LUT is not connected; unique colours are measurements, not a valid outside-LUT verdict. Eye candidate LUT is separately validated27.",
+  "restoration": {
+    "PlayExited": true,
+    "optionsRestored": true,
+    "pipelineRestored": true,
+    "timeRestored": true,
+    "backgroundRestored": true,
+    "playerSettingsRunInBackgroundRestored": true,
+    "observerRemoved": true
+  },
+  "nativeEqual": 44,
+  "input": {
+    "deviceEnabledStates": true,
+    "devicesSame": true,
+    "exactJSON": true,
+    "hideFlags": true,
+    "keyboardSame": true,
+    "nativeId": "568105589213756420",
+    "sameAliveReference": true
+  },
+  "beforeMemory": {
+    "allocated": 1722580922,
+    "mono": 1438937088,
+    "renderTextureCount": 30,
+    "reserved": 2353713152,
+    "utc": "2026-11-11T07:37:14.8716051Z"
+  },
+  "afterMemory": {
+    "allocated": 1760624905,
+    "mono": 1388892160,
+    "renderTextureCount": 30,
+    "reserved": 2353713152,
+    "utc": "2026-11-11T07:37:29.5836460Z"
+  },
+  "default77Changed": false,
+  "GPUClassifierOrFixAdded": false
+}

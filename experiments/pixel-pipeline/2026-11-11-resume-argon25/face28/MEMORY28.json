@@ -1,0 +1,106 @@
+{
+  "runs": [
+    {
+      "run": "capture",
+      "before": {
+        "allocated": 1714973055,
+        "mono": 1633521664,
+        "renderTextureCount": 30,
+        "reserved": 2336804864,
+        "utc": "2026-11-11T07:36:13.9034724Z"
+      },
+      "after": {
+        "allocated": 1752833987,
+        "mono": 1384919040,
+        "renderTextureCount": 30,
+        "reserved": 2353713152,
+        "utc": "2026-11-11T07:36:26.6550314Z"
+      },
+      "deltaMiB": {
+        "allocated": 36.106998443603516,
+        "reserved": 16.125,
+        "mono": -237.0859375
+      },
+      "scenesEqual": true,
+      "sameNative": false,
+      "exception": [
+        {
+          "equal": null,
+          "path": "ProjectSettings/ProjectSettings.asset",
+          "status": "Unavailable",
+          "type": "UnityEditor.AssetImporter"
+        }
+      ],
+      "editInput": {
+        "deviceEnabledStates": true,
+        "devicesSame": true,
+        "exactJSON": true,
+        "hideFlags": true,
+        "keyboardSame": true,
+        "nativeId": "568105589213756420",
+        "sameAliveReference": true
+      },
+      "ownedDisposed": {
+        "borrowedRestDisposedByObserver82": false,
+        "carrierNativeDisposed111": true,
+        "carrierSourceDisposed111": true,
+        "forward102Disposed": true,
+        "layer102Disposed": true,
+        "ownedProbeReleased76": true
+      }
+    },
+    {
+      "run": "capture-stages",
+      "before": {
+        "allocated": 1722580922,
+        "mono": 1438937088,
+        "renderTextureCount": 30,
+        "reserved": 2353713152,
+        "utc": "2026-11-11T07:37:14.8716051Z"
+      },
+      "after": {
+        "allocated": 1760624905,
+        "mono": 1388892160,
+        "renderTextureCount": 30,
+        "reserved": 2353713152,
+        "utc": "2026-11-11T07:37:29.5836460Z"
+      },
+      "deltaMiB": {
+        "allocated": 36.281569480895996,
+        "reserved": 0.0,
+        "mono": -47.7265625
+      },
+      "scenesEqual": true,
+      "sameNative": true,
+      "exception": [],
+      "editInput": {
+        "deviceEnabledStates": true,
+        "devicesSame": true,
+        "exactJSON": true,
+        "hideFlags": true,
+        "keyboardSame": true,
+        "nativeId": "568105589213756420",
+        "sameAliveReference": true
+      },
+      "ownedDisposed": {
+        "borrowedRestDisposedByObserver82": false,
+        "carrierNativeDisposed111": true,
+        "carrierSourceDisposed111": true,
+        "forward102Disposed": true,
+        "layer102Disposed": true,
+        "ownedProbeReleased76": true
+      }
+    }
+  ],
+  "finalReadUTC": "2026-11-11T07:45:38.2259611Z",
+  "finalAllocated": 1759064314,
+  "finalReserved": 2353582080,
+  "finalMonoUsed": 1399603200,
+  "renderTextures": 30,
+  "hostUTC": "2026-11-11T07:45:42.0331592Z",
+  "hostWorkingSet64": 3168813056,
+  "hostPrivateCommitBytes": 6735679488,
+  "hostResponding": true,
+  "meaning": "Unity Profiler allocated/reserved/Mono counters are not private working set. Final process WorkingSet64 includes shared resident pages; PrivateMemorySize64 is private commit. No leak verdict. No forced GC/Unload/cleanup.",
+  "newStageReadback": "At most245760B per readback, one outstanding request, finally completes/disposes own NativeArray. No new RT or shader. Existing renderer/Assistant cached assembly/native references not profiled."
+}

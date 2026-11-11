@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "abcbfe42",
+  "codeStage": "lifetime, exit, and same-fragment initial-Q/meta integrated in a review candidate",
+  "runtimeValidated": false,
+  "runtimeExecutionStillHeld": true,
+  "UnityRelayCalls": 0,
+  "GPUCalls": 0,
+  "AssetsWrites": 0,
+  "currentEditorAndPrivateJobStateObserved": false,
+  "CPUChecks": 50,
+  "actualReadbackObserved": false,
+  "oneSubmissionPerOwner": true,
+  "endBarrier": "16B command-buffer readback after dependencies on all own outputs and depth",
+  "pendingPolicy": "retain owner/resources; no retry or timeout-based release",
+  "exitPolicy": "one normal exit request independent of resource release; Edit restoration separate",
+  "QMetaStage": "same-fragment initial Q before spatial boundary correction; not old Qprime equivalence",
+  "callerMustProvide": [
+    "Fresh original-state preservation baseline in a permitted execution phase; PendingOwnerCount must be zero before a new Play",
+    "Explicit arm/exit/pump lifecycle and existing external-journal restoration actions",
+    "Domain reload already disabled by a permitted outer scope, no import/recompile while pending",
+    "Dispose of a fresh own producer if arm fails before registration"
+  ],
+  "stillUnverified": [
+    "Actual shader variants, five-MRT support and same-fragment output equivalence",
+    "Backend raster/full-screen lighting coordinate equivalence",
+    "Actual asynchronous callback and normal Play-exit resource lifetime",
+    "Current private URP job ownership after29 failure",
+    "Fractional visibility through non-depth-writing blend materials",
+    "Unexpected assembly/domain reload; no full recovery guarantee"
+  ],
+  "notClaimed": ["product application", "new render/PNG", "final finite palette", "face region solution", "art quality", "temporal stability", "GPU reset cause fixed"]
+}

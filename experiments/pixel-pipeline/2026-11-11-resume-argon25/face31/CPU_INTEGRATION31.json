@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "abcbfe425f65ff749b8f89e55768aa00ac9103bd",
+  "CPUCompile": "passed",
+  "staticChecks": {
+    "allOwnOutputsDependencyBeforeEndReadback": true,
+    "boundedSinglePixelCommandReadback": true,
+    "potentialCommandsMarkedBeforePasses": true,
+    "partialFailureDoesNotSkipEndBarrier": true,
+    "releaseGuardBeforeRTRelease": true,
+    "singleFrameNoResourceReuse": true,
+    "sameFragmentFiveMRTPair": true,
+    "sameDepthCoverageRequired": true,
+    "noNative2xMetadataLookup": true,
+    "fullRasterLightingPositionRestored": true,
+    "sameOriginalQFunctions": true,
+    "noShaderGlobalWrites": true,
+    "noNewPlayOrRunnableCommand": true,
+    "noBlockingGPUWait": true,
+    "no115Evaluation": true,
+    "noLegacyRunnableHostDependency": true
+  },
+  "UnityGPUCalls": 0,
+  "AssetsWrites": 0,
+  "actualGPUAcknowledgementObserved": false,
+  "runtimeValidated": false,
+  "lifetimeAndExitIntegratedInReviewCandidate": true,
+  "QMetaStage": "same-fragment initial Q, not ApplyShadeBoundary Qprime",
+  "shaderGPUCompileOrImportPerformed": false,
+  "oldHostAssemblyDependency": false,
+  "sourceFiles": {
+    "SourceOutline31.cs": "a8533b6ce8ad8354cbfab7e54579247324c9569cb2ea645b22fde4e2ca6739d1",
+    "SourceCaptureHost31.cs": "a07a39b9659dad5203016ab662307b56e21207145bcc033d5d6b42ac8428bbcc",
+    "ProducerLifetime31.cs": "b183a71abd0f1adfe03b998b551309cd01f60a41fa60395d75d61ad5b28b7440",
+    "ProducerContracts30.cs": "42a3c0ab5868b823279307b21d25f3d3eded64adcf50bc76672ba1d9479060f4",
+    "Projection31.cs": "f7d236a994c5e1a8da452aaae9b5c969744194f39735fd8d607f1ac7ad13f757",
+    "Json58Reference31.cs": "0189f1eb1d81eac7622a195e1c0ab8b409ea7fad5bd0ec2e6a5d1edf0179f647",
+    "LegacySignals335.shader": "4d176bcb44cc0afbcad24c3c2c465304dc8f1e016c6aee21c84f0df8accd7969",
+    "QMeta31.shader": "01f3fce635e81f9401c1878450045afc2625e4da967d34439ab084899ff7c463",
+    "SourceOutline31.shader": "ecfb62a61abffeb347ec0cc9b194fa5961c1e1ade333fde107311cc97f7221ac",
+    "LineClass31.compute": "e500452739066e5141e5c62b90cbb1b359f25f2f94f68e00741c7cafb96761f7"
+  }
+}

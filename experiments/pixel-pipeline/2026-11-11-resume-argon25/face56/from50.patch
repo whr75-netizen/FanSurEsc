@@ -1,0 +1,92 @@
+--- reviewed50
++++ capture56
+@@ -816,21 +816,21 @@
+  public static int PendingOwnerCount=>pendingOwners.Count; // Outer scope must be0 before starting another Play.
+  readonly EditorExitRequest40 exitRequest32=new EditorExitRequest40();
+  readonly SourceOutline40[] producers;readonly Action restoreBeforeExit,restoreAfterEdit;readonly ExitCoordinator40 exit=new ExitCoordinator40();bool armed,stopped;
+- public SourceSequenceHost40(SourceOutline40[] producers,Action restoreBeforeExit,Action restoreAfterEdit){this.producers=producers??throw new ArgumentNullException(nameof(producers));if(producers.Length!=6||producers.Any(p=>p==null)||producers.Select(p=>p.Camera).Distinct().Count()!=1)throw new ArgumentException("36 six captures on one view required");this.restoreBeforeExit=restoreBeforeExit??throw new ArgumentNullException(nameof(restoreBeforeExit));this.restoreAfterEdit=restoreAfterEdit??throw new ArgumentNullException(nameof(restoreAfterEdit));}
++ public SourceSequenceHost40(SourceOutline40[] producers,Action restoreBeforeExit,Action restoreAfterEdit){this.producers=producers??throw new ArgumentNullException(nameof(producers));if(producers.Length!=1||producers.Any(p=>p==null)||producers.Select(p=>p.Camera).Distinct().Count()!=1)throw new ArgumentException("56 one capture on one view required");this.restoreBeforeExit=restoreBeforeExit??throw new ArgumentNullException(nameof(restoreBeforeExit));this.restoreAfterEdit=restoreAfterEdit??throw new ArgumentNullException(nameof(restoreAfterEdit));}
+  public void Arm(){exitRequest32.RequireOwner();if(armed||stopped)throw new InvalidOperationException("31 host cannot rearm");if(!EditorApplication.isPlaying||!EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("31 requires existing stable Play; does not enter Play");if(!EditorSettings.enterPlayModeOptionsEnabled||(EditorSettings.enterPlayModeOptions&EnterPlayModeOptions.DisableDomainReload)==0)throw new InvalidOperationException("31 pending callback roots must survive normal Play exit; domain reload must already be disabled by the permitted outer scope");pendingOwners.Acquire(producers[0].ViewIdentity,this);armed=true;RenderPipelineManager.beginCameraRendering+=Enqueue;}
+- void Enqueue(ScriptableRenderContext unused,Camera camera){if(stopped||exitRequest32.Requested)return;try{foreach(var p in producers)if(p.TargetFrame40==Time.frameCount){if(camera==p.Camera&&p.Failure==null)camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(p);else if(camera==p.MainCamera41&&p.RequiresFinal41&&HeadLocal367.Active.main.contourReady)camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(p.FinalPass41Instance);}}catch(Exception e){foreach(var p in producers)p.ReportFailure(e);}}
++ void Enqueue(ScriptableRenderContext unused,Camera camera){if(stopped||exitRequest32.Requested)return;try{foreach(var p in producers)if(p.TargetFrame40==Time.frameCount){if(camera==p.Camera&&p.Failure==null)camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(p);else if(camera==p.MainCamera41&&p.RequiresFinal41)camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(p.FinalPass41Instance);}}catch(Exception e){foreach(var p in producers)p.ReportFailure(e);}}
+  void Stop(){stopped=true;RenderPipelineManager.beginCameraRendering-=Enqueue;foreach(var p in producers)p.StopRecording();}
+  void BeginExitOnEditor32(){exit.Begin(Stop,restoreBeforeExit,()=>{if(EditorApplication.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode)EditorApplication.ExitPlaymode();});}
+  // Called by an explicit external observer. No background polling is installed.
+  public void BeginExit(){exitRequest32.Request();}
+- public void PumpExit(){exitRequest32.RequireOwner();exitRequest32.Drain(BeginExitOnEditor32);exit.Pump(!EditorApplication.isPlaying&&!EditorApplication.isPlayingOrWillChangePlaymode&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating,()=>producers.All(p=>p.CanRelease),()=>{if(!producers.All(p=>p.TryReleaseOwned()))throw new InvalidOperationException("31 owned resources retained; release failure");},restoreAfterEdit);if(exit.Finished&&armed&&!rootReleased){pendingOwners.Release(producers[0].ViewIdentity,this);rootReleased=true;}}
++ public void PumpExit(){exitRequest32.RequireOwner();exitRequest32.Drain(BeginExitOnEditor32);foreach(var p in producers)p.DrainStopped56();exit.Pump(!EditorApplication.isPlaying&&!EditorApplication.isPlayingOrWillChangePlaymode&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating,()=>producers.All(p=>p.CanRelease),()=>{if(!producers.All(p=>p.TryReleaseOwned()))throw new InvalidOperationException("31 owned resources retained; release failure");},restoreAfterEdit);if(exit.Finished&&armed&&!rootReleased){pendingOwners.Release(producers[0].ViewIdentity,this);rootReleased=true;}}
+  public bool Ready=>producers.All(p=>p.CanUsePixels);public Exception ProducerError=>producers.Select(p=>p.Failure).FirstOrDefault(e=>e!=null);public bool ResourcesReleased=>exit.Released;public bool StateRestored=>exit.Restored;public bool ExitAttempted=>exit.ExitAttempted;public string[]Errors=>exit.Errors;
+ }
+ }
+ 
+ namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+ internal class CommandScript : IRunCommand {
+- const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face49\capture";
++ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face56\capture";
+  const string H=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111";
+  static CommandScript active;SourceOutline40 producer;SourceOutline40[] cohort;SourceSequenceHost40 host;int cohortRead;readonly Arr40 frames36=new Arr40();readonly ExitCoordinator40 earlyExit=new ExitCoordinator40();
+  GlobalJournal40 journal;Arr40 nativeBefore;Obj40 report;readonly Arr40 planes=new Arr40(),errors=new Arr40();
+@@ -845,9 +845,10 @@
+  void LogError(string message,string stack,LogType type){if(type!=LogType.Exception&&type!=LogType.Error)return;lock(ioSync){if(errors.Count()<8)errors.Add(new Obj40{["message"]=message,["stack"]=stack,["utc"]=DateTime.UtcNow.ToString("O")});} // Managed observation only; Tick requests normal exit.
+  }
+  public void Execute(ExecutionResult result){
++  if(Resources.FindObjectsOfTypeAll<RenderTexture>().Any(t=>t&&(t.name.StartsWith("31 owned source field_",StringComparison.Ordinal)||t.name.StartsWith("31 owned depth_",StringComparison.Ordinal)||t.name.StartsWith("33 immutable same-frame existing stage_",StringComparison.Ordinal))))throw new InvalidOperationException("56 prior diagnostic resources remain; do not arm");
+   if(active!=null||File.Exists(Path.Combine(Root,"STARTED.json")))throw new InvalidOperationException("Inspect previous owner; do not rearm");
+   if(!File.Exists(Path.Combine(H,"face36/import/COMPLETE.json")))throw new InvalidOperationException("Verified import required");
+-  CreateOnly40.Text(Path.Combine(Root,"STARTED.json"),DateTime.UtcNow.ToString("O"));id="face49-source-domain-"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ")+"-"+Guid.NewGuid().ToString("N").Substring(0,8);report=new Obj40{["sourceId"]=id,["PlayEntries"]=0,["packetComplete"]=false,["newEyeAllocator"]=false,["product77Unchanged"]=true,["planes"]=planes};
++  CreateOnly40.Text(Path.Combine(Root,"STARTED.json"),DateTime.UtcNow.ToString("O"));id="face56-source-domain-"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ")+"-"+Guid.NewGuid().ToString("N").Substring(0,8);report=new Obj40{["sourceId"]=id,["PlayEntries"]=0,["packetComplete"]=false,["newEyeAllocator"]=false,["plannedSourceFrames"]=1,["temporalStabilityValidated"]=false,["product77Unchanged"]=true,["planes"]=planes};
+   try{
+    if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPaused||SourceSequenceHost40.PendingOwnerCount!=0)throw new InvalidOperationException("Stable unpaused Edit without pending owner required");
+    if(Enumerable.Range(0,SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Any(s=>s.isDirty))throw new InvalidOperationException("Dirty scene; do not enter Play");
+@@ -870,11 +871,11 @@
+    if(EditorApplication.timeSinceStartup-lastTrace>2){lastTrace=EditorApplication.timeSinceStartup;CreateOnly40.Text(Path.Combine(Root,"TRACE-"+Guid.NewGuid().ToString("N")+".json"),new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["frame"]=Time.frameCount,["pause"]=EditorApplication.isPaused,["nativeReady"]=n&&n.ready,["warmup"]=n?n.warmup:-1,["nativeFailure"]=n?n.failure:null,["connected"]=g&&g.connected,["serial"]=n&&n.host&&n.host.main?n.host.main.renderedSerial335:0,["producerFrame"]=producer!=null?producer.CapturedFrame:-1,["producerReady"]=producer!=null&&producer.CanUsePixels,["readPending"]=inRead,["task"]=task,["row"]=y}.ToString());}
+    if(n&&!String.IsNullOrEmpty(n.failure))throw new InvalidOperationException(n.failure);if(g&&!String.IsNullOrEmpty(g.failure))throw new InvalidOperationException(g.failure);if(EditorApplication.isPaused)throw new InvalidOperationException("Unexpected pause; do not override");
+    if(producer==null){if(!n||!n.ready||!g||!g.connected||n.host.main.renderedSerial335<=0)return;if(g.runInputTest||!n.host.headEnabled)throw new InvalidOperationException("Normal supported head path required");
+-    motion40=new MotionContour40(n,Root);motion40.Start();cohort=new SourceOutline40[6];try{for(int i=0;i<6;i++){cohort[i]=new SourceOutline40(n.host.headEyes,Path.Combine(H,"producer/support/surface27/FACE_INPUT27.json"),@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\renderer-family59\SOURCE_REGISTRY59.json",id+"/sequence"+i);cohort[i].TargetFrame40=motion40.FirstTarget+i;cohort[i].MotionProof40=motion40.Snapshot;cohort[i].EvidenceRoot40=Root;}}catch{foreach(var p0 in cohort)if(p0!=null)p0.TryReleaseOwned();throw;}producer=cohort[0];host=new SourceSequenceHost40(cohort,RestoreHold37,Restore);host.Arm();Save("await-one-normal-frame");return;}
++    motion40=new MotionContour40(n,Root);motion40.Start();cohort=new SourceOutline40[1];try{for(int i=0;i<1;i++){cohort[i]=new SourceOutline40(n.host.headEyes,Path.Combine(H,"producer/support/surface27/FACE_INPUT27.json"),@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\renderer-family59\SOURCE_REGISTRY59.json",id+"/sequence"+i);cohort[i].TargetFrame40=motion40.FirstTarget+i;cohort[i].MotionProof40=motion40.Snapshot;cohort[i].EvidenceRoot40=Root;}}catch{foreach(var p0 in cohort)if(p0!=null)p0.TryReleaseOwned();throw;}producer=cohort[0];host=new SourceSequenceHost40(cohort,RestoreHold37,Restore);host.Arm();Save("await-one-normal-frame");return;}
+    if(host.ProducerError!=null)throw new InvalidOperationException("Producer failed",host.ProducerError);if(!host.Ready)return;if(!held37){runtimeTime37=Time.timeScale;Time.timeScale=0;held37=true;motion40.Dispose();report["motionRestoration40"]=motion40.RestoreReport;report["motionEvents40"]=motion40.events;if(!motion40.Restored)throw new InvalidOperationException("40 motion state restoration failed");}
+    if(tasks==null){var r=producer.ROI;var q=producer.QROI;tasks=new List<Plane>();var extent=producer.FieldExtent40(false,12);tasks.Add(new Plane(false,12,"atlas40",extent.x,extent.y));foreach(int ni42 in new[]{13,14}){var ne42=producer.FieldExtent40(false,ni42);tasks.Add(new Plane(false,ni42,ni42==13?"nativeBefore42":"nativeAfter42",ne42.x,ne42.y));}var eo47=producer.FieldExtent40(false,15);tasks.Add(new Plane(false,15,"ownerReceipts47",eo47.x,eo47.y));var ec47=producer.FieldExtent40(false,16);tasks.Add(new Plane(false,16,"currentColour47",ec47.x,ec47.y));var ef49=producer.FieldExtent40(false,17);tasks.Add(new Plane(false,17,"featureProducer49",ef49.x,ef49.y));report["frameInfo"]=producer.FrameInfo40;report["frameKey"]=producer.FrameKey;report["capturedFrame"]=producer.CapturedFrame;report["ROI"]=new Arr40(r.x,r.y,r.width,r.height);report["QROI"]=new Arr40(q.x,q.y,q.width,q.height);report["VP"]=new Arr40(Enumerable.Range(0,16).Select(i=>producer.PhysicalGPUVP[i]));Save("producer-acknowledged");}
+    if(inRead){if(!readDone||producer.ConsumerPending40)return;inRead=false;readDone=false;var completed=tasks[task];y+=Math.Max(1,16384/completed.width);if(y>=completed.height){task++;y=0;}return;}
+-   if(task==tasks.Count){frames36.Add(new Obj40{["frame"]=producer.CapturedFrame,["sourceId"]=producer.FrameKey,["QROI"]=report["QROI"],["frameInfo"]=producer.FrameInfo40});if(++cohortRead<cohort.Length){producer=cohort[cohortRead];tasks=null;task=0;y=0;return;}report["frames"]=frames36;bool consecutive=cohort.Select((p0,i)=>p0.CapturedFrame==cohort[0].CapturedFrame+i).All(v=>v);report["actualConsecutive"]=consecutive;if(!consecutive)throw new InvalidOperationException("36 capture frame gap");packet=true;report["packetComplete"]=true;Save("six-packets-copied");Exit();return;}
++   if(task==tasks.Count){frames36.Add(new Obj40{["frame"]=producer.CapturedFrame,["sourceId"]=producer.FrameKey,["QROI"]=report["QROI"],["frameInfo"]=producer.FrameInfo40});if(++cohortRead<cohort.Length){producer=cohort[cohortRead];tasks=null;task=0;y=0;return;}report["frames"]=frames36;bool consecutive=cohort.Select((p0,i)=>p0.CapturedFrame==cohort[0].CapturedFrame+i).All(v=>v);report["actualConsecutive"]=consecutive;if(!consecutive)throw new InvalidOperationException("36 capture frame gap");packet=true;report["packetComplete"]=true;Save("one-packet-copied");Exit();return;}
+    var p=tasks[task];int rows=Math.Min(p.height-y,Math.Max(1,16384/p.width));int row=y;var rect=new RectInt(p.ox,row+p.oy,p.width,rows);string name="frame"+producer.CapturedFrame+"-"+p.name+"-row"+row.ToString("D4")+".f32";inRead=true;readDone=false;
+    Action<byte[]> receive=bytes=>{using(var f=new FileStream(Path.Combine(Root,name),FileMode.CreateNew,FileAccess.Write,FileShare.Read)){f.Write(bytes,0,bytes.Length);f.Flush(true);}lock(ioSync){planes.Add(new Obj40{["frame"]=producer.CapturedFrame,["sourceId"]=producer.FrameKey,["name"]=p.name,["file"]=name,["width"]=p.width,["height"]=p.height,["bottomRow"]=row,["originX"]=p.ox,["originY"]=p.oy,["rows"]=rows,["bytes"]=bytes.Length,["format"]="linear RGBAFloat32 little-endian; bottom-left storage"});}readDone=true;};
+    if(p.index<0)producer.RequestClassificationReadback40(rect,receive);else producer.RequestFieldReadback40(p.q,p.index,rect,receive);
+@@ -936,6 +937,12 @@
+  void ReleaseFinal41(){if(final41)UnityEngine.Object.DestroyImmediate(final41);}
+  sealed class FinalPass41:ScriptableRenderPass {readonly SourceOutline40 owner;public FinalPass41(SourceOutline40 owner){this.owner=owner;renderPassEvent=(RenderPassEvent)605;}public override void RecordRenderGraph(RenderGraph graph,ContextContainer context){owner.RecordFinal41(graph,context);}}
+  bool completionRecorded50;
++ public void DrainStopped56(){
++  if(!stopped)return;
++  FailureCompletion56.AfterStop(ref completionRecorded50,stopped,submission,FrameKey,generation,
++   done=>AsyncGPUReadback.Request(Classification.rt,0,0,1,0,1,0,1,r=>{try{bool complete=r.done,error=r.hasError;done(complete,error,complete&&!error?r.layerDataSize:0);}catch(Exception e){Fail(e);}}),Fail);
++ }
++
+  void RecordFinal41(RenderGraph graph,ContextContainer context){
+   if(!RequiresFinal41)return;
+   CompletionScope50.Record(()=>RecordFinalCandidate50(graph,context),Fail,()=>RecordCompletion50(graph));
+@@ -991,3 +998,23 @@
+   try{candidate();}catch(Exception error){failed(error);}finally{completion();}
+  }
+ }
++
++// Cleanup-only completion for submitted work whose final camera never recorded.
++// Called only by the existing owner-thread exit pump after recording is stopped.
++// Never manufactures a completion, enables pixels, or retries an uncertain API.
++public static class FailureCompletion56 {
++ public static bool AfterStop(ref bool registered,bool stopped,Submission40 ticket,string key,int generation,
++     Action<Action<bool,bool,int>> enqueue,Action<Exception> failed){
++  if(!stopped)throw new InvalidOperationException("56 completion drain requires stopped recording");
++  if(registered||ticket==null||!ticket.CommandsPossible||ticket.CanRelease)return false;
++  registered=true;ticket.Fail();
++  try{
++   ticket.BeforeBarrier();
++   enqueue((done,error,bytes)=>{
++    try{bool invalid=error||bytes!=16;ticket.AcceptCallback(key,generation,done,invalid);if(!done||invalid)failed(new InvalidOperationException("56 incomplete/error/size completion; retain resources"));}
++    catch(Exception e){failed(e);}
++   });
++  }catch(Exception e){failed(e);}
++  return true;
++ }
++}
+\ No newline at end of file

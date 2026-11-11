@@ -1,0 +1,12 @@
+internal class CommandScript:IRunCommand {
+ public void Execute(ExecutionResult result){
+  const string root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face57";
+  if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("57 stable Edit required");
+  // Capture INPUT_BEFORE is a receipt envelope. Compare its json member, never the envelope.
+  var receipt=Json40.Parse(File.ReadAllText(Path.Combine(root,"capture","INPUT_BEFORE.json")));string before=(string)receipt["json"],now=JsonUtility.ToJson(InputSystem.settings);
+  var devices=new Arr40(InputSystem.devices.Select(d=>new Obj40{["id"]=d.deviceId,["layout"]=d.layout,["enabled"]=d.enabled}));
+  var state=new Obj40{["utc"]=DateTime.UtcNow.ToString("O"),["Edit"]=true,["readOnly"]=true,["inputId"]=InputSystem.settings.GetEntityId().ToString(),["sameNumericIdWithinSameProcess"]=InputSystem.settings.GetEntityId().ToString()==(string)receipt["id"],["inputJSONExact"]=now==before,["sameHideFlags"]=InputSystem.settings.hideFlags.ToString()==(string)receipt["hideFlags"],["devices"]=devices,["priorIncorrectComparison"]="ReadFinal57 compared raw InputSettings JSON against receipt envelope instead of its json field",["InputSettingsAssignment"]=false,["GPUOperations"]=0};
+  CreateOnly40.Text(Path.Combine(root,"input-check","STATE.json"),state.ToString());result.Log("57 receipt-schema corrected read: inputJSONExact="+(now==before));
+ }
+}
+}

@@ -1,0 +1,29 @@
+--- capture56
++++ capture57
+@@ -818,7 +818,7 @@
+  readonly SourceOutline40[] producers;readonly Action restoreBeforeExit,restoreAfterEdit;readonly ExitCoordinator40 exit=new ExitCoordinator40();bool armed,stopped;
+  public SourceSequenceHost40(SourceOutline40[] producers,Action restoreBeforeExit,Action restoreAfterEdit){this.producers=producers??throw new ArgumentNullException(nameof(producers));if(producers.Length!=1||producers.Any(p=>p==null)||producers.Select(p=>p.Camera).Distinct().Count()!=1)throw new ArgumentException("56 one capture on one view required");this.restoreBeforeExit=restoreBeforeExit??throw new ArgumentNullException(nameof(restoreBeforeExit));this.restoreAfterEdit=restoreAfterEdit??throw new ArgumentNullException(nameof(restoreAfterEdit));}
+  public void Arm(){exitRequest32.RequireOwner();if(armed||stopped)throw new InvalidOperationException("31 host cannot rearm");if(!EditorApplication.isPlaying||!EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("31 requires existing stable Play; does not enter Play");if(!EditorSettings.enterPlayModeOptionsEnabled||(EditorSettings.enterPlayModeOptions&EnterPlayModeOptions.DisableDomainReload)==0)throw new InvalidOperationException("31 pending callback roots must survive normal Play exit; domain reload must already be disabled by the permitted outer scope");pendingOwners.Acquire(producers[0].ViewIdentity,this);armed=true;RenderPipelineManager.beginCameraRendering+=Enqueue;}
+- void Enqueue(ScriptableRenderContext unused,Camera camera){if(stopped||exitRequest32.Requested)return;try{foreach(var p in producers)if(p.TargetFrame40==Time.frameCount){if(camera==p.Camera&&p.Failure==null)camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(p);else if(camera==p.MainCamera41&&p.RequiresFinal41)camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(p.FinalPass41Instance);}}catch(Exception e){foreach(var p in producers)p.ReportFailure(e);}}
++ void Enqueue(ScriptableRenderContext unused,Camera camera){if(stopped||exitRequest32.Requested)return;try{foreach(var p in producers)if(p.TargetFrame40==Time.frameCount){if(camera==p.Camera&&p.Failure==null)camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(p);else if(camera==p.MainCamera41&&p.RequiresFinal41&&HeadLocal367.Active&&HeadLocal367.Active.main.contourReady)camera.GetUniversalAdditionalCameraData().scriptableRenderer.EnqueuePass(p.FinalPass41Instance);}}catch(Exception e){foreach(var p in producers)p.ReportFailure(e);}}
+  void Stop(){stopped=true;RenderPipelineManager.beginCameraRendering-=Enqueue;foreach(var p in producers)p.StopRecording();}
+  void BeginExitOnEditor32(){exit.Begin(Stop,restoreBeforeExit,()=>{if(EditorApplication.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode)EditorApplication.ExitPlaymode();});}
+  // Called by an explicit external observer. No background polling is installed.
+@@ -830,7 +830,7 @@
+ 
+ namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+ internal class CommandScript : IRunCommand {
+- const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face56\capture";
++ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face57\capture";
+  const string H=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111";
+  static CommandScript active;SourceOutline40 producer;SourceOutline40[] cohort;SourceSequenceHost40 host;int cohortRead;readonly Arr40 frames36=new Arr40();readonly ExitCoordinator40 earlyExit=new ExitCoordinator40();
+  GlobalJournal40 journal;Arr40 nativeBefore;Obj40 report;readonly Arr40 planes=new Arr40(),errors=new Arr40();
+@@ -848,7 +848,7 @@
+   if(Resources.FindObjectsOfTypeAll<RenderTexture>().Any(t=>t&&(t.name.StartsWith("31 owned source field_",StringComparison.Ordinal)||t.name.StartsWith("31 owned depth_",StringComparison.Ordinal)||t.name.StartsWith("33 immutable same-frame existing stage_",StringComparison.Ordinal))))throw new InvalidOperationException("56 prior diagnostic resources remain; do not arm");
+   if(active!=null||File.Exists(Path.Combine(Root,"STARTED.json")))throw new InvalidOperationException("Inspect previous owner; do not rearm");
+   if(!File.Exists(Path.Combine(H,"face36/import/COMPLETE.json")))throw new InvalidOperationException("Verified import required");
+-  CreateOnly40.Text(Path.Combine(Root,"STARTED.json"),DateTime.UtcNow.ToString("O"));id="face56-source-domain-"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ")+"-"+Guid.NewGuid().ToString("N").Substring(0,8);report=new Obj40{["sourceId"]=id,["PlayEntries"]=0,["packetComplete"]=false,["newEyeAllocator"]=false,["plannedSourceFrames"]=1,["temporalStabilityValidated"]=false,["product77Unchanged"]=true,["planes"]=planes};
++  CreateOnly40.Text(Path.Combine(Root,"STARTED.json"),DateTime.UtcNow.ToString("O"));id="face57-source-domain-"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ")+"-"+Guid.NewGuid().ToString("N").Substring(0,8);report=new Obj40{["sourceId"]=id,["PlayEntries"]=0,["packetComplete"]=false,["newEyeAllocator"]=false,["plannedSourceFrames"]=1,["temporalStabilityValidated"]=false,["product77Unchanged"]=true,["planes"]=planes};
+   try{
+    if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPaused||SourceSequenceHost40.PendingOwnerCount!=0)throw new InvalidOperationException("Stable unpaused Edit without pending owner required");
+    if(Enumerable.Range(0,SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Any(s=>s.isDirty))throw new InvalidOperationException("Dirty scene; do not enter Play");

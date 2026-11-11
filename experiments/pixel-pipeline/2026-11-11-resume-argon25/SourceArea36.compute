@@ -1,0 +1,33 @@
+#pragma kernel ResolveArea36
+// Source region area, not neighbouring-label voting or RGB averaging.
+// Explicit vector counters; no dynamic local array, bit intervals, BVH or search.
+Texture2D<float4> _InitialMask36,_CurrentMeta36,_FineQ36,_FineMeta36;
+RWTexture2D<float4> _Area36;
+int2 _Size36;int _FaceSteps36;
+float FineLabel36(int2 p,int k){int2 o;k=k%28;if(k<8)o=int2(k,0);else if(k<15)o=int2(7,k-7);else if(k<22)o=int2(21-k,7);else o=int2(0,28-k);return _FineQ36.Load(int3(p*8+o,0)).x;}
+[numthreads(8,8,1)]void ResolveArea36(uint3 id:SV_DispatchThreadID){
+ int2 p=id.xy;if(any(p>=_Size36))return;
+ float old=_InitialMask36.Load(int3(p,0)).y;float4 m=_CurrentMeta36.Load(int3(p,0));
+ // W is a status code, not alpha:0 unsupported;1 partial;2 tie;3 scale/branch;
+ //4 valid unchanged;5 source-area proposal. Initial Q is never overwritten.
+ _Area36[p]=float4(old,0,0,0);
+ if(m.x<=0||round(m.y)!=4||m.z!=0||_FaceSteps36<2||_FaceSteps36>8)return;
+ float4 c0=0,c1=0;int supported=0,seenOld=0,lo=8,hi=-1;bool valid=true;
+ [unroll]for(int y=0;y<8;y++)[unroll]for(int x=0;x<8;x++){
+  int2 s=p*8+int2(x,y);float4 q=_FineQ36.Load(int3(s,0)),f=_FineMeta36.Load(int3(s,0));
+  bool own=f.x>0&&round(f.y)==4&&f.z==0&&q.a>.5&&f.a>.5;
+  if(own){supported++;int a=(int)round(q.x*(_FaceSteps36-1));valid=valid&&a>=0&&a<_FaceSteps36&&abs(q.x-(float)a/(_FaceSteps36-1))<.001;
+   lo=min(lo,a);hi=max(hi,a);seenOld+=abs(q.x-old)<.01?1:0;
+   c0+=float4(a==0,a==1,a==2,a==3);c1+=float4(a==4,a==5,a==6,a==7);
+  }
+ }
+ if(supported!=64){_Area36[p]=float4(old,0,supported/64.0,1);return;}
+ float best=max(max(max(c0.x,c0.y),max(c0.z,c0.w)),max(max(c1.x,c1.y),max(c1.z,c1.w)));
+ int ties=(c0.x==best)+(c0.y==best)+(c0.z==best)+(c0.w==best)+(c1.x==best)+(c1.y==best)+(c1.z==best)+(c1.w==best);
+ if(ties!=1){_Area36[p]=float4(old,0,best/64,2);return;}
+ int transitions=0;[unroll]for(int k=0;k<28;k++)transitions+=abs(FineLabel36(p,k)-FineLabel36(p,k+1))>.01?1:0;
+ if(!valid||seenOld==0||hi-lo>1||transitions>2){_Area36[p]=float4(old,0,best/64,3);return;}
+ int index=c0.x==best?0:c0.y==best?1:c0.z==best?2:c0.w==best?3:c1.x==best?4:c1.y==best?5:c1.z==best?6:7;
+ float q=(float)index/(_FaceSteps36-1);bool change=abs(q-old)>=.01;
+ _Area36[p]=float4(q,change?1:0,best/64,change?5:4);
+}

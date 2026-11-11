@@ -1,0 +1,23 @@
+{
+  "CPUCompile": "passed",
+  "HLSL": {
+    "instructions": 2733,
+    "privateArrayDeclarations": [],
+    "threads": [
+      8,
+      8,
+      1
+    ],
+    "structuredStridesBySlot": {},
+    "loops": 0
+  },
+  "originalABIStringsPreserved": 35,
+  "sourceSHA": "059927964dbc6a0e46a762ead079be6ddc02f0b51d724b390eeebbdde00e7643",
+  "captureSHA": "6d86563e3ee3379044b93e47f6cb077153898ae456fd7b0fcc58d07154c84f42",
+  "importSHA": "d63e0755cfa4aa051fb27fc403d074a3d118746ce42a60f3acf5732ca9f7869d",
+  "sourceFrames": 6,
+  "areaDispatchPerFrame": "4x4groups*64=1024 threads /812valid;64fixed samples+28border comparisons, early-out nonface",
+  "newPrivateBuffers": 0,
+  "GPUExpectedUpload": false,
+  "product77DefaultChanged": false
+}

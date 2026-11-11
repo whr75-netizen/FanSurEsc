@@ -1,0 +1,245 @@
+{
+  "sourceId": "face34-20261111T114010071Z-9da60241/568105589213606494/568105589213606070/c89cb4fe751f4ffa874450b9c7237e79/frame95/generation1",
+  "frame": 95,
+  "actualGPU": true,
+  "newPixelAlgorithmApplied": false,
+  "ROI": [
+    209,
+    38,
+    22,
+    23
+  ],
+  "QROI": [
+    206,
+    35,
+    28,
+    29
+  ],
+  "route": {
+    "copiedStageFormats": [
+      "R32G32B32A32_SFloat",
+      "R32G32B32A32_SFloat",
+      "R32G32B32A32_SFloat",
+      "R32G32B32A32_SFloat",
+      "R32G32B32A32_SFloat",
+      "R32G32B32A32_SFloat",
+      "R32G32B32A32_SFloat",
+      "R32G32B32A32_SFloat"
+    ],
+    "existingMaterialShaders": [
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals",
+      "EValidation/Restore335LegacySignals"
+    ],
+    "faceSteps": 3,
+    "frame": 95,
+    "headRegionEnabled": false,
+    "headRegionReady": false,
+    "headRegionStatus": "disabled",
+    "layeredSurface": true,
+    "legacyInputs": [
+      "existing class afterApply",
+      "proposal.R/initialQ.G/depth.B/role.A",
+      "raw(depth,role+1,instance,primitive+1)",
+      "effectiveNormal/frontBack",
+      "raw(UV,primitive+1,renderer+1)",
+      "geometryNormal/role+1",
+      "sourceRGBA",
+      "existing colour afterQApply"
+    ],
+    "model": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+    "shadeCurvature": true,
+    "shadeLayer": true,
+    "sourceId": "face34-20261111T114010071Z-9da60241/568105589213606494/568105589213606070/c89cb4fe751f4ffa874450b9c7237e79/frame95/generation1",
+    "styleEnabled": true,
+    "surfaceSteps": 2,
+    "view": "568105589213606494/568105589213606070/c89cb4fe751f4ffa874450b9c7237e79",
+    "worldPixel": 0.011048544198274612
+  },
+  "stripCount": 24,
+  "bytes": 3259872,
+  "nativeFaceCells": 59,
+  "existingFaceCells": 59,
+  "pairedExistingMaskCells": 59,
+  "existingQ0QprimeChanges": 0,
+  "existingQEquationMismatch": 0,
+  "equationMismatchCoordinates": [],
+  "sameDepthSourceExisting": 59,
+  "differentDepthSourceExisting": 0,
+  "nativeVsExistingQ0DifferenceOnSameDepth": 0,
+  "sourceBoundaryClassCounts": {
+    "10": 447,
+    "15": 59
+  },
+  "geometryLightDomainEquivalence": "Not assumed: clone source Q vs current product measured by paired depth; no0-error claim for unpaired cells.",
+  "finitePaletteLimitation": "No complete face-region/LUT binding is active. Unique colours alone do not establish off-palette contamination.",
+  "schemaCorrection": {
+    "q7": "raw[5]=(viewDepth, role+1, instanceId, primitiveId+1). Its W is NOT alpha. FrameInfo inherited caption raw role-owner-depth-alpha is inaccurate; analysis uses actual producer source.",
+    "q8": "raw[2]=(effective MToon normal including normal map, front/back flag); not geometric-only normal.",
+    "q9": "raw[6]=(source UV, primitiveId+1, renderer+1)."
+  },
+  "actualFaceProposalGates": {
+    "safe": 0,
+    "tipTopology": 3,
+    "safeAndTip": 0,
+    "safeTipUncertain": 0,
+    "eligible": 0
+  },
+  "actualFaceQ0Values": [
+    0.0,
+    0.5
+  ],
+  "actualFaceContinuousRange": [
+    0.01280625443905592,
+    0.4062023460865021
+  ],
+  "sourceBoundaryCoverage": {
+    "sourceOutline": {
+      "positiveCells": 19,
+      "fullyCoveredCells": 0,
+      "sumCellEquivalent": 0.734375,
+      "maxCoverage": 0.0625
+    },
+    "sourcePigment": {
+      "positiveCells": 17,
+      "fullyCoveredCells": 0,
+      "sumCellEquivalent": 1.2749954462051392,
+      "maxCoverage": 0.19944161176681519
+    }
+  },
+  "sourceInitialRGBUniqueFace": 52,
+  "inputFiles": [
+    {
+      "file": "classification-row0000.f32",
+      "sha256": "94aa1e1df80e1fd3ecc2e9ef687fef912578ec1612e63f920ff546df9d8a0894",
+      "bytes": 8096
+    },
+    {
+      "file": "q0-row0000.f32",
+      "sha256": "5b34172c5c50d643cca541d2e88b1c177cb3d6fed18e258332e9133095a8374d",
+      "bytes": 12992
+    },
+    {
+      "file": "q10-row0000.f32",
+      "sha256": "085e880ba47277c49b418b0e87df74ef3cdf0d900bec7e265e8eeee735d06f43",
+      "bytes": 12992
+    },
+    {
+      "file": "q11-row0000.f32",
+      "sha256": "4f357f51e9218fb62982b6b2eb9bb670abc75698058c513de6453dfd71106e14",
+      "bytes": 12992
+    },
+    {
+      "file": "q12-row0000.f32",
+      "sha256": "970c108205c68a870ada7e674b40bf63a29a0b73cd88f6a52bce79b01f88ee36",
+      "bytes": 12992
+    },
+    {
+      "file": "q3-row0000.f32",
+      "sha256": "db2154b4bc9a74dcb2f8caa2fa3f321157dcc059f54418a65bcabc9485e5e62c",
+      "bytes": 12992
+    },
+    {
+      "file": "q4-row0000.f32",
+      "sha256": "d9e47f52e5ff296aff8d10a6645259bf77e35c41f66cdcb97f108c0983c84398",
+      "bytes": 12992
+    },
+    {
+      "file": "q5-row0000.f32",
+      "sha256": "d769100194a0eae270af813bf2948c53198a29b20d81edc7a50b9fd5d956a8b3",
+      "bytes": 12992
+    },
+    {
+      "file": "q6-row0000.f32",
+      "sha256": "fdb2ec358b1f1ce2e098db139ec4b6b54dd27339870c1de9487a6edf06214a65",
+      "bytes": 12992
+    },
+    {
+      "file": "q7-row0000.f32",
+      "sha256": "5c073dc7ce56b4bcfd106051dd026a5cccf114fbc19c3d8d9cdeaabeac5d45f6",
+      "bytes": 12992
+    },
+    {
+      "file": "q8-row0000.f32",
+      "sha256": "74382c283cca0df4100b7478722ddc30d200a56b61f6755947fadfc732f1c77d",
+      "bytes": 12992
+    },
+    {
+      "file": "q9-row0000.f32",
+      "sha256": "239254207ff650494b8cb33c2cc4512b30d32ab46081f740734f0b9cc7fcec2e",
+      "bytes": 12992
+    },
+    {
+      "file": "source0-row0000.f32",
+      "sha256": "93e354c1501940551e4baca89a02b7b8df9bb525bd70c75b2e61b72943db42bb",
+      "bytes": 261888
+    },
+    {
+      "file": "source0-row0093.f32",
+      "sha256": "e6f54032269afca900be8952168ca7bbfff71fdd664e58d480c47327c08d03c3",
+      "bytes": 256256
+    },
+    {
+      "file": "source1-row0000.f32",
+      "sha256": "a64d64858c0b63ef862586c9139f45fb2caa4709ee2224e69884143db62c61a1",
+      "bytes": 261888
+    },
+    {
+      "file": "source1-row0093.f32",
+      "sha256": "e6f54032269afca900be8952168ca7bbfff71fdd664e58d480c47327c08d03c3",
+      "bytes": 256256
+    },
+    {
+      "file": "source2-row0000.f32",
+      "sha256": "b908414097bd8cf7bf16bb339e63c6a7d26f5ed0fc54e418f33a2685baa41fa6",
+      "bytes": 261888
+    },
+    {
+      "file": "source2-row0093.f32",
+      "sha256": "e6f54032269afca900be8952168ca7bbfff71fdd664e58d480c47327c08d03c3",
+      "bytes": 256256
+    },
+    {
+      "file": "source3-row0000.f32",
+      "sha256": "bb4274288342b072b7bbc7db5a1338ceb0768eff205e2faa7d69fd27fd5563be",
+      "bytes": 261888
+    },
+    {
+      "file": "source3-row0093.f32",
+      "sha256": "e6f54032269afca900be8952168ca7bbfff71fdd664e58d480c47327c08d03c3",
+      "bytes": 256256
+    },
+    {
+      "file": "source4-row0000.f32",
+      "sha256": "fb53c10b4d6b64223a43bd4ed168ce3f253eabee55bba6a474038c84497b325f",
+      "bytes": 261888
+    },
+    {
+      "file": "source4-row0093.f32",
+      "sha256": "9a89ee214a3d4526acb65c10a52e4d3583111841d0533ef2ac174b71a003aaee",
+      "bytes": 256256
+    },
+    {
+      "file": "source6-row0000.f32",
+      "sha256": "893f704c2c78337a26dd40d7498581c1884fc21d1862d0f9b6ee092c97df959c",
+      "bytes": 261888
+    },
+    {
+      "file": "source6-row0093.f32",
+      "sha256": "e6f54032269afca900be8952168ca7bbfff71fdd664e58d480c47327c08d03c3",
+      "bytes": 256256
+    }
+  ]
+}

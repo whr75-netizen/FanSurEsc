@@ -1,0 +1,27 @@
+{
+  "checks": 16,
+  "passed": [
+    "shared edge source path",
+    "convex same triangle",
+    "primitive and UV must correspond",
+    "invalid primitive fails closed",
+    "touching UV islands with distinct source indices are not joined",
+    "overlapping UV islands are not a shared surface",
+    "nonmanifold edge is not traversed",
+    "degenerate source UV stays unknown",
+    "D4 source path (False, 1, 1)",
+    "D4 source path (False, 1, -1)",
+    "D4 source path (False, -1, 1)",
+    "D4 source path (False, -1, -1)",
+    "D4 source path (True, 1, 1)",
+    "D4 source path (True, 1, -1)",
+    "D4 source path (True, -1, 1)",
+    "D4 source path (True, -1, -1)"
+  ],
+  "GPUCalls": 0,
+  "doesNotProve": [
+    "intermediate deformed visibility",
+    "albedo region/gradient semantics",
+    "a final Q or RGB improvement"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "808fa542ce6cf90a915dea3fd0b27277768a02b7",
+  "runtimeCandidate": "Assets/EUnityValidation01/SurfaceCarrier27/SurfaceCarrier27.compute",
+  "product77DefaultChanged": false,
+  "userTracked30HashesEqual": true,
+  "implemented": "Split existing109 native UV paths at source triangle edges.42 formerly unsupported segments each have2 exact pieces,888pieces total. Only original-query geometry changes; display shape/allocation/palette and destination occlusion policy unchanged.",
+  "materialProofFix": "Historical24 curve proof mistakenly addressed face material(part0/submesh3). Final SourcePigment maps it explicitly to original native pigment(part3/submesh6); current triangle map supplies the material. Actual GPU proof tag and native alpha bounds are verified separately from face occlusion. No shader/new buffer needed for this fix.",
+  "provisional27": "phase-run/motion-run and PRE_ALPHA reports are before source material correction; they are retained as provisional, not final adopted proof.",
+  "CPU": "378 symmetry/order/reversal tests;1344 actual deformed shared-edge joins across32 prior frames; no unresolved UV gap/overlap; C#/four HLSL entries compiled without GPU device.",
+  "actualGPU": "Four evaluated blink/reopen plus28 measured phase/walk/turn frames, normally exited/restored. Original curve rays474 match CPU. Source crop/LUT outside/phase-label changes0; Close100 iris/white0; reopen equal.",
+  "rotationRemaining": "Two owner2 white selections at canonical(4,5), turn frames129/133 are definite destination face rejection(-117).32 GPU rays match same-frame CPU. Their original source witnesses are valid, but other-eye-majority/non-dominant shared skin is not eligible for exemption under the active rule. No forced clearing or claim of artistic correctness.",
+  "faceBlocker": "Original colour/UV exist. baseColor and shadeMultiply use the same image; no accepted scalp/cheek/gradient/AA region hierarchy or per-stage confirmed binding exists. Three weak-cheek colour probes have identical normal pixels. Eye202 FaceSkin/LidSkinCarrier both select role3. Prior103/104 are unadopted segmentation evidence. No guessed face regions applied.",
+  "outlineKnownInput": "Original material3 finite outline linear RGB[.0612460561,.008568122,.014443838], lightingMix0, world width.00075 exist. Pixel classification/priority for silhouette/interior-region/partial-alpha still missing; source colour existence is separate from actual outline integration.",
+  "notClaimed": [
+    "full face finite palette/outline",
+    "whole pipeline/art completion",
+    "new hair ON/OFF or multiview/model replacement tests",
+    "proof of all-point source-footprint visibility",
+    "general GPU reset cause or universal safety",
+    "memory leak resolution"
+  ],
+  "EditorAfter": {
+    "utc": "2026-11-11T06:58:22.6309762Z",
+    "version": "6000.5.9f1",
+    "project": "C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets",
+    "playing": false,
+    "paused": false,
+    "transitioning": false,
+    "compiling": false,
+    "updating": false,
+    "allocated": 1714667755,
+    "reserved": 2336804864,
+    "mono": 1466953728,
+    "renderTextureCount": 30,
+    "ownedHairMaterials25": 0,
+    "createdHairTextures25": 0
+  },
+  "noPendingRequests": true,
+  "forbidden115OrCUAKillResetDriverSettingsPush": false,
+  "limits": "Existing operational UV alpha-centre reference, not artist intent reconstruction; external runner absolute paths remain."
+}

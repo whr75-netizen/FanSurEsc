@@ -1,0 +1,187 @@
+{
+  "counterAPIs": {
+    "allocated": "Profiler.GetTotalAllocatedMemoryLong",
+    "reserved": "Profiler.GetTotalReservedMemoryLong",
+    "mono": "Profiler.GetMonoUsedSizeLong",
+    "renderTextureCount": "Resources.FindObjectsOfTypeAll<RenderTexture>().Length"
+  },
+  "runs": [
+    {
+      "run": "phase-run",
+      "frames": 4,
+      "nativeEqual": 44,
+      "nativeUnavailable": [
+        {
+          "equal": null,
+          "path": "ProjectSettings/ProjectSettings.asset",
+          "status": "Unavailable",
+          "type": "UnityEditor.AssetImporter"
+        }
+      ],
+      "before": {
+        "allocated": 1684740843,
+        "mono": 1456431104,
+        "renderTextureCount": 30,
+        "reserved": 2303250432,
+        "utc": "2026-11-11T06:35:44.9646468Z"
+      },
+      "after": {
+        "allocated": 1721739567,
+        "mono": 1359458304,
+        "renderTextureCount": 30,
+        "reserved": 2303381504,
+        "utc": "2026-11-11T06:36:03.7526110Z"
+      },
+      "delta": {
+        "allocated": 36998724,
+        "reserved": 131072,
+        "mono": -96972800,
+        "renderTextureCount": 0
+      },
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sourceIds": [
+        "geometry24-20261111T063543737Z-97c363b4-frame99",
+        "geometry24-20261111T063543737Z-97c363b4-frame101",
+        "geometry24-20261111T063543737Z-97c363b4-frame103",
+        "geometry24-20261111T063543737Z-97c363b4-frame105"
+      ]
+    },
+    {
+      "run": "motion-run",
+      "frames": 28,
+      "nativeEqual": 44,
+      "nativeUnavailable": [],
+      "before": {
+        "allocated": 1691479831,
+        "mono": 1415524352,
+        "renderTextureCount": 30,
+        "reserved": 2303250432,
+        "utc": "2026-11-11T06:37:12.3559154Z"
+      },
+      "after": {
+        "allocated": 1729594606,
+        "mono": 1357279232,
+        "renderTextureCount": 30,
+        "reserved": 2336276480,
+        "utc": "2026-11-11T06:38:03.3860241Z"
+      },
+      "delta": {
+        "allocated": 38114775,
+        "reserved": 33026048,
+        "mono": -58245120,
+        "renderTextureCount": 0
+      },
+      "sceneBefore": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sceneAfter": [
+        {
+          "active": true,
+          "dirty": false,
+          "path": "Assets/Scenes/GameMap1.unity",
+          "roots": 37
+        }
+      ],
+      "sourceIds": [
+        "geometry24-20261111T063711281Z-64ba3e34-frame101",
+        "geometry24-20261111T063711281Z-64ba3e34-frame102",
+        "geometry24-20261111T063711281Z-64ba3e34-frame103",
+        "geometry24-20261111T063711281Z-64ba3e34-frame104",
+        "geometry24-20261111T063711281Z-64ba3e34-frame105",
+        "geometry24-20261111T063711281Z-64ba3e34-frame106",
+        "geometry24-20261111T063711281Z-64ba3e34-frame107",
+        "geometry24-20261111T063711281Z-64ba3e34-frame108",
+        "geometry24-20261111T063711281Z-64ba3e34-frame109",
+        "geometry24-20261111T063711281Z-64ba3e34-frame110",
+        "geometry24-20261111T063711281Z-64ba3e34-frame119",
+        "geometry24-20261111T063711281Z-64ba3e34-frame120",
+        "geometry24-20261111T063711281Z-64ba3e34-frame121",
+        "geometry24-20261111T063711281Z-64ba3e34-frame122",
+        "geometry24-20261111T063711281Z-64ba3e34-frame123",
+        "geometry24-20261111T063711281Z-64ba3e34-frame124",
+        "geometry24-20261111T063711281Z-64ba3e34-frame125",
+        "geometry24-20261111T063711281Z-64ba3e34-frame126",
+        "geometry24-20261111T063711281Z-64ba3e34-frame127",
+        "geometry24-20261111T063711281Z-64ba3e34-frame128",
+        "geometry24-20261111T063711281Z-64ba3e34-frame129",
+        "geometry24-20261111T063711281Z-64ba3e34-frame130",
+        "geometry24-20261111T063711281Z-64ba3e34-frame131",
+        "geometry24-20261111T063711281Z-64ba3e34-frame132",
+        "geometry24-20261111T063711281Z-64ba3e34-frame133",
+        "geometry24-20261111T063711281Z-64ba3e34-frame134",
+        "geometry24-20261111T063711281Z-64ba3e34-frame135",
+        "geometry24-20261111T063711281Z-64ba3e34-frame136"
+      ]
+    }
+  ],
+  "separatePublicBefore": {
+    "utc": "2026-11-11T06:19:13.4426302Z",
+    "version": "6000.5.9f1",
+    "project": "C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets",
+    "playing": false,
+    "paused": false,
+    "transitioning": false,
+    "compiling": false,
+    "updating": false,
+    "allocated": 1711364970,
+    "reserved": 2303250432,
+    "mono": 1363103744,
+    "renderTextureCount": 30,
+    "ownedHairMaterials25": 0,
+    "createdHairTextures25": 0
+  },
+  "separatePublicAfter": {
+    "utc": "2026-11-11T06:41:32.0225107Z",
+    "version": "6000.5.9f1",
+    "project": "C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets",
+    "playing": false,
+    "paused": false,
+    "transitioning": false,
+    "compiling": false,
+    "updating": false,
+    "allocated": 1699087301,
+    "reserved": 2336145408,
+    "mono": 1477689344,
+    "renderTextureCount": 30,
+    "ownedHairMaterials25": 0,
+    "createdHairTextures25": 0
+  },
+  "separatePointDeltaBytes": {
+    "allocated": -12277669,
+    "reserved": 32894976,
+    "mono": 114585600,
+    "renderTextureCount": 0
+  },
+  "osSinglePoint": {
+    "Utc": "2026-11-11T06:43:56.9294839Z",
+    "Id": 28080,
+    "Responding": true,
+    "CPU": 633.390625,
+    "WorkingSet64": 3324674048,
+    "PrivateMemorySize64": 6551572480,
+    "note": "WorkingSet64 includes shared resident pages; PrivateMemorySize64 is private commit"
+  },
+  "ownership": "Added13,536B GPU bend buffer and846-element CPU array owned by SourcePigment. Constructor failure/Dispose release it; Dispose nulls bend/binding arrays. Existing per-model/view/topology checks plus original/bend UV checks reject stale mappings. No static per-frame cache or new GPU feedback.",
+  "sourceAudit": "NativeSnapshot73 stores44 metadata/hash/path rows, not mesh JSON strings. Forward/Layer/Motion are disposed and nulled. Assistant AssemblyUtils uses CurrentAssemblies.LoadFromBytes on Unity6000.5; fallback Assembly.Load does not establish actual lifetime. Loaded-assembly/native-root profiling was not performed.",
+  "limit": "Allocation deltas are neither physical private working set nor a proven leak. Separate point change is not sum of spikes. No forced GC/Unload/private reflection/cleanup."
+}

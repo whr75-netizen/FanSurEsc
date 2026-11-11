@@ -1,0 +1,1484 @@
+{
+  "source": "SurfaceCarrier27.compute",
+  "sourceSHA256": "c1ce87a56a47a1b3801b8e05fa61ec76b569201ad301189720433fc3425eebcd",
+  "compiledEntries": [
+    {
+      "entry": "PrepareCells113",
+      "audit": {
+        "instructions": 492,
+        "privateArrayDeclarations": [],
+        "threads": [
+          8,
+          8,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "t0": 48,
+          "t1": 16,
+          "t2": 16,
+          "u0": 48,
+          "u1": 16,
+          "u2": 16
+        },
+        "loops": 7
+      },
+      "bindings": [
+        {
+          "Type": 5,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Keys113"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_SrcLayers113"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_SrcVisibility113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Columns24"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Cells113"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_CellTags113"
+        },
+        {
+          "Type": 0,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 0,
+          "Dimension": 0,
+          "NumSamples": 0,
+          "Name": "$Globals"
+        }
+      ],
+      "bytecodeBytes": 17208,
+      "bytecodeSHA256": "58c7164ea714da505a3d92d30c750f7a1a8104007d753cf870711a72770492c9"
+    },
+    {
+      "entry": "CurveColumns24",
+      "audit": {
+        "instructions": 1125,
+        "privateArrayDeclarations": [],
+        "threads": [
+          64,
+          1,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "t0": 48,
+          "t1": 48,
+          "t2": 4,
+          "t3": 32,
+          "t36": 32,
+          "t37": 32,
+          "t38": 16,
+          "u0": 48,
+          "u1": 16
+        },
+        "loops": 3
+      },
+      "bindings": [
+        {
+          "Type": 5,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Triangles96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Materials96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 4,
+          "Name": "_PartTriangles96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 3,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 32,
+          "Name": "_CurveProof24"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 4,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_0"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 5,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_1"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 6,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_2"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 7,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_3"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 8,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_4"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 9,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_5"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 10,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_6"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 11,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_7"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 12,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_8"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 13,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_9"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 14,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_10"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 15,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_11"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 16,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_12"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 17,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_13"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 18,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_14"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 19,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_15"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 20,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_16"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 21,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_17"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 22,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_18"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 23,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_19"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 24,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_20"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 25,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_21"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 26,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_22"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 27,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_23"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 28,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_24"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 29,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_25"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 30,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_26"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 31,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_27"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 32,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_28"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 33,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_29"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 34,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_30"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 35,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_31"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 36,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 32,
+          "Name": "_Curves106"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 37,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 32,
+          "Name": "_NativeCurve26"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 38,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_NativeBend27"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Columns24"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_ColumnNative26"
+        },
+        {
+          "Type": 0,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 0,
+          "Dimension": 0,
+          "NumSamples": 0,
+          "Name": "$Globals"
+        }
+      ],
+      "bytecodeBytes": 31980,
+      "bytecodeSHA256": "8b7b7ef04210dfaa2285c700eeaa37dabe1ff8a7c86a8db3853b4540b8c8aaab"
+    },
+    {
+      "entry": "ColumnVisibility24",
+      "audit": {
+        "instructions": 1053,
+        "privateArrayDeclarations": [
+          [
+            0,
+            32,
+            4
+          ]
+        ],
+        "threads": [
+          64,
+          1,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "t0": 48,
+          "t1": 48,
+          "t2": 16,
+          "t3": 8,
+          "t4": 16,
+          "u0": 16,
+          "u1": 48,
+          "u2": 16
+        },
+        "loops": 1
+      },
+      "bindings": [
+        {
+          "Type": 5,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Triangles96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Materials96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_World96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 3,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 8,
+          "Name": "_UV96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 4,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Nodes96"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 5,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_0"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 6,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_1"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 7,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_2"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 8,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_3"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 9,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_4"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 10,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_5"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 11,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_6"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 12,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_7"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 13,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_8"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 14,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_9"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 15,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_10"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 16,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_11"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 17,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_12"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 18,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_13"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 19,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_14"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 20,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_15"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 21,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_16"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 22,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_17"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 23,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_18"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 24,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_19"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 25,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_20"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 26,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_21"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 27,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_22"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 28,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_23"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 29,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_24"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 30,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_25"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 31,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_26"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 32,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_27"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 33,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_28"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 34,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_29"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 35,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_30"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 36,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_31"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Boxes96"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Columns24"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_ColumnNative26"
+        },
+        {
+          "Type": 0,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 0,
+          "Dimension": 0,
+          "NumSamples": 0,
+          "Name": "$Globals"
+        }
+      ],
+      "bytecodeBytes": 29344,
+      "bytecodeSHA256": "b25a054d86ed5f9445cf8e1ffcb6f1cc0b30c6699ae3adb8cb9ad48aca3cc569"
+    },
+    {
+      "entry": "AssignedVisibility24",
+      "audit": {
+        "instructions": 1101,
+        "privateArrayDeclarations": [
+          [
+            0,
+            32,
+            4
+          ]
+        ],
+        "threads": [
+          64,
+          1,
+          1
+        ],
+        "structuredStridesBySlot": {
+          "t0": 4,
+          "t1": 4,
+          "t2": 48,
+          "t3": 48,
+          "t4": 16,
+          "t5": 8,
+          "t6": 16,
+          "t7": 16,
+          "u0": 16,
+          "u1": 16,
+          "u2": 16,
+          "u3": 16
+        },
+        "loops": 1
+      },
+      "bindings": [
+        {
+          "Type": 5,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 4,
+          "Name": "_OwnSkin113"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 4,
+          "Name": "_SharedSkin26"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Triangles96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 3,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 48,
+          "Name": "_Materials96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 4,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_World96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 5,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 8,
+          "Name": "_UV96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 6,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Nodes96"
+        },
+        {
+          "Type": 5,
+          "BindPoint": 7,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_ReadIdentity96"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 8,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_0"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 9,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_1"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 10,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_2"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 11,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_3"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 12,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_4"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 13,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_5"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 14,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_6"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 15,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_7"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 16,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_8"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 17,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_9"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 18,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_10"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 19,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_11"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 20,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_12"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 21,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_13"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 22,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_14"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 23,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_15"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 24,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_16"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 25,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_17"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 26,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_18"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 27,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_19"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 28,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_20"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 29,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_21"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 30,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_22"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 31,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_23"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 32,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_24"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 33,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_25"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 34,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_26"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 35,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_27"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 36,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_28"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 37,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_29"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 38,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_30"
+        },
+        {
+          "Type": 2,
+          "BindPoint": 39,
+          "BindCount": 1,
+          "Flags": 12,
+          "ReturnType": 5,
+          "Dimension": 4,
+          "NumSamples": 4294967295,
+          "Name": "_SourceAlpha96_31"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Boxes96"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 1,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_AssignedDepth24"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 2,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_AssignedVisibility24"
+        },
+        {
+          "Type": 6,
+          "BindPoint": 3,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 6,
+          "Dimension": 1,
+          "NumSamples": 16,
+          "Name": "_Cells113"
+        },
+        {
+          "Type": 0,
+          "BindPoint": 0,
+          "BindCount": 1,
+          "Flags": 0,
+          "ReturnType": 0,
+          "Dimension": 0,
+          "NumSamples": 0,
+          "Name": "$Globals"
+        }
+      ],
+      "bytecodeBytes": 31180,
+      "bytecodeSHA256": "0de94e6625caac4be95bc3280defc42249bf386b389bd48963e7b4c7a0a2b813"
+    }
+  ],
+  "GPUDeviceCreated": false,
+  "GPUDriverModules": [],
+  "sourceAdditionalMaskBindingAbsent": true,
+  "newComputeKernels": 0,
+  "UnityCalls": 0
+}

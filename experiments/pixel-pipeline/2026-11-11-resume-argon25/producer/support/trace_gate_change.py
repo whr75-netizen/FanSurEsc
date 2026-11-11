@@ -8,7 +8,9 @@ sys.path.insert(0,str(R/'resume-20261111'))
 from replay_phase25 import FaceWithOneOriginalAlpha,NativeAlpha,geometry,plane,buffer,read
 def main():
  target=H/'native-proof'if '--native-proof'in sys.argv else H
- run=target/'typed-run'if target!=H else H/'gate-alpha/phase-run'
+ if '--surface'in sys.argv:target=H/'surface27'
+ run=target/('phase-run'if '--surface'in sys.argv else'typed-run')if target!=H else H/'gate-alpha/phase-run'
+ if '--pigment'in sys.argv:run=target/'pigment-run'
  info=read(R/'aperture-runtime111/inputs/ALPHA111.json');src=next(v for v in info['images']if v['renderer']==1 and v['submesh']==3);ip=R/'aperture-runtime111/inputs'/src['file'];assert hashlib.sha256(ip.read_bytes()).hexdigest()==src['sha256']
  im=Image.open(ip);image=np.asarray(im.convert('RGBA'))[:,:,3].astype(float)/255;im.close()
  old=np.array(read(R/'argon23-runtime113/SOURCE113.json')['ownSkinMask'],np.uint32);extra=np.array(read(H/'SHARED_SOURCE_MASK26.json')['additionalBits'],np.uint32)

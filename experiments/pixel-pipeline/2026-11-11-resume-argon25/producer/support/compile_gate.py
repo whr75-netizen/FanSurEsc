@@ -7,11 +7,13 @@ def main():
  global G
  if '--source-alpha'in sys.argv:G=H/'gate-alpha'
  if '--native-proof'in sys.argv:G=H/'native-proof'
+ if '--surface'in sys.argv:G=H/'surface27'
  dll=C.WinDLL(str(fx.DLL),winmode=0x800);fn=dll.D3DCompile
  fn.argtypes=[C.c_void_p,C.c_size_t,C.c_char_p,C.c_void_p,C.c_void_p,C.c_char_p,C.c_char_p,C.c_uint,C.c_uint,C.POINTER(C.c_void_p),C.POINTER(C.c_void_p)];fn.restype=C.c_long
- file=G/('NativeProof26.compute'if '--native-proof'in sys.argv else'SharedSource26.compute'if(G/'SharedSource26.compute').exists()else'SharedSkin26.compute')
+ native='--native-proof'in sys.argv or '--surface'in sys.argv
+ file=G/('SurfaceCarrier27.compute'if '--surface'in sys.argv else'NativeProof26.compute'if native else'SharedSource26.compute'if(G/'SharedSource26.compute').exists()else'SharedSkin26.compute')
  code=re.sub(rb'(?m)^#pragma (?:kernel|target) [^\r\n]+\r?\n',b'',file.read_bytes());source=C.create_string_buffer(code);rows=[]
- entries=['PrepareCells113','CurveColumns24','ColumnVisibility24','AssignedVisibility24']if '--native-proof'in sys.argv else['PrepareCells113','ColumnVisibility24','AssignedVisibility24']
+ entries=['PrepareCells113','CurveColumns24','ColumnVisibility24','AssignedVisibility24']if native else['PrepareCells113','ColumnVisibility24','AssignedVisibility24']
  for entry in entries:
   binary=C.c_void_p();errors=C.c_void_p()
   try:
@@ -22,7 +24,7 @@ def main():
  drivers=[p for p in fx.modules()if re.search(r'(?i)(?:d3d11|d3d12|dxgi|amdxx64|amddxx64|nvwgf2umx|igd10iumd64)\.dll$',p)];assert not drivers
  source=next(r for r in rows if r['entry']=='ColumnVisibility24');destination=next(r for r in rows if r['entry']=='AssignedVisibility24')
  assert '_SharedSkin26'not in str(source['bindings']),'Source visibility must not bind additional destination exemptions'
- if '--native-proof'in sys.argv:assert '_OwnSkin113'not in str(source['bindings'])
+ if native:assert '_OwnSkin113'not in str(source['bindings'])
  assert all(k in str(destination['bindings'])for k in ['_SharedSkin26','_Cells113','_ReadIdentity96'])
  out={'source':file.name,'sourceSHA256':hashlib.sha256(file.read_bytes()).hexdigest(),'compiledEntries':rows,'GPUDeviceCreated':False,'GPUDriverModules':drivers,'sourceAdditionalMaskBindingAbsent':True,'newComputeKernels':0,'UnityCalls':0}
  (G/'CPU_HLSL_GATE26.json').write_text(json.dumps(out,indent=2)+'\n',encoding='utf-8');print(json.dumps({'changedEntriesCompiled':len(rows),'sourceAdditionalMaskBindingAbsent':True,'GPUDeviceCreated':False,'GPUDriverModules':drivers}))

@@ -13,10 +13,11 @@ def columns(p):
 
 def main():
  global G
- native='--native-proof'in sys.argv
- if native:G=H/'native-proof'
+ surface='--surface'in sys.argv;native='--native-proof'in sys.argv or surface
+ if native:G=H/('surface27'if surface else'native-proof')
  motion='--motion'in sys.argv
- root=G/('motion-run'if motion else'typed-run'if native else'phase-run');s=read(next(root.glob('STATE113-*-finished.json')))
+ pigment='--pigment'in sys.argv
+ root=G/('pigment-motion'if motion and pigment else'motion-run'if motion else'pigment-run'if pigment else'typed-run'if native and not surface else'phase-run');s=read(next(root.glob('STATE113-*-finished.json')))
  assert s['PlayExited']and not s.get('error')and not s.get('restorationError')and not s['globalRestoreErrors']
  unavailable=[v for v in s['nativeComparisons72']if v['equal']is not True]
  assert not unavailable or native and unavailable==[{'equal':None,'path':'ProjectSettings/ProjectSettings.asset','status':'Unavailable','type':'UnityEditor.AssetImporter'}],unavailable

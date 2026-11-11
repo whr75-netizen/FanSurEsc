@@ -12,7 +12,9 @@ from support112 import Support
 
 def main():
  target=H/'native-proof'if '--native-proof'in sys.argv else H
+ if '--surface'in sys.argv:target=H/'surface27'
  run=target/'motion-run'if target!=H else H/'gate-alpha/motion-run'
+ if '--pigment'in sys.argv:run=target/'pigment-motion'
  info=read(R/'aperture-runtime111/inputs/ALPHA111.json');src=next(v for v in info['images']if v['renderer']==1 and v['submesh']==3)
  ip=R/'aperture-runtime111/inputs'/src['file'];assert hashlib.sha256(ip.read_bytes()).hexdigest()==src['sha256']
  im=Image.open(ip);alphaImage=np.asarray(im.convert('RGBA'))[:,:,3].astype(float)/255;im.close()

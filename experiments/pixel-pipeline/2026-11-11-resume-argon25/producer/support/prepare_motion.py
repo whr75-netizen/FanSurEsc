@@ -8,6 +8,7 @@ def main():
  global G,RUN
  native='--native-proof'in sys.argv
  if native:G=H/'native-proof';RUN=G/'motion-run'
+ if '--surface'in sys.argv:G=H/'surface27';RUN=G/'motion-run'
  seed=G/('typed-run'if native else'phase-run')
  assert not(RUN/'PHASE_REQUEST.json').exists()and not(RUN/'CAPTURE_STARTED76.json').exists()
  state=json.loads((seed/'STATE113-0012-finished.json').read_text());assert state['PlayExited']and not state.get('error')and not state.get('restorationError')

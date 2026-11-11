@@ -1,0 +1,298 @@
+{
+  "nativeBinding": {
+    "rendererOrdinal": 1,
+    "subMesh": 3,
+    "materialId": 3,
+    "gltfMesh": 0,
+    "gltfPrimitive": 3,
+    "imageSHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e"
+  },
+  "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "sourceFields": {
+    "textures": {
+      "baseColor": {
+        "textureIndex": 5,
+        "imageIndex": 5,
+        "imageSHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+        "sampler": {
+          "magFilter": 9729,
+          "minFilter": 9729,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        "transform": {
+          "offset": [
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1
+          ]
+        }
+      },
+      "shadeMultiply": {
+        "textureIndex": 5,
+        "imageIndex": 5,
+        "imageSHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+        "sampler": {
+          "magFilter": 9729,
+          "minFilter": 9729,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        "transform": {
+          "offset": [
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1
+          ]
+        }
+      },
+      "normal": {
+        "textureIndex": 6,
+        "imageIndex": 6,
+        "imageSHA256": "dca1fea84bde4c850d99e8913f2860fb3a87edf483e0baf54e81f6aa101ac331",
+        "sampler": {
+          "magFilter": 9729,
+          "minFilter": 9729,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        "transform": {
+          "offset": [
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    "baseColorFactor": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "mtoonScalarAndColourFields": {
+      "specVersion": "1.0",
+      "transparentWithZWrite": false,
+      "renderQueueOffsetNumber": 0,
+      "shadeColorFactor": [
+        1,
+        1,
+        1
+      ],
+      "shadingShiftFactor": -0.0500000119,
+      "shadingToonyFactor": 0.0500000119,
+      "giEqualizationFactor": 0.9,
+      "matcapFactor": [
+        1,
+        1,
+        1
+      ],
+      "parametricRimColorFactor": [
+        0.005769958,
+        0.005769958,
+        0.005769958
+      ],
+      "rimLightingMixFactor": 1,
+      "parametricRimFresnelPowerFactor": 7.999984,
+      "parametricRimLiftFactor": 0.1,
+      "outlineWidthMode": "worldCoordinates",
+      "outlineWidthFactor": 0.00075,
+      "outlineColorFactor": [
+        0.0612460561,
+        0.008568122,
+        0.014443838
+      ],
+      "outlineLightingMixFactor": 0,
+      "uvAnimationScrollXSpeedFactor": 0,
+      "uvAnimationScrollYSpeedFactor": 0,
+      "uvAnimationRotationSpeedFactor": 0
+    },
+    "vertexAttributes": [
+      "POSITION",
+      "NORMAL",
+      "TEXCOORD_0",
+      "JOINTS_0",
+      "WEIGHTS_0"
+    ],
+    "materialExtraKeys": [],
+    "primitiveExtraKeys": [
+      "targetNames"
+    ]
+  },
+  "existingLayer202": "Eye202Layers.Selected(0,role) and Selected(5,role) both select role3. FaceSkin and LidSkinCarrier are separate render products of the same source role; neither is a scalp/cheek/AA source-colour partition.",
+  "existing104": {
+    "hypothesis1": "not adopted as feature/family partition",
+    "hypothesis2": "potential parent evidence only; NOT a flat palette family or a complete feature hierarchy",
+    "weakCheek": {
+      "sourceROIOnlyDiagnostic": [
+        310,
+        620,
+        115,
+        90
+      ],
+      "sourceRGB8ResidualNorm": 10.35615758860399,
+      "old64ThinRidge": false,
+      "samples": [
+        {
+          "cropXY": [
+            382,
+            704
+          ],
+          "RGB8": [
+            253,
+            228,
+            208
+          ],
+          "coarse103": 2,
+          "FH": 495,
+          "geodesic": 8,
+          "hypotheticalFlatAnchorRGB8": [
+            248,
+            203,
+            179
+          ]
+        },
+        {
+          "cropXY": [
+            380,
+            704
+          ],
+          "RGB8": [
+            254,
+            235,
+            213
+          ],
+          "coarse103": 2,
+          "FH": 619,
+          "geodesic": 8,
+          "hypotheticalFlatAnchorRGB8": [
+            248,
+            203,
+            179
+          ]
+        },
+        {
+          "cropXY": [
+            384,
+            704
+          ],
+          "RGB8": [
+            254,
+            237,
+            216
+          ],
+          "coarse103": 2,
+          "FH": 495,
+          "geodesic": 8,
+          "hypotheticalFlatAnchorRGB8": [
+            248,
+            203,
+            179
+          ]
+        }
+      ],
+      "sameGeodesicRegion": true,
+      "finding": "A flat anchor for this parent would erase an observed thin source stroke. Keep child/source evidence; do not adopt flat P."
+    }
+  },
+  "sameUVWeakCheekProbes": {
+    "sourceCropXY": [
+      [
+        382,
+        704
+      ],
+      [
+        380,
+        704
+      ],
+      [
+        384,
+        704
+      ]
+    ],
+    "fullTextureOffset": [
+      4,
+      7
+    ],
+    "baseColorRGBA8": [
+      [
+        253,
+        228,
+        208,
+        255
+      ],
+      [
+        254,
+        235,
+        213,
+        255
+      ],
+      [
+        254,
+        237,
+        216,
+        255
+      ]
+    ],
+    "normalRGBA8": [
+      [
+        126,
+        125,
+        255,
+        255
+      ],
+      [
+        126,
+        125,
+        255,
+        255
+      ],
+      [
+        126,
+        125,
+        255,
+        255
+      ]
+    ]
+  },
+  "finiteOutlineColourInput": {
+    "materialId": 3,
+    "source": "original VRMC_materials_mtoon.outlineColorFactor",
+    "linearRGB": [
+      0.0612460561,
+      0.008568122,
+      0.014443838
+    ],
+    "lightingMix": 0,
+    "widthMode": "worldCoordinates",
+    "widthMetres": 0.00075,
+    "renderApplied": false,
+    "missing": "Verified per-stage silhouette/interior-region/partial-alpha outline classification and priority. Known colour alone does not identify outline pixels."
+  },
+  "confirmedFaceBindingsAdded": 0,
+  "newRegionDecisionMade": false,
+  "paletteBridgeMissingInputs": [
+    "Confirmed full-face source region hierarchy that preserves scalp/skin separation and the actual weak cheek stroke/gradient/AA evidence.",
+    "Confirmed region-to-family/source-sample bindings; 104 parent8 is not a flat palette family and material ID is not a substitute.",
+    "Same-frame primitive/material/UV-to-region raster supplier for each initial/final pass, including opaque interior vs partial/AA boundaries and matching Q/Qprime metadata.",
+    "Separate finite outline/partial-alpha and post-LUT colour handling contract."
+  ],
+  "preciseLimit": "Original face colour/UV and shading metadata exist. Existing records do not contain an accepted hierarchy/decision for weak cheek paint vs continuous gradient/AA simplification. This is missing validated region assignment/objective, not missing raw texture or a proof that automatic segmentation is impossible.",
+  "requiredTests": [
+    "Keep cheek source probes(382,704)/(380,704)/(384,704) distinct from discarded AA only when evidence/policy justifies it.",
+    "Same original RGB/Q must not change because material anchor changes.",
+    "Per-stage confirmed region/Q binding and explicit outline/partial-alpha handling are required before whole-face finite-palette claims."
+  ],
+  "GPUUnityOrAssetWrites": 0,
+  "product77Changed": false
+}

@@ -1,0 +1,35 @@
+{
+  "sourceBox": [
+    310,
+    620,
+    425,
+    710
+  ],
+  "testsAtNativeRadii": [
+    {
+      "radius": 1,
+      "positiveCells": 1380,
+      "seedComponentCells": 0,
+      "closedInsideDiagnosticBox": false,
+      "seedPositive": false
+    },
+    {
+      "radius": 2,
+      "positiveCells": 1966,
+      "seedComponentCells": 89,
+      "closedInsideDiagnosticBox": false,
+      "seedPositive": true
+    },
+    {
+      "radius": 4,
+      "positiveCells": 2130,
+      "seedComponentCells": 17,
+      "closedInsideDiagnosticBox": false,
+      "seedPositive": true
+    }
+  ],
+  "rule": "No fixed colour threshold or palette bins; reject affine background only when no interval-feasible field fits centre. Positive residual is NOT proof of pigment vs smooth curvature.",
+  "classification": "hypothesis/diagnostic only; no source regions approved or filled",
+  "GPUCalls": 0,
+  "curvePriorStillNeeded": "A smooth nonlinear source colour gradient can reject an affine model. Residual closure alone is insufficient for source-feature semantics; keep original28 evidence and source RGB."
+}

@@ -1,0 +1,89 @@
+{
+  "profilerRunBefore": {
+    "allocated": 1764263783,
+    "mono": 1779621888,
+    "renderTextureCount": 30,
+    "reserved": 2454245376,
+    "utc": "2026-11-11T08:14:53.5716895Z"
+  },
+  "profilerRunAfter": {
+    "allocated": 1827229279,
+    "mono": 1367363584,
+    "renderTextureCount": 30,
+    "reserved": 2454376448,
+    "utc": "2026-11-11T08:15:04.4695858Z"
+  },
+  "profilerDeltaMiB": {
+    "allocated": 60.04857635498047,
+    "reserved": 0.125,
+    "mono": -393.16015625
+  },
+  "OSInitialRead": {
+    "utc": null,
+    "timeLimit": "First read of this task did not record UTC; not a controlled same-window Play measurement",
+    "workingSet64": 3195314176,
+    "privateCommitBytes": 6769328128
+  },
+  "OSAfterRead": {
+    "utc": "2026-11-11T08:20:37.1100728Z",
+    "workingSet64": 6610616320,
+    "privateCommitBytes": 10825068544
+  },
+  "OSPrivateCommitDifferenceGiB": 3.777202606201172,
+  "failedCandidateOwnRTUpperBytes": 17891328,
+  "originalUserTracked30Unchanged": true,
+  "newCleanupOrGC": false,
+  "leakRootOrResolutionProven": false,
+  "nativeComparisons": 47,
+  "nativeMatched": 46,
+  "nativeUnavailable": [
+    {
+      "equal": null,
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "status": "Unavailable",
+      "type": "UnityEditor.AssetImporter"
+    }
+  ],
+  "dirtyBeforeAfterEqual": false,
+  "scenesBeforeAfterEqual": true,
+  "inputRestoration": {
+    "deviceEnabledStates": true,
+    "devicesSame": true,
+    "exactJSON": true,
+    "hideFlags": true,
+    "keyboardSame": true,
+    "nativeId": "568105589213756420",
+    "sameAliveReference": true
+  },
+  "globalRestoreErrors": [],
+  "optionsRestored": true,
+  "pipelineRestored": true,
+  "timeRestored": true,
+  "backgroundRestored": true,
+  "observerRemoved": true,
+  "sourceOutlineDisposed": true,
+  "pending": 0,
+  "projectDirtyBeforeAfterEqual": true,
+  "editorInternalDirtyAdded": [
+    {
+      "path": "",
+      "type": "UnityEngine.Object"
+    },
+    {
+      "path": "",
+      "type": "UnityEditor.SceneVisibilityState"
+    }
+  ],
+  "editorInternalDirtyRemoved": [],
+  "unbackedEditorStateLimit": "Two added path-empty Editor internal objects are not covered by project-native content comparisons. No ClearDirty/default reconstruction performed.",
+  "OSLatestRead": {
+    "utc": "2026-11-11T08:40:43.1236080Z",
+    "pid": 28080,
+    "responding": true,
+    "workingSet64": 3384348672,
+    "privateCommitBytes": 6959677440
+  },
+  "OSLatestPrivateCommitOverInitialMiB": 181.53125,
+  "OSPeakRecededWithoutForcedCleanup": true,
+  "interpretation": "The OS commit spike mostly receded naturally. Initial OS UTC is absent, and these are not the same time window/counter as the11s Unity Profiler delta. Neither leak nor resolution/root cause is proven."
+}

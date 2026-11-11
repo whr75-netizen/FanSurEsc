@@ -1,0 +1,27 @@
+InvalidOperationException: 29 native pigment producer absent or sample grid mismatch
+  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.SourceOutline29.Record (UnityEngine.Rendering.RenderGraphModule.RenderGraph graph, UnityEngine.Rendering.Universal.UniversalResourceData unused) [0x0025d] in <8079ca500d0c4a0b9a7bab25b0ffdeea>:0 
+  at (wrapper delegate-invoke) System.Action`2[UnityEngine.Rendering.RenderGraphModule.RenderGraph,UnityEngine.Rendering.Universal.UniversalResourceData].invoke_void_T1_T2(UnityEngine.Rendering.RenderGraphModule.RenderGraph,UnityEngine.Rendering.Universal.UniversalResourceData)
+  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.LayerZero101.RecordRenderGraph (UnityEngine.Rendering.RenderGraphModule.RenderGraph graph, UnityEngine.Rendering.ContextContainer frame) [0x001b1] in <8079ca500d0c4a0b9a7bab25b0ffdeea>:0 
+  at UnityEngine.Rendering.Universal.ScriptableRenderer.RecordCustomRenderGraphPassesInEventRange (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.Universal.RenderPassEvent eventStart, UnityEngine.Rendering.Universal.RenderPassEvent eventEnd) [0x0002c] in .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\ScriptableRenderer.cs:983 
+  at UnityEngine.Rendering.Universal.ScriptableRenderer.RecordCustomRenderGraphPasses (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.Universal.RenderPassEvent startInjectionPoint, UnityEngine.Rendering.Universal.RenderPassEvent endInjectionPoint) [0x00007] in .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\ScriptableRenderer.cs:1002 
+  at UnityEngine.Rendering.Universal.ScriptableRenderer.RecordCustomRenderGraphPasses (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.Universal.RenderPassEvent injectionPoint) [0x00000] in .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\ScriptableRenderer.cs:1007 
+  at UnityEngine.Rendering.Universal.UniversalRenderer.OnAfterRendering (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, System.Boolean applyPostProcessing) [0x0007c] in .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\UniversalRendererRenderGraph.cs:1320 
+  at UnityEngine.Rendering.Universal.UniversalRenderer.OnRecordRenderGraph (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.ScriptableRenderContext context) [0x001fa] in .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\UniversalRendererRenderGraph.cs:661 
+  at UnityEngine.Rendering.Universal.ScriptableRenderer.RecordRenderGraph (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.ScriptableRenderContext context) [0x0004c] in .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\ScriptableRenderer.cs:936 
+  at UnityEngine.Rendering.Universal.UniversalRenderPipeline.RecordAndExecuteRenderGraph (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.ScriptableRenderContext context, UnityEngine.Rendering.Universal.ScriptableRenderer renderer, UnityEngine.Rendering.CommandBuffer cmd, UnityEngine.Camera camera) [0x00079] in .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\UniversalRenderPipelineRenderGraph.cs:27 
+UnityEngine.DebugLogHandler:Internal_LogException_Injected(Exception, IntPtr)
+UnityEngine.DebugLogHandler:Internal_LogException(Exception, Object)
+UnityEngine.DebugLogHandler:LogException(Exception, Object)
+UnityEngine.Logger:LogException(Exception, Object)
+UnityEngine.Debug:LogException(Exception)
+UnityEngine.Rendering.RenderGraphModule.RenderGraph:ResetGraphAndLogException(Exception) (at .\Library\PackageCache\com.unity.render-pipelines.core@a4c9a9793789\Runtime\RenderGraph\RenderGraph.cs:1289)
+UnityEngine.Rendering.Universal.UniversalRenderPipeline:RecordAndExecuteRenderGraph(RenderGraph, ScriptableRenderContext, ScriptableRenderer, CommandBuffer, Camera) (at .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\UniversalRenderPipelineRenderGraph.cs:32)
+UnityEngine.Rendering.Universal.UniversalRenderPipeline:RenderSingleCamera(ScriptableRenderContext, UniversalCameraData) (at .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\UniversalRenderPipeline.cs:1003)
+UnityEngine.Rendering.Universal.UniversalRenderPipeline:RenderCameraStack(ScriptableRenderContext, Camera, Boolean) (at .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\UniversalRenderPipeline.cs:1207)
+UnityEngine.Rendering.Universal.UniversalRenderPipeline:Render(ScriptableRenderContext, List`1) (at .\Library\PackageCache\com.unity.render-pipelines.universal@d7774c218bdf\Runtime\UniversalRenderPipeline.cs:611)
+UnityEngine.Rendering.RenderPipeline:InternalRender(ScriptableRenderContext, List`1)
+UnityEngine.Rendering.RenderPipelineManager:DoRenderLoop_Internal(RenderPipelineAsset, IntPtr, Object, AtomicSafetyHandle)
+UnityEngine.Camera:Render_Injected(IntPtr)
+UnityEngine.Camera:Render()
+HeadLocal367:RenderFrame() (at Assets\EUnityValidation01\HeadLocal367\Runtime\HeadLocal367.cs:32)
+Gameplay397:Present() (at Assets\EUnityValidation01\MatchedPlayer397\Gameplay397.cs:33)

@@ -1,0 +1,23 @@
+{
+  "CPUHostCompile": "passed",
+  "hostSHA256": "18fc0074012dfee630a333ab9acdf40b37ac2a35bed8f21ad7e63c194edc4dbb",
+  "proposedShaderSHA256": "8205f105bcb37d379a89391ef01a0cba7f733e1f25c00f864f09aeeafd62ffcf",
+  "shaderImport": false,
+  "GPUExecution": false,
+  "appliedAssets": false,
+  "fixes": [
+    "Remove canonical DenseNative as physical sample supplier; native source pigment has own physical8x pass on the exact same source grid as outline.",
+    "Use source material depth-write/discard and preserve raw pigment alpha separately from material alpha.",
+    "Validate before recording, defer own failures outside RenderGraph; never throw own guard through URP graph recording.",
+    "Cache native topology/material identities per view; own all targets/materials/classifier and never dispose borrowed renderer buffers."
+  ],
+  "stillUnverified": [
+    "Native source outline/pigment raster output and class CPU/GPU equivalence.",
+    "Partial transparent occlusion and full face colour-region mapping.",
+    "New failures no longer abort URP graph in real Editor; only CPU compile inspected.",
+    "Same-object material/texture content edits need source-generation invalidation before production use.",
+    "URP ZBinning job public Edit stability does not prove all internal jobs released; no new render performed."
+  ],
+  "ownedRTWorstBytes": 34668544,
+  "dynamicGPUArraysBVH115": false
+}

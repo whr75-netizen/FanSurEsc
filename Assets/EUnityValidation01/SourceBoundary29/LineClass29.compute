@@ -1,0 +1,21 @@
+#pragma kernel Classify29
+// Source-typed evidence, NOT a final outline-placement/colour-compositing rule.
+Texture2D<float4> _Outline29,_Pigment29,_Q29,_NativeMeta29;
+RWTexture2D<float4> _Class29;
+int4 _Rect29,_PigmentRect29; // top-left head logical grid, integer extents
+bool Face29(int2 p){if(any(p<0)||any(p>=int2(480,272)))return false;float4 m=_NativeMeta29.Load(int3(2*p+1,0));return m.x>0&&round(m.y)==4;}
+[numthreads(8,8,1)]void Classify29(uint3 id:SV_DispatchThreadID){
+ int2 p=id.xy;if(any(p>=_Rect29.zw))return;
+ int2 physical=int2(_Rect29.x+p.x,272-_Rect29.y-_Rect29.w+p.y);
+ float outline=0,pigment=0;bool pigmentKnown=true;
+ [unroll]for(int y=0;y<8;y++)[unroll]for(int x=0;x<8;x++){
+  int2 fine=8*p+int2(x,y);outline+=_Outline29.Load(int3(fine,0)).a;
+  int2 src=int2(8*(_Rect29.x-_PigmentRect29.x)+fine.x,8*((_PigmentRect29.y+_PigmentRect29.w)-(_Rect29.y+_Rect29.w))+fine.y);
+  if(all(src>=0)&&all(src<_PigmentRect29.zw*8))pigment+=_Pigment29.Load(int3(src,0)).a;else pigmentKnown=false;
+ }
+ float4 q=_Q29.Load(int3(physical,0));bool face=Face29(physical),qKnown=face&&q.a>0;float transition=0;
+ int2 dirs[4]={int2(-1,0),int2(1,0),int2(0,-1),int2(0,1)};
+ [unroll]for(int k=0;k<4;k++){int2 n=physical+dirs[k];if(qKnown&&Face29(n)){float4 other=_Q29.Load(int3(n,0));if(other.a>0&&other.x!=q.x)transition=1;}}
+ uint flags=(face?1:0)|(pigmentKnown?2:0)|(qKnown?4:0)|8;
+ _Class29[p]=float4(outline/64,pigment/64,transition,flags);
+}

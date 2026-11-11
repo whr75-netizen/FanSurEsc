@@ -1,0 +1,46 @@
+{
+  "installedSource": [
+    {
+      "file": "Library\\PackageCache\\com.unity.render-pipelines.universal@d7774c218bdf\\Runtime\\ForwardLights.cs",
+      "SHA256": "3131afcecbe0dd7cdd35e5e65b5656ae6241fc9c629dd9d057a526f9d9d9dd32",
+      "lines": [
+        {
+          "line": 418,
+          "text": "m_CullingHandle = ScheduleClusteringJobs("
+        },
+        {
+          "line": 491,
+          "text": "m_CullingHandle.Complete();"
+        },
+        {
+          "line": 576,
+          "text": "internal void Cleanup()"
+        },
+        {
+          "line": 580,
+          "text": "m_CullingHandle.Complete();"
+        }
+      ]
+    },
+    {
+      "file": "Library\\PackageCache\\com.unity.render-pipelines.universal@d7774c218bdf\\Runtime\\UniversalRenderPipelineRenderGraph.cs",
+      "SHA256": "34fc87821f56e449a35833cd1b0c9aef5ba2fb531e3e37dceeed30b942238b2b",
+      "lines": [
+        {
+          "line": 27,
+          "text": "renderer.RecordRenderGraph(renderGraph, context);"
+        },
+        {
+          "line": 28,
+          "text": "renderGraph.EndRecordingAndExecute();"
+        },
+        {
+          "line": 32,
+          "text": "if (renderGraph.ResetGraphAndLogException(e))"
+        }
+      ]
+    }
+  ],
+  "inference": "The own Record guard exception occurs before EndRecordingAndExecute. ForwardLights schedules clustering in PreSetup; completion exists in Setup/Cleanup. This supports the secondary job-lifetime failure sequence. It does NOT establish whether the current private job is still live after Edit/pipeline restoration.",
+  "noPrivateHandleLookupOrManipulation": true
+}

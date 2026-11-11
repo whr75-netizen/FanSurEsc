@@ -1,0 +1,46 @@
+#pragma kernel SourceDomain49
+// Native395.Present's shared cell/world sampling, with the actual producer's
+// output/depth/cell receipts. Private candidate only; no production history writes.
+Texture2D<float4> _Line41,_Proof41,_NativeColour42,_MainMeta41,_NativeDepth42,_NativeCell42;
+Texture2D<float4> _NativeOwner47,_SurfaceUV47,_SelectedSource48,_FeatureDomain49;
+int _RegisteredRole48,_RegisteredTriangleCount48;
+RWTexture2D<float4> _Atlas41,_NativeAfter42,_OwnerReceipts47;
+int _OwnerScope45;
+int2 _Size41,_HeadTextureOrigin41,_JoinOffset41,_NativeOrigin42;int _NativeScale42;
+float2 _DeliveredDelta42;float _DepthOffset41;float4 _Ink41;
+[numthreads(8,8,1)]void SourceDomain49(uint3 id:SV_DispatchThreadID){
+ int2 local=id.xy;if(any(local>=_Size41))return;
+ int2 q=local+_HeadTextureOrigin41+_JoinOffset41;
+ int2 p=clamp((int2)floor(float2(_NativeOrigin42)+(float2(q)+.5+_DeliveredDelta42)*_NativeScale42),int2(0,0),int2(959,543));
+ bool inside=all(q>=0)&&all(q<int2(480,272));
+ float4 before=_NativeColour42.Load(int3(p,0));
+ float4 meta=inside?_MainMeta41.Load(int3(q,0)):0;
+ float4 world=_NativeDepth42.Load(int3(p,0));
+ float4 cell=_NativeCell42.Load(int3(p,0));
+ float4 stroke=_Line41.Load(int3(local,0)),proof=_Proof41.Load(int3(local,0));
+ float depth=proof.x+_DepthOffset41;
+ bool finite=all(isfinite(stroke))&&all(isfinite(proof))&&all(isfinite(meta))&&all(isfinite(world))&&all(isfinite(cell))&&isfinite(depth);
+ bool matched=all(cell.xy==float2(q));
+ bool source=stroke.a==1&&all(stroke.rgb==_Ink41.rgb)&&proof.x>0&&proof.y>0&&proof.w>0;
+ bool style=inside&&finite&&matched&&(meta.x<=0||depth<=meta.x+.0001);
+ bool visible=inside&&finite&&matched&&world.x>0&&depth<=world.x+.0001;
+ bool use=source&&style&&visible;
+ float4 after=use?float4(_Ink41.rgb,1):before;
+ float4 gate=float4(source?1:0,style?1:0,visible?1:0,inside&&finite&&matched?(use?1:0):-1);
+ _Atlas41[local+int2(9*_Size41.x,0)]=before;_Atlas41[local+int2(10*_Size41.x,0)]=after;
+ _Atlas41[local+int2(11*_Size41.x,0)]=gate;_Atlas41[local+int2(12*_Size41.x,0)]=meta;
+ _Atlas41[local+int2(13*_Size41.x,0)]=world;_Atlas41[local+int2(14*_Size41.x,0)]=cell;
+ // Explicit SourceCurve namespace; zero means unchanged native backing with unresolved source owner.
+ float4 originalOwner=_NativeOwner47.Load(int3(p,0));float4 originalUV=inside?_SurfaceUV47.Load(int3(q,0)):0;
+ float4 domain49=inside?_FeatureDomain49.Load(int3(q,0)):0;bool designed49=domain49.x>=.5;bool nativeVisible=cell.z==1;bool ownerReceipt=inside&&finite&&matched&&all(isfinite(originalOwner))&&all(isfinite(originalUV));
+ _Atlas41[local+int2(15*_Size41.x,0)]=use?float4(1,proof.y,_OwnerScope45,proof.z):float4(ownerReceipt?(nativeVisible?(designed49?4:2):3):0,0,_OwnerScope45,0);
+ _OwnerReceipts47[local]=originalOwner;_OwnerReceipts47[local+int2(_Size41.x,0)]=originalUV;
+ float4 selectedSource=inside?_SelectedSource48.Load(int3(q,0)):0;
+ bool sourceCarrier=!designed49&&ownerReceipt&&nativeVisible&&all(isfinite(selectedSource))&&selectedSource.x==originalOwner.z&&selectedSource.y==originalOwner.x&&selectedSource.z==originalOwner.y&&selectedSource.y==_RegisteredRole48&&selectedSource.w>0&&selectedSource.w<=_RegisteredTriangleCount48&&selectedSource.w==round(selectedSource.w);
+ _OwnerReceipts47[local+int2(2*_Size41.x,0)]=selectedSource;
+ _OwnerReceipts47[local+int2(3*_Size41.x,0)]=designed49?float4(-4,domain49.yzw):sourceCarrier?float4(4,selectedSource.y,selectedSource.z,selectedSource.w):0;
+ // Supported Native395 scale2: each output point of the same q uses exactly
+ // the same source/world texel in Native395. Verified against copied actual pixels.
+ int2 b=2*local;_NativeAfter42[b]=after;_NativeAfter42[b+int2(1,0)]=after;
+ _NativeAfter42[b+int2(0,1)]=after;_NativeAfter42[b+int2(1,1)]=after;
+}

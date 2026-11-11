@@ -1,0 +1,90 @@
+{
+  "actualGPUCases": 6,
+  "coverageExactCases": 6,
+  "CPUAnalyticOracle": "finite segment with linearly varying source-disc radius; source point chosen at nearest view depth in feasible t intervals",
+  "rows": [
+    {
+      "case": 0,
+      "sourceRadii": [
+        0,
+        0
+      ],
+      "coveredPixels": 0,
+      "coverageMismatch": 0,
+      "depthMaxAbs": 0.0,
+      "sourceTMaxAbs": 0.0,
+      "radiusMaxAbs": 0.0,
+      "paletteMismatch": 0
+    },
+    {
+      "case": 1,
+      "sourceRadii": [
+        0.20000000298023224,
+        0.20000000298023224
+      ],
+      "coveredPixels": 10,
+      "coverageMismatch": 0,
+      "depthMaxAbs": 1.5967040161157797e-06,
+      "sourceTMaxAbs": 2.632224656906601e-06,
+      "radiusMaxAbs": 0.0,
+      "paletteMismatch": 0
+    },
+    {
+      "case": 2,
+      "sourceRadii": [
+        0.699999988079071,
+        0.699999988079071
+      ],
+      "coveredPixels": 35,
+      "coverageMismatch": 0,
+      "depthMaxAbs": 3.1391676014180803e-06,
+      "sourceTMaxAbs": 5.180309648245007e-06,
+      "radiusMaxAbs": 0.0,
+      "paletteMismatch": 0
+    },
+    {
+      "case": 3,
+      "sourceRadii": [
+        2.200000047683716,
+        2.200000047683716
+      ],
+      "coveredPixels": 123,
+      "coverageMismatch": 0,
+      "depthMaxAbs": 7.573446587638699e-07,
+      "sourceTMaxAbs": 1.2870076859794466e-06,
+      "radiusMaxAbs": 0.0,
+      "paletteMismatch": 0
+    },
+    {
+      "case": 4,
+      "sourceRadii": [
+        0.20000000298023224,
+        3.0999999046325684
+      ],
+      "coveredPixels": 97,
+      "coverageMismatch": 0,
+      "depthMaxAbs": 3.064247328099512e-06,
+      "sourceTMaxAbs": 5.17500540919702e-06,
+      "radiusMaxAbs": 1.5025090791542794e-05,
+      "paletteMismatch": 0
+    },
+    {
+      "case": 5,
+      "sourceRadii": [
+        3.0999999046325684,
+        0.20000000298023224
+      ],
+      "coveredPixels": 97,
+      "coverageMismatch": 0,
+      "depthMaxAbs": 3.102561929591019e-06,
+      "sourceTMaxAbs": 5.098530923119959e-06,
+      "radiusMaxAbs": 1.4754172207087635e-05,
+      "paletteMismatch": 0
+    }
+  ],
+  "resourcesReleased": true,
+  "stateUnchanged": true,
+  "modelWorldWidthPolicySpecified": false,
+  "characterVariableWidthComplete": false,
+  "minimumThinLineReplaced": false
+}

@@ -1,0 +1,19 @@
+from pathlib import Path
+import json,numpy as np
+from native_contour42 import coordinates,oracle
+from surface_paths34 import native
+from trace_contour40 import geometry
+H=Path(__file__).resolve().parent;G=H/'face48';C=G/'capture'
+def main():
+ r=json.loads((C/'COMPLETE.json').read_text());assert r['restorationChecksPass']and r['ownedResourcesReleased']and r['pendingOwners']==0 and not r['errors'];surface,binding=native();rows=[];total=0;recovered=0;bad=[]
+ for f in r['frames']:
+  def read(name):
+   p=next(p for p in r['planes']if p['frame']==f['frame']and p['name']==name);return np.fromfile(C/p['file'],dtype='<f4').reshape(p['height'],p['width'],4)
+  w=f['QROI'][2];a=read('atlas40');fields=[a[:,i*w:(i+1)*w]for i in range(16)];b=read('ownerReceipts47');back=[b[:,i*w:(i+1)*w]for i in range(4)];info=f['frameInfo']['nativeComposite42'];registration=f['frameInfo']['sourceCarrier48'];assert registration['triangleCount']==len(surface.indices)and registration['rendererOrdinal']==binding['rendererOrdinal']and registration['subMesh']==binding['subMesh'];raw=back[2];nativeVisible=fields[14][:,:,2]==1;owner=back[0];q,_,inside=coordinates(f['QROI'],info['joinOffset'],info['nativeOrigin'],info['deliveredDelta']);expected,gate=oracle(fields[3],fields[4],fields[9],fields[12],fields[13],fields[14],inside,q,info['depthOffset'],np.asarray(f['frameInfo']['sourceOutlineRGB39'],np.float32));assert expected.tobytes()==fields[10].tobytes()and gate.tobytes()==fields[11].tobytes();assert np.array_equal(owner[nativeVisible],fields[12][:,:,[1,2,0,3]][nativeVisible]);good=nativeVisible&inside&np.all(fields[14][:,:,:2]==q,2)&(raw[:,:,0]==owner[:,:,2])&(raw[:,:,1]==owner[:,:,0])&(raw[:,:,2]==owner[:,:,1])&(raw[:,:,1]==registration['registeredRole'])&(raw[:,:,3]>0)&(raw[:,:,3]<=len(surface.indices))&(raw[:,:,3]==np.rint(raw[:,:,3]));assert np.all((back[3][:,:,0]==4)==good);assert np.array_equal(back[3][good,1:],raw[good,1:])and np.all(back[3][~good]==0)
+  g=geometry(C/f"geometry-frame{f['frame']}.bin");assert g['sourceId']==f['sourceId'];depthErrors=[];baryErrors=[]
+  for y,x in np.argwhere(good):
+   t=int(round(raw[y,x,3]))-1;uv=back[1][y,x,:2].astype(float);p=surface.inv[t]@(uv-surface.tri[t,0]);bary=np.r_[1-p.sum(),p];baryErrors.append(float(bary.min()));world=bary@g['points']['world'][surface.indices[t]].astype(float);depth=-float(g['view'][2,:3]@world+g['view'][2,3])+info['depthOffset'];error=abs(depth-float(owner[y,x,2]));depthErrors.append(error)
+   if not surface.good[t]or bary.min()<-2e-7 or error>=2e-5:bad.append({'frame':f['frame'],'localPixel':[int(x),int(y)],'primitive':t+1,'UV':uv.tolist(),'minBarycentric':float(bary.min()),'depthResidualMetres':error})
+  face=(fields[15][:,:,0]==2)&(owner[:,:,0]==registration['registeredRole']);n=int((face&good).sum());total+=int(face.sum());recovered+=n;current=read('currentColour47');different=nativeVisible&(current[:,:,:3]!=fields[9][:,:,:3]).any(2);rows.append({'frame':f['frame'],'nativeFacePixels':int(face.sum()),'GPUFlaggedFaceCarriersNotYetVerified':n,'allMeshCarrierFlags':int(good.sum()),'maxDepthResidualMetres':max(depthErrors,default=0),'minBarycentric':min(baryErrors,default=None),'RGBByteMatchCPU':True,'nativeVsCurrentRGBDifferent':int(different.sum()),'nativeCanonicalOwnerChanged':False})
+ result={'actualFrames':6,'nativeFacePixels':total,'GPUFlaggedFaceCarriersNotYetVerified':recovered,'geometryCarrierPass':not bad,'invalidGeometryClaims':bad,'sourceCarrierIsColourFamily':False,'curveAliasedToMeshPrimitive':False,'productionRGBOrOwnerHistoryChanged':False,'worldSourceOwnerStillUnresolved':True,'rows':rows};(G/'ACTUAL_CARRIER48.json').write_text(json.dumps(result,indent=2),encoding='utf-8',newline='\n');print(json.dumps(result));assert not bad,'48 selected colour UV and geometric carrier pair rejected; keep failed evidence, do not adopt'
+if __name__=='__main__':main()

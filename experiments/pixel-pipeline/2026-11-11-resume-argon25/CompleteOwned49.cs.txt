@@ -1,0 +1,34 @@
+using System;using System.IO;using System.Linq;using System.Reflection;using UnityEngine;using UnityEditor;using UnityEngine.Rendering;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+internal class CommandScript:IRunCommand {
+ const string Capture=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face49\capture";
+ const string Output=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face49\recovery";
+ const BindingFlags OwnPrivate=BindingFlags.Instance|BindingFlags.NonPublic;
+ static void Write(string name,string text){using(var f=new FileStream(Path.Combine(Output,name),FileMode.CreateNew,FileAccess.Write,FileShare.Read))using(var w=new StreamWriter(f))w.Write(text);}
+ public void Execute(ExecutionResult result){
+  if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("49 stable Edit required; no Exit request");
+  if(File.Exists(Path.Combine(Output,"STARTED.txt")))throw new InvalidOperationException("49 inspect original completion request; no resubmission");
+  if(!File.ReadAllText(Path.Combine(Capture,"STATE-004-Edit-restoration-checked.json")).Contains("\"restorationChecksPass\":true"))throw new InvalidOperationException("49 original restoration evidence missing");
+  // These private reads target only this worker's own generated observer. No
+  // Unity internals, jobs, InputSettings, driver state or private setters.
+  var types=AppDomain.CurrentDomain.GetAssemblies().Select(a=>a.GetType("Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript",false)).Where(t=>t!=null&&t.GetField("Root",BindingFlags.NonPublic|BindingFlags.Static)?.GetRawConstantValue()as string==Capture).ToArray();
+  if(types.Length!=1)throw new InvalidOperationException("49 unique owned observer assembly required");var type=types[0];var root=type.GetField("active",BindingFlags.NonPublic|BindingFlags.Static).GetValue(null);if(root==null)throw new InvalidOperationException("49 observer already finished; do not submit");
+  var all=(Array)type.GetField("cohort",OwnPrivate).GetValue(root);var pending=all.Cast<object>().Where(p=>!(bool)p.GetType().GetProperty("CanRelease").GetValue(p)).ToArray();if(pending.Length!=1)throw new InvalidOperationException("49 expected exactly one acknowledged owner without completion barrier");
+  var owner=pending[0];var ot=owner.GetType();var ticket=ot.GetField("submission",OwnPrivate).GetValue(owner);var tt=ticket.GetType();
+  if(!(bool)tt.GetProperty("CommandsPossible").GetValue(ticket)||(bool)tt.GetField("barrierAttempted",OwnPrivate).GetValue(ticket)||(bool)tt.GetField("callbackSeen",OwnPrivate).GetValue(ticket))throw new InvalidOperationException("49 completion already attempted or outcome uncertain; no retry");
+  if(ot.GetProperty("Failure").GetValue(owner)?.ToString().Contains("49 current head feature producer mode invalid")!=true)throw new InvalidOperationException("49 exact owned managed failure required");
+  string key=(string)ot.GetProperty("FrameKey").GetValue(owner);int generation=(int)ot.GetField("generation",OwnPrivate).GetValue(owner);var fields=(RTHandle[])ot.GetField("Fields",OwnPrivate).GetValue(owner);var atlas=fields[12]?.rt;if(!atlas||!atlas.IsCreated()||atlas.graphicsFormat!=UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat)throw new InvalidOperationException("49 live owned atlas ABI required");
+  Write("STARTED.txt",DateTime.UtcNow.ToString("O")+"\nsource="+key+"\nassembly="+type.Module.ModuleVersionId+"\nownedRT="+atlas.GetEntityId()+"\nbytes=16\nNo draw/dispatch/Play/global mutation. Original observer alone releases resources.");
+  // A real queue completion read, not a guessed acknowledgement. Keep the
+  // original failed status, so this can never turn failed pixels into output.
+  tt.GetMethod("BeforeBarrier").Invoke(ticket,null);
+  try{AsyncGPUReadback.Request(atlas,0,0,1,0,1,0,1,TextureFormat.RGBAFloat,r=>{
+   try{bool valid=r.done&&!r.hasError&&r.layerDataSize==16;if(valid){var data=r.GetData<byte>();valid=data.Length==16;}
+    tt.GetMethod("AcceptCallback").Invoke(ticket,new object[]{key,generation,r.done,!valid});
+    Write(valid?"CALLBACK_COMPLETE.txt":"CALLBACK_FAILED.txt",DateTime.UtcNow.ToString("O")+"\ndone="+r.done+"\nerror="+r.hasError+"\nbytes="+r.layerDataSize+"\nCanRelease="+ot.GetProperty("CanRelease").GetValue(owner)+"\nCanUsePixels="+ot.GetProperty("CanUsePixels").GetValue(owner));
+   }catch(Exception e){Write("CALLBACK_EXCEPTION.txt",e.ToString());}
+  });result.Log("49 submitted one real 16-byte owned completion read; no draw/dispatch, private mutation or direct resource destruction; original normal-exit observer owns drain");}
+  catch(Exception e){Write("SUBMISSION_UNCERTAIN.txt",e.ToString());throw;}
+ }
+}
+}

@@ -1,0 +1,105 @@
+{
+  "baselineCommit": "474de71131ddf4d31185b28d9ed2b3971887697b",
+  "completedGPUCases": {
+    "45": {
+      "utc": "2026-11-11T15:41:50.5823112Z",
+      "restored": true,
+      "resourcesReleased": true,
+      "nativeEqual": 46,
+      "nativeTotal": 47,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1838131117,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1514713088,
+        "reserved": 2627899392,
+        "utc": "2026-11-11T15:40:58.6703232Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1872537389,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1339854848,
+        "reserved": 2628689920,
+        "utc": "2026-11-11T15:41:50.5722609Z"
+      }
+    },
+    "46": {
+      "utc": "2026-11-11T15:51:54.8883391Z",
+      "restored": true,
+      "resourcesReleased": true,
+      "nativeEqual": 47,
+      "nativeTotal": 47,
+      "beforeMemory": null,
+      "afterMemory": null
+    },
+    "47": {
+      "utc": "2026-11-11T15:59:14.9564799Z",
+      "restored": true,
+      "resourcesReleased": true,
+      "nativeEqual": 46,
+      "nativeTotal": 47,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1846078059,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1511743488,
+        "reserved": 2628558848,
+        "utc": "2026-11-11T15:57:59.8940096Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1880493404,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1340854272,
+        "reserved": 2628689920,
+        "utc": "2026-11-11T15:59:14.9474619Z"
+      }
+    },
+    "48": {
+      "utc": "2026-11-11T16:08:06.6326853Z",
+      "restored": true,
+      "resourcesReleased": true,
+      "nativeEqual": 46,
+      "nativeTotal": 47,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1852276087,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1435381760,
+        "reserved": 2628558848,
+        "utc": "2026-11-11T16:06:52.7920208Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1886392844,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1347170304,
+        "reserved": 2628689920,
+        "utc": "2026-11-11T16:08:06.6226593Z"
+      }
+    }
+  },
+  "48GeometryRejected": true,
+  "49SettingsRestored": true,
+  "49OwnedResourcesReleased": false,
+  "49BeforeRTs": 30,
+  "49AfterRTs": 75,
+  "49RetainedOwnedRTs": 45,
+  "49AllocatedMiBChange": 34.64542770385742,
+  "49CompletionReadDeniedBeforeExecution": "UNEXPECTED_ERROR: Script uses one or more unauthorized namespaces: Namespace System.Reflection is imported at line 1. Remove this usage and retry.",
+  "49CompletionReadSubmitted": false,
+  "49PendingAcknowledgementNotProofOfBusyGPU": true,
+  "future50CPUPatchOnly": true,
+  "product77Changed": false,
+  "user30Equal": true,
+  "facePaletteComplete": false,
+  "characterVariableWidthComplete": false,
+  "renderHistoryStabilizationClaimed": false,
+  "newGPUAllowedBeforeOwnedDrain": false,
+  "GPU115": 0,
+  "CUA": 0,
+  "SaveAssets": 0,
+  "killResetDriverGC": 0,
+  "push": false
+}

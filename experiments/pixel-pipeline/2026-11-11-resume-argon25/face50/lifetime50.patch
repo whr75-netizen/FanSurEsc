@@ -1,0 +1,49 @@
+--- executed49/RUN.cs.txt
++++ review-only50/RUN.cs.txt
+@@ -934,11 +934,21 @@
+  }
+  void ReleaseFinal41(){if(final41)UnityEngine.Object.DestroyImmediate(final41);}
+  sealed class FinalPass41:ScriptableRenderPass {readonly SourceOutline40 owner;public FinalPass41(SourceOutline40 owner){this.owner=owner;renderPassEvent=(RenderPassEvent)605;}public override void RecordRenderGraph(RenderGraph graph,ContextContainer context){owner.RecordFinal41(graph,context);}}
++ bool completionRecorded50;
+  void RecordFinal41(RenderGraph graph,ContextContainer context){
+   if(!RequiresFinal41)return;
+-  try{
++  CompletionScope50.Record(()=>RecordFinalCandidate50(graph,context),Fail,()=>RecordCompletion50(graph));
++ }
++ void RecordCompletion50(RenderGraph graph){
++  if(completionRecorded50||submission==null||!submission.CommandsPossible)return;
++  completionRecorded50=true; // Mark before an uncertain graph API; never resubmit.
++   using(var b=graph.AddUnsafePass<Data>("42 end barrier after actual native presentation",out var d)){d.owner=this;foreach(var t in Fields.Concat(QFields).Concat(new[]{Classification,depth,qDepth,fineDepth,styleDepth39}))b.UseTexture(graph.ImportTexture(t),AccessFlags.Read);b.AllowPassCulling(false);b.SetRenderFunc(static(Data p,UnsafeGraphContext c)=>p.owner.EndBarrier(c));}
++ }
++ void RecordFinalCandidate50(RenderGraph graph,ContextContainer context){
++  if(!RequiresFinal41)return;
++  {
+    if(Time.frameCount!=frame||context.Get<UniversalCameraData>().camera!=MainCamera41||!host41.headReady||!main41.contourReady||!native42.ready)throw new InvalidOperationException("42 native source/view/frame/order mismatch");
+-   if(!eye||eye.intrinsic==null||!eye.intrinsic.rt||!eye.intrinsic.rt.IsCreated()||!eye.candidateEnabled||eye.samplesOnly||eye.full!=host41.head)throw new InvalidOperationException("49 current head feature producer mode invalid; no unproduced texture accepted");finalRecorded41=true;join41=host41.offset;depth41=host41.depthOffset;delta42=native42.manualDelta?native42.delta:main41.motion.composeDelta;serialBefore42=native42.presentSerial;
++   if(!eye||eye.intrinsic==null||!eye.intrinsic.rt||!eye.intrinsic.rt.IsCreated()||eye.full!=host41.head||host41.headEyes!=eye||!host41.headEnabled||!host41.headReady)throw new InvalidOperationException("49 current head feature producer mode invalid; no unproduced texture accepted");finalRecorded41=true;join41=host41.offset;depth41=host41.depthOffset;delta42=native42.manualDelta?native42.delta:main41.motion.composeDelta;serialBefore42=native42.presentSerial;
+    int qx=QROI.x+join41.x,qy=272-QROI.y-QROI.height+join41.y;
+    if(qx<0||qy<0||qx+QROI.width>480||qy+QROI.height>272||main41.colour.rt.graphicsFormat!=Fields[16].rt.graphicsFormat)throw new InvalidOperationException("47 current source-colour receipt bounds/format");nativeMin42=new Vector2Int(Mathf.CeilToInt(native42.origin.x+2*(qx+delta42.x)-.5f),Mathf.CeilToInt(native42.origin.y+2*(qy+delta42.y)-.5f));
+    if(nativeMin42.x<0||nativeMin42.y<0||nativeMin42.x+2*QROI.width>960||nativeMin42.y+2*QROI.height>544)throw new InvalidOperationException("42 native footprint clipped; no guessed crop");
+@@ -946,8 +956,8 @@
+    if(FrameInfo40!=null)FrameInfo40["nativeComposite42"]=new Obj40{["sameFrame"]=frame,["sourceId"]=FrameKey,["headTextureOrigin"]=new Arr40(QROI.x,272-QROI.y-QROI.height),["joinOffset"]=new Arr40(join41.x,join41.y),["deliveredDelta"]=new Arr40(delta42.x,delta42.y),["depthOffset"]=depth41,["nativeOrigin"]=new Arr40(native42.origin.x,native42.origin.y),["nativeScale"]=2,["nativeROI"]=new Arr40(nativeMin42.x,nativeMin42.y,2*QROI.width,2*QROI.height),["presentSerialBeforeGraphExecute"]=serialBefore42,["worldSerial"]=native42.worldSerial,["presenterAsset"]=AssetDatabase.GetAssetPath(native42.compute),["policy"]="Native395.Present exact shared-cell/world sample; actual native depthAudit/cellID; private native RGB proposal only; owner/history not replaced"};
+    if(FrameInfo40!=null&&worldProof41!=null)FrameInfo40["worldFixture41"]=worldProof41;FrameInfo40["sourceOwner45"]=new Obj40{["slot"]=1,["ownerKind"]="SourceCurve",["featureOwnerInstance"]=eye.GetEntityId().ToString(),["cameraInstance"]=cameraIdentity,["model"]=model,["lifetimeSourcePacket"]=packet.Split(new[]{"/sequence"},StringSplitOptions.None)[0],["layout"]="kind1 SourceCurve(edge,t); kind2 original NativeProducerOwner raw payload, not assumed real triangle; kind3 WorldUnresolved; kind0 invalid receipt. Separate borrowed native backing/UV receipts; no curve-to-primitive alias",["productionHistoryWrites"]=false};
+    using(var b=graph.AddUnsafePass<Data>("42 actual Native395 final-depth candidate",out var d)){d.owner=this;foreach(var t in new[]{Fields[8],Fields[9],native42.output,main41.resolvedMeta,native42.depthAudit,native42.cellID,native42.owner,main41.resolvedUV,main41.colour,main41.preparedMeta,main41.domain,eye.intrinsic,eye.visible,eye.domain,eye.supportMeta})b.UseTexture(graph.ImportTexture(t),AccessFlags.Read);foreach(var t in new[]{Fields[12],Fields[13],Fields[14],Fields[15],Fields[16],Fields[17]})b.UseTexture(graph.ImportTexture(t),AccessFlags.ReadWrite);b.AllowPassCulling(false);b.SetRenderFunc(static(Data p,UnsafeGraphContext c)=>p.owner.ProduceFinal41(c));}
+-   using(var b=graph.AddUnsafePass<Data>("42 end barrier after actual native presentation",out var d)){d.owner=this;foreach(var t in Fields.Concat(QFields).Concat(new[]{Classification,depth,qDepth,fineDepth,styleDepth39}))b.UseTexture(graph.ImportTexture(t),AccessFlags.Read);b.AllowPassCulling(false);b.SetRenderFunc(static(Data p,UnsafeGraphContext c)=>p.owner.EndBarrier(c));}
+-  }catch(Exception e){Fail(e);}
++
++  }
+  }
+  void ProduceFinal41(UnsafeGraphContext context){
+   if(Failure!=null)return;
+@@ -972,3 +982,11 @@
+   return r;
+  }
+ }
++
++
++// Exception handling must never skip the GPU completion path of submitted work.
++public static class CompletionScope50 {
++ public static void Record(Action candidate,Action<Exception> failed,Action completion){
++  try{candidate();}catch(Exception error){failed(error);}finally{completion();}
++ }
++}

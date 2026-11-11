@@ -1,0 +1,36 @@
+{
+  "assertionGroups": 10,
+  "passed": [
+    "saved58 62 opaque samples / 52 old==q: RGB unchanged; output metadata matches bound integer k",
+    "LUT k versus applied Q mismatch rejected before upload",
+    "old Q is not silently accepted as applied Qprime",
+    "actor/view/source/stage/producer/frame/serial and equal-area different raster all rejected",
+    "missing/NaN Q and producer/palette count mismatch require explicit input correction",
+    "no epsilon repairs an inconsistent normalized label",
+    "stage metadata output owns its arrays and scope snapshot",
+    "actual saved scalp/cheek/AA probes remain unconfirmed; no guessed family or Q",
+    "partial alpha remains outside opaque finite-palette coverage",
+    "palette spacing changes neither region bindings nor applied Q metadata"
+  ],
+  "savedOpaqueSamples": 62,
+  "sameQ": 52,
+  "actualFaceBindings": 0,
+  "semanticRegionTruthValidated": false,
+  "newGPUOrUnityCalls": 0,
+  "productApplied": false,
+  "upstreamHashes": {
+    "ResolvedRegionInput.cs": "aac537bdfb73ae2d7c901eb45f3d48b07ec67e2d0577904bbf67e00340538009",
+    "ResolvedRegionPalette.hlsl": "71903ec8573cd3956fb939577ae07eb29536ccd05519d6146a3a857c928945be",
+    "CpuTests.cs": "8ef32c94db429ef132611f6a3541e77dd0e3e58784f778d927dba4b0f071ae03",
+    "FIXTURE58.json": "f2d47d08a8e773557e46beebd894dd8abcd34e796f89154d90c930342fc5bf25",
+    "candidate/SourcePalette54.hlsl": "d9961d87df48ad0e2a84b4612a33f8508ec059addb0deee083d1ec7f89c02cb8",
+    "candidate/SourcePalette58.cs": "c99c191d3d80f7d84c9b33ad0803d9365c6e66fec96db7668ae6f503f1ad1e4c",
+    "candidate/RestoreStyle335.compute": "8bf511f2c3d932d17a5078aebbfff21e96202684cfbebb552d17db2bf046ad32"
+  },
+  "noSourceMathChanges": true,
+  "actualStageRasterSupplierImplemented": false,
+  "newRuntimeBuffer": "_ResolvedRegionAppliedQ: float, same index/extent as binding and k; no live upload performed",
+  "shaderCompiledOrImported": false,
+  "staticDebugViewUsesLegacyPath": true,
+  "metadataReferenceNormalization": "Float32(k/(N-1)); test Q values are computed from recorded58 k, not observed raw live/GPU Q planes. Actual producer normalization/precision still requires verification."
+}

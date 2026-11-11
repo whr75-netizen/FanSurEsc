@@ -1,0 +1,22 @@
+--- face-region-lut/candidate/RestoreStyle335.compute
++++ face52/candidate/RestoreStyle335.compute
+@@ -1,4 +1,4 @@
+-#include "ResolvedRegionPalette.hlsl"
++#include "ResolvedShade52.hlsl"
+ #pragma kernel Restore
+ #include "Assets/EUnityValidation01/SkinPalette302/Shaders/HairRamp335.hlsl"
+ #pragma kernel ShadeBoundary
+@@ -79,10 +79,10 @@
+ }
+ [numthreads(8,8,1)]void ApplyShadeBoundary(uint3 id:SV_DispatchThreadID){
+  int2 p=id.xy;if(any(p>=_ShadeSize335))return;
+- float3 paletteRGB;
+- if(TryResolvedRegionPalette((uint2)p,paletteRGB)){
++ float3 paletteRGB;float appliedQ52;
++ if(_ShadeView335==0&&TryResolvedShade52((uint2)p,paletteRGB,appliedQ52)){
+   float4 colour=_ShadeColourOut335[p];colour.rgb=paletteRGB;_ShadeColourOut335[p]=colour;
+-  float4 cls=_ShadeClassOut335[p];cls.x=_ShadeMaskRead335.Load(int3(p,0)).x;_ShadeClassOut335[p]=cls;
++  float4 cls=_ShadeClassOut335[p];cls.x=appliedQ52;_ShadeClassOut335[p]=cls;
+   float4 factor=_ShadeFactorOut335[p];factor.rgb=1;_ShadeFactorOut335[p]=factor;
+   return;
+  }

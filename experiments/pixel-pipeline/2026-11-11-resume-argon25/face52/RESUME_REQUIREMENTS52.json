@@ -1,0 +1,60 @@
+{
+  "status": "Plan only. No Unity request, GPU operation, import, save, exit or restart executed in52/53.",
+  "currentBlocker": {
+    "evidence": "face51/SUPPORTED_LIFECYCLE51.json and details/PUBLIC_RESOURCE_DETAILS51.txt",
+    "lastPublicRTReadUTC": "2026-11-11T16:41:37.3252566Z",
+    "diagnosticRTsCreated": 45,
+    "completionACKKnown": false,
+    "originalObserverDrained": false,
+    "doNotInferCompletionFrom": ["elapsed time", "Edit mode", "Responding=true", "IsCreated", "CPU or memory changes"],
+    "noAdditionalGPUUntil": "Actual original owner completion and safe drain are proven, or a separately decided normal session teardown and new-session preservation check establishes a fresh baseline.",
+    "forbiddenRecovery": ["private/reflection retry", "remove original update delegate alone", "release RTs by name", "fake done callback", "force quit/reset", "automatic restart", "driver/TDR/security changes"]
+  },
+  "beforeAnyNormalCloseDecision": {
+    "currentOldBackupLocation": "face49/capture: NATIVE_BEFORE73.json, native-before-0..46.json, INPUT_BEFORE.json, GLOBALS_BEFORE.bin, STATE-004-Edit-restoration-checked.json",
+    "existingBackupHashesVerified": "47 of47 exact; user30 byte hashes unchanged in51. These are prior observations, not fresh live snapshots.",
+    "nativeDirtyCategoriesAtLastBackup": "Shader25 + FaceSourceOwner202 Mesh1 + EditorBuildSettings/EditorSettings/GraphicsSettings/PlayerSettings/TimeManager each1 =31",
+    "freshReadRequirements": [
+      "Verify actual PID/project/Edit/transition/compiling/updating and user changes without sending a GPU operation.",
+      "Snapshot current scene identities/dirty flags, dirty asset paths/types and raw native JSON to a new unique folder; validate byte hashes with the existing linear raw-hash path, never parse/re-serialize the mesh.",
+      "Record current InputSystem.settings object identity,22 serialized values, devices and public readable flags; preserve existing references while this session remains alive.",
+      "Back up exact current disk bytes and diffs of protected/product/user files. Do not overwrite existing49 backup or revert user changes.",
+      "Compare new native/scene/settings contents to disk and older snapshots. List actual unsaved content changes before choosing minimal save targets. A dirty count or SaveAssetIfDirty return alone does not prove saved contents.",
+      "Externalize current Play options/background/pipeline/time/gettable globals and binding ownership. Do not overwrite unknown bindings."
+    ],
+    "requiresExplicitDecisionBeforeExecution": "Normal save/close/reopen is outside the current CPU-only instruction. The user must decide after actual unsaved targets and loss limits are known.",
+    "limits": [
+      "JSON/raw hashes cover serialized content, not complete native state, Undo or all nonserialized flags.",
+      "InputSettings and all other live object identities cannot survive Editor process exit. Equal22 values in a new object are not same-object preservation.",
+      "One unloaded AssetImporter on the PlayerSettings path was not compared; the PlayerSettings object itself was compared exactly.",
+      "Existing45RTs have not been freed; no restart or normal close is proven mandatory."
+    ]
+  },
+  "futureMinimumRetestAfterBlockerResolved": {
+    "noAutoSubmit": true,
+    "firstScope": "One normal-render frame using50 finally completion guard and actual HeadLocal367 direct dispatch readiness; domain49 capture remains a hypothesis until its real producer data is obtained.",
+    "beforeSubmission": [
+      "Require stable Edit, no old pending owner, fresh current preservation snapshot and an unambiguous new sourceId/output folder.",
+      "Compile the external C# candidate offline first. Review every RT/MRT format, descriptor, pass attachment and owned-buffer lifetime; no project C# import or default77 replacement for this diagnostic.",
+      "Register the completion path before candidate failure can bypass it; restore failure state separately from resource release and pixel validity."
+    ],
+    "completion": "Bounded producer completion plus all bounded consumer callbacks must acknowledge the same owner/generation and expected byte size; partial results have no COMPLETE marker.",
+    "failure": "Stop recording/submission on first managed/GPU/readback/URP error. Queue normal exit once. Unknown completion retains resources; no timeout retry, early free or new dispatch.",
+    "after": "Normal Edit restoration, original InputSettings reference/22 values/devices, scenes/native contents, options/time/pipeline/gettable globals, actual observer removal and owned resource drain must all be verified before another test."
+  },
+  "palette52Integration": {
+    "preparation": "ResolvedShade52.Build checks the exact actor/view/source/frame/serial/stage/producer/extent and integer-k versus applied normalized Q. It cannot prove a caller-supplied semantic region or physical source correspondence.",
+    "runtimeBuffers": "One float _ResolvedRegionAppliedQ per exact stage cell, uploaded together with the existing binding/index/LUT packet in one owned material/compute scope; never global unbacked bindings or mixed generations.",
+    "additionalFloatBytes": {"480x272": 522240, "960x544": 2088960},
+    "differentStageSizes": "Need independently observed raster correspondence for each pass. No nearest resize or borrowing another pass's Q.",
+    "stillMissing": ["Confirmed full-face colour parent/child to finite-family mapping", "Actual same-stage source/UV/region supplier including designed-eye domain separation", "Partial-alpha/AA and post-LUT colour contract", "HLSL/actual GPU validation"]
+  },
+  "width46AndOwnerHistory53": {
+    "width": "46 is an explicit logical-radius geometric band operator plus separate44 minimum-expression policy. Do not equate its radius with native MToon world-coordinate inverted-hull width.",
+    "saved44Geometry": "sourceId/model/frame, evaluated world points/head projections/weld, indices, view and viewProjection; no per-vertex evaluated authored normals or extrusion vectors in this packet.",
+    "widthMissingForNativeEquivalence": "Same-frame evaluated authored extrusion/normal and width-mask correspondence or an explicit approved geometric-curve width policy. World width0.00075m alone does not identify the projected inverted hull.",
+    "history53": "Pure CPU source-parameter correspondence with one sorted index per completed frame. Same current visibility override and ambiguous ties; not a runtime stabilizing selector.",
+    "historyLifetime": "One instance per live actor/view/model/topology/UV/lifetime scope; failed/unknown packets cannot commit, replace or retire pending state. New topology/model/view/lifetime invalidates correspondence.",
+    "unverified": ["Real variable-width character rendering", "Runtime history feedback", "Long-term motion/art quality", "Live multi-view integration"]
+  }
+}

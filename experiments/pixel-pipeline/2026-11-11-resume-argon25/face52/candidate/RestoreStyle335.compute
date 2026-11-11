@@ -1,0 +1,105 @@
+#include "ResolvedShade52.hlsl"
+#pragma kernel Restore
+#include "Assets/EUnityValidation01/SkinPalette302/Shaders/HairRamp335.hlsl"
+#pragma kernel ShadeBoundary
+#pragma kernel ApplyShadeBoundary
+// Existing302 endpoint/classifier outputs only. No changes to source, coverage, owner or depth.
+Texture2D<float4> _Map335,_CurrentMeta335,_CurrentUV335,_CurrentRaw335,_NativeMeta335,_NativeUV335,_NativeRaw335,_StockMember335;
+Texture2D<float4> _LegacyColour480,_LegacyLit480,_LegacyShade480,_LegacyClass480,_LegacyColour960,_LegacyLit960,_LegacyShade960,_LegacyClass960;
+SamplerState sampler_StockMember335;
+RWTexture2D<float4> _Before335,_Colour335,_SelectedUV335;
+int _StockMode335,_FaceMain335,_SurfaceLayers335;float4 _Profile335;
+[numthreads(8,8,1)]void Restore(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;if(_SurfaceLayers335==0&&_StockMode335==0&&_FaceMain335==0)return;float4 map=_Map335.Load(int3(p,0));bool added=map.r>.5&&map.a>.5;int2 n=added?(int2)round(map.gb):2*p+1;float4 meta=added?_NativeMeta335.Load(int3(n,0)):_CurrentMeta335.Load(int3(p,0));int role=round(meta.y)-1;float4 before=_Before335[p];if(before.a<=0)return;float4 uv=added?_NativeUV335.Load(int3(n,0)):_CurrentUV335.Load(int3(p,0));float4 cls=added?_LegacyClass960.Load(int3(n,0)):_LegacyClass480.Load(int3(p,0));float4 selectedUV=_SelectedUV335[p];
+if(_SurfaceLayers335!=0&&(role==3||(role>=7&&role<=14))){float4 layered=added?_LegacyColour960.Load(int3(n,0)):_LegacyColour480.Load(int3(p,0));before.rgb=layered.rgb;selectedUV.z=cls.x;_Before335[p]=before;_Colour335[p]=before;_SelectedUV335[p]=selectedUV;return;}
+if(role==7&&_StockMode335>0&&_StockMember335.SampleLevel(sampler_StockMember335,uv.xy,0).r>.5){float lit=(_StockMode335==1)?selectedUV.z:cls.x;if(_StockMode335==2){float4 raw=added?_NativeRaw335.Load(int3(n,0)):_CurrentRaw335.Load(int3(p,0));before.rgb=raw.rgb*((_Profile335.w>.5&&lit<.5)?_Profile335.x:1);}else{float4 lc=added?_LegacyLit960.Load(int3(n,0)):_LegacyLit480.Load(int3(p,0));float4 sc=added?_LegacyShade960.Load(int3(n,0)):_LegacyShade480.Load(int3(p,0));before.rgb=lit>.5?lc.rgb:sc.rgb;}selectedUV.z=lit;}
+if(role==3&&_FaceMain335>0){float4 legacy=added?_LegacyColour960.Load(int3(n,0)):_LegacyColour480.Load(int3(p,0));before.rgb=legacy.rgb;selectedUV.z=cls.x;}
+_Before335[p]=before;_Colour335[p]=before;_SelectedUV335[p]=selectedUV;}
+
+// One bounded, discrete-label pass. No RGB averaging, alpha edits or silhouette edits.
+Texture2D<float4> _ShadeClass335,_ShadeMeta335,_ShadeNormal335,_ShadeMaskRead335,_ShadeLit335,_ShadeUV335;
+RWTexture2D<float4> _ShadeMaskOut335,_ShadeColourOut335,_ShadeFactorOut335,_ShadeClassOut335;
+int2 _ShadeSize335;int _ShadeStride335,_ShadeCurvature335,_ShadeApply335,_ShadeEnabled335,_ShadeView335;
+Texture2D<float4> _ShadeSkinMember335,_ShadeCreamMember335;
+float _ShadeWorldPixel335,_ShadeFloor335;float4 _ShadeFaceMinimum335,_ShadeStockMinimum335;int _ShadeFaceSteps335,_ShadeSurfaceSteps335;
+bool ShadeRole335(float4 m){int r=round(m.y)-1;return m.x>0&&(r==3||(r>=7&&r<=14));}
+// Existing UV membership is semantic input, independent of camera and model coordinates.
+int ShadeRegion335(int2 p,float4 meta){
+ int role=round(meta.y)-1;float2 uv=_ShadeUV335.Load(int3(p,0)).xy;
+ int result=role;
+ if(role==7){result=70;
+  if(_StockMember335.SampleLevel(sampler_StockMember335,uv,0).r>.5)result=71;
+  else if(_ShadeSkinMember335.SampleLevel(sampler_StockMember335,uv,0).r>.5)result=72;
+ }else if(role==10)result=_ShadeCreamMember335.SampleLevel(sampler_StockMember335,uv,0).r>.5?101:100;
+ return result;
+}
+bool ShadeNeighbour335(int2 p,int2 t,float4 m,float3 n,float depth){
+ if(any(t<0)||any(t>=_ShadeSize335))return false;
+ float4 other=_ShadeMeta335.Load(int3(t,0)),c=_ShadeClass335.Load(int3(t,0));
+ if(other.x<=0||abs(other.y-m.y)>.1||abs(other.z-m.z)>.1||c.a<.5)return false;
+ if(ShadeRegion335(p,m)!=ShadeRegion335(t,other))return false;
+ float3 normal=_ShadeNormal335.Load(int3(t,0)).xyz;
+ return dot(n,normalize(normal))>.94&&abs(c.z-depth)<_ShadeWorldPixel335*2;
+}
+[numthreads(8,8,1)]void ShadeBoundary(uint3 id:SV_DispatchThreadID){
+ int2 p=id.xy;if(any(p>=_ShadeSize335))return;
+ float4 c=_ShadeClass335.Load(int3(p,0)),m=_ShadeMeta335.Load(int3(p,0));float q=c.x;
+ if(_ShadeCurvature335!=0&&ShadeRole335(m)&&c.a>.5){
+  float3 n=normalize(_ShadeNormal335.Load(int3(p,0)).xyz);bool safe=true;
+  float lo=q,hi=q;int same=0;float opposite=q;
+  // A width-one tip must have exactly one same-label cardinal neighbour.
+  [unroll]for(int y=-1;y<=1;y++)[unroll]for(int x=-1;x<=1;x++)if(x!=0||y!=0){
+   int2 t=p+int2(x,y)*_ShadeStride335;safe=safe&&ShadeNeighbour335(p,t,m,n,c.z);
+   float v=_ShadeClass335.Load(int3(clamp(t,0,_ShadeSize335-1),0)).x;lo=min(lo,v);hi=max(hi,v);
+   if(abs(x)+abs(y)==1){if(abs(v-q)<.01)same++;else opposite=v;}
+  }
+  int r=round(m.y)-1;float step=1.0/(max(2,r==3?_ShadeFaceSteps335:_ShadeSurfaceSteps335)-1);
+  // Both labels must remain one connected arc on the 3x3 ring; never merge islands.
+  int2 ring[8]={int2(-1,-1),int2(0,-1),int2(1,-1),int2(1,0),int2(1,1),int2(0,1),int2(-1,1),int2(-1,0)};
+  int transitions=0;
+  [unroll]for(int i=0;i<8;i++){
+   float a=_ShadeClass335.Load(int3(clamp(p+ring[i]*_ShadeStride335,0,_ShadeSize335-1),0)).x;
+   float b=_ShadeClass335.Load(int3(clamp(p+ring[(i+1)%8]*_ShadeStride335,0,_ShadeSize335-1),0)).x;
+   if(abs(a-b)>.01)transitions++;
+  }
+  if(safe&&same==1&&transitions==2&&abs(hi-lo-step)<.01){
+   float threshold=(q+opposite)*.5;
+   // Only uncertain samples within one tenth of a quantization bin may move.
+   bool uncertain=abs(c.y-threshold)<=step*.1;
+   if(abs(abs(opposite-q)-step)<.01&&uncertain){
+    [unroll]for(int axis=0;axis<2;axis++)[unroll]for(int sign=-1;sign<=1;sign+=2){
+     int2 back=(axis==0?int2(sign,0):int2(0,sign))*_ShadeStride335;
+     int2 t=p+back,u=p+2*back;
+     if(ShadeNeighbour335(p,t,m,n,c.z)&&ShadeNeighbour335(p,u,m,n,c.z)&&
+        abs(_ShadeClass335.Load(int3(t,0)).x-q)<.01&&abs(_ShadeClass335.Load(int3(u,0)).x-q)<.01)q=opposite;
+    }
+   }
+  }
+ }
+ _ShadeMaskOut335[p]=float4(q,c.x,c.z,ShadeRole335(m)?m.y:0);
+}
+[numthreads(8,8,1)]void ApplyShadeBoundary(uint3 id:SV_DispatchThreadID){
+ int2 p=id.xy;if(any(p>=_ShadeSize335))return;
+ float3 paletteRGB;float appliedQ52;
+ if(_ShadeView335==0&&TryResolvedShade52((uint2)p,paletteRGB,appliedQ52)){
+  float4 colour=_ShadeColourOut335[p];colour.rgb=paletteRGB;_ShadeColourOut335[p]=colour;
+  float4 cls=_ShadeClassOut335[p];cls.x=appliedQ52;_ShadeClassOut335[p]=cls;
+  float4 factor=_ShadeFactorOut335[p];factor.rgb=1;_ShadeFactorOut335[p]=factor;
+  return;
+ }
+ // No confirmed region: retain legacy output, reported unresolved by CPU input.
+ if(_ShadeApply335==0)return;
+ float4 m=_ShadeMeta335.Load(int3(p,0));if(!ShadeRole335(m))return;
+ float4 mask=_ShadeMaskRead335.Load(int3(p,0)),cls=_ShadeClassOut335[p];
+ float old=cls.x,q=mask.x;if(abs(old-q)<.01)return;
+ int role=round(m.y)-1;float3 minimum=role==3?_ShadeFaceMinimum335.rgb:_ShadeFloor335.xxx;
+ float2 uv=_ShadeUV335.Load(int3(p,0)).xy;
+ if(role==7&&_StockMember335.SampleLevel(sampler_StockMember335,uv,0).r>.5)minimum=_ShadeStockMinimum335.rgb;
+ float4 factor=float4(_ShadeEnabled335!=0?lerp(minimum,1,q):1,cls.a);
+ float4 colour=_ShadeLit335.Load(int3(p,0));cls.x=q;
+ float3 result=colour.rgb*factor.rgb;
+ if(role>=11&&role<=14){factor.rgb=_ShadeEnabled335!=0?HairAnchor335()*lerp(_ShadeFloor335,1,q):1;result=HairFinal335(colour.rgb,q,_ShadeFloor335,_ShadeEnabled335!=0);}
+ if(_ShadeView335==1)result=colour.rgb;
+ if(_ShadeView335==2)result=cls.yyy;
+ if(_ShadeView335==3)result=q.xxx;
+ _ShadeColourOut335[p]=float4(result,colour.a);_ShadeFactorOut335[p]=factor;_ShadeClassOut335[p]=cls;
+}

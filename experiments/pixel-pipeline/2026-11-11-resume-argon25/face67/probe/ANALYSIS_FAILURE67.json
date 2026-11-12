@@ -1,0 +1,58 @@
+{
+  "algorithmPassed": false,
+  "captureCompletedAndRestored": true,
+  "receiptMismatchPixels": 257,
+  "falsePositiveAppliedReceipts": 2,
+  "actualSourceId": "face67-source-lut-one-20261112T010055962Z-404abda4/sequence0/568105589213667912/568105589213667488/6b43d99fc96c4896af3f36ed2dd27783/frame102/generation1",
+  "reason": "HLSL && did not suppress out-parameter writes; actual application scope was not encoded explicitly.",
+  "falsePositiveCells": [
+    {
+      "localXY": [
+        7,
+        7
+      ],
+      "sourceCarrier": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "actualReceipt": [
+        1021.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "expectedReceipt": [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "localXY": [
+        23,
+        10
+      ],
+      "sourceCarrier": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "actualReceipt": [
+        1021.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "expectedReceipt": [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ]
+    }
+  ]
+}

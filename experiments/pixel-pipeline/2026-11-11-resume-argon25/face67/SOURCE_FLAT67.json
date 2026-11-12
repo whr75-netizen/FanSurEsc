@@ -1,0 +1,75 @@
+{
+  "sourceFamily": {
+    "id": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3/mesh0/primitive3/material3/constant-source-equality",
+    "domainId": "source-constant-RGBA-components/not-full-face-semantics",
+    "source": {
+      "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+      "imageSHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+      "materialId": 3,
+      "factorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "uvOrigin": "top-left",
+      "encoding": "srgb8"
+    },
+    "samples": [
+      {
+        "id": "native-constant/684,513",
+        "imageSHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+        "materialId": 3,
+        "primitiveId": 3,
+        "triangle": -1,
+        "uv": [
+          0.66845703125,
+          0.50146484375
+        ],
+        "texel": [
+          684,
+          513
+        ],
+        "rgba8": [
+          254,
+          246,
+          230,
+          255
+        ],
+        "weight": 1
+      }
+    ]
+  },
+  "settingsFromExisting58": {
+    "count": 3,
+    "darkLRatio": 0.55,
+    "darkCRatio": 0.6,
+    "gamma": 1,
+    "intervalScale": 1
+  },
+  "settingsCountMustMatchObservedFaceSteps": true,
+  "modelAsset": "Assets/EUnityValidation01/VRoidSampleA144/Inputs/AvatarSample_A.vrm",
+  "sourceWidth": 1024,
+  "sourceHeight": 1024,
+  "rendererOrdinal": 1,
+  "subMesh": 3,
+  "primitiveCount": 4232,
+  "meshUVSHA256": "39b430d5a5676ef69e13b7b291a046367f7d24f140eab972fdeacb2862dd3aff",
+  "maskBottomSHA256": "0ff25617d05a8431c5c23d4e8190c5408c22c52ea45bc18806d6da2992525680",
+  "maskBytes": 4194304,
+  "regionCount": 1404,
+  "exactConstantRGB": [
+    254,
+    246,
+    230
+  ],
+  "sourceTexels": 27587,
+  "sourceInputSHA256": "0660905559f7bad37cd457f401074d02380504e4190d0cd5d40f7fd82dfe375e",
+  "sourceWeakWitnessExcluded": true,
+  "fullFaceColourSegmentation": false,
+  "integrationFixtureOnly": true,
+  "integrationFixtureSelection": "Most represented exact flat source support among actual66 ordinary-carrier UVs, then frozen to original UV connected components; not a semantic region classifier or per-frame colour selection.",
+  "actualWitnessesForThisConstantSource": 29,
+  "CPUOnly": true,
+  "unknowns": "Every other source colour, gradient, AA and weak paint remains unassigned; no17-family palette split."
+}

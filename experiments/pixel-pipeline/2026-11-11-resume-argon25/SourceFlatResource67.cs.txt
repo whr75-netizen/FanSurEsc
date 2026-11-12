@@ -1,0 +1,33 @@
+// Private immutable source-UV mask and source-derived palette, owned by the
+// external observer until every borrowing producer has completed and released.
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public sealed class SourceFlatResource67:IDisposable {
+ readonly Json40 spec;public Texture2D regions{get;private set;}public Texture2D palette{get;private set;}
+ public readonly int width,height,levels,wrapU,wrapV;readonly int[][] rgb;readonly float[] linear;bool disposed;
+ public SourceFlatResource67(string root,EyeFeature348 eye){
+  spec=Json40.Parse(File.ReadAllText(Path.Combine(root,"SOURCE_FLAT67.json")));width=(int)spec["sourceWidth"];height=(int)spec["sourceHeight"];levels=eye.full.faceShadeSteps;
+  if(!(bool)spec["integrationFixtureOnly"]||(bool)spec["fullFaceColourSegmentation"]||width<1||height<1||(long)width*height*4>4L*1024*1024||levels<2||levels>256||!eye.full.layeredSurface||!eye.full.styleEnabled||HeadRegion502.Enabled)throw new InvalidOperationException("67 source-equality integration fixture/mode/budget mismatch");
+  string HashStream(string path){using(var stream=File.OpenRead(path))using(var digest=SHA256.Create())return BitConverter.ToString(digest.ComputeHash(stream)).Replace("-","").ToLowerInvariant();}
+  var f=spec["sourceFamily"];var src=f["source"];string model=(string)spec["modelAsset"];
+  if(HashStream(model)!=(string)src["modelSHA256"]||eye.modelTopologySHA256==null)throw new InvalidOperationException("67 original source model changed");
+  int renderer=(int)spec["rendererOrdinal"],part=(int)spec["subMesh"];var material=eye.full.motion.surface.source[renderer].sharedMaterials[part];var texture=material.GetTexture("_MainTex");
+  if(!texture||texture.width!=width||texture.height!=height||AssetDatabase.GetAssetPath(texture)!=model||material.GetTextureScale("_MainTex")!=Vector2.one||material.GetTextureOffset("_MainTex")!=Vector2.zero||material.GetColor("_Color")!=Color.white)throw new InvalidOperationException("67 original material/image/UV/factor link changed");
+  foreach(var key in new[]{"_UvAnimScrollXSpeed","_UvAnimScrollYSpeed","_UvAnimRotationSpeed"})if(material.HasProperty(key)&&material.GetFloat(key)!=0)throw new InvalidOperationException("67 animated source UV not covered by frozen source mask");
+  wrapU=(int)texture.wrapModeU;wrapV=(int)texture.wrapModeV;if(wrapU<0||wrapU>2||wrapV<0||wrapV>2)throw new NotSupportedException("67 source sampler wrap mode");
+  var family=new SourceMath67.SourcePalette58.Family{id=(string)f["id"],domainId=(string)f["domainId"],source=new SourceMath67.SourcePalette58.Source{modelSHA256=(string)src["modelSHA256"],imageSHA256=(string)src["imageSHA256"],materialId=(int)src["materialId"],factorLinear=src["factorLinear"].Values<double>().ToArray(),uvOrigin=(string)src["uvOrigin"],encoding=(string)src["encoding"]},samples=f["samples"].Select(v=>new SourceMath67.SourcePalette58.Sample{id=(string)v["id"],imageSHA256=(string)v["imageSHA256"],materialId=(int)v["materialId"],primitiveId=(int)v["primitiveId"],triangle=(int)v["triangle"],uv=v["uv"].Values<double>().ToArray(),texel=v["texel"].Values<int>().ToArray(),rgba8=v["rgba8"].Values<int>().ToArray(),weight=(double)v["weight"]}).ToArray()};
+  var setting=spec["settingsFromExisting58"];var config=new SourceMath67.SourcePalette58.Settings{count=levels,darkLRatio=(double)setting["darkLRatio"],darkCRatio=(double)setting["darkCRatio"],gamma=(double)setting["gamma"],intervalScale=(double)setting["intervalScale"]};var result=SourceMath67.SourcePalette58.MakePalette(SourceMath67.SourcePalette58.ExtractReference(family),config);rgb=result.rgb8;
+  linear=new float[levels*4];for(int i=0;i<levels;i++){for(int c=0;c<3;c++)linear[4*i+c]=(float)SourceMath67.SourcePalette58.Decode(rgb[i][c]/255.0);linear[4*i+3]=1;}
+  string raw=Path.Combine(root,"REGION_BOTTOM67.rgba");if(HashStream(raw)!=(string)spec["maskBottomSHA256"]||new FileInfo(raw).Length!=(long)width*height*4)throw new InvalidOperationException("67 immutable source region mask changed");
+  try{
+   regions=new Texture2D(width,height,TextureFormat.RGBA32,false,true){name="67 owned immutable source components",hideFlags=HideFlags.HideAndDontSave,filterMode=FilterMode.Point};regions.SetPixelData(File.ReadAllBytes(raw),0);regions.Apply(false,true);
+   palette=new Texture2D(levels,1,TextureFormat.RGBAFloat,false,true){name="67 owned source palette LUT",hideFlags=HideFlags.HideAndDontSave,filterMode=FilterMode.Point};palette.SetPixelData(linear,0);palette.Apply(false,true);
+  }catch{Dispose();throw;}
+ }
+ public void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,RTHandle receipt,bool enabled){
+  if(disposed||!regions||!palette)throw new InvalidOperationException("67 source resources disposed before owner completion");
+  cmd.SetComputeTextureParam(shader,kernel,"_SourceRegionMask67",regions);cmd.SetComputeTextureParam(shader,kernel,"_SourcePalette67",palette);cmd.SetComputeTextureParam(shader,kernel,"_PaletteReceipt67",receipt.rt);cmd.SetComputeIntParams(shader,"_SourceMaskSize67",width,height);cmd.SetComputeIntParams(shader,"_SourceWrap67",wrapU,wrapV);cmd.SetComputeIntParam(shader,"_SourceLevels67",levels);cmd.SetComputeIntParam(shader,"_PaletteEnabled67",enabled?1:0);
+ }
+ public Obj40 Info()=>new Obj40{["input"]="original model/UV constant-source equality components; not full semantic face partition",["sourceImageSHA"]=(string)spec["sourceFamily"]["source"]["imageSHA256"],["modelSHA"]=(string)spec["sourceFamily"]["source"]["modelSHA256"],["sourceMaterial"]=(int)spec["sourceFamily"]["source"]["materialId"],["sourceRGB"]=spec["exactConstantRGB"],["maskSHA"]=(string)spec["maskBottomSHA256"],["sourceRegionCount"]=(int)spec["regionCount"],["paletteRGB8"]=new Arr40(rgb.Select(x=>new Arr40(x))),["paletteLinear"]=new Arr40(linear),["levels"]=levels,["extent"]=new Arr40(width,height),["wrap"]=new Arr40(wrapU,wrapV),["maxOwnedTextureBytes"]=(long)width*height*4+levels*16,["sharedObserverOwns"]=true,["GPUCPUReadbackForSelection"]=false,["fullFaceRegionPolicy"]=false};
+ public void Dispose(){if(disposed)return;if(regions)UnityEngine.Object.DestroyImmediate(regions);regions=null;if(palette)UnityEngine.Object.DestroyImmediate(palette);palette=null;disposed=true;}
+}
+}

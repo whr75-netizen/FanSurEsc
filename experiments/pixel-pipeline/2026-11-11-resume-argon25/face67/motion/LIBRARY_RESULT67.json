@@ -1,0 +1,36 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Action completed."
+      }
+    ],
+    "structuredContent": {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/ACTUAL_PARTIAL_LUT67.png",
+      "file_id": "file_0000000039dc81f5a0331266f1dd8749",
+      "library_file_id": "libfile_fde3_f-fcd994b5c3788191987b4a708ac2709b_63ba02b4784c8191890f3a4c58eb6764",
+      "file_name": "ACTUAL_PARTIAL_LUT67.png",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "personal-root:v1",
+      "mime_type": "image/png",
+      "library_artifact_type": "other",
+      "file_size_bytes": 61203,
+      "external_connectors_accessed": false
+    },
+    "isError": false
+  },
+  "localXattrsApplied": false,
+  "metadataFailure": "Traceback (most recent call last):\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library57-helper\\library_file_transfer.py\", line 419, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library57-helper\\library_file_transfer.py\", line 406, in main\n    materializer.apply_xattrs(\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library57-helper\\library_file_transfer.py\", line 335, in apply_xattrs\n    xattr.apply(path)\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library57-helper\\library_file_transfer.py\", line 152, in apply\n    os.setxattr(path, self.name, encoded_value)\nAttributeError: module 'os' has no attribute 'setxattr'",
+  "identitySidecarRetained": true,
+  "partialIntegrationOnlyNotArtPass": true
+}

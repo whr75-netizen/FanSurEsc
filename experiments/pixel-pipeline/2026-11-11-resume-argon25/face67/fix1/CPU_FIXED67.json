@@ -1,0 +1,21 @@
+{
+  "rootCause": "HLSL bool AND does not guarantee skipping functions with out-parameter writes. Receipt must explicitly encode caller scope and actual application.",
+  "CSharp9Compiled": true,
+  "CPUShaderCompiled": true,
+  "tokenAudit": {
+    "instructions": 431,
+    "privateArrayDeclarations": [],
+    "threads": [
+      8,
+      8,
+      1
+    ],
+    "structuredStridesBySlot": {},
+    "loops": 0
+  },
+  "newTexturesOrBuffers": 0,
+  "beforeComputeSHA256": "8e91e8322ba518fdc3a697e490d9e9bb3db3e38a9ea3f1cc98d12fe454e23790",
+  "computeSHA256": "3517cb29cd2d71665d937d1268d94d2126e4dc9c381dd5f5f983b0047954d343",
+  "captureSHA256": "47aae71dcf7e49c041415b359392b97e320f40b0172470713c0b2299393549ce",
+  "GPUExecuted": false
+}

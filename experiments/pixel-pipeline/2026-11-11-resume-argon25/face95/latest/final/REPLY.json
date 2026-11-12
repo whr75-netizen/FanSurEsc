@@ -1,0 +1,13 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": false,\n  \"error\": \"UNEXPECTED_ERROR: Command was executed partially, but reported warnings or errors:\\n[Error] System.IO.IOException: Could not create file \\\"C:\\\\Users\\\\15352\\\\Documents\\\\Codex\\\\2026-10-27\\\\task-2\\\\render-fix21\\\\resume-20261111\\\\face95\\\\colour64\\\\post\\\\final\\\\STATE.json\\\". File already exists.\\r\\n  at System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share, System.Int32 bufferSize, System.Boolean anonymous, System.IO.FileOptions options) [0x0019e] in <816f70bc2a9c4332b0bd119906a8d40e>:0 \\r\\n  at System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share) [0x00000] in <816f70bc2a9c4332b0bd119906a8d40e>:0 \\r\\n  at (wrapper remoting-invoke-with-check) System.IO.FileStream..ctor(string,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)\\r\\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CreateOnly40.Text (System.String path, System.String text) [0x00001] in <baab89c4855a450cb82247e0d9f7b9d5>:0 \\r\\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult result) [0x00546] in <baab89c4855a450cb82247e0d9f7b9d5>:0 \\r\\n  at Unity.AI.Assistant.Editor.RunCommand.AgentRunCommand.Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult& executionResult, System.String title) [0x00019] in .\\\\Library\\\\PackageCache\\\\com.unity.ai.assistant@c0127625258e\\\\Editor\\\\Assistant\\\\RunCommand\\\\AgentRunCommand.cs:56 \\nConsider reverting changes that may have happened if you retry.\"\n}"
+      }
+    ],
+    "isError": true
+  },
+  "jsonrpc": "2.0",
+  "id": 3
+}

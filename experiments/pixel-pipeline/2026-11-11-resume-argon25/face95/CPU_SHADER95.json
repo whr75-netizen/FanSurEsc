@@ -1,0 +1,31 @@
+{
+  "CPUCompiledNoGPUDevice": true,
+  "shaderSHA256": "78ce990b6d869f06401362bc38a1316f84bbee145d0d4283f01bf35096ff42c2",
+  "entries": [
+    {
+      "entry": "Full95",
+      "profile": "vs_5_0",
+      "audit": {
+        "instructions": 9,
+        "loops": 0,
+        "privateArrays": 0,
+        "threadGroups": 0
+      },
+      "warnings": ""
+    },
+    {
+      "entry": "Read95",
+      "profile": "ps_5_0",
+      "audit": {
+        "instructions": 127,
+        "loops": 0,
+        "privateArrays": 0,
+        "threadGroups": 0
+      },
+      "warnings": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint95.shader(11,34-45): warning X3556: integer divides may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint95.shader(11,63-74): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint95.shader(12,47-53): warning X3556: integer modulus may be much slower, try using uints if possible.\n\u0000"
+    }
+  ],
+  "readbackBytes": 259584,
+  "newComputeDispatches": 0,
+  "continuousVisibilityProven": false
+}

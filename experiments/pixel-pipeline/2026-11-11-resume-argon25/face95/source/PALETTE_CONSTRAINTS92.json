@@ -1,0 +1,39 @@
+{
+  "CPUOnly": true,
+  "sameOriginal58ContinuousTargets": true,
+  "sameObserved89LinearFloor": 0.7200000286102295,
+  "perChannelFloorCeilOnly": true,
+  "nativeConstraints": 3822,
+  "allLevelsFeasible": true,
+  "rows": [
+    {
+      "feasible": true,
+      "searchNodes": 510,
+      "arcRevisions": 44227,
+      "maxTargetCodeError": 0.73632496372662,
+      "changedFromYOnlyEntries": 18,
+      "globalMinimumTotalSSEClaimed": false,
+      "shade": 0
+    },
+    {
+      "feasible": true,
+      "searchNodes": 509,
+      "arcRevisions": 44132,
+      "maxTargetCodeError": 0.5593399376060404,
+      "changedFromYOnlyEntries": 6,
+      "globalMinimumTotalSSEClaimed": false,
+      "shade": 1
+    },
+    {
+      "feasible": true,
+      "searchNodes": 1,
+      "arcRevisions": 4520,
+      "maxTargetCodeError": 0.0,
+      "changedFromYOnlyEntries": 0,
+      "globalMinimumTotalSSEClaimed": false,
+      "shade": 2
+    }
+  ],
+  "actualGPUOrRuntimeCSharpPortTested": false,
+  "artAdopted": false
+}

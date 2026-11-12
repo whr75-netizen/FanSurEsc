@@ -1,0 +1,15 @@
+"""Do not accept source-MSE gains at the expense of the measured temporal case."""
+from pathlib import Path
+import json,numpy as np
+from frame_bytes77 import decode
+H=Path(__file__).resolve().parent;G=H/'face95/source'
+def main():
+ old=np.load(H/'face93/SOURCE_RANGE_CANDIDATE93.npz');new=np.load(G/'SOURCE_MAPPING95.npz');assert np.array_equal(old['colours'],new['colours']);keys=old['colours']@np.array([65536,256,1]);pal=np.fromfile(G/'CONSTRAINED92.rgb',np.uint8).reshape(-1,3,3);base=np.fromfile(H/'face93/range-palette/CONSTRAINED92.rgb',np.uint8).reshape(-1,3,3);root=H/'face94/held480';report=json.loads((root/'capture/COMPLETE.json').read_text());frames={f['frame']:f for f in report['stream77']['frames']};rows=json.loads((root/'COLOUR_TRANSITIONS94.json').read_text())['rows'];selected=[];cached_frame=None;packet=None
+ for row in rows:
+  if not row['sameSupport']or not row['sameQ']:continue
+  f=frames[row['frame']]
+  if cached_frame!=f['frame']:
+   w=f['QROI'][2];packet=np.frombuffer(decode((root/'capture'/f['compressedFile']).read_bytes(),f['bytes']),'<f4').reshape(w,24,w,4).transpose(1,0,2,3);cached_frame=f['frame']
+  x,y=row['currentLocalXY'];q=int(round(packet[13,y,x,0]*2));a,b=[int(np.searchsorted(keys,np.asarray(v)@np.array([65536,256,1])))for v in [row['previousSourceRGB'],row['currentSourceRGB']]];d=pal[new['colourAddress'][b],q].astype(int)-pal[new['colourAddress'][a],q].astype(int);old_delta=base[old['colourAddress'][b],q].astype(int)-base[old['colourAddress'][a],q].astype(int);assert old_delta.tolist()==row['CPU510Step'];selected.append({'frame':row['frame'],'currentLocalXY':row['currentLocalXY'],'q':q,'native':row['nativeStep'],'range93CPU':old_delta.tolist(),'nearest95CPU':d.tolist()})
+ prior=np.array([x['range93CPU']for x in selected]);candidate=np.array([x['nearest95CPU']for x in selected]);native=np.array([x['native']for x in selected]);pn=np.linalg.norm(prior,axis=1);cn=np.linalg.norm(candidate,axis=1);nn=np.linalg.norm(native,axis=1);changed=nn>0;old_gain=np.divide(pn,nn,out=np.zeros_like(pn),where=changed);new_gain=np.divide(cn,nn,out=np.zeros_like(cn),where=changed);examples=[x for x in selected if x['frame']in[149,196]and x['currentLocalXY']==[6,7]];out={'CPUCounterfactualFromActual480Input':True,'sourceRGBMSEIsNotTemporalQuality':True,'observedSameSupportQPairs':len(selected),'nativeChangingPairs':int(changed.sum()),'range93CPUChangingPairs':int((pn>0).sum()),'nearest95CPUChangingPairs':int((cn>0).sum()),'stepNormIncreasedPairs':int((cn>pn).sum()),'stepNormReducedPairs':int((cn<pn).sum()),'range93MaxStepGain':float(old_gain.max()),'nearest95MaxStepGain':float(new_gain.max()),'knownCounterexampleWorse':examples,'runtimeMapping95Adopted':False,'reason':'MSE refinement worsens the original temporal counterexample relative to the already-available93 source-range candidate; representative nearest distance does not define pigment/gradient semantics.','rows':selected};(G/'REJECTION95.json').write_text(json.dumps(out,indent=2));print(json.dumps({k:v for k,v in out.items()if k!='rows'}))
+if __name__=='__main__':main()

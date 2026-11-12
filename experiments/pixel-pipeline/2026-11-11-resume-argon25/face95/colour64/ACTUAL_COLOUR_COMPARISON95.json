@@ -1,0 +1,703 @@
+{
+  "actualGPUFrames": 64,
+  "simulationSeconds": 1.0666667222976685,
+  "candidateSourceAddresses": 510,
+  "actualRuntimeCSharpLUTMatchesCPUBytes": true,
+  "actualFinalLUTSamplesExact": 918,
+  "sameEvaluatedFaceGeometryFrames": 64,
+  "sameRawHeadMetaUVFrames": 64,
+  "sameQAndHistoryQFrames": 49,
+  "sameSourcePointUVRecorded": false,
+  "sourceRGBMSEImprovedIsCPUTextureMetric": true,
+  "completePixelVisibilityOrArtAdopted": false,
+  "examples": [
+    {
+      "framePair": [
+        148,
+        149
+      ],
+      "localXY": [
+        6,
+        7
+      ],
+      "baselineGPU226Delta": [
+        0,
+        -4,
+        -5
+      ],
+      "candidateGPU510Delta": [
+        0,
+        -1,
+        -3
+      ],
+      "candidateAddresses": [
+        497,
+        493
+      ],
+      "baselineQBeforeAfter": [
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ]
+      ],
+      "candidateQBeforeAfter": [
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ]
+      ],
+      "sameQ": true,
+      "sameSourceColourNotAssumed": true
+    }
+  ],
+  "rows": [
+    {
+      "frame": 102,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame102/generation2",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame102/generation2",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 45,
+      "changedCandidateRGBCells": 41
+    },
+    {
+      "frame": 103,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame103/generation2",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame103/generation2",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 45,
+      "changedCandidateRGBCells": 41
+    },
+    {
+      "frame": 104,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame104/generation2",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame104/generation2",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 44,
+      "changedCandidateRGBCells": 38
+    },
+    {
+      "frame": 105,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame105/generation3",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame105/generation3",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 42,
+      "changedCandidateRGBCells": 38
+    },
+    {
+      "frame": 106,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame106/generation3",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame106/generation3",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 40,
+      "changedCandidateRGBCells": 34
+    },
+    {
+      "frame": 107,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame107/generation2",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame107/generation2",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 36,
+      "changedCandidateRGBCells": 31
+    },
+    {
+      "frame": 108,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame108/generation3",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame108/generation4",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 25,
+      "changedCandidateRGBCells": 21
+    },
+    {
+      "frame": 109,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame109/generation4",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame109/generation4",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 14,
+      "changedCandidateRGBCells": 12
+    },
+    {
+      "frame": 110,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame110/generation4",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame110/generation3",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 111,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame111/generation4",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame111/generation5",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 112,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame112/generation3",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame112/generation3",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 113,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame113/generation5",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame113/generation5",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 114,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame114/generation5",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame114/generation4",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 115,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame115/generation5",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame115/generation6",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 5
+    },
+    {
+      "frame": 116,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame116/generation6",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame116/generation6",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 117,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame117/generation4",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame117/generation5",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 118,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame118/generation6",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame118/generation4",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 9,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 119,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame119/generation6",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame119/generation7",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 9,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 120,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame120/generation7",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame120/generation7",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 121,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame121/generation7",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame121/generation6",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 122,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame122/generation7",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame122/generation8",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 123,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame123/generation5",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame123/generation5",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 124,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame124/generation8",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame124/generation8",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 125,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame125/generation8",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame125/generation9",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 126,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame126/generation8",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame126/generation7",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 127,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame127/generation6",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame127/generation9",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 128,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame128/generation9",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame128/generation10",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 9,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 129,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame129/generation9",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame129/generation8",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 130,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame130/generation9",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame130/generation10",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 131,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame131/generation7",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame131/generation6",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 132,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame132/generation10",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame132/generation11",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 133,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame133/generation10",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame133/generation11",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 134,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame134/generation10",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame134/generation9",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 25,
+      "changedCandidateRGBCells": 22
+    },
+    {
+      "frame": 135,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame135/generation11",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame135/generation12",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 33,
+      "changedCandidateRGBCells": 25
+    },
+    {
+      "frame": 136,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame136/generation8",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame136/generation7",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 38,
+      "changedCandidateRGBCells": 36
+    },
+    {
+      "frame": 137,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame137/generation11",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame137/generation12",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 45,
+      "changedCandidateRGBCells": 41
+    },
+    {
+      "frame": 138,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame138/generation11",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame138/generation13",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 40,
+      "changedCandidateRGBCells": 37
+    },
+    {
+      "frame": 139,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame139/generation12",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame139/generation10",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 36,
+      "changedCandidateRGBCells": 30
+    },
+    {
+      "frame": 140,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame140/generation12",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame140/generation13",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 23,
+      "changedCandidateRGBCells": 22
+    },
+    {
+      "frame": 141,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame141/generation12",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame141/generation8",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 12,
+      "changedCandidateRGBCells": 10
+    },
+    {
+      "frame": 142,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame142/generation9",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame142/generation14",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 143,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame143/generation13",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame143/generation11",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 144,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame144/generation13",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame144/generation14",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 145,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame145/generation13",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame145/generation15",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 146,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame146/generation10",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame146/generation12",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 147,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame147/generation14",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame147/generation15",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 148,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame148/generation14",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame148/generation9",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 149,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame149/generation14",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame149/generation16",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 150,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame150/generation15",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame150/generation16",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 151,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame151/generation15",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame151/generation13",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 152,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame152/generation15",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame152/generation10",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": false,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 153,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame153/generation16",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame153/generation17",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 154,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame154/generation16",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame154/generation17",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 9,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 155,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame155/generation11",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame155/generation14",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 156,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame156/generation17",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame156/generation18",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 157,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame157/generation17",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame157/generation18",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 158,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame158/generation16",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame158/generation11",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 159,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame159/generation12",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame159/generation19",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 160,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame160/generation18",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame160/generation19",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 161,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame161/generation18",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame161/generation15",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 8
+    },
+    {
+      "frame": 162,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot2/frame162/generation17",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot0/frame162/generation20",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 163,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot0/frame163/generation19",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot3/frame163/generation12",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 7
+    },
+    {
+      "frame": 164,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot1/frame164/generation19",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot1/frame164/generation20",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 7,
+      "changedCandidateRGBCells": 6
+    },
+    {
+      "frame": 165,
+      "sourceId": "face95-colour64-20261112T113249220Z-8837c778/slot3/frame165/generation13",
+      "baselineSourceId": "face95-raw2x-motion64-20261112T112508062Z-3d878491/slot2/frame165/generation16",
+      "evaluatedFaceGeometryBitExact": true,
+      "rawHeadMetaUVBitExact": true,
+      "QAndHistoryQBitExact": true,
+      "visibleColourSamples": 8,
+      "changedCandidateRGBCells": 6
+    }
+  ]
+}

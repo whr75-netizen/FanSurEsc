@@ -1,0 +1,22 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public sealed partial class SourceOutline40 {
+ Material footprintMaterial95;
+ void InitFootprint95(){var s=AssetDatabase.LoadAssetAtPath<Shader>("Assets/EUnityValidation01/SourceFootprint95/SourceFootprint95.shader");if(!s||!s.isSupported||ShaderUtil.ShaderHasError(s))throw new InvalidOperationException("95 source raster observer shader absent/error");footprintMaterial95=new Material(s){name="31 owned pre-Present source footprint95",hideFlags=HideFlags.HideAndDontSave};}
+ void RecordFootprint95(RenderGraph graph){
+  if(native42.nativePixelsPerCell!=2||!native42.gameCamera.orthographic)throw new InvalidOperationException("95 exact native2x orthographic contract");
+  var origin=new Vector2(QROI.x,272-QROI.y-W77);var lo=native42.origin+2*(origin+join41+delta42)-Vector2.one*.5f;var first=new Vector2Int((int)Math.Ceiling(lo.x),(int)Math.Ceiling(lo.y));
+  if(first.x<0||first.y<0||first.x+2*W77>960||first.y+2*W77>544||origin.x<0||origin.y<0||2*(origin.x+W77)>960||2*(origin.y+W77)>544)throw new InvalidOperationException("95 raw native source ROI outside raster; no clamping");
+  if(native42.worldDepth.rt.graphicsFormat!=GraphicsFormat.R32_SFloat)throw new InvalidOperationException("95 source device-depth format");
+  using(var b=graph.AddRasterRenderPass<Light84Data>("95 pre-Present source2x2 read-only gather",out var d)){
+   d.owner=this;var p=new MaterialPropertyBlock();d.properties=p;
+   void T(string name,RTHandle t){if(t==null||t.rt==null)throw new InvalidOperationException("95 missing borrowed source");b.UseTexture(graph.ImportTexture(t),AccessFlags.Read);p.SetTexture(name,t.rt);}
+   T("_RawWorld95",native42.world);T("_RawDepth95",native42.worldDepth);T("_RawMeta95",eye.full.native[5]);T("_RawUV95",eye.full.native[6]);T("_Atlas95",Fields[13]);T("_LineProof95",ribbonFields93[5]);T("_LineProjection95",ribbonFields93[6]);T("_LineFootprint95",ribbonFields93[7]);T("_LineFinal95",ribbonFields93[10]);T("_LineReceipt95",ribbonFields93[11]);
+   p.SetInt("_Width95",W77);p.SetVector("_HeadOrigin95",new Vector4(origin.x,origin.y,0,0));p.SetVector("_Join95",new Vector4(join41.x,join41.y,0,0));p.SetVector("_NativeOrigin95",new Vector4(native42.origin.x,native42.origin.y,0,0));p.SetVector("_Delta95",new Vector4(delta42.x,delta42.y,0,0));p.SetVector("_NearFar95",new Vector4(native42.gameCamera.nearClipPlane,native42.gameCamera.farClipPlane,SystemInfo.usesReversedZBuffer?1:0,0));
+   b.SetRenderAttachment(graph.ImportTexture(readbackPack93),0,AccessFlags.Write);b.AllowPassCulling(false);b.SetRenderFunc(static(Light84Data d,RasterGraphContext c)=>{var o=d.owner;if(!o.native42.ready||o.native42.presentSerial<=o.serialBefore42||Time.frameCount!=o.frame){o.invalid81=true;return;}c.cmd.DrawProcedural(Matrix4x4.identity,o.footprintMaterial95,0,MeshTopology.Triangles,3,1,d.properties);});
+  }
+  FrameInfo40["sourceFootprint95"]=new Obj40{["prePresentRawWorld"]=true,["nativeOutputIsCellReplicated"]=true,["headFirst"]=new Arr40(2*origin.x,2*origin.y),["worldFirst"]=new Arr40(first.x,first.y),["near"]=native42.gameCamera.nearClipPlane,["far"]=native42.gameCamera.farClipPlane,["reversedZ"]=SystemInfo.usesReversedZBuffer,["sampleFootprint"]= "four existing native pixel centres, not continuous alpha between samples",["newComputeDispatches"]=0,["borrowedSourceReleased"]=false};
+ }
+ void FinalizeFootprint95(){var row=FrameInfo40["sourceFootprint95"];row["worldView"]=new Arr40(Enumerable.Range(0,16).Select(i=>native42.worldView[i]));row["worldProjection"]=new Arr40(Enumerable.Range(0,16).Select(i=>native42.worldProjection[i]));row["presentSerial"]=native42.presentSerial;row["worldSerial"]=native42.worldSerial;row["currentFrame"]=Time.frameCount;var cam=eye.full.motion.camera;float flip=GL.GetGPUProjectionMatrix(cam.projectionMatrix,true)[1,1]/cam.projectionMatrix[1,1];var extra=eye.full.nativeShift-eye.full.motion.clipShift;row["nativeExtraGPUClipShift"]=new Arr40(extra.x,extra.y);row["nativeExtraSourceCells"]=new Arr40(extra.x*240,extra.y*136*flip);row["nativeProjectionFlip"]=flip;}
+ void ReleaseFootprint95(){if(footprintMaterial95)UnityEngine.Object.DestroyImmediate(footprintMaterial95);footprintMaterial95=null;}
+}
+}

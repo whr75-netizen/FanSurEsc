@@ -1,0 +1,26 @@
+{
+  "layout": {
+    "0-3": "raw pre-Present NativePlayer395.world RGBA, four pixel centres",
+    "4-7": "raw world depth: orthographic linear z, device z, native pixel x,y",
+    "8-11": "raw Full319View335.native[5] head meta: depth,role,object,primitive",
+    "12-15": "same native head sample UV from native[6]",
+    "16": "current representative native pixel xy / ROI local xy",
+    "17": "actual selected source address+1,currentQ,historyQ,currentColourKnown",
+    "18": "actual finite LUT RGB or unchanged current native RGBA when unknown",
+    "19": "joint93 line witness depth,edge,param,widthMapGreen",
+    "20": "joint93 line source projection xy / incident primitive IDs",
+    "21": "joint93 selected triangle area,witnessOffsetXY,triangleIndex",
+    "22": "actual joint93 final RGBA",
+    "23": "actual joint93 sourceOK,representativeDepthOK,targetOK,used"
+  },
+  "rawBytes": 259584,
+  "maxBytes": 262144,
+  "oneCallbackAndExistingLifetimeGate": true,
+  "observedActorCells77Meaning": "raw head raster occupancy, NOT final world-visible actor cells",
+  "observedFaceCells77Meaning": "current-valid source-LUT cells",
+  "worldPixelCentreRule": "ceil(nativeOrigin+2*(headCell+join+delta)-0.5)+corner",
+  "headSourceCoordinateRule": "(2*headCell+corner+0.5)/2-nativeExtraSourceCells",
+  "shaderDefaultOrProductChanged": false,
+  "fourSamplesAreNotContinuousAlphaProof": true,
+  "rawWorldObjectIdentityNotProduced": true
+}

@@ -1,0 +1,51 @@
+{
+  "CPUFromStoredActualInput": true,
+  "testCells": 18,
+  "jointMassNonnegativeAndAreaBounded": true,
+  "old96FocusHistogramExactWithin": 1e-12,
+  "sourceRegionIDNotPaletteFamily": true,
+  "separateDetectedComponentsNotAutomaticallyMandatoryFeatureLabels": true,
+  "rows": [
+    {
+      "frame": 148,
+      "probes": [
+        {
+          "xy": [
+            6,
+            7
+          ],
+          "pointFamilyOneBased": 217,
+          "Q": 1,
+          "areaLeaderFamilyOneBased": 216,
+          "existingDetectedComponentMass": {
+            "14": 0.014290681183386804,
+            "27": 0.008716055569812947,
+            "365": 0.0007238784936405059
+          },
+          "legacy96FamilyHistogramMaximumDifference": 5.551115123125783e-17
+        }
+      ]
+    },
+    {
+      "frame": 149,
+      "probes": [
+        {
+          "xy": [
+            6,
+            7
+          ],
+          "pointFamilyOneBased": 216,
+          "Q": 1,
+          "areaLeaderFamilyOneBased": 216,
+          "existingDetectedComponentMass": {
+            "14": 0.014241591154483924,
+            "27": 0.008826258375248978,
+            "365": 0.000716711467435562
+          },
+          "legacy96FamilyHistogramMaximumDifference": 5.551115123125783e-17
+        }
+      ]
+    }
+  ],
+  "notAdoptedReason": "Area leader remains stable but selecting it can erase small observed source components. CC support/AA/gradient is not a confirmed feature-priority contract. No new palette selection, RGB blend, feature count, colour threshold, or product switch was introduced."
+}

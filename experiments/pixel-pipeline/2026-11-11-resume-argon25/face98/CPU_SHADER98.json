@@ -1,0 +1,56 @@
+{
+  "CPUCompiledNoGPUDevice": true,
+  "newCompute": 0,
+  "newRasterPasses": 2,
+  "readbackBytesUnchanged": 259584,
+  "rows": [
+    {
+      "shader": "CoupledRibbon98B",
+      "shaderSHA256": "a42f4498e4f5382edf9bc392cc2df203047a2969f5bcf13f666b8174b65e4c99",
+      "entry": "Full98",
+      "audit": {
+        "instructions": 9,
+        "loops": 0,
+        "privateArrays": 0,
+        "threadGroups": 0
+      },
+      "warnings": ""
+    },
+    {
+      "shader": "CoupledRibbon98B",
+      "shaderSHA256": "a42f4498e4f5382edf9bc392cc2df203047a2969f5bcf13f666b8174b65e4c99",
+      "entry": "Compose98",
+      "audit": {
+        "instructions": 471,
+        "loops": 0,
+        "privateArrays": 0,
+        "threadGroups": 0
+      },
+      "warnings": ""
+    },
+    {
+      "shader": "SourceFootprint98",
+      "shaderSHA256": "342e404a8f824b819feb1fd5f47ba642db4b6cdad8f1153a90d7c9f43b4ede54",
+      "entry": "Full96",
+      "audit": {
+        "instructions": 9,
+        "loops": 0,
+        "privateArrays": 0,
+        "threadGroups": 0
+      },
+      "warnings": ""
+    },
+    {
+      "shader": "SourceFootprint98",
+      "shaderSHA256": "342e404a8f824b819feb1fd5f47ba642db4b6cdad8f1153a90d7c9f43b4ede54",
+      "entry": "Read96",
+      "audit": {
+        "instructions": 191,
+        "loops": 0,
+        "privateArrays": 0,
+        "threadGroups": 0
+      },
+      "warnings": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint98.shader(11,36-45): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint98.shader(11,47-56): warning X3556: integer divides may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint98.shader(12,56-61): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint98.shader(12,63-68): warning X3556: integer divides may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint98.shader(13,27-51): warning X3556: integer divides may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint98.shader(13,60-84): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint98.shader(13,98-108): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint98.shader(13,110-120): warning X3556: integer divides may be much slower, try using uints if possible.\n\u0000"
+    }
+  ]
+}

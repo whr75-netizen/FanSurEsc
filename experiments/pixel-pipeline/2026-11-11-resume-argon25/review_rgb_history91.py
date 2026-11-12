@@ -32,5 +32,6 @@ def verify(root):
  d=np.load(root/'RGB_CONTINUITY91.npz')['records'];same_source=d[:,1]==d[:,2];same_q=d[:,5]==d[:,6];same_rgb=(d[:,7:10]==d[:,10:13]).all(1);nohistory_q=d[:,3]!=d[:,4];qchange=~same_q;colour_change=~same_rgb;source_change=~same_source;assert same_rgb[same_source&same_q].all(),'same palette address and Q must have identical actual RGB';assert not(colour_change&same_source&same_q).any();result={'observedCarrierPairs':len(d),'sameSourceAddressPairs':int(same_source.sum()),'sourceAddressChanges':int(source_change.sum()),'sameAddressNoHistoryQTransitions':int((same_source&nohistory_q).sum()),'sameAddressActualHistoryQTransitions':int((same_source&qchange).sum()),'sameAddressActualRGBTransitions':int((same_source&colour_change).sum()),'sameAddressAndQPairs':int((same_source&same_q).sum()),'unexplainedActualRGBChangesAtSameAddressAndQ':0,'sourceAddressChangesWithSameQ':int((source_change&same_q).sum()),'noRGBTimeAveraging':True,'coverageAndFirstFrameOrBoundaryAmbiguityNotHidden':True,'fixtureIsObservedGPUOutputNotNewExecution':True};(root/'RGB_CONTINUITY91.json').write_text(json.dumps(result,indent=2));print(json.dumps(result))
 if __name__=='__main__':
  import sys
+ if '--root'in sys.argv:G=Path(sys.argv[sys.argv.index('--root')+1]).resolve()
  if '--verify-only'not in sys.argv:pack(G)
  verify(G)

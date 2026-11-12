@@ -35,7 +35,7 @@ def main():
 '''+needle)
  # Refuse a partial source lookup rather than emit a successful mixed-LUT frame.
  needle='receipt["observedActorCells77"]=actorCount77;';assert s.count(needle)==1;s=s.replace(needle,'for(int yy=0;yy<W77;yy++)for(int xx=0;xx<W77;xx++){int b89=16*(yy*W77*22+20*W77+xx);if(BitConverter.ToSingle(bytes,b89)<0)throw new InvalidOperationException("89 incomplete visible source lookup; reject whole frame");}'+needle)
- s+='\n'+(H/'PaletteRuntime89.cs').read_text()+'\n'+(H/'SourceField89.cs.txt').read_text();assert 'EvaluateForm115'not in s and 'BoundRun115'not in s
+ s+='\n'+(H/'PaletteRuntime89.cs').read_text()+'\n'+(H/'PaletteConstraints92.cs').read_text()+'\n'+(H/'SourceField89.cs.txt').read_text();assert 'EvaluateForm115'not in s and 'BoundRun115'not in s
  if G.name.startswith('fix'):s=s.replace('resume-20261111\\face89\\capture','resume-20261111\\face89\\'+G.name+'\\capture')
  (G/'capture/RUN.cs.txt').write_text(s,encoding='utf-8',newline='\n');compile_unity_language(G/'capture/RUN.cs.txt',G/'build/colour89.dll')
  for mode in ['final','post/final']:

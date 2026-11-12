@@ -9,9 +9,9 @@ using P89=global::SourcePalette58;
 #endif
 using System;using System.Collections.Generic;using System.Linq;
 public static class PaletteRuntime89 {
- public sealed class Result {public byte[] rgb8;public float[] linear;public double floor,labRatio,maxCodeError;public int roundingChanges;}
+ public sealed class Result {public byte[] rgb8;public float[] linear;public double floor,labRatio,maxCodeError;public int roundingChanges,sourceContrastPairs92,contrastCorrections92;}
  static void Need(bool b,string why){if(!b)throw new ArgumentException(why);}
- static double Y(int rgb){return .2126*P89.Decode((rgb>>16)/255.0)+.7152*P89.Decode(((rgb>>8)&255)/255.0)+.0722*P89.Decode((rgb&255)/255.0);}
+ internal static double Y(int rgb){return .2126*P89.Decode((rgb>>16)/255.0)+.7152*P89.Decode(((rgb>>8)&255)/255.0)+.0722*P89.Decode((rgb&255)/255.0);}
  static int Key(int r,int g,int b){return(r<<16)|(g<<8)|b;}
  static int Channel(int key,int j){return(key>>(16-8*j))&255;}
  public static Result Build(byte[] references,int[] pairs,int levels,double floor){
@@ -30,6 +30,15 @@ public static class PaletteRuntime89 {
    foreach(long e in unique.Keys){int a=(int)(e>>32),b=(int)(e&0xFFFFFFFF);Need(selected[a]<selected[b],"89 palette source-order invariant");}
   }
   Need(result.maxCodeError<1+1e-10,"89 palette exceeds floor/ceil quantization domain");return result;
+ }
+ // Optional measured-RGB constraints are CPU preprocessing only. The original
+ // four-argument builder remains unchanged and reproduces the actual89 table.
+ public static Result BuildConstrained92(byte[] references,int[] pairs,int levels,double floor,int[] nativeContrasts){
+  var original=Build(references,pairs,levels,floor);int n=references.Length/3;var target=new double[n,levels,3];double ratio=Math.Pow(floor,1.0/3.0);var settings=new P89.Settings{count=levels,darkLRatio=ratio,darkCRatio=ratio,gamma=1,intervalScale=1};
+  for(int i=0;i<n;i++){var rgb=new[]{(int)references[3*i],(int)references[3*i+1],(int)references[3*i+2]};var lab=P89.LabRGB(rgb);var palette=P89.MakePalette(new P89.Reference{rgb8=rgb},settings);for(int k=0;k<levels;k++){var c=P89.LinearLch(palette.targetL[k],palette.usedC[k],Math.Atan2(lab[2],lab[1]));for(int j=0;j<3;j++)target[i,k,j]=k==levels-1?rgb[j]:Math.Max(0,Math.Min(255,255*P89.Encode(c[j])));}}
+  var before=original.rgb8;var corrected=PaletteConstraints92.Solve(target,before,pairs,nativeContrasts);original.rgb8=corrected;original.maxCodeError=0;original.sourceContrastPairs92=nativeContrasts.Length/5;
+  for(int i=0;i<n;i++)for(int k=0;k<levels;k++){bool changed=false;for(int j=0;j<3;j++){int at=(i*levels+k)*3+j;changed|=corrected[at]!=before[at];original.maxCodeError=Math.Max(original.maxCodeError,Math.Abs(corrected[at]-target[i,k,j]));original.linear[(i*levels+k)*4+j]=(float)P89.Decode(corrected[at]/255.0);}if(changed)original.contrastCorrections92++;}
+  return original;
  }
 }
 }

@@ -1,0 +1,33 @@
+// CPU-only, bounded RGB8 feasibility. No shader, readback, Unity static cache,
+// fitted RGB, light multiplication or artist-facing heuristic is introduced.
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+using System;using System.Collections.Generic;
+public static class PaletteConstraints92 {
+ struct Edge {public int a,b;public Edge(int a,int b){this.a=a;this.b=b;}}
+ sealed class Problem {
+  public int n;public int[][] colour,rank;public List<int>[] adjacent;public Dictionary<int,bool[,]> relations=new Dictionary<int,bool[,]>();public long revisions;public int nodes;
+  public bool[][] Copy(bool[][] d){var r=new bool[n][];for(int i=0;i<n;i++)r[i]=(bool[])d[i].Clone();return r;}
+  public void Add(int a,int b,bool[,] allowed){if(a<0||a>=n||b<0||b>=n||a==b)throw new ArgumentException("92 contrast endpoints");if(a>b){int c=a;a=b;b=c;var t=new bool[allowed.GetLength(1),allowed.GetLength(0)];for(int i=0;i<t.GetLength(0);i++)for(int j=0;j<t.GetLength(1);j++)t[i,j]=allowed[j,i];allowed=t;}int key=a*n+b;bool[,] old;if(relations.TryGetValue(key,out old)){for(int i=0;i<old.GetLength(0);i++)for(int j=0;j<old.GetLength(1);j++)old[i,j]&=allowed[i,j];}else{relations.Add(key,allowed);adjacent[a].Add(b);adjacent[b].Add(a);}}
+  bool Allowed(int a,int b,int i,int j){return a<b?relations[a*n+b][i,j]:relations[b*n+a][j,i];}
+  public bool Propagate(bool[][] domains,Queue<Edge> queue){while(queue.Count>0){if(++revisions>2000000)throw new ArgumentException("92 CPU arc budget; no GPU submit");var e=queue.Dequeue();bool changed=false,any=false;for(int i=0;i<domains[e.a].Length;i++){if(!domains[e.a][i])continue;bool supported=false;for(int j=0;j<domains[e.b].Length;j++)if(domains[e.b][j]&&Allowed(e.a,e.b,i,j)){supported=true;break;}if(!supported){domains[e.a][i]=false;changed=true;}else any=true;}if(!any)return false;if(changed)foreach(int q in adjacent[e.a])if(q!=e.b)queue.Enqueue(new Edge(q,e.a));}return true;}
+  public int[] Search(){var initial=new bool[n][];var queue=new Queue<Edge>();for(int i=0;i<n;i++){initial[i]=new bool[colour[i].Length];for(int j=0;j<initial[i].Length;j++)initial[i][j]=true;foreach(int b in adjacent[i])queue.Enqueue(new Edge(i,b));}if(!Propagate(initial,queue))throw new ArgumentException("92 measured colour/Y constraints infeasible");var stack=new Stack<bool[][]>();stack.Push(initial);
+   while(stack.Count>0){if(++nodes>4096)throw new ArgumentException("92 CPU search budget; no GPU submit");var d=stack.Pop();int chosen=-1,best=Int32.MaxValue;for(int i=0;i<n;i++){int count=0;foreach(bool b in d[i])if(b)count++;if(count>1&&(count<best||(count==best&&(chosen<0||adjacent[i].Count>adjacent[chosen].Count)))){chosen=i;best=count;}}
+    if(chosen<0){var result=new int[n];for(int i=0;i<n;i++)for(int j=0;j<d[i].Length;j++)if(d[i][j])result[i]=colour[i][j];foreach(var kv in relations){int a=kv.Key/n,b=kv.Key%n;int ai=Array.IndexOf(colour[a],result[a]),bi=Array.IndexOf(colour[b],result[b]);if(!kv.Value[ai,bi])throw new InvalidOperationException("92 output constraint mismatch");}return result;}
+    // Push reverse preference order: base89 first, then original target error
+    // and canonical RGB. This is feasibility, not a global SSE optimum.
+    for(int r=rank[chosen].Length-1;r>=0;r--){int at=rank[chosen][r];if(!d[chosen][at])continue;var child=Copy(d);for(int j=0;j<child[chosen].Length;j++)child[chosen][j]=j==at;queue=new Queue<Edge>();foreach(int q in adjacent[chosen])queue.Enqueue(new Edge(q,chosen));if(Propagate(child,queue))stack.Push(child);}
+   }throw new ArgumentException("92 measured colour/Y constraints infeasible after complete search");
+  }
+ }
+ static int Channel(int key,int c){return(key>>(16-8*c))&255;}
+ public static byte[] Solve(double[,,] target,byte[] baseline,int[] orders,int[] vectors){
+  int n=target.GetLength(0),levels=target.GetLength(1);if(n<1||n>1024||target.GetLength(2)!=3||baseline==null||baseline.Length!=n*levels*3||orders==null||orders.Length%2!=0||orders.Length>65536||vectors==null||vectors.Length%5!=0||vectors.Length>65536*5)throw new ArgumentException("92 bounded CPU palette ABI");var output=new byte[baseline.Length];
+  for(int k=0;k<levels;k++){var p=new Problem{n=n,colour=new int[n][],rank=new int[n][],adjacent=new List<int>[n]};var shared=new Dictionary<int,double>();
+   for(int i=0;i<n;i++){var colours=new List<int>();for(int bits=0;bits<8;bits++){int key=0;for(int c=0;c<3;c++){double v=target[i,k,c];if(Double.IsNaN(v)||Double.IsInfinity(v)||v<0||v>255)throw new ArgumentException("92 finite target");int v8=(int)((bits&(1<<c))==0?Math.Floor(v):Math.Ceiling(v));key|=v8<<(16-8*c);}if(!colours.Contains(key))colours.Add(key);}colours.Sort();p.colour[i]=colours.ToArray();p.adjacent[i]=new List<int>();var rank=new List<int>();for(int j=0;j<colours.Count;j++){rank.Add(j);if(!shared.ContainsKey(colours[j]))shared.Add(colours[j],PaletteRuntime89.Y(colours[j]));}int ii=i,baseKey=(baseline[(i*levels+k)*3]<<16)|(baseline[(i*levels+k)*3+1]<<8)|baseline[(i*levels+k)*3+2];rank.Sort((a,b)=>{int first=(colours[a]==baseKey?0:1).CompareTo(colours[b]==baseKey?0:1);if(first!=0)return first;double ca=0,cb=0;for(int c=0;c<3;c++){double da=Channel(colours[a],c)-target[ii,k,c],db=Channel(colours[b],c)-target[ii,k,c];ca+=da*da;cb+=db*db;}int cost=ca.CompareTo(cb);return cost!=0?cost:colours[a].CompareTo(colours[b]);});p.rank[i]=rank.ToArray();}
+   for(int j=0;j<orders.Length;j+=2){int a=orders[j],b=orders[j+1];if(a<0||a>=n||b<0||b>=n||a==b)throw new ArgumentException("92 Y endpoints");var allow=new bool[p.colour[a].Length,p.colour[b].Length];for(int x=0;x<p.colour[a].Length;x++)for(int y=0;y<p.colour[b].Length;y++)allow[x,y]=shared[p.colour[a][x]]<shared[p.colour[b][y]];p.Add(a,b,allow);}
+   for(int j=0;j<vectors.Length;j+=5){int a=vectors[j],b=vectors[j+1];if(a<0||a>=n||b<0||b>=n||a==b)throw new ArgumentException("92 RGB endpoints");for(int c=2;c<5;c++)if(vectors[j+c]<-255||vectors[j+c]>255)throw new ArgumentException("92 native RGB difference");if(vectors[j+2]==0&&vectors[j+3]==0&&vectors[j+4]==0)throw new ArgumentException("92 zero colour difference");var allow=new bool[p.colour[a].Length,p.colour[b].Length];for(int x=0;x<p.colour[a].Length;x++)for(int y=0;y<p.colour[b].Length;y++){int dot=0;for(int c=0;c<3;c++)dot+=(Channel(p.colour[a][x],c)-Channel(p.colour[b][y],c))*vectors[j+2+c];allow[x,y]=dot>0;}p.Add(a,b,allow);}
+   var chosen=p.Search();for(int i=0;i<n;i++)for(int c=0;c<3;c++){int value=Channel(chosen[i],c);if(Math.Abs(value-target[i,k,c])>=1+1e-10)throw new InvalidOperationException("92 palette outside original floor/ceil target");output[(i*levels+k)*3+c]=(byte)value;}
+  }return output;
+ }
+}
+}

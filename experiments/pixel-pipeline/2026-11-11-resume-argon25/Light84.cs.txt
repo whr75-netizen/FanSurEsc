@@ -1,0 +1,23 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public sealed partial class SourceOutline40 {
+ volatile bool invalid81;
+ sealed class Light84Data{public SourceOutline40 owner;public MaterialPropertyBlock properties;}
+ void InitCurve81(){var shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/EUnityValidation01/SelectedLight84/SelectedLight84.shader");if(!shader||ShaderUtil.ShaderHasError(shader))throw new InvalidOperationException("84 selected-address shader absent/error");inkStyle39=new Material(shader){name="31 owned current curve81",hideFlags=HideFlags.HideAndDontSave};}
+ void PrepareCurve81(){
+  var mesh=meshes[renderer];var v=mesh.vertices;var uv=mesh.uv;var ix=mesh.GetIndices(submesh);var matrix=matrices[renderer];var view84=camera.worldToCameraMatrix;long bytes84=(long)v.Length*28+(long)ix.Length*4+128;if(v.Length!=uv.Length||bytes84>262144||ix.Length%3!=0)throw new InvalidOperationException("84 bounded source geometry");
+  using(var bw=new BinaryWriter(new FileStream(Path.Combine(root77,"geometry-frame"+frame+".bin"),FileMode.CreateNew))){bw.Write("face-source84/v1");bw.Write(FrameKey);bw.Write(model);bw.Write(frame);bw.Write(renderer);bw.Write(submesh);bw.Write(v.Length);bw.Write(ix.Length);for(int i=0;i<16;i++)bw.Write(view84[i]);for(int i=0;i<v.Length;i++){var p=matrix.MultiplyPoint3x4(v[i]);var q=eye.full.Project(p);foreach(var x in new[]{p.x,p.y,p.z,uv[i].x,uv[i].y,q.x,q.y}){if(!float.IsFinite(x))throw new InvalidOperationException("84 finite source geometry");bw.Write(x);}}foreach(int i in ix)bw.Write(i);}
+  FrameInfo40["light84"]=new Obj40{["producer"]="existing Restore335 Map/Current/Native Class source selection; cls.y is retained continuous light",["layers"]=16,["computeDispatches"]=0,["sourceGeometryBytes"]=bytes84,["sourceGeometryFile"]="geometry-frame"+frame+".bin",["faceSteps"]=eye.full.faceShadeSteps,["nativeStyleKey"]=eye.full.renderedSerial335,["sourceBinding"]=new Arr40(renderer,submesh),["unknownNeverRepaired"]=true};invalid81=false;
+ }
+ void RecordCurve81(RenderGraph graph){
+  using(var b=graph.AddRasterRenderPass<Light84Data>("84 existing selected light address observation",out var d)){
+   d.owner=this;var p=new MaterialPropertyBlock();d.properties=p;
+   void T(string n,RTHandle t){if(t==null||t.rt==null||t.rt.graphicsFormat!=Fields[13].rt.graphicsFormat)throw new InvalidOperationException("84 existing source RT ABI");b.UseTexture(graph.ImportTexture(t),AccessFlags.Read);p.SetTexture(n,t.rt);}
+   T("_Before84",native42.output);T("_MainMeta84",main41.resolvedMeta);T("_World84",native42.depthAudit);T("_Cell84",native42.cellID);T("_Owner84",native42.owner);T("_MainUV84",main41.resolvedUV);T("_MainSource84",main41.preparedMeta);T("_Domain84",main41.domain);
+   if(!eye.full.actionMap||eye.full.actionMap.width!=480||eye.full.actionMap.height!=272)throw new InvalidOperationException("84 action-map source ABI");p.SetTexture("_Map84",eye.full.actionMap);
+   T("_HeadUV84",eye.full.preparedUV);T("_HeadMeta84",eye.full.preparedMeta);T("_Class48084",eye.full.style480[3]);T("_Class96084",eye.full.style960[3]);T("_Mask48084",eye.full.shadeMask480);T("_Mask96084",eye.full.shadeMask960);T("_Meta48084",eye.full.motion.raw[5]);T("_Meta96084",eye.full.native[5]);T("_Normal48084",eye.full.motion.raw[2]);T("_Normal96084",eye.full.native[2]);T("_UV48084",eye.full.motion.raw[6]);T("_UV96084",eye.full.native[6]);
+   p.SetInt("_Width84",W77);p.SetVector("_HeadOrigin84",new Vector4(QROI.x,272-QROI.y-W77,0,0));p.SetVector("_Join84",new Vector4(join41.x,join41.y,0,0));p.SetVector("_NativeOrigin84",new Vector4(native42.origin.x,native42.origin.y,0,0));p.SetVector("_Delta84",new Vector4(delta42.x,delta42.y,0,0));
+   b.UseTexture(graph.ImportTexture(native42.output),AccessFlags.Read);b.SetRenderAttachment(graph.ImportTexture(Fields[13]),0,AccessFlags.Write);b.AllowPassCulling(false);b.SetRenderFunc(static(Light84Data d,RasterGraphContext c)=>{var o=d.owner;if(!o.native42.ready||o.native42.presentSerial<=o.serialBefore42){o.invalid81=true;return;}c.cmd.DrawProcedural(Matrix4x4.identity,o.inkStyle39,0,MeshTopology.Triangles,3,1,d.properties);});
+  }
+ }
+}
+}

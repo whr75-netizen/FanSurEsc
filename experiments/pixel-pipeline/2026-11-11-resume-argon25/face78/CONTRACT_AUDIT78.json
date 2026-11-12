@@ -1,0 +1,752 @@
+{
+  "sourceSHA256": "0660905559f7bad37cd457f401074d02380504e4190d0cd5d40f7fd82dfe375e",
+  "sourceRows": 4374,
+  "validLineRowsWithSameParentNativeFlanks": 3217,
+  "sourceRGBChanged": 0,
+  "newSemanticFamilies": 0,
+  "GPUExecuted": false,
+  "paletteReferencesGenerated": false,
+  "models": {
+    "encodedRGB": {
+      "connectedSupports": 412,
+      "rankDeficient": 176,
+      "uniqueNumerical": 236,
+      "gamutAndNonSuperopaque": 29,
+      "rayDistanceIsNotPureBackgroundProof": true,
+      "maxResidualAmongPhysical": 0.00025193895060812477,
+      "medianConditionAmongUnique": 44.31573982948211
+    },
+    "linearRGB": {
+      "connectedSupports": 412,
+      "rankDeficient": 176,
+      "uniqueNumerical": 236,
+      "gamutAndNonSuperopaque": 34,
+      "rayDistanceIsNotPureBackgroundProof": true,
+      "maxResidualAmongPhysical": 0.000525800111015039,
+      "medianConditionAmongUnique": 46.80261090698536
+    }
+  },
+  "gradientCompositingModels": {
+    "encodedRGB": {
+      "profiles": 4257,
+      "unsupportedNativeProfileRows": 0,
+      "alphaAndGamutNumericallyAdmissible": 831,
+      "notDisprovenByQuantizationBounds": 1692,
+      "matteAccepted": false,
+      "boundsAreNecessaryNotSufficient": true,
+      "sigmaOffsetFrozenFrom71": true,
+      "examples": [
+        {
+          "profileSSE": 4.335228427268076e-05,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.0023053571219556162,
+          "alpha": -1.1393969167890448,
+          "point": [
+            0.9923810847386315,
+            0.92923543144972,
+            0.854662060595886
+          ],
+          "crossChannelConstraintResidual": 0.000894159727515678,
+          "sampleErrorBound": 0.00196078431372549,
+          "alphaInterval": [
+            0.03065248390823669,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            73,
+            14
+          ]
+        },
+        {
+          "profileSSE": 4.629133582421554e-05,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.0023397299607412388,
+          "alpha": 1.6856426801867568,
+          "point": [
+            0.9870399468526512,
+            0.8974892797597706,
+            0.8106158235651111
+          ],
+          "crossChannelConstraintResidual": 0.0005668149389854455,
+          "sampleErrorBound": 0.00196078431372549,
+          "alphaInterval": [
+            0.026042519302497055,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            74,
+            14
+          ]
+        },
+        {
+          "profileSSE": 8.339942706772566e-05,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.0028792622901641545,
+          "alpha": 2.6553790919463056,
+          "point": [
+            0.987893197112326,
+            0.9023304857247534,
+            0.8160475243573309
+          ],
+          "crossChannelConstraintResidual": 0.001688505331695538,
+          "sampleErrorBound": 0.00196078431372549,
+          "alphaInterval": [
+            0.813002406531693,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": false,
+          "necessaryModelCompatible": false,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            940,
+            14
+          ]
+        },
+        {
+          "profileSSE": 0.00010279003254848512,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.002925469849994043,
+          "alpha": 0.7857612116777374,
+          "point": [
+            0.9831747993799953,
+            0.8844861951010218,
+            0.7934822441092865
+          ],
+          "crossChannelConstraintResidual": 0.0026798110508718517,
+          "sampleErrorBound": 0.00196078431372549,
+          "alphaInterval": [
+            0.02692026567370127,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": false,
+          "necessaryModelCompatible": false,
+          "matteIdentified": false,
+          "alphaInUnitInterval": true,
+          "unitGamut": true,
+          "nativeXY": [
+            941,
+            14
+          ]
+        },
+        {
+          "profileSSE": 9.630307327131076e-05,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.0028493003797373795,
+          "alpha": -1.0428254243965358,
+          "point": [
+            0.9958208951537622,
+            0.9323687579985237,
+            0.8576399566534505
+          ],
+          "crossChannelConstraintResidual": 0.0013073593187650438,
+          "sampleErrorBound": 0.00196078431372549,
+          "alphaInterval": [
+            0.029541077712591145,
+            0.25953322651485883
+          ],
+          "linearModelWithinSampleBounds": false,
+          "necessaryModelCompatible": false,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            942,
+            14
+          ]
+        },
+        {
+          "profileSSE": 3.7833950955398745e-05,
+          "modelCondition": 9.890684687946246,
+          "backgroundSlopeNorm": 0.0018552326281716701,
+          "alpha": -0.7035633269961629,
+          "point": [
+            0.9991937697710459,
+            0.9463385342415086,
+            0.8698115310329831
+          ],
+          "crossChannelConstraintResidual": 0.002161672829377307,
+          "sampleErrorBound": 0.00196078431372549,
+          "alphaInterval": [
+            0.026490851044158697,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            70,
+            15
+          ]
+        },
+        {
+          "profileSSE": 1.3495839229848118e-05,
+          "modelCondition": 10.245668617988699,
+          "backgroundSlopeNorm": 0.0026080100631672132,
+          "alpha": -0.9540966135148936,
+          "point": [
+            0.9920350836505343,
+            0.9416183894907676,
+            0.8641068285418191
+          ],
+          "crossChannelConstraintResidual": 0.0024800413780716618,
+          "sampleErrorBound": 0.00196078431372549,
+          "alphaInterval": [
+            0.03048098528360119,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            71,
+            15
+          ]
+        },
+        {
+          "profileSSE": 3.169469649790368e-05,
+          "modelCondition": 9.890684687946246,
+          "backgroundSlopeNorm": 0.0025827319891042655,
+          "alpha": 1.953737573873211,
+          "point": [
+            0.98809208484465,
+            0.9015724702749975,
+            0.8160905996902313
+          ],
+          "crossChannelConstraintResidual": 0.0006699690845024042,
+          "sampleErrorBound": 0.00196078431372549,
+          "alphaInterval": [
+            0.19665981887894082,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            72,
+            15
+          ]
+        }
+      ]
+    },
+    "linearRGB": {
+      "profiles": 4257,
+      "unsupportedNativeProfileRows": 0,
+      "alphaAndGamutNumericallyAdmissible": 746,
+      "notDisprovenByQuantizationBounds": 2527,
+      "matteAccepted": false,
+      "boundsAreNecessaryNotSufficient": true,
+      "sigmaOffsetFrozenFrom71": true,
+      "examples": [
+        {
+          "profileSSE": 0.000149111526797297,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.00431250215647563,
+          "alpha": -1.0688377182007966,
+          "point": [
+            0.9831096894231404,
+            0.8478539099403197,
+            0.7015823451405471
+          ],
+          "crossChannelConstraintResidual": 0.0019387122061755035,
+          "sampleErrorBound": 0.004460551993309172,
+          "alphaInterval": [
+            0.06305120365505001,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            73,
+            14
+          ]
+        },
+        {
+          "profileSSE": 0.00017137616653595353,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.004363306699070814,
+          "alpha": 1.64643612351813,
+          "point": [
+            0.9706543931299705,
+            0.7819624727507999,
+            0.6214613861041361
+          ],
+          "crossChannelConstraintResidual": 0.0012054271823288896,
+          "sampleErrorBound": 0.004460551993309172,
+          "alphaInterval": [
+            0.05319452229506888,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            74,
+            14
+          ]
+        },
+        {
+          "profileSSE": 0.0002866417332753929,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.005390239030589183,
+          "alpha": 2.6352925712565303,
+          "point": [
+            0.9726580651952544,
+            0.7920205971546279,
+            0.6314043607171883
+          ],
+          "crossChannelConstraintResidual": 0.0036924015299766703,
+          "sampleErrorBound": 0.004460551993309172,
+          "alphaInterval": [
+            0.5935302452708313,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            940,
+            14
+          ]
+        },
+        {
+          "profileSSE": 0.0003441345127478664,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.0055045825103067995,
+          "alpha": 0.7953220275662428,
+          "point": [
+            0.9623278943860327,
+            0.757363453600523,
+            0.593044731909439
+          ],
+          "crossChannelConstraintResidual": 0.005724532289052286,
+          "sampleErrorBound": 0.004460551993309172,
+          "alphaInterval": [
+            0.05513671322905833,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": true,
+          "unitGamut": true,
+          "nativeXY": [
+            941,
+            14
+          ]
+        },
+        {
+          "profileSSE": 0.0003238293234699179,
+          "modelCondition": 8.165415259881698,
+          "backgroundSlopeNorm": 0.005343798287932093,
+          "alpha": -0.9557167996787105,
+          "point": [
+            0.9914376446451574,
+            0.8554668453646131,
+            0.7083544194604704
+          ],
+          "crossChannelConstraintResidual": 0.0024544082851973505,
+          "sampleErrorBound": 0.004460551993309172,
+          "alphaInterval": [
+            0.060676614581664345,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            942,
+            14
+          ]
+        },
+        {
+          "profileSSE": 0.00013341260749874046,
+          "modelCondition": 9.890684687946246,
+          "backgroundSlopeNorm": 0.003674558961091668,
+          "alpha": -0.5554129027778871,
+          "point": [
+            1.0026175329927614,
+            0.8965888816683382,
+            0.7431020429305479
+          ],
+          "crossChannelConstraintResidual": 0.0038389185416082853,
+          "sampleErrorBound": 0.004460551993309172,
+          "alphaInterval": [
+            0.05315943587692785,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": false,
+          "nativeXY": [
+            70,
+            15
+          ]
+        },
+        {
+          "profileSSE": 4.9070780119620354e-05,
+          "modelCondition": 10.245668617988699,
+          "backgroundSlopeNorm": 0.005084244515414238,
+          "alpha": -0.7552542103946699,
+          "point": [
+            0.9831802212293131,
+            0.884097579338641,
+            0.7301049887819845
+          ],
+          "crossChannelConstraintResidual": 0.005173325175280583,
+          "sampleErrorBound": 0.004460551993309172,
+          "alphaInterval": [
+            0.06177512192100783,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            71,
+            15
+          ]
+        },
+        {
+          "profileSSE": 0.00012082310478389873,
+          "modelCondition": 9.890684687946246,
+          "backgroundSlopeNorm": 0.004871278476556475,
+          "alpha": 1.9114614883275152,
+          "point": [
+            0.9729918500088526,
+            0.7900666667738132,
+            0.6309942378582123
+          ],
+          "crossChannelConstraintResidual": 0.0014572781607550505,
+          "sampleErrorBound": 0.004460551993309172,
+          "alphaInterval": [
+            0.06406682489492166,
+            1.0
+          ],
+          "linearModelWithinSampleBounds": true,
+          "necessaryModelCompatible": true,
+          "matteIdentified": false,
+          "alphaInUnitInterval": false,
+          "unitGamut": true,
+          "nativeXY": [
+            72,
+            15
+          ]
+        }
+      ]
+    }
+  },
+  "compactInputSHA256": "cbebae362849f61841498a1083caaf92be3570e62a337a3537f1fa8a4a0f46f1",
+  "supportInputSHA256": "7f7c786ea2fc1025e0c05fd7110c1409c476eb51968890889440c9e7ac13cd99",
+  "examples": [
+    {
+      "samples": 1,
+      "rank": 2,
+      "eigenvalues": [
+        -9.71445146547012e-17,
+        1.0,
+        1.0
+      ],
+      "uniqueNumericalIntersection": false,
+      "point": null,
+      "space": "encodedRGB",
+      "connectedSupport": 41,
+      "distinctNativeCentreRGB": 1,
+      "backgroundStatus": "hypothesized from symmetric native flanks, not observed clean backing",
+      "pigmentStatus": "numerical estimate only, never palette reference",
+      "sampleSourceXY": [
+        [
+          145,
+          26
+        ]
+      ],
+      "exampleKind": "rank-deficient"
+    },
+    {
+      "samples": 278,
+      "rank": 3,
+      "eigenvalues": [
+        8.655798149833332,
+        271.900372841573,
+        275.4438290085937
+      ],
+      "uniqueNumericalIntersection": true,
+      "point": [
+        0.9922382097520089,
+        0.884315321886633,
+        0.796071317578006
+      ],
+      "condition": 31.821886813973155,
+      "maxRayDistance": 0.027625660107331244,
+      "rmsRayDistance": 0.00661493542179169,
+      "minRayParameter": -0.24325520886823856,
+      "maxRayParameter": 10.7242860696541,
+      "unitGamut": true,
+      "allRayParametersAtLeastOne": false,
+      "space": "encodedRGB",
+      "connectedSupport": 491,
+      "distinctNativeCentreRGB": 82,
+      "backgroundStatus": "hypothesized from symmetric native flanks, not observed clean backing",
+      "pigmentStatus": "numerical estimate only, never palette reference",
+      "sampleSourceXY": [
+        [
+          374,
+          631
+        ],
+        [
+          375,
+          631
+        ],
+        [
+          374,
+          632
+        ],
+        [
+          373,
+          633
+        ],
+        [
+          373,
+          634
+        ],
+        [
+          372,
+          635
+        ],
+        [
+          372,
+          636
+        ],
+        [
+          371,
+          637
+        ]
+      ],
+      "exampleKind": "weak-native-component"
+    },
+    {
+      "samples": 2,
+      "rank": 3,
+      "eigenvalues": [
+        0.002462484052246916,
+        1.9975375159477529,
+        2.0
+      ],
+      "uniqueNumericalIntersection": true,
+      "point": [
+        0.9725490196078431,
+        0.8078431372549032,
+        0.7137254901960817
+      ],
+      "condition": 812.1880010450757,
+      "maxRayDistance": 1.3114746286939404e-16,
+      "rmsRayDistance": 1.2134322225081496e-16,
+      "minRayParameter": 1.0000000000004619,
+      "maxRayParameter": 1.000000000000475,
+      "unitGamut": true,
+      "allRayParametersAtLeastOne": true,
+      "space": "encodedRGB",
+      "connectedSupport": 194,
+      "distinctNativeCentreRGB": 1,
+      "backgroundStatus": "hypothesized from symmetric native flanks, not observed clean backing",
+      "pigmentStatus": "numerical estimate only, never palette reference",
+      "sampleSourceXY": [
+        [
+          655,
+          359
+        ],
+        [
+          655,
+          360
+        ]
+      ],
+      "exampleKind": "small-physical-only"
+    },
+    {
+      "samples": 1,
+      "rank": 2,
+      "eigenvalues": [
+        1.3877787807814457e-16,
+        1.0,
+        1.0
+      ],
+      "uniqueNumericalIntersection": false,
+      "point": null,
+      "space": "linearRGB",
+      "connectedSupport": 41,
+      "distinctNativeCentreRGB": 1,
+      "backgroundStatus": "hypothesized from symmetric native flanks, not observed clean backing",
+      "pigmentStatus": "numerical estimate only, never palette reference",
+      "sampleSourceXY": [
+        [
+          145,
+          26
+        ]
+      ],
+      "exampleKind": "rank-deficient"
+    },
+    {
+      "samples": 278,
+      "rank": 3,
+      "eigenvalues": [
+        10.13719765577541,
+        270.385937071191,
+        275.4768652730335
+      ],
+      "uniqueNumericalIntersection": true,
+      "point": [
+        0.9821367761829819,
+        0.7561707073464442,
+        0.5968498275815107
+      ],
+      "condition": 27.17485390216186,
+      "maxRayDistance": 0.05568552527857756,
+      "rmsRayDistance": 0.012406262328120957,
+      "minRayParameter": -0.1832180534544473,
+      "maxRayParameter": 10.410734602061957,
+      "unitGamut": true,
+      "allRayParametersAtLeastOne": false,
+      "space": "linearRGB",
+      "connectedSupport": 491,
+      "distinctNativeCentreRGB": 82,
+      "backgroundStatus": "hypothesized from symmetric native flanks, not observed clean backing",
+      "pigmentStatus": "numerical estimate only, never palette reference",
+      "sampleSourceXY": [
+        [
+          374,
+          631
+        ],
+        [
+          375,
+          631
+        ],
+        [
+          374,
+          632
+        ],
+        [
+          373,
+          633
+        ],
+        [
+          373,
+          634
+        ],
+        [
+          372,
+          635
+        ],
+        [
+          372,
+          636
+        ],
+        [
+          371,
+          637
+        ]
+      ],
+      "exampleKind": "weak-native-component"
+    },
+    {
+      "samples": 2,
+      "rank": 3,
+      "eigenvalues": [
+        0.006571007390823877,
+        1.993428992609176,
+        2.0
+      ],
+      "uniqueNumericalIntersection": true,
+      "point": [
+        0.9386857284578884,
+        0.617206562419646,
+        0.4507857828382294
+      ],
+      "condition": 304.3673338113924,
+      "maxRayDistance": 4.858643217047108e-16,
+      "rmsRayDistance": 4.512745266954223e-16,
+      "minRayParameter": 0.9999999999994273,
+      "maxRayParameter": 0.9999999999994906,
+      "unitGamut": true,
+      "allRayParametersAtLeastOne": true,
+      "space": "linearRGB",
+      "connectedSupport": 191,
+      "distinctNativeCentreRGB": 1,
+      "backgroundStatus": "hypothesized from symmetric native flanks, not observed clean backing",
+      "pigmentStatus": "numerical estimate only, never palette reference",
+      "sampleSourceXY": [
+        [
+          643,
+          355
+        ],
+        [
+          644,
+          355
+        ]
+      ],
+      "exampleKind": "small-physical-only"
+    }
+  ],
+  "nativeSourceInput": {
+    "sourceHierarchySHA256": "6b4b3e4833b6401722e947e82b876db09d985c206105e7512fa43bba554e463d",
+    "nativeSubsetSHA256": "0660905559f7bad37cd457f401074d02380504e4190d0cd5d40f7fd82dfe375e",
+    "RGBABytesSHA256": "da7ba277833ef7ac39700f08e75cc78742e197ca9c56941a4464b2d69373f732",
+    "sourceImageSHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+    "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+    "material3": "mesh0/primitive3; identity UV transform; image5",
+    "textureSize": [
+      1024,
+      1024
+    ],
+    "cropOffset": [
+      4,
+      7
+    ],
+    "keysKept": [
+      "rgba",
+      "mask",
+      "thinX",
+      "thinY"
+    ],
+    "reducedInputDoesNotModifyRGBOrMask": true
+  },
+  "interpretation": {
+    "neitherFlanksNorFittedBaseIsObservedCleanBackground": true,
+    "noUniquePigmentClaimFromLeastSquaresPoint": true,
+    "constantBackgroundContinuumDoesNotProveAllSegmentationImpossible": true,
+    "fixedSigmaOffsetCounterexampleNotAllCurveModels": true,
+    "quantizationIsAStatedPrecisionAssumptionNotAuthoredAAProof": true,
+    "sourceLocalToneAndPigmentContractStillUnresolved": true,
+    "independentRuntimeLightQNotUsedToInferSourceColour": true,
+    "fullFaceOutputNotImplementedByThisAudit": true
+  }
+}

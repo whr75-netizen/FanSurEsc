@@ -10,7 +10,7 @@ from prepare_final41 import compile_unity_language
 H=Path(__file__).resolve().parent
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
- mode=sys.argv[1];assert mode in['probe','probe2','probe3','long'];target=12 if mode.startswith('probe') else 120;pose=1;G=H/'face77'/mode
+ mode=sys.argv[1];assert mode in['probe','probe2','probe3','long','loop120'];target=12 if mode.startswith('probe') else 120;pose=1;G=H/'face77'/mode
  for p in['capture','final','post/final','console','build']:(G/p).mkdir(parents=True,exist_ok=True)
  assert not(G/'capture/REQUEST.json').exists();s=(H/'face75/capture/RUN.cs.txt').read_text().replace('resume-20261111\\face75\\capture','resume-20261111\\face77\\'+mode+'\\capture').replace('face75-source-owner-history-','face77-bounded-runtime-stream-')
  def rep(a,b):
@@ -32,6 +32,14 @@ def main():
  # The actual turn arrives the update after queueing at end-of-frame+32. Keep
  # the expected-input receipt aligned; this changes no key/event dispatch.
  assert s.count('index<3')==2;s=s.replace('index<3','index<33')
+ if mode=='loop120':
+  # Normal bound actions form an eight-update-per-side square. No teleport,
+  # camera manipulation, speed or InputSettings object replacement. End-frame
+  # event arrives on the next Dynamic update; expected index uses that delay.
+  rep('bool started,disposed,turned;int direction;','bool started,disposed;int loopPhase77;int direction;')
+  rep('void AfterFrame(ScriptableRenderContext context,Camera[] cameras){if(!turned&&Time.frameCount>=FirstTarget+32){Queue(direction+2);turned=true;}}','void AfterFrame(ScriptableRenderContext context,Camera[] cameras){if(Time.frameCount<FirstTarget)return;int phase=(Time.frameCount-FirstTarget+1)/8;if(phase!=loopPhase77){Queue(direction+2*phase);loopPhase77=phase;}}')
+  rep('var expected=D[((index<33?direction:direction+2)+8)%8];','var expected=D[(direction+2*Math.Max(0,index/8)+8)%8];')
+  rep('["stage"]=index<33?"walk":"turn",','["stage"]="bounded-loop-side-"+(Math.Max(0,index/8)%4),')
  a=s.index(' void Tick(){',s.index('internal class CommandScript : IRunCommand'));b=s.index(' void Exit(){',a)
  tick='''  void Tick(){
    if(finished)return;try{
@@ -53,14 +61,17 @@ def main():
  rep('void Finish(){sharedSource67?.Dispose();','void Finish(){if(host!=null)report["stream77"]=host.Summary();sharedSource67?.Dispose();')
  rep('["plannedSourceFrames"]=6,','["plannedSourceFrames"]='+str(target)+',')
  stream=(H/'Stream77.cs.txt').read_text()
- if mode=='long':
+ if not mode.startswith('probe'):
   #35x35x13x16=254800 bytes: keep ONE bounded request while adding the actual
   # source-width scalar plane required for complete selection recomputation.
   stream=stream.replace('const int W77=36;','const int W77=35;').replace('W77*12','W77*13').replace('12*W77*W77*16','13*W77*W77*16').replace('bottom-left12layers','bottom-left13layers').replace('x1-x0>30||y1-y0>30','x1-x0>29||y1-y0>29').replace('["maxReadbackBytes"]=248832','["maxReadbackBytes"]=254800')
   needle='cmd.CopyTexture(main41.domain.rt,0,0,QROI.x+join41.x,272-QROI.y-W77+join41.y,W77,W77,Fields[13].rt,0,0,11*W77,0);';assert stream.count(needle)==1;stream=stream.replace(needle,needle+'cmd.CopyTexture(Fields[15].rt,0,0,5*W77,0,W77,W77,Fields[13].rt,0,0,12*W77,0);')
+ if mode=='loop120':
+  needle='data.CopyTo(bytes);var encoded=FrameBytes77.Encode(bytes);';assert stream.count(needle)==1
+  stream=stream.replace(needle,'data.CopyTo(bytes);int actorCount77=0,faceCount77=0;for(int y77=0;y77<W77;y77++)for(int x77=0;x77<W77;x77++){bool actor77=BitConverter.ToSingle(bytes,16*(y77*W77*13+5*W77+x77)+8)==1;if(actor77){actorCount77++;if(BitConverter.ToSingle(bytes,16*(y77*W77*13+6*W77+x77))==sourceFlat67.MappedRole72)faceCount77++;}}receipt["observedActorCells77"]=actorCount77;receipt["observedFaceCells77"]=faceCount77;if(actorCount77==0)Fail(new InvalidOperationException("77 character not observed; stop and drain, no temporal art claim"));var encoded=FrameBytes77.Encode(bytes);')
  s+='\n'+stream+'\n'+(H/'FrameBytes77.cs').read_text();(G/'capture/RUN.cs.txt').write_text(s,encoding='utf-8',newline='\n');compile_unity_language(G/'capture/RUN.cs.txt',G/'build/stream77.dll')
  for phase in['final','post/final']:
   text=(H/('face75/'+phase+'/RUN.cs.txt')).read_text().replace('resume-20261111\\face75','resume-20261111\\face77\\'+mode);(G/phase/'RUN.cs.txt').write_text(text,encoding='utf-8',newline='\n');compile_unity_language(G/phase/'RUN.cs.txt',G/'build'/('post77.dll'if phase.startswith('post')else'pre77.dll'))
- readbytes=254800 if mode=='long' else 248832
+ readbytes=248832 if mode.startswith('probe')else 254800
  (G/'console/ARGS.json').write_text((H/'face75/console/ARGS.json').read_text());result={'mode':mode,'CSharp9Compiled':True,'shaderSHA256':json.loads((H/'face75/CPU_PREPARED75.json').read_text())['computeSHA256'],'captureSHA256':sha(G/'capture/RUN.cs.txt'),'targetFrames':target,'poseEvery':pose,'poolSlots':6,'readbackBytes':readbytes,'maxThreadsPerFrame':1600,'maxDispatchesPerFrame':1,'noNewShaderOrKernel':True,'rawFrameBytesTotalUpper':target*readbytes,'compressedFramesStored':True,'GPUExecuted':False,'normalExitAfterAllACK':True};(G/'CPU_PREPARED77.json').write_text(json.dumps(result,indent=2));print(json.dumps(result))
 if __name__=='__main__':main()

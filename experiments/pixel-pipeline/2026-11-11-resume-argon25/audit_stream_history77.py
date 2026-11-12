@@ -4,10 +4,10 @@ Actual GPU results stay immutable. This is not a second GPU A/B capture, nor a
 whole-feature silhouette cache. Count owner ties separately from visible RGB.
 """
 from pathlib import Path
-import json,numpy as np
+import json,sys,numpy as np
 from frame_bytes77 import decode
 from variable_exterior72 import resolve
-H=Path(__file__).resolve().parent;G=H/'face77/long';C=G/'capture'
+H=Path(__file__).resolve().parent;K=sys.argv[1]if len(sys.argv)>1 else'long';assert K in['long','loop120'];G=H/'face77'/K;C=G/'capture'
 
 def main():
  report=json.loads((C/'COMPLETE.json').read_text());frames=report['stream77']['frames'];table=json.loads((C/'SOURCE_TABLE77.json').read_text());enabled=np.zeros(16,bool);maximum=np.zeros(16,int);inks=np.zeros((16,3),np.float32)

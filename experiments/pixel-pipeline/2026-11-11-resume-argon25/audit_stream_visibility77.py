@@ -1,10 +1,10 @@
 """Count actual source support; empty ROI frames are not face stability evidence."""
 from pathlib import Path
-import json,hashlib,numpy as np
+import json,hashlib,sys,numpy as np
 from PIL import Image,ImageDraw
 from frame_bytes77 import decode
 from review_motion64 import srgb
-H=Path(__file__).resolve().parent;G=H/'face77/long';C=G/'capture'
+H=Path(__file__).resolve().parent;K=sys.argv[1]if len(sys.argv)>1 else'long';assert K in['long','loop120'];G=H/'face77'/K;C=G/'capture'
 
 def main():
  report=json.loads((C/'COMPLETE.json').read_text());frames=report['stream77']['frames'];rows=[];film=[];panels=[]
@@ -14,6 +14,7 @@ def main():
   data=np.frombuffer(raw,'<f4').reshape(h,w*13,4);parts=[data[:,i*w:(i+1)*w]for i in range(13)];before,after,key,meta,world,cell,owner,uv,source,trace,receipt,domain=parts[:12]
   actor=cell[:,:,2]==1;face=actor&(owner[:,:,0]==role);outline=key[:,:,0]>=100;hist=trace[:,:,3]==1
   row={'ordinal':f['ordinal'],'frame':f['frame'],'actorCells':int(actor.sum()),'faceSourceCells':int(face.sum()),'outlineCells':int(outline.sum()),'historyMatchedCells':int(hist.sum()),'actualInputMatches':f['motion']['matches'],'stage':f['motion']['stage']};rows.append(row)
+  if'observedActorCells77'in f:assert f['observedActorCells77']==row['actorCells']and f['observedFaceCells77']==row['faceSourceCells']
   # No native support means no evidence about face/line temporal quality.
   if actor.any():
    a=srgb(before);b=srgb(after);out=Image.new('RGB',(w*12,h*6+24),(27,29,35));out.paste(a.resize((w*6,h*6),Image.Resampling.NEAREST),(0,24));out.paste(b.resize((w*6,h*6),Image.Resampling.NEAREST),(w*6,24));ImageDraw.Draw(out).text((3,3),f"F{f['frame']} native | private candidate; partial LUT rejected",fill='white');film.append(out)

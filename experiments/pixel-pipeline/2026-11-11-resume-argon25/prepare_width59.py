@@ -1,0 +1,16 @@
+"""Use the installed UniVRM Linear->sRGB material-property contract exactly."""
+from pathlib import Path
+import json,hashlib,difflib
+from prepare_final41 import compile_unity_language
+H=Path(__file__).resolve().parent;G=H/'face59'
+def main():
+ p=G/'capture';p.mkdir(parents=True,exist_ok=True);assert not(p/'REQUEST.json').exists()
+ fail=json.loads((H/'face58/capture/FAILED.json').read_text());assert fail['restorationChecksPass']and fail['ownedResourcesReleased']and not fail['errors']and fail['pendingOwners']==0
+ old=(H/'face58/capture/RUN.cs.txt').read_text();s=old.replace('resume-20261111\\face58\\capture','resume-20261111\\face59\\capture').replace('face58-authored-width-','face59-authored-width-')
+ a='if(widthMaterial40.GetFloat("_OutlineWidth")!=width||widthMaterial40.GetFloat("_OutlineLightingMix")!=0||widthMaterial40.GetColor("_OutlineColor").r!=sourceInk.x||widthMaterial40.GetColor("_OutlineColor").g!=sourceInk.y||widthMaterial40.GetColor("_OutlineColor").b!=sourceInk.z)throw new InvalidOperationException("58 live source outline settings differ from provenance; no historical override accepted");'
+ b='''var expectedGamma59=new Color(sourceInk.x,sourceInk.y,sourceInk.z,1).gamma;var actualGamma59=widthMaterial40.GetColor("_OutlineColor");CreateOnly40.Text(Path.Combine(CommandScript.Root59,"SOURCE_SETTINGS59.json"),new Obj40{["sourceLinearRGB"]=new Arr40(sourceInk.x,sourceInk.y,sourceInk.z),["expectedStoredSRGB"]=new Arr40(expectedGamma59.r,expectedGamma59.g,expectedGamma59.b),["actualStoredSRGB"]=new Arr40(actualGamma59.r,actualGamma59.g,actualGamma59.b),["actualWidth"]=widthMaterial40.GetFloat("_OutlineWidth"),["expectedWidth"]=width,["actualLightingMix"]=widthMaterial40.GetFloat("_OutlineLightingMix"),["contract"]="Installed UniVRM BuiltInVrm10MToonMaterialImporter.TryGetAllColors and ColorConversionExtensions.ToColor3: glTF Linear to stored sRGB via Color.gamma; no tolerance"}.ToString());if(widthMaterial40.GetFloat("_OutlineWidth")!=width||widthMaterial40.GetFloat("_OutlineLightingMix")!=0||actualGamma59.r!=expectedGamma59.r||actualGamma59.g!=expectedGamma59.g||actualGamma59.b!=expectedGamma59.b)throw new InvalidOperationException("59 live source outline settings differ after exact importer conversion; no override accepted");'''
+ assert s.count(a)==1;s=s.replace(a,b)
+ needle='internal class CommandScript : IRunCommand {';assert s.count(needle)==1;s=s.replace(needle,needle+'\n public const string Root59=@"'+str(p)+'";')
+ (p/'RUN.cs.txt').write_text(s,encoding='utf-8',newline='\n');build=G/'build';build.mkdir(exist_ok=True);compile_unity_language(p/'RUN.cs.txt',build/'width59.dll')
+ data={'fullExternalCSharp9Compiled':True,'plannedSourceFrames':1,'newShaders':0,'newDraws':0,'newDispatches':0,'addedReadbackPlanes':6,'readbackMaxBytesPerRequest':262144,'sourceSettingsComparedInDeclaredSpace':True,'colourToleranceUsed':False,'GPUExecuted':False,'captureSHA256':hashlib.sha256(s.encode()).hexdigest()};(G/'CPU_PREPARED59.json').write_text(json.dumps(data,indent=2),encoding='utf-8');diff=difflib.unified_diff(old.splitlines(True),s.splitlines(True),fromfile='capture58',tofile='capture59');(G/'from58.patch').write_text(''.join(x if x.endswith('\n')else x+'\n\\ No newline at end of file\n'for x in diff),encoding='utf-8');print(json.dumps(data))
+if __name__=='__main__':main()

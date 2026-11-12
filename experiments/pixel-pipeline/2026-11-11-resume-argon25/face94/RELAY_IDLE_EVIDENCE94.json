@@ -1,0 +1,16 @@
+{
+  "installedAutoShutdownSeconds": 180,
+  "source": "RelayService.cs:69,1185",
+  "filteredPublicLifecycleLog": [
+    "[2026-11-12T10:27:23.694Z] [INFO] log Client disconnected - blocking and caching for recovery",
+    "[2026-11-12T10:27:23.697Z] [INFO] log Auto-shutdown timer started due to client disconnection",
+    "[2026-11-12T10:30:23.703Z] [INFO] log Auto-shutdown timer fired after 180s inactivity, shutting down: Dedicated client disconnected",
+    "[2026-11-12T10:30:23.703Z] [INFO] log Shutdown: Initiating graceful shutdown: Dedicated client disconnected",
+    "[2026-11-12T10:31:26.719Z] [INFO] log Client disconnected - blocking and caching for recovery",
+    "[2026-11-12T10:31:26.720Z] [INFO] log Auto-shutdown timer started due to client disconnection",
+    "[2026-11-12T10:31:29.081Z] [INFO] log Client disconnected - blocking and caching for recovery",
+    "[2026-11-12T10:31:29.083Z] [INFO] log Auto-shutdown timer started due to client disconnection",
+    "[2026-11-12T10:34:29.089Z] [INFO] log Auto-shutdown timer fired after 180s inactivity, shutting down: Dedicated client disconnected",
+    "[2026-11-12T10:34:29.090Z] [INFO] log Shutdown: Initiating graceful shutdown: Dedicated client disconnected"
+  ]
+}

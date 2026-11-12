@@ -1,0 +1,23 @@
+{
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "path": "/ACTUAL_SEQUENCE94.png",
+  "file_id": "file_000000005f2c81f58562a740ef856cc7",
+  "library_file_id": "libfile_fde3_f-f0ec428af2408191be3a22c01b94b263_63ba02b4784c8191890f3a4c58eb6764",
+  "file_name": "ACTUAL_SEQUENCE94.png",
+  "current_version_number": 0,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "0"
+    }
+  ],
+  "directory_id": "personal-root:v1",
+  "mime_type": "image/png",
+  "library_artifact_type": "image",
+  "file_size_bytes": 57636,
+  "localPath": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face94\\held480\\ACTUAL_SEQUENCE94.png",
+  "xattrHelperExit": 1,
+  "xattrHelperOutput": "Traceback (most recent call last):\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face94\\library-current94\\library_file_transfer.py\", line 419, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face94\\library-current94\\library_file_transfer.py\", line 406, in main\n    materializer.apply_xattrs(\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face94\\library-current94\\library_file_transfer.py\", line 335, in apply_xattrs\n    xattr.apply(path)\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face94\\library-current94\\library_file_transfer.py\", line 152, in apply\n    os.setxattr(path, self.name, encoded_value)\nAttributeError: module 'os' has no attribute 'setxattr'\n"
+}

@@ -1,7 +1,7 @@
 """Explicit single-step official relay. No automatic follow-up or retry."""
 from pathlib import Path
 import datetime,hashlib,json,queue,subprocess,threading,time,sys
-H=Path(__file__).resolve().parent;G=H/'face33';PROJECT=Path(r'C:\Users\15352\Documents\work\Fantasy Survival Escape Game');PID=28080;TITLE_OVERRIDE=None
+H=Path(__file__).resolve().parent;G=H/'face33';PROJECT=Path(r'C:\Users\15352\Documents\work\Fantasy Survival Escape Game');PID=28080;TITLE_OVERRIDE=None;OBSERVATION_HOLD=None
 def save(p,obj):p.write_text(json.dumps(obj,indent=2),encoding='utf-8',newline='\n')
 def main():
  mode=sys.argv[1];assert mode in ['schema','inventory','console','console-after','details','import','capture','final','owned-completion'];root=G/mode;root.mkdir(parents=True,exist_ok=True)
@@ -34,7 +34,8 @@ def main():
    name='Unity_RunCommand';arguments={'Code':code,'Title':TITLE_OVERRIDE or {'details':'Read current scene and project dirty metadata only','import':'Import three owned source-diagnostic shaders only','capture':'One normal Play frame source diagnostic, acknowledged readback and normal restoration','final':'Read post-capture Editor state only','owned-completion':'Confirm failed owned work by one16-byte GPU readback; original observer drains; no draw, dispatch, Play or forced release'}[mode]}
   save(marker,{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'pid':PID,'tool':name,'codeSHA256':hashlib.sha256(arguments.get('Code','').encode()).hexdigest()})
   reply=rpc('tools/call',{'name':name,'arguments':arguments});save(root/'REPLY.json',reply);content=reply.get('result',{}).get('structuredContent',{});data=content.get('data',{})
-  print(json.dumps({'success':content.get('success'),'compiled':data.get('isCompilationSuccessful'),'executed':data.get('isExecutionSuccessful'),'logs':data.get('executionLogs'),'error':content.get('error'),'text':reply.get('result',{}).get('content',[])if mode.startswith('console') else None}))
+  print(json.dumps({'success':content.get('success'),'compiled':data.get('isCompilationSuccessful'),'executed':data.get('isExecutionSuccessful'),'logs':data.get('executionLogs'),'error':content.get('error'),'text':reply.get('result',{}).get('content',[])if mode.startswith('console') else None}),flush=True)
+  if mode=='capture'and OBSERVATION_HOLD is not None:save(root/'TRANSPORT_HOLD.json',OBSERVATION_HOLD(root))
  except Exception as e:
   save(root/'ERROR.json',{'type':type(e).__name__,'message':str(e),'uncertain':isinstance(e,TimeoutError)});raise
  finally:

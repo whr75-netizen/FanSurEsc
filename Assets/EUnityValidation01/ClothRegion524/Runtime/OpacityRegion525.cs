@@ -17,7 +17,7 @@ public sealed class OpacityRegion525
         public static D operator *(D a,double t)=>new D(a.x*t,a.y*t);
     }
     struct Line { public D a,b; public Line(D a,D b){this.a=a;this.b=b;} }
-    public struct Anchor {public int a,b,c;public Vector3 weights;public Vector3 Local(Vector3[] p)=>p[a]*weights.x+p[b]*weights.y+p[c]*weights.z;}
+    public struct Anchor {public int a,b,c;public Vector3 weights;public double weightB94,weightC94;public Vector3 Local(Vector3[] p)=>p[a]*weights.x+p[b]*weights.y+p[c]*weights.z;}
     public struct Boundary {public int primitive,a,b;public bool opacity;}
     public readonly List<Anchor> Anchors=new();
     public readonly List<Boundary> Segments=new();
@@ -110,9 +110,9 @@ public sealed class OpacityRegion525
         for(int i=0;i<3;i++)if(Math.Abs(w[i])<1e-8)
         {
             int j=(i+1)%3,k=(i+2)%3,a=canonical[ids[j]],c=canonical[ids[k]];double t=w[k]/(w[j]+w[k]);if(a>c){(a,c)=(c,a);t=1-t;}
-            var key=(a,c,(long)Math.Round(t*1e8));if(edgeAnchors.TryGetValue(key,out int old))return old;int at=Anchors.Count;Anchors.Add(new Anchor{a=a,b=c,weights=new Vector3((float)(1-t),(float)t,0)});edgeAnchors.Add(key,at);return at;
+            var key=(a,c,(long)Math.Round(t*1e8));if(edgeAnchors.TryGetValue(key,out int old))return old;int at=Anchors.Count;Anchors.Add(new Anchor{a=a,b=c,weights=new Vector3((float)(1-t),(float)t,0),weightB94=t});edgeAnchors.Add(key,at);return at;
         }
-        var inner=(pr,(long)Math.Round(p.x*1e10),(long)Math.Round(p.y*1e10));if(innerAnchors.TryGetValue(inner,out int prior))return prior;int index=Anchors.Count;Anchors.Add(new Anchor{a=ids[0],b=ids[1],c=ids[2],weights=new Vector3((float)w[0],(float)w[1],(float)w[2])});innerAnchors.Add(inner,index);return index;
+        var inner=(pr,(long)Math.Round(p.x*1e10),(long)Math.Round(p.y*1e10));if(innerAnchors.TryGetValue(inner,out int prior))return prior;int index=Anchors.Count;Anchors.Add(new Anchor{a=ids[0],b=ids[1],c=ids[2],weights=new Vector3((float)w[0],(float)w[1],(float)w[2]),weightB94=w[1],weightC94=w[2]});innerAnchors.Add(inner,index);return index;
     }
     void Add(int pr,D a,D b,D[] tri,bool opacity=false)
     {
@@ -142,13 +142,22 @@ public sealed class OpacityRegion525
     }
     public List<(Vector2,Vector2)> Project(Vector2[] original,bool fitOpacity=false)
     {
-        var p=new Vector2[Anchors.Count];for(int i=0;i<p.Length;i++){var a=Anchors[i];p[i]=original[a.a]*a.weights.x+original[a.b]*a.weights.y+original[a.c]*a.weights.z;}
+        return ProjectHighPrecision94(original,fitOpacity).ConvertAll(e=>(new Vector2((float)e.Item1.x,(float)e.Item1.y),new Vector2((float)e.Item2.x,(float)e.Item2.y)));
+    }
+    public List<(ClosedRegion524.P,ClosedRegion524.P)> ProjectExact94(Vector2[] original,bool fitOpacity=false)
+    {
+        return ProjectHighPrecision94(original,fitOpacity).ConvertAll(e=>(new ClosedRegion524.P(e.Item1.x,e.Item1.y),new ClosedRegion524.P(e.Item2.x,e.Item2.y)));
+    }
+    List<(D,D)> ProjectHighPrecision94(Vector2[] original,bool fitOpacity)
+    {
+        var exact=new D[Anchors.Count];var p=new Vector2[exact.Length];
+        for(int i=0;i<exact.Length;i++){var a=Anchors[i];var origin=original[a.a];var b=original[a.b];var c=original[a.c];var q=new D(origin.x+((double)b.x-origin.x)*a.weightB94+((double)c.x-origin.x)*a.weightC94,origin.y+((double)b.y-origin.y)*a.weightB94+((double)c.y-origin.y)*a.weightC94);exact[i]=q;p[i]=new Vector2((float)q.x,(float)q.y);}
         var orientation=new int[Indices.Length/3];
-        for(int pr=0;pr<orientation.Length;pr++){if(Included551!=null&&!Included551[pr])continue;int at=pr*3;var a=original[Indices[at]];var b=original[Indices[at+1]];var c=original[Indices[at+2]];double det=(double)(b.x-a.x)*(c.y-a.y)-(double)(b.y-a.y)*(c.x-a.x),uvDet=Cross(Tex(uv[Indices[at]]),Tex(uv[Indices[at+1]]),Tex(uv[Indices[at+2]]));orientation[pr]=Math.Abs(det)<1e-10?0:Math.Sign(det*uvDet);}
+        for(int pr=0;pr<orientation.Length;pr++){if(Included551!=null&&!Included551[pr])continue;int at=pr*3;var a=original[Indices[at]];var b=original[Indices[at+1]];var c=original[Indices[at+2]];double det=((double)b.x-a.x)*((double)c.y-a.y)-((double)b.y-a.y)*((double)c.x-a.x),uvDet=Cross(Tex(uv[Indices[at]]),Tex(uv[Indices[at+1]]),Tex(uv[Indices[at+2]]));orientation[pr]=Math.Abs(det)<1e-10?0:Math.Sign(det*uvDet);}
         InputSegments527=OpacitySegments527=FitOpacitySegments527=TopologyFallbacks527=0;UsedCurveFit527=false;CurveBuildMs527=0;TopologyFallbackDetails527.Clear();
-        if(fitOpacity)return CurvedProjection527(p,orientation);
-        var result=new List<(Vector2,Vector2)>(Segments.Count);
-        foreach(var s in Segments){int sign=orientation[s.primitive];if(sign==0)continue;result.Add(sign>0?(p[s.a],p[s.b]):(p[s.b],p[s.a]));}InputSegments527=result.Count;
+        if(fitOpacity)return CurvedProjection527(p,exact,orientation);
+        var result=new List<(D,D)>(Segments.Count);
+        foreach(var s in Segments){int sign=orientation[s.primitive];if(sign==0)continue;result.Add(sign>0?(exact[s.a],exact[s.b]):(exact[s.b],exact[s.a]));}InputSegments527=result.Count;
         return result;
     }
     sealed class Chain527
@@ -208,9 +217,9 @@ public sealed class OpacityRegion525
         for(int i=0;i<=n;i++)if(chain.keep[i])chain.fitted.Add(chain.nodes[i]);
         if(closed&&chain.fitted.Count<4){chain.fitted.Clear();chain.fitted.AddRange(chain.nodes);}return chain.fitted;
     }
-    static double Area527(int[] ring,Vector2[] p)
+    static double Area527(int[] ring,D[] p)
     {double a=0;for(int i=0;i+1<ring.Length;i++){var u=p[ring[i]];var v=p[ring[i+1]];a+=(double)u.x*v.y-(double)u.y*v.x;}return a*.5;}
-    static bool SameTopology527(Plan527 plan,Vector2[] p,out string reason)
+    static bool SameTopology527(Plan527 plan,D[] p,out string reason)
     {
         reason="";if(!Trace527(plan.candidate,true,out var loops)||loops.Count!=plan.loops.Length){reason="closed incidence or component count";return false;}
         var matched=new bool[plan.loops.Length];
@@ -224,16 +233,16 @@ public sealed class OpacityRegion525
         for(int i=0;i<edges.Count;i++)for(int j=i+1;j<edges.Count;j++)
         {
             var a=edges[i];var b=edges[j];if(a.Item1==b.Item1||a.Item1==b.Item2||a.Item2==b.Item1||a.Item2==b.Item2)continue;
-            Vector2 av=p[a.Item1],bv=p[a.Item2],cv=p[b.Item1],dv=p[b.Item2];double rx=(double)bv.x-av.x,ry=(double)bv.y-av.y,sx=(double)dv.x-cv.x,sy=(double)dv.y-cv.y,qx=(double)cv.x-av.x,qy=(double)cv.y-av.y,den=rx*sy-ry*sx;
+            D av=p[a.Item1],bv=p[a.Item2],cv=p[b.Item1],dv=p[b.Item2];double rx=(double)bv.x-av.x,ry=(double)bv.y-av.y,sx=(double)dv.x-cv.x,sy=(double)dv.y-cv.y,qx=(double)cv.x-av.x,qy=(double)cv.y-av.y,den=rx*sy-ry*sx;
             if(Math.Abs(den)>1e-14){double t=(qx*sy-qy*sx)/den,u=(qx*ry-qy*rx)/den;if(t>0&&t<1&&u>0&&u<1){reason="new crossing";return false;}}
             else if(Math.Abs(qx*ry-qy*rx)<1e-12){bool x=Math.Abs(rx)>=Math.Abs(ry);double a0=x?av.x:av.y,a1=x?bv.x:bv.y,b0=x?cv.x:cv.y,b1=x?dv.x:dv.y;if(Math.Min(Math.Max(a0,a1),Math.Max(b0,b1))-Math.Max(Math.Min(a0,a1),Math.Min(b0,b1))>1e-8){reason="collinear overlap";return false;}}
         }
         return true;
     }
-    List<(Vector2,Vector2)> CurvedProjection527(Vector2[] p,int[] orientation)
+    List<(D,D)> CurvedProjection527(Vector2[] p,D[] exact,int[] orientation)
     {
-        long start=Stopwatch.GetTimestamp();var result=new List<(Vector2,Vector2)>(Segments.Count);
-        void Emit(int a,int b,int sign){if(sign>0)result.Add((p[a],p[b]));else result.Add((p[b],p[a]));}
+        long start=Stopwatch.GetTimestamp();var result=new List<(D,D)>(Segments.Count);
+        void Emit(int a,int b,int sign){if(sign>0)result.Add((exact[a],exact[b]));else result.Add((exact[b],exact[a]));}
         for(int pr=0;pr<TriangleSegments.Length;pr++)
         {
             int sign=orientation[pr];if(sign==0)continue;var plan=plans527[pr];bool fitted=false;
@@ -242,7 +251,7 @@ public sealed class OpacityRegion525
                 plan.candidate.Clear();foreach(var s in plan.fixedEdges)plan.candidate.Add((s.a,s.b));int raw=0,after=0;
                 foreach(var chain in plan.chains){var chosen=FitChain527(chain,p,HeadRegion502.CurveError*.5f);raw+=chain.nodes.Length-1;after+=chosen.Count-1;for(int i=0;i+1<chosen.Count;i++)plan.candidate.Add((chosen[i],chosen[i+1]));}
                 OpacitySegments527+=raw;
-                string reason="unchanged";if(after<raw&&SameTopology527(plan,p,out reason)){FitOpacitySegments527+=after;fitted=UsedCurveFit527=true;foreach(var e in plan.candidate)Emit(e.Item1,e.Item2,sign);}
+                string reason="unchanged";if(after<raw&&SameTopology527(plan,exact,out reason)){FitOpacitySegments527+=after;fitted=UsedCurveFit527=true;foreach(var e in plan.candidate)Emit(e.Item1,e.Item2,sign);}
                 else{FitOpacitySegments527+=raw;if(after<raw){TopologyFallbacks527++;TopologyFallbackDetails527.Add(pr+":"+reason);}}
             }
             else if(plan!=null){TopologyFallbacks527++;TopologyFallbackDetails527.Add(pr+":source incidence");}
@@ -252,3 +261,4 @@ public sealed class OpacityRegion525
     }
 
 }
+

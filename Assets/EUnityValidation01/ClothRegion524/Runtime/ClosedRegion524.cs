@@ -120,6 +120,14 @@ public static class ClosedRegion524
         foreach(var line in segments)Count(counts,new P(line.Item1.x,line.Item1.y),new P(line.Item2.x,line.Item2.y));
         return BuildCounts(counts);
     }
+    // Preserve high-precision projected source coordinates until the same
+    // declared1e8 arithmetic grid. Do not round through Vector2 first.
+    public static List<Vector2[]> BuildSegments(IEnumerable<(P,P)> segments)
+    {
+        var counts=new Dictionary<(P,P),int>();
+        foreach(var edge in segments)Count(counts,edge.Item1,edge.Item2);
+        return BuildCounts(counts);
+    }
     static List<Vector2[]> BuildCounts(Dictionary<(P,P),int> counts,Dictionary<(P,P),List<Origin579>> origins579=null,List<Node579[]> anchored579=null)
     {
         var edges=new List<Edge>();foreach(var row in counts)if(row.Value!=0)edges.Add(row.Value>0?new Edge{a=row.Key.Item1,b=row.Key.Item2,weight=row.Value}:new Edge{a=row.Key.Item2,b=row.Key.Item1,weight=-row.Value});WeightedEdges=edges.Count;

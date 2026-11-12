@@ -1,0 +1,108 @@
+{
+  "CPUOnly": true,
+  "observedNativeUVFlipValidated": 1,
+  "actualBaselineAllSegmentMultisetExact": true,
+  "originalFailureDeformedPointsRetained": true,
+  "rawAndExistingFitPassAtBothBaselines": true,
+  "bothUnionImplementationsPass": true,
+  "wrongUVHandednessRejected": true,
+  "newGPUExecuted": false,
+  "cases": [
+    {
+      "fixture": "actual-baseline-v2.fixture94",
+      "frame": 102,
+      "flip": 0,
+      "fit": false,
+      "segments": 5397,
+      "runtimeMatch": false,
+      "union": [
+        "UNION FAIL spatial=False 524 negative union winding",
+        "UNION FAIL spatial=True 524 negative union winding"
+      ]
+    },
+    {
+      "fixture": "actual-baseline-v2.fixture94",
+      "frame": 102,
+      "flip": 0,
+      "fit": true,
+      "segments": 1863,
+      "runtimeMatch": false,
+      "union": [
+        "UNION FAIL spatial=False 524 negative union winding",
+        "UNION FAIL spatial=True 524 negative union winding"
+      ]
+    },
+    {
+      "fixture": "actual-baseline-v2.fixture94",
+      "frame": 102,
+      "flip": 1,
+      "fit": false,
+      "segments": 5397,
+      "runtimeMatch": false,
+      "union": [
+        "UNION PASS spatial=False loops=1",
+        "UNION PASS spatial=True loops=1"
+      ]
+    },
+    {
+      "fixture": "actual-baseline-v2.fixture94",
+      "frame": 102,
+      "flip": 1,
+      "fit": true,
+      "segments": 1863,
+      "runtimeMatch": true,
+      "union": [
+        "UNION PASS spatial=False loops=1",
+        "UNION PASS spatial=True loops=1"
+      ]
+    },
+    {
+      "fixture": "saved-failure-source.fixture94",
+      "frame": 429,
+      "flip": 0,
+      "fit": false,
+      "segments": 5397,
+      "runtimeMatch": false,
+      "union": [
+        "UNION FAIL spatial=False 524 negative union winding",
+        "UNION FAIL spatial=True 524 negative union winding"
+      ]
+    },
+    {
+      "fixture": "saved-failure-source.fixture94",
+      "frame": 429,
+      "flip": 0,
+      "fit": true,
+      "segments": 1872,
+      "runtimeMatch": false,
+      "union": [
+        "UNION FAIL spatial=False 524 negative union winding",
+        "UNION FAIL spatial=True 524 negative union winding"
+      ]
+    },
+    {
+      "fixture": "saved-failure-source.fixture94",
+      "frame": 429,
+      "flip": 1,
+      "fit": false,
+      "segments": 5397,
+      "runtimeMatch": false,
+      "union": [
+        "UNION PASS spatial=False loops=1",
+        "UNION PASS spatial=True loops=1"
+      ]
+    },
+    {
+      "fixture": "saved-failure-source.fixture94",
+      "frame": 429,
+      "flip": 1,
+      "fit": true,
+      "segments": 1872,
+      "runtimeMatch": false,
+      "union": [
+        "UNION PASS spatial=False loops=1",
+        "UNION PASS spatial=True loops=1"
+      ]
+    }
+  ]
+}

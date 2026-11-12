@@ -1,0 +1,19 @@
+ // Read current public geometry once, synchronously on the existing main-thread
+ // error callback. No reflection, mesh mutation, extra rendering or union retry.
+ bool unionBaseline94,unionFailure94;
+ void CaptureUnion94(string kind){
+  if(kind=="baseline"?unionBaseline94:unionFailure94)return;if(kind=="baseline")unionBaseline94=true;else unionFailure94=true;
+  try{
+   var n=NativePlayer395.Active;if(!n||!n.host||!n.host.main)throw new InvalidOperationException("94 current public body host absent");var f=n.host.main;var mf=f.motion.surface.outputs[0];var mesh=mf.sharedMesh;var op=ClothRegion524.Parts540[1].opacity;if(op==null||kind=="failure"&&op!=ClothRegion524.Opacity)throw new InvalidOperationException("94 requires current failing part1 opacity identity, no guessed part");
+   string status=ClothRegion524.Status;int priorSegments=op.InputSegments527;int fragments=ClosedRegion524.Fragments;int weighted=ClosedRegion524.WeightedEdges;bool fit=ClothRegion524.UseOpacityCurves527;
+   var verts=mesh.vertices;if(verts.Length>32768||op.Anchors.Count>65536||op.Segments.Count>65536||op.Indices.Length>196608)throw new InvalidOperationException("94 source count budget before projection");
+   var points=verts.Select(v=>f.Project(mf.transform.TransformPoint(v))).ToArray();foreach(var p in points)if(!float.IsFinite(p.x)||!float.IsFinite(p.y))throw new InvalidOperationException("94 nonfinite projected source");var segments=op.Project(points,fit);if(segments.Count>65536)throw new InvalidOperationException("94 segment budget");long budget=1024L+points.Length*8L+op.Indices.Length*4L+op.Anchors.Count*24L+op.Segments.Count*13L+segments.Count*16L;if(budget>4194304)throw new InvalidOperationException("94 bounded file budget");
+   string filename="UNION94-"+kind+"-frame"+Time.frameCount+".bin",path=Path.Combine(Root,filename);
+   using(var b=new BinaryWriter(new FileStream(path,FileMode.CreateNew))){b.Write("union-input94/v1");b.Write(id);b.Write(Time.frameCount);b.Write(points.Length);foreach(var p in points){b.Write(p.x);b.Write(p.y);}b.Write(op.Indices.Length);foreach(int q in op.Indices)b.Write(q);b.Write(op.Anchors.Count);foreach(var a in op.Anchors){b.Write(a.a);b.Write(a.b);b.Write(a.c);b.Write(a.weights.x);b.Write(a.weights.y);b.Write(a.weights.z);}b.Write(op.Segments.Count);foreach(var s in op.Segments){b.Write(s.primitive);b.Write(s.a);b.Write(s.b);b.Write(s.opacity);}b.Write(segments.Count);foreach(var s in segments){b.Write(s.Item1.x);b.Write(s.Item1.y);b.Write(s.Item2.x);b.Write(s.Item2.y);}}
+   string hash;using(var digest=SHA256.Create())using(var input=File.OpenRead(path))hash=BitConverter.ToString(digest.ComputeHash(input)).Replace("-","").ToLowerInvariant();
+   var info=new Obj40{["kind"]=kind,["sourceId"]=id,["frame"]=Time.frameCount,["status"]=status,["currentFailedPart"]=1,["sourceVertices"]=points.Length,["projectedSegments"]=segments.Count,["originalProductionSegmentCount"]=priorSegments,["segmentCountMatchesProduction"]=priorSegments==segments.Count,["weightedInputEdgesBefore"]=weighted,["fragmentsBefore"]=fragments,["fitOpacity"]=fit,["file"]=filename,["bytes"]=new FileInfo(path).Length,["SHA256"]=hash,["reprojectedSameCurrentPublicBodyGeometry"]=true,["windingReexecutedInEditor"]=false,["newRenderOrDispatch"]=false};
+   // COMPLETE applies only to this bounded input observation, never to the
+   // enclosing Play/capture success. Its independent FAILED marker remains.
+   CreateOnly40.Text(Path.Combine(Root,"UNION_INPUT94_"+kind+"_COMPLETE.json"),info.ToString());report["unionInput94-"+kind]=info;
+  }catch(Exception ex){report["unionInput94-"+kind+"-error"]=ex.ToString();}
+ }

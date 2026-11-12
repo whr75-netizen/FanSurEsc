@@ -1,0 +1,4 @@
+using System;using System.IO;using System.Collections.Generic;
+public static class DoubleUnionTests94 {
+ public static void Main(string[] args){foreach(string path in args){var edges=new List<(ClosedRegion524.P,ClosedRegion524.P)>();using(var b=new BinaryReader(File.OpenRead(path))){int n=b.ReadInt32();if(n<1||n>65536)throw new Exception("bounded source edges");for(int i=0;i<n;i++)edges.Add((new ClosedRegion524.P(b.ReadDouble(),b.ReadDouble()),new ClosedRegion524.P(b.ReadDouble(),b.ReadDouble())));if(b.BaseStream.Position!=b.BaseStream.Length)throw new Exception("ABI");}foreach(bool spatial in new[]{false,true}){ClosedRegion524.UseSpatialIndex526=spatial;try{var result=ClosedRegion524.BuildSegments(edges);Console.WriteLine(Path.GetFileName(path)+" spatial="+spatial+" PASS loops="+result.Count);}catch(Exception e){Console.WriteLine(Path.GetFileName(path)+" spatial="+spatial+" FAIL "+e.Message);}}}}
+}

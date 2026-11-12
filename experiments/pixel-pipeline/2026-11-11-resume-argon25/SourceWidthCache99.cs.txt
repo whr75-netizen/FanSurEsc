@@ -1,0 +1,16 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+// Same source texels and bilinear formula as97. Owned by one observation host.
+// It caches source UV evaluations, never screen positions, RGB or visibility.
+public sealed class SourceWidthCache99:IDisposable {
+ public sealed class Entry {
+  public readonly Texture2D texture;readonly int width,height;readonly uint update;readonly string imageHash;readonly Dictionary<Vector2,float> values=new Dictionary<Vector2,float>();readonly SourceWidthCache99 owner;
+  public Entry(Texture2D t,SourceWidthCache99 owner){texture=t;this.owner=owner;width=t.width;height=t.height;update=t.updateCount;imageHash=t.imageContentsHash.ToString();Require();}
+  public void Require(){var t=texture;if(!t||t.width!=width||t.height!=height||t.updateCount!=update||t.imageContentsHash.ToString()!=imageHash||!t.isReadable||t.mipmapCount!=1||t.filterMode!=FilterMode.Bilinear||t.wrapModeU!=TextureWrapMode.Repeat||t.wrapModeV!=TextureWrapMode.Repeat||GraphicsFormatUtility.IsSRGBFormat(t.graphicsFormat))throw new InvalidOperationException("99 source width texture/sampler changed; invalidate before submit");}
+  public float Sample(float u,float v){if(owner.disposed||!float.IsFinite(u)||!float.IsFinite(v))throw new InvalidOperationException("99 width source lifetime/UV");var key=new Vector2(u,v);float value;if(values.TryGetValue(key,out value)){owner.hits++;return value;}if(++owner.entries>8192)throw new InvalidOperationException("99 source UV cache budget");double x=(double)u*width-.5,y=(double)v*height-.5;int x0=(int)Math.Floor(x),y0=(int)Math.Floor(y);double dx=x-x0,dy=y-y0;int Wrap(int i,int n){i%=n;return i<0?i+n:i;}double a=texture.GetPixel(Wrap(x0,width),Wrap(y0,height),0).g,b=texture.GetPixel(Wrap(x0+1,width),Wrap(y0,height),0).g,c=texture.GetPixel(Wrap(x0,width),Wrap(y0+1,height),0).g,d=texture.GetPixel(Wrap(x0+1,width),Wrap(y0+1,height),0).g;value=(float)(((1-dx)*a+dx*b)*(1-dy)+((1-dx)*c+dx*d)*dy);values.Add(key,value);owner.misses++;return value;}
+  public void Clear(){values.Clear();}
+ }
+ readonly Dictionary<Texture2D,Entry> textures=new Dictionary<Texture2D,Entry>();bool disposed;int entries;public int hits,misses;public int Entries=>entries;
+ public Entry Require(Texture2D t){if(disposed)throw new ObjectDisposedException("99 source width cache");Entry entry;if(textures.TryGetValue(t,out entry))entry.Require();else{if(textures.Count>=16)throw new InvalidOperationException("99 source width texture budget");entry=new Entry(t,this);textures.Add(t,entry);}return entry;}
+ public void Dispose(){if(disposed)return;disposed=true;foreach(var entry in textures.Values)entry.Clear();textures.Clear();entries=0;/* Borrowed source textures are never disposed or changed. */}
+}
+}

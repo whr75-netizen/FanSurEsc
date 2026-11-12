@@ -9,7 +9,15 @@ from native_width86 import text
 from frame_bytes77 import decode
 
 def packet(root,f):
- w=f['QROI'][2];n=(2*w+1)**2;info=f['sourceFootprint95'];assert info['currentFrame']==f['frame']and info['presentSerial']==f['nativeSerial']and info['worldSerial']==f['worldSerial'];payload=decode((root/'capture'/f['compressedFile']).read_bytes(),f['bytes']);assert hashlib.sha256(payload).hexdigest()==f['rawSHA256'];raw=np.frombuffer(payload,'<f4').reshape(-1,4);assert raw.shape==(24*w*w,4)and np.isfinite(raw).all();world=raw[:n].reshape(2*w+1,2*w+1,4);depth=raw[n:2*n].reshape(2*w+1,2*w+1,4);a=raw[2*n:2*n+14*w*w].reshape(14,w,w,4);assert(raw[2*n+14*w*w:]==0).all();first=np.array(info['worldFirst']);x,y=np.meshgrid(np.arange(2*w+1),np.arange(2*w+1));assert np.array_equal(depth[:,:,2],x+first[0])and np.array_equal(depth[:,:,3],y+first[1]);expected=(1-depth[:,:,1]if info['reversedZ']else depth[:,:,1])*(info['far']-info['near'])+info['near'];assert np.max(abs(expected-depth[:,:,0]))<=max(1e-4,abs(info['far'])*2e-7);return a,world,depth
+ w=f['QROI'][2];n=(2*w+1)**2;info=f['sourceFootprint95'];assert info['currentFrame']==f['frame']and info['presentSerial']==f['nativeSerial']and info['worldSerial']==f['worldSerial'];path=root/'capture'/f['compressedFile']
+ if path.is_file():encoded=path.read_bytes()
+ else:
+  # Repository99 stores exact original R77 records in a lossless archive.
+  # Do not extract/replace evidence or synthesize missing packets.
+  assert Path(f['compressedFile']).name==f['compressedFile']
+  with zipfile.ZipFile(root/'capture/PACKETS99.zip')as archive:
+   entry=archive.getinfo(f['compressedFile']);assert 0<entry.file_size<=2*f['bytes'];encoded=archive.read(entry)
+ payload=decode(encoded,f['bytes']);assert hashlib.sha256(payload).hexdigest()==f['rawSHA256'];raw=np.frombuffer(payload,'<f4').reshape(-1,4);assert raw.shape==(24*w*w,4)and np.isfinite(raw).all();world=raw[:n].reshape(2*w+1,2*w+1,4);depth=raw[n:2*n].reshape(2*w+1,2*w+1,4);a=raw[2*n:2*n+14*w*w].reshape(14,w,w,4);assert(raw[2*n+14*w*w:]==0).all();first=np.array(info['worldFirst']);x,y=np.meshgrid(np.arange(2*w+1),np.arange(2*w+1));assert np.array_equal(depth[:,:,2],x+first[0])and np.array_equal(depth[:,:,3],y+first[1]);expected=(1-depth[:,:,1]if info['reversedZ']else depth[:,:,1])*(info['far']-info['near'])+info['near'];assert np.max(abs(expected-depth[:,:,0]))<=max(1e-4,abs(info['far'])*2e-7);return a,world,depth
 
 def actor(path):
  with path.open('rb')as f:

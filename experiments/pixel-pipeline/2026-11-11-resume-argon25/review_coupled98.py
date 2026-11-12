@@ -7,7 +7,7 @@ H=Path(__file__).resolve().parent
 
 def main():
  root=H/'face98'/sys.argv[1];report=json.loads((root/'capture/COMPLETE.json').read_text());assert report['packetComplete']and report['Edit']and report['ownedResourcesReleased']and report['restorationChecksPass']and not report['errors'];assert report['stream77']['sourceAlpha97ManagedBytesAfterRelease']==0
- rows=[];pictures=[];sequence=[];changes=[]
+ commonPolicy='CoupledRibbon98B/CoupledRibbon98B.shader'in(root/'capture/RUN.cs.txt').read_text();rows=[];pictures=[];sequence=[];changes=[]
  for f in report['stream77']['frames']:
   a,world,depth=packet(root,f);m=f['coupled98'];assert m['sourceId']==f['sourceId']and m['frame']==f['frame'];w=f['QROI'][2];proof={tuple(v[:2]):v for v in m['rows']};pruned=a[8,:,:,3]==2;assert np.array_equal(a[8,:,:,0],a[3,:,:,0]);assert np.array_equal(a[7][~pruned],a[12][~pruned]);assert np.array_equal(a[7][pruned],a[5][pruned]);assert not np.any(pruned&(a[3,:,:,3]!=1));assert not np.any(pruned&(a[3,:,:,0]!=1));assert np.array_equal(a[7][a[3,:,:,0]==3],a[12][a[3,:,:,0]==3])
   for y,x in np.argwhere(pruned):
@@ -16,7 +16,7 @@ def main():
     for dx in range(-1,2):
      if mask&(1<<((dy+1)*3+dx+1)):
       nx,ny=x+dx,y+dy;assert 0<=nx<w and 0<=ny<w;assert (nx,ny)in proof and proof[nx,ny][2]==0 and proof[nx,ny][4]>=0;realized.append(bool(a[3,ny,nx,3]==1 and not pruned[ny,nx]))
-   assert (any(realized)if sys.argv[1].endswith('B')else all(realized))
+   assert (any(realized)if commonPolicy else all(realized))
    changes.append({'frame':f['frame'],'xy':[int(x),int(y)],'sameSourceNeighbourMask':mask,'old97':a[12,y,x].tolist(),'actual98':a[7,y,x].tolist()})
   rows.append({'frame':f['frame'],'CPUmsIncluding97':m['CPUmsIncluding97'],'maskCandidates':m['maskCandidates'],'centrelineWitnesses':m['centrelineWitnesses'],'continuityChecks':m['continuityChecks'],'actualPrunedCells':int(pruned.sum()),'changedRGB':int((a[7]!=a[12]).any(2).sum()),'unknownRetained':int((a[3,:,:,0]==3).sum())})
   p=Image.new('RGB',(1050,292),'#20252c');d=ImageDraw.Draw(p);d.text((12,8),f"ACTUAL GPU98 frame {f['frame']}: current geometry/alpha -> joint line cells. Product77 default unchanged.",fill='white')

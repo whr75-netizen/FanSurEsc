@@ -1,0 +1,35 @@
+{
+  "CPUOnly": true,
+  "runtimeGeometry": "JointLine99C.cs",
+  "runtimeOpacity": "CurveOpacity99.cs",
+  "tests": [
+    {
+      "test": "OracleFinal99",
+      "stdout": "CPU exact visibility states=16192; random/front/behind/unknown/edge/corner; no Unity/GPU"
+    },
+    {
+      "test": "CurveFinal99",
+      "stdout": "CPU CurveOpacity98 tests=66; duplicate cells=3; no Unity/GPU"
+    },
+    {
+      "fixture": "frame102.bin",
+      "pixelsWitnessRadiusAnd98BCertificatesExact": true,
+      "stdout": "frame=102 known-visible=27 covered=27 unknown=17 queries=3791 visits=272049 CPUms=42.86"
+    },
+    {
+      "fixture": "frame140.bin",
+      "pixelsWitnessRadiusAnd98BCertificatesExact": true,
+      "stdout": "frame=140 known-visible=19 covered=27 unknown=29 queries=4510 visits=360788 CPUms=41.5941"
+    },
+    {
+      "fixture": "frame148.bin",
+      "pixelsWitnessRadiusAnd98BCertificatesExact": true,
+      "stdout": "frame=148 known-visible=16 covered=31 unknown=32 queries=3124 visits=183908 CPUms=42.2556"
+    },
+    {
+      "fixture": "frame149.bin",
+      "pixelsWitnessRadiusAnd98BCertificatesExact": true,
+      "stdout": "frame=149 known-visible=16 covered=29 unknown=31 queries=3133 visits=182041 CPUms=41.903"
+    }
+  ]
+}

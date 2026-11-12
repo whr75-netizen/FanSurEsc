@@ -1,0 +1,263 @@
+{
+  "originalGPUFrames": 64,
+  "sourceTexelSamples": 918,
+  "sourceRGB8Differences": 918,
+  "errors": [
+    {
+      "frame": 102,
+      "xy": [
+        12,
+        2
+      ],
+      "UV": [
+        0.5007854700088501,
+        0.14450782537460327
+      ],
+      "expected": [
+        254,
+        246,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        11,
+        3
+      ],
+      "UV": [
+        0.4560419023036957,
+        0.21157288551330566
+      ],
+      "expected": [
+        254,
+        246,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        12,
+        3
+      ],
+      "UV": [
+        0.504924476146698,
+        0.2289145588874817
+      ],
+      "expected": [
+        253,
+        242,
+        225
+      ],
+      "actual": [
+        219,
+        209,
+        194
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        13,
+        3
+      ],
+      "UV": [
+        0.550751805305481,
+        0.2137773633003235
+      ],
+      "expected": [
+        254,
+        246,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        14,
+        3
+      ],
+      "UV": [
+        0.5818732976913452,
+        0.1863320767879486
+      ],
+      "expected": [
+        254,
+        247,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        9,
+        4
+      ],
+      "UV": [
+        0.3796789050102234,
+        0.2312474250793457
+      ],
+      "expected": [
+        254,
+        247,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        10,
+        4
+      ],
+      "UV": [
+        0.4179064631462097,
+        0.27080804109573364
+      ],
+      "expected": [
+        254,
+        246,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        11,
+        4
+      ],
+      "UV": [
+        0.46413716673851013,
+        0.29610395431518555
+      ],
+      "expected": [
+        254,
+        246,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        12,
+        4
+      ],
+      "UV": [
+        0.5083873867988586,
+        0.3398037254810333
+      ],
+      "expected": [
+        253,
+        245,
+        228
+      ],
+      "actual": [
+        236,
+        227,
+        212
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        13,
+        4
+      ],
+      "UV": [
+        0.5460555553436279,
+        0.2958642244338989
+      ],
+      "expected": [
+        254,
+        246,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        14,
+        4
+      ],
+      "UV": [
+        0.587230384349823,
+        0.27701887488365173
+      ],
+      "expected": [
+        254,
+        247,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    },
+    {
+      "frame": 102,
+      "xy": [
+        15,
+        4
+      ],
+      "UV": [
+        0.6216399073600769,
+        0.2520710527896881
+      ],
+      "expected": [
+        254,
+        247,
+        230
+      ],
+      "actual": [
+        220,
+        213,
+        199
+      ]
+    }
+  ],
+  "exactUVBoundaryOldYDifferentSamples": 0,
+  "shaderContract": "site=floor(float32(UV)*textureSize); source PNG row=height-1-siteY; point Load; existing original material texture, no invented RGB",
+  "comparisonInvalidWrongPlane": true,
+  "reason": "Held480 plane14 is palette colour, not original RGB; all918 mismatch is an analysis-schema error, not a renderer failure. Current source snapshot ORIGINAL99.rgba matches the original cropped source byte-for-byte."
+}

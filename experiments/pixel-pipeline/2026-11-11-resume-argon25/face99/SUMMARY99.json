@@ -1,0 +1,164 @@
+{
+  "product77DefaultChanged": false,
+  "runtimePrivateCandidate": "JointLine99C + CurveOpacity99 + SourceWidthCache99 with unchanged98B GPU shader",
+  "CPUOnlyRejectedAlternative": "JointLine99B multiplication classification not used by actual runs",
+  "runs": [
+    {
+      "run": "profile12",
+      "actualFrames": 12,
+      "simulationSeconds": 0.20000001043081284,
+      "first12MedianCPUms": 56.02970000109053,
+      "allMedianCPUms": 56.02970000109053,
+      "maximumCPUms": 70.28990000253543,
+      "sceneFirst12MedianCPUms": 7.009850003669271,
+      "rasterFirst12MedianCPUms": 48.301099999662256,
+      "normalEditRestored": true,
+      "ownedResourcesReleased": true,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1944734113,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1686568960,
+        "reserved": 2728255488,
+        "utc": "2026-11-12T13:58:03.0751110Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1985759426,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1605783552,
+        "reserved": 2761940992,
+        "utc": "2026-11-12T13:58:17.4011443Z"
+      }
+    },
+    {
+      "run": "optimized12",
+      "actualFrames": 12,
+      "simulationSeconds": 0.20000001043081284,
+      "first12MedianCPUms": 44.85035000107018,
+      "allMedianCPUms": 44.85035000107018,
+      "maximumCPUms": 56.810300004144665,
+      "sceneFirst12MedianCPUms": 6.943299998965813,
+      "rasterFirst12MedianCPUms": 37.242550006340025,
+      "normalEditRestored": true,
+      "ownedResourcesReleased": true,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1947671215,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1687273472,
+        "reserved": 2728255488,
+        "utc": "2026-11-12T14:01:17.4131411Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1988492952,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1605189632,
+        "reserved": 2761281536,
+        "utc": "2026-11-12T14:01:31.5368498Z"
+      }
+    },
+    {
+      "run": "cached64",
+      "actualFrames": 64,
+      "simulationSeconds": 1.0666667222976685,
+      "first12MedianCPUms": 43.94345000036992,
+      "allMedianCPUms": 39.69255000265548,
+      "maximumCPUms": 67.48109999898588,
+      "sceneFirst12MedianCPUms": 6.934450000699144,
+      "rasterFirst12MedianCPUms": 36.13310000218917,
+      "normalEditRestored": true,
+      "ownedResourcesReleased": true,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1950319908,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1685913600,
+        "reserved": 2727596032,
+        "utc": "2026-11-12T14:07:58.2945560Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1991105989,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1589207040,
+        "reserved": 2761281536,
+        "utc": "2026-11-12T14:08:33.8764846Z"
+      }
+    },
+    {
+      "run": "fine64",
+      "actualFrames": 64,
+      "simulationSeconds": 1.0666667222976685,
+      "first12MedianCPUms": 32.0584000000963,
+      "allMedianCPUms": 30.10895000261371,
+      "maximumCPUms": 54.52259999583475,
+      "sceneFirst12MedianCPUms": 12.739500001771376,
+      "rasterFirst12MedianCPUms": 18.450699997629272,
+      "normalEditRestored": true,
+      "ownedResourcesReleased": true,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1952944526,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1695105024,
+        "reserved": 2727596032,
+        "utc": "2026-11-12T14:13:51.4114794Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1993884939,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1586376704,
+        "reserved": 2761412608,
+        "utc": "2026-11-12T14:14:27.0275101Z"
+      }
+    },
+    {
+      "run": "long960",
+      "actualFrames": 960,
+      "simulationSeconds": 16.000000834465027,
+      "first12MedianCPUms": 30.34549999938463,
+      "allMedianCPUms": 22.531950002303347,
+      "maximumCPUms": 66.54210000124294,
+      "sceneFirst12MedianCPUms": 12.295849999645725,
+      "rasterFirst12MedianCPUms": 17.60034999824711,
+      "normalEditRestored": true,
+      "ownedResourcesReleased": true,
+      "beforeMemory": {
+        "RTCount": 30,
+        "allocated": 1955705976,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1696391168,
+        "reserved": 2727727104,
+        "utc": "2026-11-12T14:21:21.8981764Z"
+      },
+      "afterMemory": {
+        "RTCount": 30,
+        "allocated": 1996635915,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1725689856,
+        "reserved": 2744635392,
+        "utc": "2026-11-12T14:27:43.4719558Z"
+      }
+    }
+  ],
+  "fullInputAcrossSeparateRunsByteExact": false,
+  "exactOriginal97And98BFixtureRegression": "CPU_REPRODUCIBLE99.json",
+  "all960GPUFramesExactWithinFiniteLUTInkAndUnknownContract": true,
+  "longValidation": "long960/LONG_VALIDATED99.json",
+  "continuousWorldVisibilitySolved": false,
+  "generalOpacitySolved": false,
+  "colourFeatureAAPigmentGradientSemanticsSolved": false,
+  "sourceColourStepAmplificationAndRejectedRangeTests": "long960/COLOUR_CAUSALITY99.json; long960/RANGE_COMPARISON99.json",
+  "nativeVisibleFaceUnknownPaletteCells1301CannotBeCalledLUTFailureWithoutDomainReason": true,
+  "physicalWorkingSetLeakClaim": false,
+  "finalArtAdopted": false,
+  "APNGActualSimulationSeconds": 16.000000834465027,
+  "APNGWallObservationSecondsNot16": true,
+  "ownedSourceWidthCacheInvalidation": "original texture identity/dimensions/updateCount/image hash/format/colourspace/filter/wrap/mip/readability; no screen RGB history",
+  "oldUnloadedAssetImporterVerified": false,
+  "unsafeGPU115Executed": false,
+  "oldDeniedBulkArchiveRetried": false
+}

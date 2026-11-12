@@ -1,0 +1,221 @@
+{
+  "CPUChecks": 13,
+  "actualSourceRGBAChanged": 0,
+  "realWeakPaintPoints": [
+    {
+      "xy": [
+        382,
+        704
+      ],
+      "RGB8": [
+        253,
+        228,
+        208
+      ],
+      "robustCore": true,
+      "nominalPossible": true
+    },
+    {
+      "xy": [
+        380,
+        704
+      ],
+      "RGB8": [
+        254,
+        235,
+        213
+      ],
+      "robustCore": false,
+      "nominalPossible": true
+    },
+    {
+      "xy": [
+        384,
+        704
+      ],
+      "RGB8": [
+        254,
+        237,
+        216
+      ],
+      "robustCore": false,
+      "nominalPossible": false
+    }
+  ],
+  "actualWitnesses": [
+    {
+      "radius": 1,
+      "axis": 0,
+      "normalIntegerRGB": [
+        0,
+        10,
+        7
+      ],
+      "flankBarrierDot": 71,
+      "oneDeltaRoundoffBoundDot": 17,
+      "nominalTexels": 100,
+      "robustCoreTexels": 78,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 1,
+      "axis": 1,
+      "normalIntegerRGB": [
+        0,
+        6,
+        4
+      ],
+      "flankBarrierDot": 16,
+      "oneDeltaRoundoffBoundDot": 10,
+      "nominalTexels": 1,
+      "robustCoreTexels": 1,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 1,
+      "axis": 2,
+      "normalIntegerRGB": [
+        1,
+        15,
+        13
+      ],
+      "flankBarrierDot": 155,
+      "oneDeltaRoundoffBoundDot": 29,
+      "nominalTexels": 7023,
+      "robustCoreTexels": 113,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 1,
+      "axis": 3,
+      "normalIntegerRGB": [
+        0,
+        4,
+        2
+      ],
+      "flankBarrierDot": 10,
+      "oneDeltaRoundoffBoundDot": 6,
+      "nominalTexels": 1,
+      "robustCoreTexels": 1,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 2,
+      "axis": 0,
+      "normalIntegerRGB": [
+        2,
+        16,
+        13
+      ],
+      "flankBarrierDot": 179,
+      "oneDeltaRoundoffBoundDot": 31,
+      "nominalTexels": 7554,
+      "robustCoreTexels": 6800,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 2,
+      "axis": 1,
+      "normalIntegerRGB": [
+        0,
+        11,
+        9
+      ],
+      "flankBarrierDot": 82,
+      "oneDeltaRoundoffBoundDot": 20,
+      "nominalTexels": 100,
+      "robustCoreTexels": 78,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 2,
+      "axis": 2,
+      "normalIntegerRGB": [
+        0,
+        15,
+        13
+      ],
+      "flankBarrierDot": 155,
+      "oneDeltaRoundoffBoundDot": 28,
+      "nominalTexels": 7023,
+      "robustCoreTexels": 113,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 2,
+      "axis": 3,
+      "normalIntegerRGB": [
+        0,
+        7,
+        6
+      ],
+      "flankBarrierDot": 39,
+      "oneDeltaRoundoffBoundDot": 13,
+      "nominalTexels": 14,
+      "robustCoreTexels": 7,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 4,
+      "axis": 0,
+      "normalIntegerRGB": [
+        1,
+        15,
+        13
+      ],
+      "flankBarrierDot": 156,
+      "oneDeltaRoundoffBoundDot": 29,
+      "nominalTexels": 7068,
+      "robustCoreTexels": 113,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 4,
+      "axis": 1,
+      "normalIntegerRGB": [
+        2,
+        15,
+        13
+      ],
+      "flankBarrierDot": 157,
+      "oneDeltaRoundoffBoundDot": 30,
+      "nominalTexels": 7068,
+      "robustCoreTexels": 113,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 4,
+      "axis": 2,
+      "normalIntegerRGB": [
+        1,
+        15,
+        13
+      ],
+      "flankBarrierDot": 127,
+      "oneDeltaRoundoffBoundDot": 29,
+      "nominalTexels": 113,
+      "robustCoreTexels": 78,
+      "touchesImageEdge": false
+    },
+    {
+      "radius": 4,
+      "axis": 3,
+      "normalIntegerRGB": [
+        1,
+        14,
+        12
+      ],
+      "flankBarrierDot": 170,
+      "oneDeltaRoundoffBoundDot": 27,
+      "nominalTexels": 7669,
+      "robustCoreTexels": 7000,
+      "touchesImageEdge": false
+    }
+  ],
+  "robustCoreTexels": 1,
+  "nominalUnionTexels": 7669,
+  "axesAndScalesAgreeOnWholeRegion": false,
+  "familyConfirmed": false,
+  "newUnityGPUCalls": 0,
+  "interpretation": "Closed measured source components preserve the weak witness. Different axes/scales and AA uncertainty remain visible; no complete semantic region or palette mapping is inferred."
+}

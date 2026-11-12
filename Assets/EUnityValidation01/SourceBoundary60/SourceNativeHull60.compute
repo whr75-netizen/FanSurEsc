@@ -5,7 +5,7 @@ Texture2D<float4> _Line41,_Proof41,_NativeColour42,_MainMeta41,_NativeDepth42,_N
 Texture2D<float4> _NativeOwner47,_SurfaceUV47,_SelectedSource48,_FeatureDomain49,_ChildVisible62;
 int _RegisteredRole48,_RegisteredTriangleCount48;
 RWTexture2D<float4> _Atlas41,_NativeAfter42,_OwnerReceipts47;
-int _OwnerScope45;
+int _OwnerScope45;int _OutlineClass66; //0=native material hull reference,1=generic actor-exterior silhouette
 int2 _Size41,_HeadTextureOrigin41,_JoinOffset41,_NativeOrigin42;int _NativeScale42;
 float2 _DeliveredDelta42;float _DepthOffset41;float4 _Ink41;
 [numthreads(8,8,1)]void SourceNativeHull60(uint3 id:SV_DispatchThreadID){
@@ -24,7 +24,7 @@ float2 _DeliveredDelta42;float _DepthOffset41;float4 _Ink41;
  bool source=stroke.a==1&&all(stroke.rgb==_Ink41.rgb)&&proof.x>0&&proof.w>=1&&proof.w==round(proof.w)&&proof.w<=_RegisteredTriangleCount48;
  bool style=inside&&finite&&matched&&(meta.x<=0||depth<=meta.x+.0001);
  bool visible=inside&&finite&&matched&&world.x>0&&depth<=world.x+.0001;
- int2 hp62=local+_HeadTextureOrigin41;bool inHead62=all(hp62>=0)&&all(hp62<int2(480,272));float4 cv62=inHead62?_ChildVisible62.Load(int3(hp62,0)):0;float4 originalOwner=_NativeOwner47.Load(int3(p,0));float kind62=round(cv62.x);float role62=kind62==1?5:(kind62>=2&&kind62<=4)?2:(kind62==5||kind62==7)?7:0;float4 parentDomain62=inside?_FeatureDomain49.Load(int3(q,0)):0;bool child62=all(isfinite(cv62))&&cv62.x==kind62&&role62>0&&cv62.y>0&&cv62.z>0&&parentDomain62.x>=.5&&cell.z==1&&originalOwner.x==role62;bool blocked62=source&&style&&visible&&child62;bool use=source&&style&&visible&&!child62;
+ int2 hp62=local+_HeadTextureOrigin41;bool inHead62=all(hp62>=0)&&all(hp62<int2(480,272));float4 cv62=inHead62?_ChildVisible62.Load(int3(hp62,0)):0;float4 originalOwner=_NativeOwner47.Load(int3(p,0));float kind62=round(cv62.x);float role62=kind62==1?5:(kind62>=2&&kind62<=4)?2:(kind62==5||kind62==7)?7:0;float4 parentDomain62=inside?_FeatureDomain49.Load(int3(q,0)):0;bool child62=all(isfinite(cv62))&&cv62.x==kind62&&role62>0&&cv62.y>0&&cv62.z>0&&parentDomain62.x>=.5&&cell.z==1&&originalOwner.x==role62;bool blocked62=source&&style&&visible&&child62;bool classEligible66=_OutlineClass66==0||(_OutlineClass66==1&&cell.z!=1);bool use=source&&style&&visible&&!child62&&classEligible66;
  float4 after=use?float4(_Ink41.rgb,1):before;
  float4 gate=float4(source?1:0,style?1:0,visible?1:0,inside&&finite&&matched?(use?1:0):-1);
  _Atlas41[local+int2(9*_Size41.x,0)]=before;_Atlas41[local+int2(10*_Size41.x,0)]=after;

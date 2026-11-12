@@ -1,7 +1,7 @@
 """Current source radius field. Selection oracle, never uploaded RGB."""
 import numpy as np
 
-def resolve(before,actor,eligible,depth,world,meta,keys,inks,radius,previous=()):
+def resolve(before,actor,eligible,depth,world,meta,keys,inks,radius,previous=(),history_preference=None):
  b=np.asarray(before,np.float32);h,w=actor.shape;r=np.asarray(radius)
  if max(h,w)>64 or b.shape!=(h,w,4)or r.shape!=(h,w)or not np.isfinite(r).all()or not np.array_equal(r,np.rint(r))or (r<0).any()or(r>2).any():raise ValueError('bounded current integer source radius 0..2')
  if any(np.shape(t)!=(h,w)for t in[eligible,depth,world,meta])or keys.shape!=(h,w,4)or inks.shape!=(h,w,3):raise ValueError('one current grid')
@@ -18,7 +18,7 @@ def resolve(before,actor,eligible,depth,world,meta,keys,inks,radius,previous=())
      if ch==0 or not eligible[yy,xx]or ch>r[yy,xx]:continue
      z=depth[yy,xx]
      if world[y,x]<=0 or z>np.float32(world[y,x]+np.float32(.0001))or(meta[y,x]>0 and z>np.float32(meta[y,x]+np.float32(.0001))):continue
-     key=tuple(float(v)for v in keys[yy,xx]);choices.append(((dx*dx+dy*dy,float(z),key not in previous,key),yy,xx))
+     key=tuple(float(v)for v in keys[yy,xx]);preferred=bool(history_preference(yy,xx,y,x,key))if history_preference is not None else key in previous;choices.append(((dx*dx+dy*dy,float(z),not preferred,key),yy,xx))
    if choices:
     _,yy,xx=min(choices);out[y,x]=[*inks[yy,xx],1];owner[y,x]=keys[yy,xx];selected[y,x]=True;trace[y,x]=r[yy,xx]
  return out,owner,selected,trace

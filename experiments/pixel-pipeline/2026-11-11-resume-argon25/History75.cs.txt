@@ -1,0 +1,28 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public sealed partial class SourceOutline40 {
+ public SourceOutline40 Previous75;Texture2D projection75;int projectionTriangles75;bool historyRecorded75;
+ static string Hash75(byte[] bytes){using(var digest=SHA256.Create())return BitConverter.ToString(digest.ComputeHash(bytes)).Replace("-","").ToLowerInvariant();}
+ void PrepareHistory75(){
+  var spec=Json40.Parse(File.ReadAllText(Path.Combine(H75,"face69/ZERO_POLICY69.json")));
+  if(renderer!=(int)spec["rendererOrdinal"]||submesh!=(int)spec["subMesh"])throw new InvalidOperationException("75 current mapped source binding changed");
+  var mesh=meshes[renderer];var verts=mesh.vertices;var uv=mesh.uv;var ix=mesh.GetIndices(submesh);projectionTriangles75=ix.Length/3;
+  if(ix.Length%3!=0||projectionTriangles75!=(int)spec["count"]||projectionTriangles75<1||projectionTriangles75>16384||uv.Length!=verts.Length)throw new InvalidOperationException("75 bounded evaluated topology");
+  byte[] ub;using(var memory=new MemoryStream())using(var writer=new BinaryWriter(memory)){foreach(var p in uv){writer.Write(p.x);writer.Write(p.y);}ub=memory.ToArray();}var ib=new byte[ix.Length*4];Buffer.BlockCopy(ix,0,ib,0,ib.Length);
+  if(Hash75(ub)!=(string)spec["uvSHA256"]||Hash75(ib)!=(string)spec["indexSHA256"])throw new InvalidOperationException("75 source UV/index generation changed; no history or dispatch");
+  int height=(ix.Length+127)/128;var data=new Vector4[128*height];for(int i=0;i<ix.Length;i++){int k=ix[i];if(k<0||k>=verts.Length)throw new InvalidOperationException("75 source index range");var world=matrices[renderer].MultiplyPoint3x4(verts[k]);var p=eye.full.Project(world);if(!float.IsFinite(p.x)||!float.IsFinite(p.y))throw new InvalidOperationException("75 nonfinite projection");data[i]=new Vector4(uv[k].x,uv[k].y,p.x,p.y);}
+  projection75=new Texture2D(128,height,TextureFormat.RGBAFloat,false,true){name="67 owned immutable evaluated source projection75",hideFlags=HideFlags.HideAndDontSave,filterMode=FilterMode.Point};projection75.SetPixelData(data,0);projection75.Apply(false,true);
+ }
+ const string H75=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111";
+ bool ReadyHistory75(){
+  if(Previous75==null)return false;
+  var p=Previous75;
+  if(p.Failure!=null||p.Disposed||p.eye!=eye||p.model!=model||p.topology!=topology||p.cameraIdentity!=cameraIdentity||p.frame!=frame-1||!p.historyRecorded75||!p.projection75||p.projectionTriangles75!=projectionTriangles75)throw new InvalidOperationException("75 previous actual source/view/frame unavailable; stop, never replay a guessed owner");
+  return true;
+ }
+ void BindHistory75(CommandBuffer cmd,bool enabled){
+  if(!projection75)throw new InvalidOperationException("75 current evaluated source missing");bool previous=ReadyHistory75();var p=previous?Previous75:this;
+  cmd.SetComputeTextureParam(final41,finalKernel41,"_CurrentProjection75",projection75);cmd.SetComputeTextureParam(final41,finalKernel41,"_PreviousProjection75",p.projection75);cmd.SetComputeTextureParam(final41,finalKernel41,"_PreviousOwner75",previous?p.Fields[12]:Fields[27]);cmd.SetComputeIntParam(final41,"_HistoryRole75",sourceFlat67.MappedRole72);cmd.SetComputeIntParam(final41,"_HistoryCount75",projectionTriangles75);cmd.SetComputeIntParam(final41,"_HistoryEnabled75",enabled&&previous?1:0);cmd.SetComputeIntParams(final41,"_PreviousOrigin75",p.QROI.x+p.join41.x,272-p.QROI.y-p.QROI.height+p.join41.y);cmd.SetComputeIntParams(final41,"_PreviousSize75",p.QROI.width,p.QROI.height);cmd.SetComputeIntParams(final41,"_PreviousJoin75",p.join41.x,p.join41.y);
+ }
+ void ReleaseHistory75(){if(projection75)UnityEngine.Object.DestroyImmediate(projection75);projection75=null;}
+}
+}

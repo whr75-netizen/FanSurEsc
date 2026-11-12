@@ -10,7 +10,7 @@ from test_flat67 import region_at
 from face_parent62 import resolve as native_resolve
 from replay_outline_class66 import exterior_candidate
 H=Path(__file__).resolve().parent;G=H/'face72';C=G/'capture'
-HALO=0;SUFFIX=72
+HALO=0;SUFFIX=72;HISTORY_PREPARE=None;CASE2_MAPPED=False
 
 def main():
  api.C=C;r=json.loads((C/'COMPLETE.json').read_text());assert r['packetComplete']and r['restorationChecksPass']and r['pendingOwners']==0 and r['ownedResourcesReleased']and not r['errors']and r['sourceFlatTexturesRemaining67']==0
@@ -44,26 +44,30 @@ def main():
    receipt[yy,xx,2]=uv[yy,xx,2];region=region_at(mask,uv[yy,xx,:2],pinfo['wrap'])
    if region:k[yy,xx]=round(float(uv[yy,xx,2])*(len(palette)-1));known[yy,xx]=True;receipt[yy,xx]=[region,k[yy,xx],uv[yy,xx,2],1]
   assert np.array_equal(receipt,read('sourcePaletteReceipt67'))
+  callback=HISTORY_PREPARE(r,f)if HISTORY_PREPARE else None
   outputs=read('widthCompositeAtlas61');outowners=read('widthOwnerAndLayerAtlas62');cases=[];ims=[];widths=[];results={}
   for ci in[0,1,2,3]:
-   rad=np.zeros(actor.shape,int)if ci==0 else np.full(actor.shape,1 if ci==1 else 2,int)if ci<3 else radius
-   eligible=source if ci<3 else source&~unknown
-   expected,picked,m,rt=resolve(before,actor,eligible,owner[:,:,2],np.where(valid,fields[13][:,:,0],0),fields[12][:,:,0],keys,inks[ix],rad);expected[known,:3]=palette[k[known],:3];actual=outputs[:,ci*2*w:(ci+1)*2*w];ow=outowners[:,ci*2*w:(ci*2+1)*w];trace=outowners[:,(ci*2+1)*w:(ci+1)*2*w]
+   mapped=ci==3 or(CASE2_MAPPED and ci==2);rad=np.zeros(actor.shape,int)if ci==0 else radius if mapped else np.full(actor.shape,1 if ci==1 else 2,int)
+   eligible=source&~unknown if mapped else source
+   expected,picked,m,rt=resolve(before,actor,eligible,owner[:,:,2],np.where(valid,fields[13][:,:,0],0),fields[12][:,:,0],keys,inks[ix],rad,history_preference=callback if ci==3 else None);expected[known,:3]=palette[k[known],:3];actual=outputs[:,ci*2*w:(ci+1)*2*w];ow=outowners[:,ci*2*w:(ci*2+1)*w];trace=outowners[:,(ci*2+1)*w:(ci+1)*2*w]
    assert np.array_equal(actual,np.repeat(np.repeat(actual[::2,::2],2,0),2,1)),('quad replication',f['frame'],ci)
    assert np.array_equal(actual[::2,::2][core],expected[core]),('RGB',f['frame'],ci)
    if ci:
     assert np.array_equal((ow[:,:,0]>=100)[core],m[core]);wanted=picked[m].copy();wanted[:,0]+=100;assert np.array_equal(ow[m],wanted)
     assert np.array_equal((trace[:,:,2]==1)[core],m[core])and np.array_equal(trace[:,:,1].astype(int)[core],rt[core])
     for yy,xx in np.argwhere(m):
-     hit=(keys==picked[yy,xx]).all(2)&eligible;assert hit.any();gg=float(scalar[hit,0][0])if ci==3 else 1.;assert trace[yy,xx,0]==gg
+     hit=(keys==picked[yy,xx]).all(2)&eligible;assert hit.any();gg=float(scalar[hit,0][0])if mapped else 1.;assert trace[yy,xx,0]==gg
+     if HISTORY_PREPARE:
+      hy,hx=np.argwhere(hit)[0];want_history=bool(callback(hy,hx,yy,xx,tuple(picked[yy,xx])))if ci==3 and callback else False;assert (trace[yy,xx,3]==1)==want_history,('history',f['frame'],ci,int(xx),int(yy),trace[yy,xx].tolist(),want_history)
    assert not(m&actor).any()and not(m&known).any();cases.append({'case':ci,'integerCells':int(m.sum()),'RGBAndOwnerAndRadiusExact':True,'sourceScalar':'actual GPU vertex-green barycentric'if ci==3 else'current uniform radius control'});widths.append(int(m.sum()));results[ci]=(actual,ow,m);im=srgb(actual);ims.append(im.crop((2*HALO,2*HALO,im.width-2*HALO,im.height-2*HALO))if HALO else im)
   assert np.array_equal(read('nativeAfter42'),results[3][0]);changed=(results[2][1]!=results[3][1]).any(2)&core;changes=[]
   for yy,xx in np.argwhere(changed):changes.append({'localXY':[int(xx),int(yy)],'uniformSource':results[2][1][yy,xx].tolist(),'mappedSource':results[3][1][yy,xx].tolist(),'RGBChanged':bool((results[2][0][2*yy,2*xx]!=results[3][0][2*yy,2*xx]).any())})
-  for col,(im,title)in enumerate(zip(ims,['No exterior + partial LUT','Uniform radius1','Uniform radius2','Original vertex mask x radius2'])):
+  titles=['No exterior + partial LUT','Uniform radius1','Mapped radius2, no history','Mapped radius2, source owner history']if HISTORY_PREPARE else['No exterior + partial LUT','Uniform radius1','Uniform radius2','Original vertex mask x radius2']
+  for col,(im,title)in enumerate(zip(ims,titles)):
    draw.text((col*360+8,fi*230+8),f"F{f['frame']} {title}",fill='white');board.paste(im,(col*360+8,fi*230+35));board.paste(im.resize((w*6,im.height*3),Image.Resampling.NEAREST),(col*360+100,fi*230+35))
-  film.append(ims[3].resize((ims[3].width*4,ims[3].height*4),Image.Resampling.NEAREST));rows.append({'frame':f['frame'],'sourceId':f['sourceId'],'cases':cases,'mappedSourceCells':int((source&(role==zinfo['role'])).sum()),'UVCarrierUnknownCells':int(unknown.sum()),'PNGMathematicalBilinearScalarMaxError':max(frame_scalar,default=0),'changesFromSameFrameUniform2':changes,'LUTSamples':int(known.sum()),'actorOrEyeOverwrite':0})
+  film.append(ims[3].resize((ims[3].width*4,ims[3].height*4),Image.Resampling.NEAREST));rows.append({'frame':f['frame'],'sourceId':f['sourceId'],'cases':cases,'mappedSourceCells':int((source&(role==zinfo['role'])).sum()),'UVCarrierUnknownCells':int(unknown.sum()),'PNGMathematicalBilinearScalarMaxError':max(frame_scalar,default=0),'changesFromSameFrameMapped2NoHistory'if HISTORY_PREPARE else'changesFromSameFrameUniform2':changes,'actualHistoryMatchedSelectedCells':int(((outowners[:,7*w:8*w,3]==1)&core).sum())if HISTORY_PREPARE else 0,'LUTSamples':int(known.sum()),'actorOrEyeOverwrite':0})
  draw.text((8,len(rows)*230+8),'Actual private GPU. Uniform1/2 are explicit style tests; no product77 switch or native physical-width equality.',fill='white');draw.text((8,len(rows)*230+30),'Partial face LUT remains visibly unfinished. Sampler scalar / CPU selection / art quality are separate checks.',fill='white');board.save(G/f'ACTUAL_VERTEX_WIDTH{SUFFIX}.png');size=(max(im.width for im in film),max(im.height for im in film));pad=[]
  for im in film:out=Image.new('RGB',size,(27,29,35));out.paste(im,(0,0));pad.append(out)
  pad[0].save(G/f'ACTUAL_VERTEX_WIDTH{SUFFIX}.webp',save_all=True,append_images=pad[1:],duration=200,loop=0,lossless=True)
- result={'actualGPUFrames':len(rows),'sameFrameControlsPerFrame':5,'integerCasesCompared':4*len(rows),'CPUSelectionUsesObservedGPUWidthScalar':True,'CPUExpectedRGBUploaded':False,'PNGSamplerMaxError':max(scalar_errors,default=0),'verifiedCoreHalo':HALO,'outerObservationBorderNotOracleVerified':bool(HALO),'rows':rows,'fullFaceSegmentation':False,'nativeMetresEquality':False,'runtimeHistoryFeedback':False,'longTermStabilityValidated':False,'product77Changed':False};(G/f'ACTUAL_VERTEX_WIDTH{SUFFIX}.json').write_text(json.dumps(result,indent=2));print(json.dumps({'actualGPUFrames':len(rows),'integerCasesCompared':4*len(rows),'counts':[[c['integerCells']for c in f['cases']]for f in rows],'unknownCells':[f['UVCarrierUnknownCells']for f in rows],'PNGSamplerMaxError':max(scalar_errors,default=0)}))
+ result={'actualGPUFrames':len(rows),'sameFrameControlsPerFrame':5,'integerCasesCompared':4*len(rows),'CPUSelectionUsesObservedGPUWidthScalar':True,'CPUExpectedRGBUploaded':False,'PNGSamplerMaxError':max(scalar_errors,default=0),'verifiedCoreHalo':HALO,'outerObservationBorderNotOracleVerified':bool(HALO),'rows':rows,'fullFaceSegmentation':False,'nativeMetresEquality':False,'runtimeHistoryFeedback':bool(HISTORY_PREPARE),'historyOnlyCurrentGeometryTieOwnerPreference':bool(HISTORY_PREPARE),'longTermStabilityValidated':False,'product77Changed':False};(G/f'ACTUAL_VERTEX_WIDTH{SUFFIX}.json').write_text(json.dumps(result,indent=2));print(json.dumps({'actualGPUFrames':len(rows),'integerCasesCompared':4*len(rows),'counts':[[c['integerCells']for c in f['cases']]for f in rows],'unknownCells':[f['UVCarrierUnknownCells']for f in rows],'PNGSamplerMaxError':max(scalar_errors,default=0),'historyMatches':[f['actualHistoryMatchedSelectedCells']for f in rows]}))
 if __name__=='__main__':main()

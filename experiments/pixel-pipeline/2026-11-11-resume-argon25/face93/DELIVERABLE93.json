@@ -1,0 +1,24 @@
+{
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "path": "/RENDER_AND_FAILURE93.png",
+  "file_id": "file_0000000025ac81f59cf5383c797a09df",
+  "library_file_id": "libfile_fde3_f-c78551dc302c8191ad5b1a062613ba8f_63ba02b4784c8191890f3a4c58eb6764",
+  "file_name": "RENDER_AND_FAILURE93.png",
+  "current_version_number": 0,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "0"
+    }
+  ],
+  "directory_id": "personal-root:v1",
+  "mime_type": "image/png",
+  "library_artifact_type": "image",
+  "file_size_bytes": 75506,
+  "external_connectors_accessed": false,
+  "localPath": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face93\\RENDER_AND_FAILURE93.png",
+  "xattrHelperExit": 1,
+  "xattrHelperOutput": "Traceback (most recent call last):\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face93\\library-current93\\library_file_transfer.py\", line 419, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face93\\library-current93\\library_file_transfer.py\", line 406, in main\n    materializer.apply_xattrs(\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face93\\library-current93\\library_file_transfer.py\", line 335, in apply_xattrs\n    xattr.apply(path)\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face93\\library-current93\\library_file_transfer.py\", line 152, in apply\n    os.setxattr(path, self.name, encoded_value)\nAttributeError: module 'os' has no attribute 'setxattr'\n"
+}

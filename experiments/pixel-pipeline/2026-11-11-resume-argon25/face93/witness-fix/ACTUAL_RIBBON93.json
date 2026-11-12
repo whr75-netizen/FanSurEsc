@@ -1,0 +1,91 @@
+{
+  "actualGPUFrames": 1,
+  "sameFramePaletteAndRibbon": true,
+  "singleReadbackBytes": 259584,
+  "old262144ByteCapUnchanged": true,
+  "currentFaceLUTAndActorProtected": true,
+  "rawCurveProofAndSourcePointProbeNotReadBack": true,
+  "restorationChecksPass": true,
+  "ownedResourcesReleased": true,
+  "artAdopted": false,
+  "rows": [
+    {
+      "frame": 102,
+      "sourceId": "face93-guarded-witness-ribbon-20261112T094057431Z-37fcbafe/slot0/frame102/generation2",
+      "faceSamples": 45,
+      "jointPositiveAreaRibbonCellsAfterSourceRaster": 20,
+      "nativeOneSidedWidthMetres": 0.000750000006519258,
+      "segments": 251,
+      "bboxPixelsPerVariantUpper": 2262,
+      "GPUWitnessCPUPositiveFootprintContradictions": [],
+      "minimumCPUWitnessBarycentric": -0.0001259152381136719,
+      "witnessOutsideWarnings": [
+        {
+          "localXY": [
+            7,
+            4
+          ],
+          "edge": 2632,
+          "witnessOffset": [
+            0.471486896276474,
+            0.4719533920288086
+          ],
+          "minimumBarycentric": -0.0001259152381136719,
+          "outsideDistanceCells": 6.417305850073614e-06,
+          "GPUReportedTriangleArea": 0.0165389496833086
+        },
+        {
+          "localXY": [
+            8,
+            4
+          ],
+          "edge": 2632,
+          "witnessOffset": [
+            -0.4768497943878174,
+            0.4899332523345947
+          ],
+          "minimumBarycentric": -4.0745575966665655e-05,
+          "outsideDistanceCells": 2.07358713824194e-06,
+          "GPUReportedTriangleArea": 0.0165389496833086
+        },
+        {
+          "localXY": [
+            22,
+            16
+          ],
+          "edge": 5284,
+          "witnessOffset": [
+            -0.4939146041870117,
+            -0.49238601326942444
+          ],
+          "minimumBarycentric": -1.3806482294485448e-05,
+          "outsideDistanceCells": 9.009356777166643e-07,
+          "GPUReportedTriangleArea": 0.006798229180276394
+        }
+      ],
+      "sourceProjectionMaxErrorCells": 1.3344564308681583e-05,
+      "witnessDepthMaxError": 1.3496300024229413e-06,
+      "sourceGreenSamplerMaxDifference": 0.00013349015339678139,
+      "finiteFaceLUTExact": true,
+      "wholeDisplacedPixelAlphaVisibilityProven": false,
+      "variants": [
+        {
+          "kind": "raw",
+          "addedInkCells": 2,
+          "actorOverwrite": 0,
+          "faceLUTChanged": 0,
+          "unselectedRGBChanged": 0,
+          "addedInkOutsideSourceOutlinePalette": 0
+        },
+        {
+          "kind": "joint",
+          "addedInkCells": 2,
+          "actorOverwrite": 0,
+          "faceLUTChanged": 0,
+          "unselectedRGBChanged": 0,
+          "addedInkOutsideSourceOutlinePalette": 0
+        }
+      ]
+    }
+  ]
+}

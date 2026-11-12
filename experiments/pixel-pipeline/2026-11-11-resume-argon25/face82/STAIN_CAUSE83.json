@@ -1,0 +1,254 @@
+{
+  "actualInputFrames": 7,
+  "candidateGPUExecuted": false,
+  "noNewThresholdOrFamilyOrQ": true,
+  "sameAddressDifferentQPairs": 5,
+  "oldPartialCoverageSeams": 34,
+  "conclusion": "Uniform LUT coverage removes mixed-path seams, but same-source-family Q boundaries still produce large finite palette jumps. Source-colour segmentation alone cannot guarantee coherent light regions. This does not prove those observed shadows are invalid or authorize erasing them.",
+  "rows": [
+    {
+      "frame": 102,
+      "faceNeighbourPairs": 66,
+      "oldPartialCoverageSeams": 14,
+      "sameSourceAddressPairs": 10,
+      "sameSourceAddressDifferentQ": 1,
+      "examples": [
+        {
+          "localXY": [
+            [
+              17,
+              9
+            ],
+            [
+              17,
+              10
+            ]
+          ],
+          "sameSourceColourAddress": 901,
+          "observedQ": [
+            0,
+            1
+          ],
+          "nativeLinearY": [
+            0.66935856372118,
+            0.7976048630833625
+          ],
+          "CPUFullLUTRGB8": [
+            [
+              113,
+              109,
+              101
+            ],
+            [
+              181,
+              175,
+              163
+            ]
+          ],
+          "CPUFullLUTY": [
+            0.15387574207574545,
+            0.43128045070702914
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 122,
+      "faceNeighbourPairs": 0,
+      "oldPartialCoverageSeams": 0,
+      "sameSourceAddressPairs": 0,
+      "sameSourceAddressDifferentQ": 0,
+      "examples": []
+    },
+    {
+      "frame": 142,
+      "faceNeighbourPairs": 63,
+      "oldPartialCoverageSeams": 7,
+      "sameSourceAddressPairs": 11,
+      "sameSourceAddressDifferentQ": 2,
+      "examples": [
+        {
+          "localXY": [
+            [
+              14,
+              9
+            ],
+            [
+              15,
+              9
+            ]
+          ],
+          "sameSourceColourAddress": 903,
+          "observedQ": [
+            0,
+            1
+          ],
+          "nativeLinearY": [
+            0.6718889502644538,
+            0.8013175826668739
+          ],
+          "CPUFullLUTRGB8": [
+            [
+              113,
+              110,
+              101
+            ],
+            [
+              181,
+              176,
+              163
+            ]
+          ],
+          "CPUFullLUTY": [
+            0.15602156501193698,
+            0.4351876881209436
+          ]
+        },
+        {
+          "localXY": [
+            [
+              15,
+              9
+            ],
+            [
+              16,
+              9
+            ]
+          ],
+          "sameSourceColourAddress": 903,
+          "observedQ": [
+            1,
+            0
+          ],
+          "nativeLinearY": [
+            0.8013175826668739,
+            0.6709456930279731
+          ],
+          "CPUFullLUTRGB8": [
+            [
+              181,
+              176,
+              163
+            ],
+            [
+              113,
+              110,
+              101
+            ]
+          ],
+          "CPUFullLUTY": [
+            0.4351876881209436,
+            0.15602156501193698
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 162,
+      "faceNeighbourPairs": 2,
+      "oldPartialCoverageSeams": 0,
+      "sameSourceAddressPairs": 0,
+      "sameSourceAddressDifferentQ": 0,
+      "examples": []
+    },
+    {
+      "frame": 182,
+      "faceNeighbourPairs": 7,
+      "oldPartialCoverageSeams": 0,
+      "sameSourceAddressPairs": 0,
+      "sameSourceAddressDifferentQ": 0,
+      "examples": []
+    },
+    {
+      "frame": 202,
+      "faceNeighbourPairs": 63,
+      "oldPartialCoverageSeams": 13,
+      "sameSourceAddressPairs": 12,
+      "sameSourceAddressDifferentQ": 2,
+      "examples": [
+        {
+          "localXY": [
+            [
+              16,
+              9
+            ],
+            [
+              16,
+              10
+            ]
+          ],
+          "sameSourceColourAddress": 901,
+          "observedQ": [
+            0,
+            1
+          ],
+          "nativeLinearY": [
+            0.6680559419751168,
+            0.7995792474389076
+          ],
+          "CPUFullLUTRGB8": [
+            [
+              113,
+              109,
+              101
+            ],
+            [
+              181,
+              175,
+              163
+            ]
+          ],
+          "CPUFullLUTY": [
+            0.15387574207574545,
+            0.43128045070702914
+          ]
+        },
+        {
+          "localXY": [
+            [
+              14,
+              10
+            ],
+            [
+              14,
+              11
+            ]
+          ],
+          "sameSourceColourAddress": 865,
+          "observedQ": [
+            0,
+            1
+          ],
+          "nativeLinearY": [
+            0.6268103935837745,
+            0.7453670758366585
+          ],
+          "CPUFullLUTRGB8": [
+            [
+              114,
+              105,
+              94
+            ],
+            [
+              181,
+              168,
+              153
+            ]
+          ],
+          "CPUFullLUTY": [
+            0.14488710159367513,
+            0.40128928359376065
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 221,
+      "faceNeighbourPairs": 0,
+      "oldPartialCoverageSeams": 0,
+      "sameSourceAddressPairs": 0,
+      "sameSourceAddressDifferentQ": 0,
+      "examples": []
+    }
+  ]
+}

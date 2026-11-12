@@ -1,0 +1,58 @@
+{
+  "actualGPUFrames": 1,
+  "framesWithBothGeometriesObserved": 1,
+  "validPlacementComparison": false,
+  "depthStateIsolationOnly": true,
+  "actualCurrentEvaluatedSource": true,
+  "sameFrameRawAndJoint": true,
+  "allTargetDepthRGBAndActorProtectionChecksPass": true,
+  "sourceSampleEligibilityIndependentCPUProof": false,
+  "wholeFootprintAlphaVisibilityProven": false,
+  "generalVariableThicknessProven": false,
+  "artAdopted": false,
+  "restorationChecksPass": true,
+  "resourcesReleased": true,
+  "rows": [
+    {
+      "frame": 102,
+      "sourceId": "face81-depth-state-only-20261112T051310815Z-278e6f1d/slot0/frame102/generation2",
+      "motion": "walk",
+      "inputMatches": true,
+      "anchor": [
+        219.65615694481937,
+        52.112121592369185
+      ],
+      "snapped": [
+        219.5,
+        52.5
+      ],
+      "rawJointFinalRGBDifferences": 0,
+      "variants": [
+        {
+          "kind": "raw",
+          "actualCurvePixels": 61,
+          "sampleAdmittedExteriorPixels": 0,
+          "actorOverwrite": 0,
+          "unmappedEdgePixels": 0,
+          "sourceProjectionMaxErrorCells": 7.513991911546666e-05,
+          "sourceDepthMaxError": 1.8305074718227843e-06,
+          "minT": -4.1923065185546875,
+          "maxT": 2.659090280532837,
+          "sourceEligibilityObservedOnGPUNotIndependentlyRecomputed": true
+        },
+        {
+          "kind": "joint",
+          "actualCurvePixels": 59,
+          "sampleAdmittedExteriorPixels": 0,
+          "actorOverwrite": 0,
+          "unmappedEdgePixels": 0,
+          "sourceProjectionMaxErrorCells": 2.204387847576952e-05,
+          "sourceDepthMaxError": 8.732590686122421e-07,
+          "minT": -1.6101698875427246,
+          "maxT": 1.6821703910827637,
+          "sourceEligibilityObservedOnGPUNotIndependentlyRecomputed": true
+        }
+      ]
+    }
+  ]
+}

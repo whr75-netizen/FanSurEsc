@@ -1,0 +1,87 @@
+{
+  "CPUChecks": 5,
+  "nativeRegressionFile": "CPU_PROFILE71.json",
+  "models": {
+    "flat": {
+      "affineSSE": 3.6350710512584224e-27,
+      "lineSSE": 4.2409162264681595e-27,
+      "lineSigma": 0.5,
+      "lineOffset": -0.5,
+      "lineAmplitude": [
+        1.4210854715202004e-14,
+        1.4210854715202004e-14,
+        1.4210854715202004e-14
+      ],
+      "stepSSE": 1.0905213153775267e-26,
+      "stepSigma": 0.5,
+      "stepOffset": -0.5,
+      "stepAmplitude": [
+        4.973799150320701e-14,
+        4.973799150320701e-14,
+        4.973799150320701e-14
+      ],
+      "lineWins": false
+    },
+    "affine": {
+      "affineSSE": 4.8467614016778965e-27,
+      "lineSSE": 1.5146129380243427e-26,
+      "lineSigma": 0.5,
+      "lineOffset": -0.5,
+      "lineAmplitude": [
+        7.105427357601002e-15,
+        7.105427357601002e-15,
+        7.105427357601002e-15
+      ],
+      "stepSSE": 2.3627961833179746e-26,
+      "stepSigma": 0.5,
+      "stepOffset": -0.5,
+      "stepAmplitude": [
+        1.4210854715202004e-14,
+        1.4210854715202004e-14,
+        1.4210854715202004e-14
+      ],
+      "lineWins": false
+    },
+    "line": {
+      "affineSSE": 94.5168908083237,
+      "lineSSE": 2.665718770922843e-26,
+      "lineSigma": 2.0,
+      "lineOffset": 0.0,
+      "lineAmplitude": [
+        -6.000000000000014,
+        -6.000000000000014,
+        -6.000000000000014
+      ],
+      "stepSSE": 66.53270729964048,
+      "stepSigma": 4.0,
+      "stepOffset": -0.5,
+      "stepAmplitude": [
+        -79.66069602241646,
+        -79.66069602241646,
+        -79.66069602241646
+      ],
+      "lineWins": true
+    },
+    "AAstep": {
+      "affineSSE": 11.210216178227082,
+      "lineSSE": 10.129612506606362,
+      "lineSigma": 1.0,
+      "lineOffset": -0.5,
+      "lineAmplitude": [
+        -0.5862651130442025,
+        -0.5862651130442025,
+        -0.5862651130442025
+      ],
+      "stepSSE": 1.2116903504194741e-26,
+      "stepSigma": 2.0,
+      "stepOffset": 0.0,
+      "stepAmplitude": [
+        12.000000000000057,
+        12.000000000000057,
+        12.000000000000057
+      ],
+      "lineWins": false
+    }
+  },
+  "noSemanticTruthOrClosedRegionClaim": true
+}

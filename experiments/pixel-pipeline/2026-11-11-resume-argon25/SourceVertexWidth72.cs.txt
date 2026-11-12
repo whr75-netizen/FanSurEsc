@@ -1,0 +1,26 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+// Immutable source UV topology. Borrow the original width texture, never clone
+// or destroy it. No rendered RGB, temporal colour average, or guessed width.
+public sealed class SourceVertexWidth72:IDisposable {
+ readonly Texture original;Texture2D uv;readonly int role,count,tw=128,th;bool disposed;
+ public long OwnedBytes=>(long)tw*th*8;
+ public int Role=>role;
+ public SourceVertexWidth72(string root,EyeFeature348 eye){
+  var spec=Json40.Parse(File.ReadAllText(Path.Combine(root,"ZERO_POLICY69.json")));role=(int)spec["role"];count=(int)spec["count"];int rr=(int)spec["rendererOrdinal"],sm=(int)spec["subMesh"];
+  var renderer=eye.full.motion.surface.source[rr];var skinned=renderer as SkinnedMeshRenderer;var mesh=skinned?skinned.sharedMesh:renderer.GetComponent<MeshFilter>()?.sharedMesh;if(!mesh)throw new InvalidOperationException("72 source mesh absent");
+  var material=renderer.sharedMaterials[sm];original=material.GetTexture("_OutlineWidthTex");
+  // SourceZeroWidth69 already verifies topology/hash/sampler/ST. The additional
+  // declaration below is required for the sampled GREEN scalar's CPU oracle.
+  if(!original||GraphicsFormatUtility.IsSRGBFormat(original.graphicsFormat))throw new InvalidOperationException("72 linear original width texture required");
+  var vertices=mesh.uv;var indices=mesh.GetIndices(sm);if(indices.Length!=3*count||count<1||count>16384)throw new InvalidOperationException("72 bounded source triangle count");
+  th=(indices.Length+tw-1)/tw;var data=new Vector2[tw*th];for(int i=0;i<indices.Length;i++){int k=indices[i];if(k<0||k>=vertices.Length||!float.IsFinite(vertices[k].x)||!float.IsFinite(vertices[k].y)||Mathf.Abs(vertices[k].x)>2||Mathf.Abs(vertices[k].y)>2)throw new InvalidOperationException("72 source UV/index range");data[i]=vertices[k];}
+  try{uv=new Texture2D(tw,th,TextureFormat.RGFloat,false,true){name="67 owned immutable triangle vertex UV72",hideFlags=HideFlags.HideAndDontSave,filterMode=FilterMode.Point};uv.SetPixelData(data,0);uv.Apply(false,true);}catch{Dispose();throw;}
+ }
+ public void Bind(CommandBuffer cmd,ComputeShader shader,int kernel){
+  if(disposed||!uv||!original)throw new InvalidOperationException("72 source lifetime ended before borrowing consumer ACK");
+  cmd.SetComputeTextureParam(shader,kernel,"_VertexUV72",uv);cmd.SetComputeTextureParam(shader,kernel,"_OriginalWidth72",original);cmd.SetComputeIntParam(shader,"_MappedRole72",role);cmd.SetComputeIntParam(shader,"_MappedCount72",count);cmd.SetComputeIntParam(shader,"_VertexUVStride72",tw);
+ }
+ public Obj40 Info()=>new Obj40{["role"]=role,["triangles"]=count,["UVTextureExtent"]=new Arr40(tw,th),["ownedBytes"]=OwnedBytes,["sourceTextureImageHash"]=original.imageContentsHash.ToString(),["sourceTextureFormat"]=original.graphicsFormat.ToString(),["method"]="sample original green at each original vertex UV, barycentric interpolation at current source UV; no final RGB use",["maximumTestRadiusCells"]=2,["nativeMetresEquality"]=false,["runtimeHistoryFeedback"]=false};
+ public void Dispose(){if(disposed)return;if(uv)UnityEngine.Object.DestroyImmediate(uv);uv=null;disposed=true;/* original is borrowed */}
+}
+}

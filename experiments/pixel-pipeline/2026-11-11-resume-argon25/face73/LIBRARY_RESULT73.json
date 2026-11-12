@@ -1,0 +1,42 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Action completed."
+      }
+    ],
+    "structuredContent": {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/ACTUAL_VERTEX_WIDTH73.png",
+      "file_id": "file_00000000d92481f881111a963006f36a",
+      "library_file_id": "libfile_fde3_f-288828004358819191cd659f6358f9eb_63ba02b4784c8191890f3a4c58eb6764",
+      "file_name": "ACTUAL_VERTEX_WIDTH73.png",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "personal-root:v1",
+      "mime_type": "image/png",
+      "library_artifact_type": "image",
+      "file_size_bytes": 68175,
+      "external_connectors_accessed": false
+    },
+    "isError": false
+  },
+  "metadataHelper": {
+    "chunk_id": "a2dbd8",
+    "wall_time_seconds": 0.945851025,
+    "exit_code": 1,
+    "original_token_count": 212,
+    "output": "Traceback (most recent call last):\r\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library73-helper\\library_file_transfer.py\", line 419, in <module>\r\n    raise SystemExit(main(sys.argv[1:]))\r\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library73-helper\\library_file_transfer.py\", line 406, in main\r\n    materializer.apply_xattrs(\r\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library73-helper\\library_file_transfer.py\", line 335, in apply_xattrs\r\n    xattr.apply(path)\r\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\library73-helper\\library_file_transfer.py\", line 152, in apply\r\n    os.setxattr(path, self.name, encoded_value)\r\nAttributeError: module 'os' has no attribute 'setxattr'\r\n"
+  },
+  "localXattrsApplied": false,
+  "metadataFailure": "Windows metadata helper failed; exact identity retained here",
+  "privateGPUResultNotArtOrDefaultAdoption": true
+}

@@ -37,9 +37,33 @@ float2 _DeliveredDelta42;float _DepthOffset41;float4 _Ink41;
 Texture2D<float> _ZeroWidthFlags69;int _ZeroWidthRole69,_ZeroWidthCount69;int2 _ZeroWidthSize69;
 int _IntegerExterior68;
 float4 _OutlineInk68[16],_OutlineRegistry68[16];
-void Source68(int2 origin,int distance2,float4 targetMeta,float4 targetWorld,inout float distanceBest,inout float depthBest,inout float4 keyBest,inout float3 inkBest){
+// Bounded source scalar interpolation. Unity's sampler_ name uses the original
+// texture's actual sampler. Vertex UV coordinates are the imported mesh UVs.
+Texture2D<float2> _VertexUV72;
+Texture2D<float4> _OriginalWidth72;SamplerState sampler_OriginalWidth72;
+int _MappedRole72,_MappedCount72,_VertexUVStride72,_UseWidthMap72,_ExteriorRadius72;
+float2 VertexUV72(int i){return _VertexUV72.Load(int3((uint)i&127u,(uint)i>>7u,0));}
+bool SourceWidth72(int role,int primitive,float2 uvPoint,out float green){
+ green=1;
+ if(_UseWidthMap72==0||role!=_MappedRole72)return true;
+ if(primitive<0||primitive>=_MappedCount72)return false;
+ float2 a=VertexUV72(3*primitive),b=VertexUV72(3*primitive+1),c=VertexUV72(3*primitive+2);
+ float3 values=float3(_OriginalWidth72.SampleLevel(sampler_OriginalWidth72,a,0).g,_OriginalWidth72.SampleLevel(sampler_OriginalWidth72,b,0).g,_OriginalWidth72.SampleLevel(sampler_OriginalWidth72,c,0).g);
+ if(!all(isfinite(values))||any(values<0)||any(values>1))return false;
+ if(values.x==values.y&&values.y==values.z){green=values.x;return true;}
+ float2 ab=b-a,ac=c-a,ap=uvPoint-a;float det=ab.x*ac.y-ab.y*ac.x;
+ // A UV-degenerate triangle with unequal vertex scalars has no inverse UV
+ // carrier. Reject it; do not manufacture a barycentric coordinate or colour.
+ if(det==0||!isfinite(det))return false;
+ float v=(ap.x*ac.y-ap.y*ac.x)/det,w=(ab.x*ap.y-ab.y*ap.x)/det;float3 bary=float3(1-v-w,v,w);
+ if(!all(isfinite(bary))||any(bary<0)||any(bary>1))return false;
+ green=dot(values,bary);return isfinite(green)&&green>=0&&green<=1;
+}
+
+void Source68(int2 origin,int distance2,int chebyshev,float4 targetMeta,float4 targetWorld,inout float distanceBest,inout float depthBest,inout float4 keyBest,inout float3 inkBest,inout float2 widthBest){
+ if(chebyshev>_ExteriorRadius72)return;
  int2 oq=origin+_HeadTextureOrigin41+_JoinOffset41;
- if(any(origin<0)||any(origin>=_Size41)||any(oq<0)||any(oq>=int2(480,272)))return;
+ if(any(oq<0)||any(oq>=int2(480,272)))return;
  int2 p=clamp((int2)floor(float2(_NativeOrigin42)+(float2(oq)+.5+_DeliveredDelta42)*_NativeScale42),int2(0,0),int2(959,543));
  float4 cell=_NativeCell42.Load(int3(p,0)),owner=_NativeOwner47.Load(int3(p,0));
  float4 selected=_SelectedSource48.Load(int3(oq,0)),uv=_SurfaceUV47.Load(int3(oq,0)),domain=_FeatureDomain49.Load(int3(oq,0));
@@ -47,22 +71,41 @@ void Source68(int2 origin,int distance2,float4 targetMeta,float4 targetWorld,ino
  bool valid=all(isfinite(cell))&&all(isfinite(owner))&&all(isfinite(selected))&&all(isfinite(uv))&&all(isfinite(domain))&&all(isfinite(ink))&&all(isfinite(reg))&&all(cell.xy==float2(oq))&&cell.z==1&&domain.x<.5&&owner.x==role&&role>0&&reg.y==role&&ink.a==1&&selected.x==owner.z&&selected.y==owner.x&&selected.z==owner.y&&selected.w>=1&&selected.w==round(selected.w)&&selected.w<=reg.x&&owner.z>0;
  if(role==_ZeroWidthRole69&&valid){int wi69=(int)selected.w-1;if(wi69<0||wi69>=_ZeroWidthCount69)return;int2 wp69=int2(wi69%_ZeroWidthSize69.x,wi69/_ZeroWidthSize69.x);if(_ZeroWidthFlags69.Load(int3(wp69,0))>.5)return;}
  if(!valid||targetWorld.x<=0||owner.z>targetWorld.x+.0001||(targetMeta.x>0&&owner.z>targetMeta.x+.0001))return;
+ float green72;bool widthValid72=SourceWidth72(role,(int)selected.w-1,uv.xy,green72);
+ if(!widthValid72)return;int radius72=(int)floor(_ExteriorRadius72*green72+.5);if(chebyshev>radius72)return;
  float4 key=float4(role,selected.w,uv.xy);
  bool lex=key.x<keyBest.x||(key.x==keyBest.x&&(key.y<keyBest.y||(key.y==keyBest.y&&(key.z<keyBest.z||(key.z==keyBest.z&&key.w<keyBest.w)))));
- if(distance2<distanceBest||(distance2==distanceBest&&(owner.z<depthBest||(owner.z==depthBest&&lex)))){distanceBest=distance2;depthBest=owner.z;keyBest=key;inkBest=ink.rgb;}
+ if(distance2<distanceBest||(distance2==distanceBest&&(owner.z<depthBest||(owner.z==depthBest&&lex)))){distanceBest=distance2;depthBest=owner.z;keyBest=key;inkBest=ink.rgb;widthBest=float2(green72,radius72);}
 }
-bool IntegerExterior68(int2 local,float4 cell,float4 meta,float4 world,bool valid,out float4 key,out float3 ink){
- float distanceBest=100,depthBest=0;key=0;ink=0;
- if(!valid||cell.z==1||any(local<1)||any(local>=_Size41-1))return false;
- // Eight fixed neighbours, one shared logical cell wide. No dependent loop.
- Source68(local+int2(-1,0),1,meta,world,distanceBest,depthBest,key,ink);
- Source68(local+int2(1,0),1,meta,world,distanceBest,depthBest,key,ink);
- Source68(local+int2(0,-1),1,meta,world,distanceBest,depthBest,key,ink);
- Source68(local+int2(0,1),1,meta,world,distanceBest,depthBest,key,ink);
- Source68(local+int2(-1,-1),2,meta,world,distanceBest,depthBest,key,ink);
- Source68(local+int2(1,-1),2,meta,world,distanceBest,depthBest,key,ink);
- Source68(local+int2(-1,1),2,meta,world,distanceBest,depthBest,key,ink);
- Source68(local+int2(1,1),2,meta,world,distanceBest,depthBest,key,ink);
+bool IntegerExterior68(int2 local,float4 cell,float4 meta,float4 world,bool valid,out float4 key,out float3 ink,out float2 widthTrace){
+ float distanceBest=100,depthBest=0;key=0;ink=0;widthTrace=0;
+ if(!valid||cell.z==1||_ExteriorRadius72<1||_ExteriorRadius72>2)return false;
+ // Fixed 5x5 stencil, centre excluded; global radius rejects outer
+ // ring before loads. Current source scalar gates candidates before ranking.
+ Source68(local+int2(-2,-2),8,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-1,-2),5,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(0,-2),4,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(1,-2),5,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(2,-2),8,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-2,-1),5,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-1,-1),2,1,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(0,-1),1,1,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(1,-1),2,1,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(2,-1),5,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-2,0),4,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-1,0),1,1,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(1,0),1,1,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(2,0),4,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-2,1),5,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-1,1),2,1,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(0,1),1,1,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(1,1),2,1,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(2,1),5,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-2,2),8,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(-1,2),5,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(0,2),4,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(1,2),5,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
+ Source68(local+int2(2,2),8,2,meta,world,distanceBest,depthBest,key,ink,widthTrace);
  return key.x>0&&world.x>0&&depthBest<=world.x+.0001&&(meta.x<=0||depthBest<=meta.x+.0001);
 }
 
@@ -97,7 +140,9 @@ bool IntegerExterior68(int2 local,float4 cell,float4 meta,float4 world,bool vali
  bool sourceCarrier=!designed49&&ownerReceipt&&nativeVisible&&all(isfinite(selectedSource))&&selectedSource.x==originalOwner.z&&selectedSource.y==originalOwner.x&&selectedSource.z==originalOwner.y&&selectedSource.y==_RegisteredRole48&&selectedSource.w>0&&selectedSource.w<=_RegisteredTriangleCount48&&selectedSource.w==round(selectedSource.w);
  _OwnerReceipts47[local+int2(2*_Size41.x,0)]=selectedSource;
  _OwnerReceipts47[local+int2(3*_Size41.x,0)]=designed49?float4(-4,domain49.yzw):sourceCarrier?float4(4,selectedSource.y,selectedSource.z,selectedSource.w):0;
- if(_IntegerExterior68==1){float4 key68;float3 ink68;bool selected68=IntegerExterior68(local,cell,meta,world,inside&&finite&&matched,key68,ink68);use=selected68;after=selected68?float4(ink68,1):before;_Atlas41[local+int2(10*_Size41.x,0)]=after;_Atlas41[local+int2(11*_Size41.x,0)]=float4(selected68?1:0,selected68?1:0,selected68?1:0,selected68?1:0);_Atlas41[local+int2(15*_Size41.x,0)]=selected68?float4(100+key68.x,key68.yzw):float4(ownerReceipt?(nativeVisible?(designed49?4:2):3):0,0,_OwnerScope45,0);_OwnerReceipts47[local+int2(4*_Size41.x,0)]=float4(cv62.xyz,0);}
+ if(_IntegerExterior68==1){float4 key68;float3 ink68;float2 width72;bool selected68=IntegerExterior68(local,cell,meta,world,inside&&finite&&matched,key68,ink68,width72);use=selected68;after=selected68?float4(ink68,1):before;_Atlas41[local+int2(10*_Size41.x,0)]=after;_Atlas41[local+int2(11*_Size41.x,0)]=float4(selected68?1:0,selected68?1:0,selected68?1:0,selected68?1:0);_Atlas41[local+int2(15*_Size41.x,0)]=selected68?float4(100+key68.x,key68.yzw):float4(ownerReceipt?(nativeVisible?(designed49?4:2):3):0,0,_OwnerScope45,0);_OwnerReceipts47[local+int2(4*_Size41.x,0)]=float4(width72,selected68?1:0,0);}
+ float sourceGreen72;bool sourceWidthValid72=SourceWidth72((int)round(originalOwner.x),(int)selectedSource.w-1,originalUV.xy,sourceGreen72);
+ _OwnerReceipts47[local+int2(5*_Size41.x,0)]=float4(sourceGreen72,floor(_ExteriorRadius72*sourceGreen72+.5),sourceWidthValid72?1:0,originalOwner.x);
  float4 candidateReceipt67;float3 paletteRGB67;bool candidateColour67=ResolveSourcePalette67(originalUV,paletteRGB67,candidateReceipt67);
  float4 paletteReceipt67=sourceCarrier?candidateReceipt67:float4(0,-1,0,0);
  bool applyColour67=sourceCarrier&&candidateColour67&&!use;

@@ -1,0 +1,48 @@
+{
+  "actualGPUFrames": 1,
+  "sameFrameRuntimeCPUSelector": true,
+  "GPUSelectCompute": false,
+  "GPUReplayOfOfflineColours": false,
+  "exactCurrentLUTOrOriginalOutlineInk": true,
+  "unknownPreservesExactControl": true,
+  "knownSourceDestinationQuerySamples": 54,
+  "knownSourceDestinationQueryErrors": [],
+  "maxWidthGreenError": 0.07498271098321574,
+  "widthGPU8FractionalBitBound": 0.007814407348632812,
+  "widthWithinBound": false,
+  "knownOldLineCellsRemoved": 1,
+  "newVisibleLineCells": 0,
+  "rows": [
+    {
+      "frame": 102,
+      "CPUms": 111.23870000301395,
+      "queries": 2520,
+      "visits": 451681,
+      "indexEntries": 46979,
+      "projectionInvariantChecks": null,
+      "knownSomeVisible": 27,
+      "fullyCovered": 27,
+      "unknown": 17,
+      "opaqueAdded": 0,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.07498271098321574
+    }
+  ],
+  "changes": [
+    {
+      "frame": 102,
+      "xy": [
+        22,
+        13
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    }
+  ],
+  "generalOpaquePixelAreaOrIntegerLinePolicySolved": false,
+  "continuousWorldOcclusionProven": false,
+  "artAdopted": false
+}

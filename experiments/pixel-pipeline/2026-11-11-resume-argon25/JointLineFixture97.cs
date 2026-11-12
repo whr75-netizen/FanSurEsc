@@ -1,0 +1,17 @@
+using System;
+using System.IO;
+using System.Diagnostics;
+using System.Collections.Generic;
+using LineGeometry97;
+public static class JointLineFixture97 {
+ static P Point(BinaryReader b){return new P(b.ReadDouble(),b.ReadDouble());}
+ public static void Main(string[] args){
+  Material[] materials;
+  using(var b=new BinaryReader(File.OpenRead(args[0]))){if(b.ReadInt32()!=9701)throw new Exception("97 materials");int count=b.ReadInt32();materials=new Material[count];int[] imageIds=new int[count];for(int i=0;i<count;i++){var m=new Material();m.cull=b.ReadInt32();m.test=b.ReadInt32()!=0;m.blend=b.ReadInt32()!=0;m.unresolved=b.ReadInt32()!=0;m.alpha=b.ReadDouble();m.cutoff=b.ReadDouble();m.scale=Point(b);m.offset=Point(b);imageIds[i]=b.ReadInt32();materials[i]=m;}int n=b.ReadInt32();var images=new LineGeometry97.Image[n];for(int i=0;i<n;i++){int w=b.ReadInt32(),h=b.ReadInt32(),filter=b.ReadInt32(),u=b.ReadInt32(),v=b.ReadInt32(),bytes=b.ReadInt32();if(bytes!=(long)w*h||bytes>4194304)throw new Exception("97 alpha bounds");images[i]=new LineGeometry97.Image(w,h,filter,u,v,b.ReadBytes(bytes));}for(int i=0;i<count;i++)if(imageIds[i]>=0)materials[i].image=images[imageIds[i]];if(b.BaseStream.Position!=b.BaseStream.Length)throw new Exception("97 trailing source input");}
+  var watch=Stopwatch.StartNew();int frame,width;P origin,shift;Scene scene;Raster raster;
+  using(var b=new BinaryReader(File.OpenRead(args[1]))){if(b.ReadInt32()!=9702)throw new Exception("97 frame");frame=b.ReadInt32();origin=Point(b);width=b.ReadInt32();shift=Point(b);int count=b.ReadInt32();var triangles=new List<Triangle>();for(int i=0;i<count;i++){int material=b.ReadInt32();P a=Point(b),c=Point(b),d=Point(b);double za=b.ReadDouble(),zb=b.ReadDouble(),zc=b.ReadDouble();P ua=Point(b),ub=Point(b),uc=Point(b);triangles.Add(new Triangle(a,c,d,za,zb,zc,ua,ub,uc,materials[material]));}scene=new Scene(triangles,origin-new P(1,1),width+2);raster=new Raster(scene,origin,width,shift);int edges=b.ReadInt32();for(int i=0;i<edges;i++){int edge=b.ReadInt32();var p=new P[4];var z=new double[4];for(int k=0;k<4;k++){p[k]=Point(b);z[k]=b.ReadDouble();}raster.Add(new Triangle(p[0],p[1],p[3],z[0],z[1],z[3],new P(),new P(),new P(),null),edge,0,1,1);raster.Add(new Triangle(p[0],p[3],p[2],z[0],z[3],z[2],new P(),new P(),new P(),null),edge,0,1,0);}if(b.BaseStream.Position!=b.BaseStream.Length)throw new Exception("97 trailing frame");}
+  watch.Stop();int visible=0,empty=0,unknown=0;
+  using(var b=new BinaryWriter(new FileStream(args[2],FileMode.Create))){b.Write(9703);b.Write(frame);b.Write(width);b.Write(scene.queries);b.Write(scene.visits);b.Write(scene.entries);b.Write(raster.fragments);b.Write(watch.Elapsed.TotalMilliseconds);foreach(var p in raster.pixels){b.Write(p.State);b.Write(p.edge);b.Write(p.witness.x);b.Write(p.witness.y);b.Write(p.z);b.Write(p.sourceUpper);b.Write(p.radius);b.Write(p.t);if(p.State==1)visible++;if(p.State==2)empty++;if(p.State==3)unknown++;}}
+  Console.WriteLine("frame="+frame+" known-visible="+visible+" covered="+empty+" unknown="+unknown+" queries="+scene.queries+" visits="+scene.visits+" CPUms="+watch.Elapsed.TotalMilliseconds);
+ }
+}

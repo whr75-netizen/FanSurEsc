@@ -1,0 +1,2236 @@
+{
+  "actualGPUFrames": 64,
+  "sameFrameRuntimeCPUSelector": true,
+  "GPUSelectCompute": false,
+  "GPUReplayOfOfflineColours": false,
+  "exactCurrentLUTOrOriginalOutlineInk": true,
+  "unknownPreservesExactControl": true,
+  "knownSourceDestinationQuerySamples": 156,
+  "knownSourceDestinationQueryErrors": [],
+  "maxWidthGreenError": 0.00022501204856695267,
+  "widthGPU8FractionalBitBound": 0.007814407348632812,
+  "widthWithinBound": true,
+  "knownOldLineCellsRemoved": 33,
+  "newVisibleLineCells": 86,
+  "rows": [
+    {
+      "frame": 102,
+      "CPUms": 85.14819999982137,
+      "queries": 2466,
+      "visits": 435958,
+      "indexEntries": 46986,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 27,
+      "fullyCovered": 26,
+      "unknown": 18,
+      "opaqueAdded": 0,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00013348621114706027
+    },
+    {
+      "frame": 103,
+      "CPUms": 84.36689999507507,
+      "queries": 2440,
+      "visits": 424366,
+      "indexEntries": 46036,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 27,
+      "fullyCovered": 27,
+      "unknown": 18,
+      "opaqueAdded": 0,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00013348673575963588
+    },
+    {
+      "frame": 104,
+      "CPUms": 89.77299999969546,
+      "queries": 2397,
+      "visits": 419100,
+      "indexEntries": 46289,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 28,
+      "fullyCovered": 24,
+      "unknown": 19,
+      "opaqueAdded": 0,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00013686083487973733
+    },
+    {
+      "frame": 105,
+      "CPUms": 70.17700000142213,
+      "queries": 2523,
+      "visits": 438263,
+      "indexEntries": 46390,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 29,
+      "fullyCovered": 24,
+      "unknown": 18,
+      "opaqueAdded": 0,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.0001368555887539813
+    },
+    {
+      "frame": 106,
+      "CPUms": 83.65220000268891,
+      "queries": 2499,
+      "visits": 468900,
+      "indexEntries": 48077,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 27,
+      "fullyCovered": 26,
+      "unknown": 23,
+      "opaqueAdded": 1,
+      "changedVsControl": 0,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 4.631772233665288e-05
+    },
+    {
+      "frame": 107,
+      "CPUms": 80.87399999931222,
+      "queries": 2342,
+      "visits": 477156,
+      "indexEntries": 48765,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 5,
+      "fullyCovered": 30,
+      "unknown": 43,
+      "opaqueAdded": 0,
+      "changedVsControl": 0,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00017248678246417626
+    },
+    {
+      "frame": 108,
+      "CPUms": 55.73079999885522,
+      "queries": 2141,
+      "visits": 388793,
+      "indexEntries": 50628,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 32,
+      "unknown": 25,
+      "opaqueAdded": 3,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.0001702072807931998
+    },
+    {
+      "frame": 109,
+      "CPUms": 73.1443999975454,
+      "queries": 2841,
+      "visits": 404965,
+      "indexEntries": 50273,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 21,
+      "fullyCovered": 29,
+      "unknown": 30,
+      "opaqueAdded": 10,
+      "changedVsControl": 3,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 3,
+      "widthGreenMaximumError": 8.901243858616681e-05
+    },
+    {
+      "frame": 110,
+      "CPUms": 61.29479999799514,
+      "queries": 2190,
+      "visits": 309826,
+      "indexEntries": 47585,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 23,
+      "unknown": 40,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.00014655300877497446
+    },
+    {
+      "frame": 111,
+      "CPUms": 62.641799995617475,
+      "queries": 2190,
+      "visits": 310911,
+      "indexEntries": 47669,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 24,
+      "unknown": 39,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.00014862962107298205
+    },
+    {
+      "frame": 112,
+      "CPUms": 63.35840000247117,
+      "queries": 2199,
+      "visits": 312898,
+      "indexEntries": 47777,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 26,
+      "unknown": 38,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.00015125580767705316
+    },
+    {
+      "frame": 113,
+      "CPUms": 68.52190000063274,
+      "queries": 2141,
+      "visits": 308013,
+      "indexEntries": 47848,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 25,
+      "unknown": 39,
+      "opaqueAdded": 7,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 0.00015445056877105845
+    },
+    {
+      "frame": 114,
+      "CPUms": 71.47270000132266,
+      "queries": 2172,
+      "visits": 308930,
+      "indexEntries": 47749,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 27,
+      "unknown": 38,
+      "opaqueAdded": 7,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 0.00015819241099915282
+    },
+    {
+      "frame": 115,
+      "CPUms": 52.91189999843482,
+      "queries": 2167,
+      "visits": 309192,
+      "indexEntries": 47837,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 26,
+      "unknown": 38,
+      "opaqueAdded": 7,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 0.00016050978959124274
+    },
+    {
+      "frame": 116,
+      "CPUms": 67.0648999948753,
+      "queries": 2135,
+      "visits": 304583,
+      "indexEntries": 47911,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 25,
+      "unknown": 39,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.00017249160926979812
+    },
+    {
+      "frame": 117,
+      "CPUms": 75.2070000016829,
+      "queries": 2246,
+      "visits": 320522,
+      "indexEntries": 47970,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 26,
+      "unknown": 39,
+      "opaqueAdded": 7,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.0001724855757627708
+    },
+    {
+      "frame": 118,
+      "CPUms": 60.55070000002161,
+      "queries": 2227,
+      "visits": 316821,
+      "indexEntries": 48026,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 27,
+      "unknown": 38,
+      "opaqueAdded": 6,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00018340510090908424
+    },
+    {
+      "frame": 119,
+      "CPUms": 58.16979999508476,
+      "queries": 2201,
+      "visits": 312010,
+      "indexEntries": 47934,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 27,
+      "unknown": 38,
+      "opaqueAdded": 6,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 8.306187238871221e-05
+    },
+    {
+      "frame": 120,
+      "CPUms": 77.73849999648519,
+      "queries": 2219,
+      "visits": 317866,
+      "indexEntries": 48057,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 12,
+      "fullyCovered": 28,
+      "unknown": 40,
+      "opaqueAdded": 6,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 2,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 9.447360159597906e-05
+    },
+    {
+      "frame": 121,
+      "CPUms": 72.82770000165328,
+      "queries": 2263,
+      "visits": 304311,
+      "indexEntries": 48198,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 27,
+      "unknown": 39,
+      "opaqueAdded": 8,
+      "changedVsControl": 5,
+      "knownCoveredOldLineRemoved": 2,
+      "newVisibleLineCells": 3,
+      "widthGreenMaximumError": 9.447909967130741e-05
+    },
+    {
+      "frame": 122,
+      "CPUms": 75.5522999970708,
+      "queries": 2309,
+      "visits": 311287,
+      "indexEntries": 48222,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 26,
+      "unknown": 39,
+      "opaqueAdded": 8,
+      "changedVsControl": 4,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 3,
+      "widthGreenMaximumError": 9.447714716603883e-05
+    },
+    {
+      "frame": 123,
+      "CPUms": 65.40610000229208,
+      "queries": 2301,
+      "visits": 310766,
+      "indexEntries": 48238,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 28,
+      "unknown": 36,
+      "opaqueAdded": 9,
+      "changedVsControl": 5,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 4,
+      "widthGreenMaximumError": 8.306383068013012e-05
+    },
+    {
+      "frame": 124,
+      "CPUms": 60.63770000037039,
+      "queries": 2408,
+      "visits": 330886,
+      "indexEntries": 48275,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 17,
+      "fullyCovered": 27,
+      "unknown": 37,
+      "opaqueAdded": 9,
+      "changedVsControl": 4,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 4,
+      "widthGreenMaximumError": 8.306188097262357e-05
+    },
+    {
+      "frame": 125,
+      "CPUms": 72.88970000081463,
+      "queries": 2393,
+      "visits": 332785,
+      "indexEntries": 48178,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 17,
+      "fullyCovered": 25,
+      "unknown": 37,
+      "opaqueAdded": 9,
+      "changedVsControl": 4,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 4,
+      "widthGreenMaximumError": 8.306383068013012e-05
+    },
+    {
+      "frame": 126,
+      "CPUms": 69.42799999524141,
+      "queries": 2350,
+      "visits": 327594,
+      "indexEntries": 48169,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 26,
+      "unknown": 37,
+      "opaqueAdded": 8,
+      "changedVsControl": 4,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 4,
+      "widthGreenMaximumError": 9.447909967130741e-05
+    },
+    {
+      "frame": 127,
+      "CPUms": 67.87260000419337,
+      "queries": 2299,
+      "visits": 325958,
+      "indexEntries": 48241,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 28,
+      "unknown": 33,
+      "opaqueAdded": 7,
+      "changedVsControl": 3,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 3,
+      "widthGreenMaximumError": 7.939278565938235e-05
+    },
+    {
+      "frame": 128,
+      "CPUms": 73.00049999321345,
+      "queries": 2209,
+      "visits": 317477,
+      "indexEntries": 48314,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 28,
+      "unknown": 33,
+      "opaqueAdded": 6,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 7.657034322816614e-05
+    },
+    {
+      "frame": 129,
+      "CPUms": 68.97449999814853,
+      "queries": 2202,
+      "visits": 319513,
+      "indexEntries": 48295,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 28,
+      "unknown": 34,
+      "opaqueAdded": 7,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 7.328440695331118e-05
+    },
+    {
+      "frame": 130,
+      "CPUms": 70.11880000209203,
+      "queries": 2258,
+      "visits": 329134,
+      "indexEntries": 47008,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 17,
+      "fullyCovered": 28,
+      "unknown": 34,
+      "opaqueAdded": 8,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 9.447519466077026e-05
+    },
+    {
+      "frame": 131,
+      "CPUms": 72.8951999990386,
+      "queries": 2263,
+      "visits": 332023,
+      "indexEntries": 47152,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 26,
+      "unknown": 36,
+      "opaqueAdded": 8,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 9.447874023083003e-05
+    },
+    {
+      "frame": 132,
+      "CPUms": 65.10659999912605,
+      "queries": 2267,
+      "visits": 336876,
+      "indexEntries": 47153,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 17,
+      "fullyCovered": 25,
+      "unknown": 36,
+      "opaqueAdded": 8,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 9.447360159597906e-05
+    },
+    {
+      "frame": 133,
+      "CPUms": 74.46340000024065,
+      "queries": 2194,
+      "visits": 330625,
+      "indexEntries": 47124,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 17,
+      "fullyCovered": 26,
+      "unknown": 34,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 9.447519466077026e-05
+    },
+    {
+      "frame": 134,
+      "CPUms": 88.05969999957597,
+      "queries": 2699,
+      "visits": 487045,
+      "indexEntries": 50470,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 18,
+      "fullyCovered": 27,
+      "unknown": 27,
+      "opaqueAdded": 5,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00015720753124970344
+    },
+    {
+      "frame": 135,
+      "CPUms": 84.49629999813624,
+      "queries": 2663,
+      "visits": 508114,
+      "indexEntries": 49401,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 21,
+      "fullyCovered": 28,
+      "unknown": 29,
+      "opaqueAdded": 2,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00017248798916558172
+    },
+    {
+      "frame": 136,
+      "CPUms": 77.29829999880167,
+      "queries": 2247,
+      "visits": 447295,
+      "indexEntries": 47879,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 22,
+      "unknown": 38,
+      "opaqueAdded": 2,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.00012804557051887544
+    },
+    {
+      "frame": 137,
+      "CPUms": 65.76769999810494,
+      "queries": 2134,
+      "visits": 353803,
+      "indexEntries": 47496,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 30,
+      "fullyCovered": 21,
+      "unknown": 20,
+      "opaqueAdded": 0,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 2,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 3.335987439179178e-05
+    },
+    {
+      "frame": 138,
+      "CPUms": 81.40819999971427,
+      "queries": 2233,
+      "visits": 445368,
+      "indexEntries": 48020,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 21,
+      "unknown": 39,
+      "opaqueAdded": 2,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.0001275465460275349
+    },
+    {
+      "frame": 139,
+      "CPUms": 89.76819999952568,
+      "queries": 2614,
+      "visits": 497606,
+      "indexEntries": 49521,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 22,
+      "fullyCovered": 27,
+      "unknown": 27,
+      "opaqueAdded": 2,
+      "changedVsControl": 0,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00019212534984625051
+    },
+    {
+      "frame": 140,
+      "CPUms": 92.90510000573704,
+      "queries": 2877,
+      "visits": 527256,
+      "indexEntries": 50538,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 19,
+      "fullyCovered": 26,
+      "unknown": 30,
+      "opaqueAdded": 2,
+      "changedVsControl": 0,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00022501204856695267
+    },
+    {
+      "frame": 141,
+      "CPUms": 75.29519999661716,
+      "queries": 2768,
+      "visits": 421248,
+      "indexEntries": 48863,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 31,
+      "unknown": 30,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.00012630063919530365
+    },
+    {
+      "frame": 142,
+      "CPUms": 58.34119999781251,
+      "queries": 1907,
+      "visits": 299791,
+      "indexEntries": 47478,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 34,
+      "unknown": 31,
+      "opaqueAdded": 6,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00013618733387588122
+    },
+    {
+      "frame": 143,
+      "CPUms": 66.70000000303844,
+      "queries": 1925,
+      "visits": 302599,
+      "indexEntries": 47447,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 35,
+      "unknown": 30,
+      "opaqueAdded": 6,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00013493448666412888
+    },
+    {
+      "frame": 144,
+      "CPUms": 141.58870000392199,
+      "queries": 1923,
+      "visits": 302664,
+      "indexEntries": 47460,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 34,
+      "unknown": 30,
+      "opaqueAdded": 6,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00013334812433285492
+    },
+    {
+      "frame": 145,
+      "CPUms": 68.67780000175117,
+      "queries": 1955,
+      "visits": 307809,
+      "indexEntries": 47390,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 35,
+      "unknown": 29,
+      "opaqueAdded": 6,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00013145235314038217
+    },
+    {
+      "frame": 146,
+      "CPUms": 67.66780000180006,
+      "queries": 1981,
+      "visits": 316506,
+      "indexEntries": 47474,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 32,
+      "unknown": 31,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00012922623140276812
+    },
+    {
+      "frame": 147,
+      "CPUms": 84.01099999900907,
+      "queries": 2024,
+      "visits": 318843,
+      "indexEntries": 47466,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 33,
+      "unknown": 30,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00011735138810653467
+    },
+    {
+      "frame": 148,
+      "CPUms": 70.47620000230381,
+      "queries": 2022,
+      "visits": 314377,
+      "indexEntries": 47408,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 31,
+      "unknown": 32,
+      "opaqueAdded": 7,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00011734928029838443
+    },
+    {
+      "frame": 149,
+      "CPUms": 65.86659999447875,
+      "queries": 1997,
+      "visits": 310932,
+      "indexEntries": 47323,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 29,
+      "unknown": 31,
+      "opaqueAdded": 7,
+      "changedVsControl": 0,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 0.00011734923146367038
+    },
+    {
+      "frame": 150,
+      "CPUms": 66.80109999433625,
+      "queries": 2141,
+      "visits": 323471,
+      "indexEntries": 47151,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 17,
+      "fullyCovered": 27,
+      "unknown": 33,
+      "opaqueAdded": 7,
+      "changedVsControl": 0,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 9.447909967130741e-05
+    },
+    {
+      "frame": 151,
+      "CPUms": 69.31479999911971,
+      "queries": 2207,
+      "visits": 327277,
+      "indexEntries": 47177,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 18,
+      "fullyCovered": 26,
+      "unknown": 33,
+      "opaqueAdded": 8,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 9.447909967130741e-05
+    },
+    {
+      "frame": 152,
+      "CPUms": 65.45189999451395,
+      "queries": 2280,
+      "visits": 336435,
+      "indexEntries": 47092,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 17,
+      "fullyCovered": 27,
+      "unknown": 34,
+      "opaqueAdded": 8,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 9.447714716603883e-05
+    },
+    {
+      "frame": 153,
+      "CPUms": 63.26850000186823,
+      "queries": 2274,
+      "visits": 329990,
+      "indexEntries": 47055,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 26,
+      "unknown": 36,
+      "opaqueAdded": 7,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 9.447714716603883e-05
+    },
+    {
+      "frame": 154,
+      "CPUms": 68.57380000292324,
+      "queries": 2205,
+      "visits": 320675,
+      "indexEntries": 48279,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 27,
+      "unknown": 34,
+      "opaqueAdded": 6,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 7.49111104593192e-05
+    },
+    {
+      "frame": 155,
+      "CPUms": 77.2930000021006,
+      "queries": 2185,
+      "visits": 319141,
+      "indexEntries": 48240,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 27,
+      "unknown": 34,
+      "opaqueAdded": 7,
+      "changedVsControl": 3,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 3,
+      "widthGreenMaximumError": 7.827661877335412e-05
+    },
+    {
+      "frame": 156,
+      "CPUms": 72.78999999834923,
+      "queries": 2194,
+      "visits": 318775,
+      "indexEntries": 48255,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 27,
+      "unknown": 36,
+      "opaqueAdded": 8,
+      "changedVsControl": 4,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 4,
+      "widthGreenMaximumError": 8.170531436280104e-05
+    },
+    {
+      "frame": 157,
+      "CPUms": 93.27280000434257,
+      "queries": 2227,
+      "visits": 320812,
+      "indexEntries": 48146,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 16,
+      "fullyCovered": 27,
+      "unknown": 36,
+      "opaqueAdded": 8,
+      "changedVsControl": 4,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 4,
+      "widthGreenMaximumError": 9.447909967130741e-05
+    },
+    {
+      "frame": 158,
+      "CPUms": 67.17660000140313,
+      "queries": 2194,
+      "visits": 309446,
+      "indexEntries": 48175,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 17,
+      "fullyCovered": 29,
+      "unknown": 35,
+      "opaqueAdded": 9,
+      "changedVsControl": 5,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 4,
+      "widthGreenMaximumError": 9.447909967130741e-05
+    },
+    {
+      "frame": 159,
+      "CPUms": 91.12249999452615,
+      "queries": 2138,
+      "visits": 294724,
+      "indexEntries": 48197,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 15,
+      "fullyCovered": 28,
+      "unknown": 37,
+      "opaqueAdded": 8,
+      "changedVsControl": 4,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 3,
+      "widthGreenMaximumError": 8.306276876401952e-05
+    },
+    {
+      "frame": 160,
+      "CPUms": 64.11200000002282,
+      "queries": 2188,
+      "visits": 301604,
+      "indexEntries": 48116,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 27,
+      "unknown": 39,
+      "opaqueAdded": 8,
+      "changedVsControl": 5,
+      "knownCoveredOldLineRemoved": 2,
+      "newVisibleLineCells": 3,
+      "widthGreenMaximumError": 8.306099318122762e-05
+    },
+    {
+      "frame": 161,
+      "CPUms": 73.07149999542162,
+      "queries": 2203,
+      "visits": 314929,
+      "indexEntries": 47975,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 12,
+      "fullyCovered": 31,
+      "unknown": 38,
+      "opaqueAdded": 5,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 2,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 8.306437022209678e-05
+    },
+    {
+      "frame": 162,
+      "CPUms": 69.61900000169408,
+      "queries": 2211,
+      "visits": 315265,
+      "indexEntries": 47842,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 29,
+      "unknown": 37,
+      "opaqueAdded": 6,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 8.306116730594226e-05
+    },
+    {
+      "frame": 163,
+      "CPUms": 70.53369999630377,
+      "queries": 2221,
+      "visits": 321790,
+      "indexEntries": 47993,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 28,
+      "unknown": 37,
+      "opaqueAdded": 6,
+      "changedVsControl": 1,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 0,
+      "widthGreenMaximumError": 8.306276876401952e-05
+    },
+    {
+      "frame": 164,
+      "CPUms": 71.3945999959833,
+      "queries": 2239,
+      "visits": 324858,
+      "indexEntries": 48041,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 27,
+      "unknown": 37,
+      "opaqueAdded": 7,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 1,
+      "newVisibleLineCells": 1,
+      "widthGreenMaximumError": 0.00017248678246417626
+    },
+    {
+      "frame": 165,
+      "CPUms": 65.89359999634326,
+      "queries": 2211,
+      "visits": 317038,
+      "indexEntries": 47916,
+      "projectionInvariantChecks": 11,
+      "knownSomeVisible": 14,
+      "fullyCovered": 27,
+      "unknown": 37,
+      "opaqueAdded": 7,
+      "changedVsControl": 2,
+      "knownCoveredOldLineRemoved": 0,
+      "newVisibleLineCells": 2,
+      "widthGreenMaximumError": 0.00017248678246417626
+    }
+  ],
+  "changes": [
+    {
+      "frame": 102,
+      "xy": [
+        22,
+        13
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 103,
+      "xy": [
+        22,
+        14
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 104,
+      "xy": [
+        22,
+        14
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 105,
+      "xy": [
+        22,
+        14
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 108,
+      "xy": [
+        23,
+        17
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 109,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 109,
+      "xy": [
+        19,
+        3
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 109,
+      "xy": [
+        20,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 110,
+      "xy": [
+        20,
+        7
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 111,
+      "xy": [
+        20,
+        7
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 112,
+      "xy": [
+        20,
+        7
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 113,
+      "xy": [
+        20,
+        7
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 113,
+      "xy": [
+        20,
+        12
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 114,
+      "xy": [
+        20,
+        7
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 114,
+      "xy": [
+        20,
+        12
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 115,
+      "xy": [
+        20,
+        7
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 115,
+      "xy": [
+        20,
+        12
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 116,
+      "xy": [
+        20,
+        12
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 117,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 117,
+      "xy": [
+        20,
+        12
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 118,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 119,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 120,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 120,
+      "xy": [
+        20,
+        10
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 121,
+      "xy": [
+        18,
+        1
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 121,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 121,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 121,
+      "xy": [
+        20,
+        9
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 121,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 122,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 122,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 122,
+      "xy": [
+        20,
+        9
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 122,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 123,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 123,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 123,
+      "xy": [
+        20,
+        9
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 123,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 123,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 124,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 124,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 124,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 124,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 125,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 125,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 125,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 125,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 126,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 126,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 126,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 126,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 127,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 127,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 127,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 128,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 128,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 129,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 129,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 130,
+      "xy": [
+        19,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 130,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 131,
+      "xy": [
+        19,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 131,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 132,
+      "xy": [
+        19,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 132,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 133,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 134,
+      "xy": [
+        23,
+        19
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 135,
+      "xy": [
+        24,
+        16
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 136,
+      "xy": [
+        21,
+        9
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 137,
+      "xy": [
+        3,
+        13
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 137,
+      "xy": [
+        3,
+        16
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 138,
+      "xy": [
+        21,
+        9
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 141,
+      "xy": [
+        20,
+        6
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 142,
+      "xy": [
+        19,
+        20
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 143,
+      "xy": [
+        19,
+        20
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 144,
+      "xy": [
+        19,
+        20
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 145,
+      "xy": [
+        19,
+        20
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 146,
+      "xy": [
+        19,
+        20
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 147,
+      "xy": [
+        19,
+        20
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 148,
+      "xy": [
+        19,
+        20
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 151,
+      "xy": [
+        19,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 151,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 152,
+      "xy": [
+        19,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 152,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 153,
+      "xy": [
+        19,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 153,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 154,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 154,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 155,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 155,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 155,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 156,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 156,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 156,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 156,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 157,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 157,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 157,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 157,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 158,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 158,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 158,
+      "xy": [
+        20,
+        9
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 158,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 158,
+      "xy": [
+        21,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 159,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 159,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 159,
+      "xy": [
+        20,
+        9
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 159,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 160,
+      "xy": [
+        18,
+        1
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 160,
+      "xy": [
+        19,
+        4
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 160,
+      "xy": [
+        20,
+        5
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 160,
+      "xy": [
+        20,
+        9
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 160,
+      "xy": [
+        20,
+        11
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 161,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 161,
+      "xy": [
+        20,
+        10
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 162,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 163,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 164,
+      "xy": [
+        18,
+        2
+      ],
+      "state": 2,
+      "applied": 0.0,
+      "wasOldLine": true
+    },
+    {
+      "frame": 164,
+      "xy": [
+        20,
+        12
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 165,
+      "xy": [
+        20,
+        7
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    },
+    {
+      "frame": 165,
+      "xy": [
+        20,
+        12
+      ],
+      "state": 1,
+      "applied": 1.0,
+      "wasOldLine": false
+    }
+  ],
+  "generalOpaquePixelAreaOrIntegerLinePolicySolved": false,
+  "continuousWorldOcclusionProven": false,
+  "artAdopted": false
+}

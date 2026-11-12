@@ -1608,3 +1608,31 @@ PID35364 Edit/domain1/scene clean, InputSettings native ID568105589213679894/22�
 - **보관과 적용:** 사용자30/보호128·의상94 hunk·제품77 기본값을 보존했다. 새 자산은 private shader 4개와 Unity 생성 meta이며 C# Assets/domain reload/default 변경은 0이다. 원래 64개 packet의 lossless zip, 선택 2개 actor geometry(각 실행의 첫 프레임), 불변 RUN과 완료·복원·컴파일 자료는 같은 experiments의 100/101 아래에 있다. 성능99 commit은 `921865f8`이고 이번 관측·미행사 후보 commit은 최신 git log와 작업폴더 `COMMIT101.json`에서 찾는다. 승인 차단이나 pending 요청은 없다. 115/GPU reset/강제 종료/광범위 저장/push는 수행하지 않았다.
 
 
+## 102. 색 주소 경계의 원인과 공동 주소 후보 미채택 (2026-11-12)
+
+- **원인:** 실제99 frame585 local(6,6)의 source RGB 1코드 변화가 출력 G/B의 -5/-6 변화로 증폭됐다. `CRITICAL_PAIR102.json`의 RGB key8410/8411은 검증된 profile contrast가 아니라 base-support CC393(2texel)의 B min/max에서 hard contrast가 됐다. 이 CC가 실제 AA·gradient·칠 중 무엇인지는 미확정이다. 검출 CC나 범위 extrema를 authored 특징으로 승격하지 않는다.
+- **최소 후보와 실패:** `joint_address102.uncertainty_edges/optimize`는 기존 원본 RGB와 226개 원본 대표색·3단계 LUT를 유지하고, profile/검출 foreground의 대비·순서·기존 색 오차를 보존하는 조건에서 인접 8bit 불확실성 그래프를 공동 최적화했다. 13 CPU 검사(두 색 fixture, 얇은 대비, D4, 동일 RGB 주소)를 통과했지만 실제960프레임 입력의 CPU 반사실 비교에서 RGB 변화 쌍이 **266→275**, 개선10/악화20이었다. 최대 증폭 7.810→6.403만으로 채택하지 않았다. 새 family·RGB 혼합·최종 명암 곱셈은 없으며 GPU에는 적용하지 않았다.
+- **찾기/다음 원인 단계:** `audit_joint_address102.py`, `test_joint_address102.py`, `review_joint_address102.py`, `face102/ACTUAL_INPUT_COUNTERFACTUAL102.json`과 원배율·확대 PNG를 참조한다. RGB 공간의 경계를 옮기는 목적함수는 투영된 특징·표본 전환의 공동 배정을 대신하지 못했다. 원본 색소/AA/gradient의 분리와 feature-local support·팔레트 주소의 공동 배정은 미완이며, 이 실패가 그 구분의 원천적 불가능성을 증명한 것은 아니다.
+
+## 103. CPU 행 작업 분할과 실제 1800연속프레임 (2026-11-12)
+
+- **구현:** `JointLine103.Scene.ForkQueries103/ReleaseQueries103`는 현재 기하·색소 alpha·공간 인덱스를 불변 공유하고 query 상태를 분리한다. `RowParallel103.Run/Split103`는 원본 strip이 걸치는 후보 행 작업량으로 두 구간을 나눠 기본 CPU Task와 소유 스레드에서 계산한다. 모든 작업 합류 전 원본 갱신·해제·GPU 제출을 금지하며 worker에는 Unity API가 없다. `CurveOpacity103`의 feature 등록도 실행 전에 봉인한다. source-ID·픽셀·witness·radius·98B 증명은 기존 입력 4건과 바이트 단위로 같았다. 16192 visibility·66 curve·10 수명/예외/분할 검사를 통과했다.
+- **실행과 성능:** 최초 rows64는 공식 실행기의 Stopwatch 참조 누락으로 **컴파일 단계에서 실패, Play 0회**였다. 공개 `Environment.TickCount`로 보조 행 계측만 바꾸고 전체 source compile-only를 통과했다. 전체 준비 시간은 기존 Editor 고해상도 계측이다. rows64B/C 각각64 실제프레임에서 첫12 중앙값은 28.65/26.75ms, 비교99 fine64는32.06ms였다. 행 분할 후 대기 중앙값은15→0ms다. 별도 실행의 조명까지 동일하다고 하지 않으며, 기존46.5ms와 직접 동일 조건 비교로 확대하지 않는다. 기본 단일 스레드 소스는 보존했다.
+- **긴 검증:** `face103/long1800`은 정상 입력의 보행·정지·회전을 1800개 서로 다른 source-ID로 연속 관측했다. **30.0000016초 시뮬레이션**, 벽시계 약11분29초이며 실시간 60fps 성능 주장이 아니다. 혼합 뷰 전체 준비 중앙값19.54ms/최대62.33ms, 첫12는27.10ms다. 현재 보이는 일반 얼굴 4508표본은 LUT byte와 정확히 일치했고, palette/ink/unknown과 실제 RGB를 모든 프레임에서 검산했다. 원배율·nearest contact를 열었고 APNG1800개 RGB를 lossless decode/hash로 대조했다. 최종 미술·장기 안정성·Close·순수 소수 위상 검증의 완성을 뜻하지 않는다.
+- **색 변화는 잔존:** `audit_colour99.py`를 같은 새1800프레임에 적용해 원본 UV4508개를 대조했다. 인접 동일 primitive/support/Q1762쌍 중 원본 RGB 동일1016쌍의 출력 변화는0이다. 원본과 출력이 함께 바뀐414쌍과 최대 증폭7.810은 남았다. 색 후보102를 이 실행에 넣지 않았다. `prepare_rows103.py`, `relay103.py`, `review_rows103.py`, `ACTUAL_ROWS103.json`, `LONG_VALIDATED99.json`, `COLOUR_CAUSALITY99.json`이 색인이다.
+
+## 104. 월드 대표 표본 재현과 연속 가림 입력의 한계 (2026-11-12)
+
+- **실제 입력 감사:** `audit_world104.site/main`은 `Native395.Present`와 `JointRibbon97`의 대표 좌표·깊이 판정을 raw world halo로 재현한다. 새1800프레임에서 14207개 선 셀 판정이 실제 GPU와 같았다. actor/cell gate를 제외한5645셀에서 월드에 의한 기각은0이었다. witness의 nearest native tile이4389건 달랐어도 표본 가시성 차이와 2×2 내 혼합 가림은0이었다. 기존960 및64프레임도 가림이 걸리지 않았다. 가림을 겪지 않은 자료를 연속 월드 가림 통과로 집계하지 않는다.
+- **정확한 반례/필요 입력:** `WorldSampleCases104.Main`·`test_world104.py`는 불투명 삼각형만으로 네 native 표본 깊이가 모두 같지만 실제 선 witness의 가림은 다른 두 장면을 재현했다. 다른 선 조각은 계속 보이므로 전체 셀 기각도 정당화되지 않는다. `CPU_WORLD104.json`을 참조한다. 필요한 것은 같은 프레임의 실제 witness/support 위치에서 평가된 world 기하·shader 변형·alpha 또는 그에 동등한 renderer coverage 생산자다. 현 깊이 tile·이후 asset snapshot·bounds만으로 그 사이 값을 발명하지 않는다. 새 world 판정은 적용하지 않았다.
+
+## 105. 동일 원본 선의 내부 대각선 연결과 남은 소유권 (2026-11-12)
+
+- **최소 수정:** `CurveOpacity105.ClearPath105`는 **동일 원본 edge**를 구성하는 두 삼각형을 별도 특징처럼 취급하던 누락을 보완한다. 정확히 공유하는 대각선에서 경로를 나눠 양쪽 깊이와 source/destination alpha 가림을 검사한다. 다른 edge를 임의 연결하거나 source 면적 threshold로 지우지 않는다. 기존 넓은/미확정/단독 조각 정책은 유지한다. `test_opacity105.py`의 합성288건은 D4 마스크 불일치0이며, 기존 원시 입력4건의 픽셀·witness·깊이는 그대로다. 기존 shader/RT/pass만 사용하고 새 compute·import는0이다.
+- **실제 효과:** `face105/edge64`의 실제64프레임을 rows64C와 대조했다. 선 기하·투영·witness row가64건 모두 정확히 같고 기존 제거5셀은 유지됐다. frame123/124/158 local(21,11), source edge4040의 중복3셀이 추가로 현재 바탕에 복원됐다(원본 면적 상한0.00004649/0.00084936/0.00042457). 이는 극소 조각을 불투명1셀로 확대하던 구체적 과잉을 줄인 결과이며 일반 opacity 해결이 아니다. `compare_opacity105.py`·`PAIRED_LINE105.json/PNG`의 원배율·nearest 확대를 열어 확인했다. 별도 실행 조명은 동일 입력으로 주장하지 않는다.
+- **잔여 소유권:** 실제 제거8건은 후보 이웃의 source-curve support가 존재해도 그 이웃의 최종 primary edge가 다를 수 있다. 이것만으로 특징 손실을 증명하지는 않지만, 여러 곡선 조각의 공동 표현·history 소유권까지 증명한 것도 아니다. `review_opacity105.py`·`ACTUAL_OPACITY105.json`에 구체 좌표를 남겼다. GPU의 단일 primary ID를 전체 지지 성분 집합으로 확대 해석하지 않는다. 일반 가변 폭, 공동 불투명도와 현재 world 가림, 전체 얼굴 영역/팔레트 및 최종 미술은 미완이다. 제품77 기본 경로는 전환하지 않았다.
+- **보존/메모리:** 실제64+64+1800+64=1992프레임 모두 정상 종료했다. 마지막16:27:27.103UTC 조회에서 Edit/씬 clean/dirty31의 전후 목록 exact/InputSettings 같은 객체·22값/옵션 disabled·None/background/pause/time/pipeline/74globals를 보존했다. native46/47 exact, 기존 AssetImporter1은 미확인이다. owned RT/material/observer/67texture0, RT30, alpha0B/width cache0, CPU 작업·query lease 합류/해제 완료다. 긴 실행의 Profiler.GetTotalAllocatedMemoryLong은2022212456→2067867828B(+43.540MiB,16:14:01.844→16:25:31.109UTC), reserved2744508416→2772176896B, monoUsed1719762944→1905643520B다. 다음 실행 전 allocated2031763284B로 일부 감소했지만 누수 유무는 미확정이다. host rows/report의 managed metadata는 참조가 없어져 GC될 때까지 남을 수 있으며 살아 있는 private 참조를 검사·강제 해제하거나 GC를 호출하지 않았다.
+- **보관/적용:** 같은 experiments의102~105 코드·완료 packet lossless archive·선택 actor 입력·이미지·복원 결과와 `face105/SUMMARY105.json`, `SELECTION105.json`이 최신 색인이다. 이번 로컬 commit은 git log와 작업폴더 `COMMIT105.json`으로 찾는다(직전8474ae74). 오래된 거부 일괄 보관을 재시도하지 않았다. 사용자30/보호128·의상94 hunk를 보존했다. 승인 차단·pending은 없고 CUA/115/초기화/강제 종료/광범위 저장/push는 수행하지 않았다.
+- **전달:** 실제 `PAIRED_LINE105.png`와 1800프레임 APNG `ACTUAL_FACE_LINE_30S_103.png`는 Library 생성에 성공했다. 전체 파일 ID·버전은 `face105/DELIVERY105.json`에 보존한다. Windows의 `os.setxattr` 미지원으로 로컬 xattr 적용은 실패했으며, 업로드 실패로 혼동하지 않는다. 전달명 APNG는 Git의 `face103/long1800/ACTUAL_LONG99.png`와 byte-identical이므로 저장소에는 한 사본만 보존한다.
+
+

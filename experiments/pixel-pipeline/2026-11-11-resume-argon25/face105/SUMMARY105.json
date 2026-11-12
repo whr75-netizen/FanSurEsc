@@ -1,0 +1,589 @@
+{
+  "runs": [
+    {
+      "run": "face103/rows64B",
+      "actualFrames": 64,
+      "simulatedSeconds": 1.0666667222976685,
+      "before": {
+        "RTCount": 30,
+        "allocated": 2003999851,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1775579136,
+        "reserved": 2744508416,
+        "utc": "2026-11-12T16:08:20.0831963Z"
+      },
+      "after": {
+        "RTCount": 30,
+        "allocated": 2049088606,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1628266496,
+        "reserved": 2771648512,
+        "utc": "2026-11-12T16:08:55.5494258Z"
+      },
+      "allocatedDeltaMiB": 42.99998760223389,
+      "inputSameObjectAndValues": true,
+      "dirtyList31ExactlyPreserved": true,
+      "nativeExact": 46,
+      "nativeUnavailable": [
+        "UnityEditor.AssetImporter"
+      ],
+      "globals74Errors": [],
+      "normalEditRestored": true,
+      "ownedRTMaterialObservers": [
+        0,
+        0,
+        0
+      ],
+      "RTCount": 30,
+      "alphaBytesAfterRelease": 0,
+      "widthEntriesAfterRelease": 0
+    },
+    {
+      "run": "face103/rows64C",
+      "actualFrames": 64,
+      "simulatedSeconds": 1.0666667222976685,
+      "before": {
+        "RTCount": 30,
+        "allocated": 2013125735,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1721700352,
+        "reserved": 2727731200,
+        "utc": "2026-11-12T16:11:32.9567886Z"
+      },
+      "after": {
+        "RTCount": 30,
+        "allocated": 2058332213,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1620021248,
+        "reserved": 2771648512,
+        "utc": "2026-11-12T16:12:07.8007889Z"
+      },
+      "allocatedDeltaMiB": 43.11225700378418,
+      "inputSameObjectAndValues": true,
+      "dirtyList31ExactlyPreserved": true,
+      "nativeExact": 46,
+      "nativeUnavailable": [
+        "UnityEditor.AssetImporter"
+      ],
+      "globals74Errors": [],
+      "normalEditRestored": true,
+      "ownedRTMaterialObservers": [
+        0,
+        0,
+        0
+      ],
+      "RTCount": 30,
+      "alphaBytesAfterRelease": 0,
+      "widthEntriesAfterRelease": 0
+    },
+    {
+      "run": "face103/long1800",
+      "actualFrames": 1800,
+      "simulatedSeconds": 30.000001564621925,
+      "before": {
+        "RTCount": 30,
+        "allocated": 2022212456,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1719762944,
+        "reserved": 2744508416,
+        "utc": "2026-11-12T16:14:01.8436826Z"
+      },
+      "after": {
+        "RTCount": 30,
+        "allocated": 2067867828,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1905643520,
+        "reserved": 2772176896,
+        "utc": "2026-11-12T16:25:31.1093895Z"
+      },
+      "allocatedDeltaMiB": 43.54035568237305,
+      "inputSameObjectAndValues": true,
+      "dirtyList31ExactlyPreserved": true,
+      "nativeExact": 46,
+      "nativeUnavailable": [
+        "UnityEditor.AssetImporter"
+      ],
+      "globals74Errors": [],
+      "normalEditRestored": true,
+      "ownedRTMaterialObservers": [
+        0,
+        0,
+        0
+      ],
+      "RTCount": 30,
+      "alphaBytesAfterRelease": 0,
+      "widthEntriesAfterRelease": 0
+    },
+    {
+      "run": "face105/edge64",
+      "actualFrames": 64,
+      "simulatedSeconds": 1.0666667222976685,
+      "before": {
+        "RTCount": 30,
+        "allocated": 2031763284,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 2308214784,
+        "reserved": 2728390656,
+        "utc": "2026-11-12T16:26:21.6361505Z"
+      },
+      "after": {
+        "RTCount": 30,
+        "allocated": 2076931642,
+        "api": "UnityEngine.Profiling.Profiler",
+        "monoUsed": 1638768640,
+        "reserved": 2771517440,
+        "utc": "2026-11-12T16:26:57.0917614Z"
+      },
+      "allocatedDeltaMiB": 43.07590293884277,
+      "inputSameObjectAndValues": true,
+      "dirtyList31ExactlyPreserved": true,
+      "nativeExact": 46,
+      "nativeUnavailable": [
+        "UnityEditor.AssetImporter"
+      ],
+      "globals74Errors": [],
+      "normalEditRestored": true,
+      "ownedRTMaterialObservers": [
+        0,
+        0,
+        0
+      ],
+      "RTCount": 30,
+      "alphaBytesAfterRelease": 0,
+      "widthEntriesAfterRelease": 0
+    }
+  ],
+  "newActualGPUFrames": 1992,
+  "102ColourCandidateRejected": {
+    "CPUCounterfactualNotGPURender": true,
+    "actualSourceFrames": 960,
+    "sameActualUVAndSelectedQ": true,
+    "colourSamples": 2933,
+    "changedColourSamples": 132,
+    "comparedAdjacentSamePrimitiveRegionQPairs": 1160,
+    "RGBChangingPairsBeforeAfter": [
+      266,
+      275
+    ],
+    "maximumPointStepGainBeforeAfter": [
+      7.810249675906654,
+      6.4031242374328485
+    ],
+    "improvedStepPairs": 10,
+    "worsenedStepPairs": 20,
+    "equalRGBBoundaryEdgesBeforeAfter": [
+      1910,
+      1910
+    ],
+    "singletonPixelsBeforeAfter": [
+      2331,
+      2331
+    ],
+    "largestOldStepExamples": [
+      {
+        "frame": 585,
+        "xy": [
+          6,
+          6
+        ],
+        "sourceStep": [
+          -1,
+          0,
+          0
+        ],
+        "baselineStep": [
+          0,
+          -5,
+          -6
+        ],
+        "candidateStep": [
+          0,
+          0,
+          0
+        ],
+        "baselineGain": 7.810249675906654,
+        "candidateGain": 0.0
+      },
+      {
+        "frame": 133,
+        "xy": [
+          6,
+          7
+        ],
+        "sourceStep": [
+          1,
+          0,
+          0
+        ],
+        "baselineStep": [
+          0,
+          4,
+          5
+        ],
+        "candidateStep": [
+          0,
+          4,
+          5
+        ],
+        "baselineGain": 6.4031242374328485,
+        "candidateGain": 6.4031242374328485
+      },
+      {
+        "frame": 149,
+        "xy": [
+          6,
+          7
+        ],
+        "sourceStep": [
+          -1,
+          0,
+          0
+        ],
+        "baselineStep": [
+          0,
+          -4,
+          -5
+        ],
+        "candidateStep": [
+          0,
+          -4,
+          -5
+        ],
+        "baselineGain": 6.4031242374328485,
+        "candidateGain": 6.4031242374328485
+      },
+      {
+        "frame": 196,
+        "xy": [
+          6,
+          7
+        ],
+        "sourceStep": [
+          1,
+          0,
+          0
+        ],
+        "baselineStep": [
+          0,
+          4,
+          5
+        ],
+        "candidateStep": [
+          0,
+          4,
+          5
+        ],
+        "baselineGain": 6.4031242374328485,
+        "candidateGain": 6.4031242374328485
+      },
+      {
+        "frame": 320,
+        "xy": [
+          13,
+          3
+        ],
+        "sourceStep": [
+          0,
+          -1,
+          0
+        ],
+        "baselineStep": [
+          2,
+          -1,
+          -4
+        ],
+        "candidateStep": [
+          2,
+          -1,
+          -4
+        ],
+        "baselineGain": 4.58257569495584,
+        "candidateGain": 4.58257569495584
+      },
+      {
+        "frame": 442,
+        "xy": [
+          13,
+          3
+        ],
+        "sourceStep": [
+          0,
+          -1,
+          0
+        ],
+        "baselineStep": [
+          2,
+          -1,
+          -4
+        ],
+        "candidateStep": [
+          2,
+          -1,
+          -4
+        ],
+        "baselineGain": 4.58257569495584,
+        "candidateGain": 4.58257569495584
+      },
+      {
+        "frame": 564,
+        "xy": [
+          13,
+          3
+        ],
+        "sourceStep": [
+          0,
+          -1,
+          0
+        ],
+        "baselineStep": [
+          2,
+          -1,
+          -4
+        ],
+        "candidateStep": [
+          2,
+          -1,
+          -4
+        ],
+        "baselineGain": 4.58257569495584,
+        "candidateGain": 4.58257569495584
+      },
+      {
+        "frame": 146,
+        "xy": [
+          6,
+          7
+        ],
+        "sourceStep": [
+          -1,
+          -1,
+          0
+        ],
+        "baselineStep": [
+          0,
+          -4,
+          -5
+        ],
+        "candidateStep": [
+          0,
+          -4,
+          -5
+        ],
+        "baselineGain": 4.527692569068708,
+        "candidateGain": 4.527692569068708
+      },
+      {
+        "frame": 147,
+        "xy": [
+          6,
+          7
+        ],
+        "sourceStep": [
+          1,
+          0,
+          -1
+        ],
+        "baselineStep": [
+          0,
+          4,
+          5
+        ],
+        "candidateStep": [
+          0,
+          4,
+          5
+        ],
+        "baselineGain": 4.527692569068708,
+        "candidateGain": 4.527692569068708
+      },
+      {
+        "frame": 583,
+        "xy": [
+          6,
+          7
+        ],
+        "sourceStep": [
+          1,
+          1,
+          0
+        ],
+        "baselineStep": [
+          0,
+          4,
+          5
+        ],
+        "candidateStep": [
+          0,
+          4,
+          5
+        ],
+        "baselineGain": 4.527692569068708,
+        "candidateGain": 4.527692569068708
+      },
+      {
+        "frame": 711,
+        "xy": [
+          6,
+          7
+        ],
+        "sourceStep": [
+          1,
+          0,
+          0
+        ],
+        "baselineStep": [
+          1,
+          3,
+          3
+        ],
+        "candidateStep": [
+          1,
+          3,
+          3
+        ],
+        "baselineGain": 4.358898943540674,
+        "candidateGain": 4.358898943540674
+      },
+      {
+        "frame": 144,
+        "xy": [
+          6,
+          6
+        ],
+        "sourceStep": [
+          1,
+          1,
+          1
+        ],
+        "baselineStep": [
+          0,
+          5,
+          5
+        ],
+        "candidateStep": [
+          0,
+          5,
+          5
+        ],
+        "baselineGain": 4.08248290463863,
+        "candidateGain": 4.08248290463863
+      }
+    ],
+    "sameSurfaceFootprintNotProvenByAdjacentCell": true,
+    "GPUOrArtAdopted": false
+  },
+  "103Long": {
+    "actualFrames": 1800,
+    "simulationSeconds": 30.000001564621925,
+    "rowCPUOnlyNoGPUAlgorithmChange": true,
+    "current91SourceLUTUnchanged": true,
+    "102RejectedCandidateNotLoaded": true,
+    "allWorkersJoinedAndQueryLeasesReleased": true,
+    "actualFiniteLUTExact": true,
+    "ownerAwareCounts": {
+      "actualVisibleFace": 4654,
+      "ordinaryFaceLUT": 4508,
+      "ordinaryFaceUnknown": 0
+    },
+    "currentMedianMs": {
+      "totalMs": 19.53940000021248,
+      "rasterMs": 6.810949998907745,
+      "coupledMs": 0.04510000144364312
+    },
+    "first12MedianMs": {
+      "totalMs": 27.102150001155678,
+      "rasterMs": 13.197500000387663,
+      "coupledMs": 0.06679999933112413
+    },
+    "separateRun99First12MedianMs": {
+      "totalMs": 32.0584000000963,
+      "rasterMs": 18.450699997629272,
+      "coupledMs": 0.05945000157225877
+    },
+    "separateRunTimingNotSameInputBitwiseProof": true,
+    "rowWallMedianMs": {
+      "mainRowWallMs": 0.0,
+      "workerRowWallMs": 0.0,
+      "joinWallMs": 0.0,
+      "rowPhaseWallMs": 0.0
+    },
+    "restored": true,
+    "generalLineOpacityContinuousWorldAndArtCompleted": false
+  },
+  "104WorldSamples": {
+    "CPUOnlySavedActualInput": true,
+    "actualFrames": 1800,
+    "counts": {
+      "knownLineCells": 14207,
+      "representativeGateExactlyReproduced": 14207,
+      "actorOrCellGateExcluded": 8562,
+      "worldEligibleLineCells": 5645,
+      "representativeWorldRejected": 0,
+      "witnessUsesDifferentNativeTile": 4389,
+      "nearestWitnessWorldSampleDisagreement": 0,
+      "mixedFourTileWorldVisibility": 0
+    },
+    "examples": [],
+    "representativeGateMatchesActualGPU": true,
+    "continuousWorldOcclusionProven": false,
+    "newWorldGateAdopted": false,
+    "remainingInput": "At selected line support/witness coordinates, same-frame evaluated world geometry + shader deformation/alpha, or a renderer-produced continuous coverage contract. Native 2x2 samples cannot certify between samples."
+  },
+  "105LineComparison": {
+    "actualRuns": [
+      "face103\\rows64C",
+      "face105\\edge64"
+    ],
+    "lineGeometryAndWitnessRowsExactlyMatched": 64,
+    "allPriorPrunesRetained": true,
+    "additionalActualPrunedCells": [
+      {
+        "frame": 123,
+        "sourceBefore": "face103-rows-20261112T161132030Z-982d1641/slot1/frame123/generation7",
+        "sourceAfter": "face105-same-edge-20261112T162620727Z-45da189b/slot0/frame123/generation8",
+        "xy": [
+          21,
+          11
+        ],
+        "sourceEdge": 4040,
+        "positiveSourceAreaUpper": 4.64944968976434e-05,
+        "addedRedundantCellRemoved": true,
+        "currentLUTBackingExact": true
+      },
+      {
+        "frame": 124,
+        "sourceBefore": "face103-rows-20261112T161132030Z-982d1641/slot2/frame124/generation7",
+        "sourceAfter": "face105-same-edge-20261112T162620727Z-45da189b/slot1/frame124/generation8",
+        "xy": [
+          21,
+          11
+        ],
+        "sourceEdge": 4040,
+        "positiveSourceAreaUpper": 0.0008493630034254327,
+        "addedRedundantCellRemoved": true,
+        "currentLUTBackingExact": true
+      },
+      {
+        "frame": 158,
+        "sourceBefore": "face103-rows-20261112T161132030Z-982d1641/slot2/frame158/generation15",
+        "sourceAfter": "face105-same-edge-20261112T162620727Z-45da189b/slot1/frame158/generation18",
+        "xy": [
+          21,
+          11
+        ],
+        "sourceEdge": 4040,
+        "positiveSourceAreaUpper": 0.00042456576204847213,
+        "addedRedundantCellRemoved": true,
+        "currentLUTBackingExact": true
+      }
+    ],
+    "sameInputLightingClaimed": false,
+    "fullArtOrUniqueFeatureOwnerProven": false
+  },
+  "memoryConclusion": "Unity Profiler allocation counters, not physical working set. RT/material/observer ownership and task joins verified; between-run allocation falls do not prove absence of retention. Host rows/report are managed metadata until unreachable; no live private-reference inspection or forced GC performed.",
+  "product77DefaultChanged": false,
+  "allArtOrLongTermStabilityCompleted": false,
+  "newUnityShaderImports": 0,
+  "newGPUKernels": 0,
+  "oldDeniedBulkArchiveRetried": false
+}

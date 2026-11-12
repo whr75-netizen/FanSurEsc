@@ -1,0 +1,23 @@
+{
+  "CPUOnly": true,
+  "frozenActualFrame": 140,
+  "runtimeFPSNotClaimed": true,
+  "rows": [
+    {
+      "variant": "Reference",
+      "coldThenTwoWarmSameProcess": [
+        "frame=140 known-visible=19 covered=27 unknown=29 queries=4510 visits=360788 CPUms=42.6402",
+        "frame=140 known-visible=19 covered=27 unknown=29 queries=4510 visits=360788 CPUms=20.6184",
+        "frame=140 known-visible=19 covered=27 unknown=29 queries=4510 visits=360788 CPUms=20.2888"
+      ]
+    },
+    {
+      "variant": "Parallel",
+      "coldThenTwoWarmSameProcess": [
+        "frame=140 known-visible=19 covered=27 unknown=29 queries=4510 visits=360788 CPUms=48.0315",
+        "frame=140 known-visible=19 covered=27 unknown=29 queries=4510 visits=360788 CPUms=19.2516",
+        "frame=140 known-visible=19 covered=27 unknown=29 queries=4510 visits=360788 CPUms=21.9859"
+      ]
+    }
+  ]
+}

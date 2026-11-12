@@ -1,0 +1,320 @@
+{
+  "CPUOnly": true,
+  "UnityOrGPUExecuted": false,
+  "sourceRule": "Only two triangular halves of the identical authored edge. Split path at their exact shared diagonal; both source and destination depth/alpha paths must be clear. No joining separate source curves.",
+  "syntheticCases": 288,
+  "D4MaskFailures": {
+    "baseline": [],
+    "candidate": []
+  },
+  "casesWithAdditionalRedundancy": [
+    {
+      "case": "1,0,0,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "1,0,0,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "1,0,1,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "1,0,1,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "1,1,0,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "1,1,0,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "1,1,1,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "1,1,1,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "1,2,0,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "1,2,0,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "1,2,1,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "1,2,1,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "1,3,0,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "1,3,0,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "1,3,1,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "1,3,1,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "2,0,0,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "2,0,0,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "2,0,1,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "2,0,1,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "2,1,0,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "2,1,0,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "2,1,1,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "2,1,1,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "2,2,0,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "2,2,0,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "2,2,1,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "2,2,1,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "2,3,0,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "2,3,0,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "2,3,1,0.7,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "2,3,1,0.7,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,0,0,0.2,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,0,0,0.2,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,0,0,0.7,0",
+      "baselineMaskCells": 4,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,0,1,0.2,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,0,1,0.2,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,0,1,0.7,0",
+      "baselineMaskCells": 4,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,1,0,0.2,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,1,0,0.2,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,1,0,0.7,0",
+      "baselineMaskCells": 4,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,1,1,0.2,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,1,1,0.2,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,1,1,0.7,0",
+      "baselineMaskCells": 4,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,2,0,0.2,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,2,0,0.2,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,2,0,0.7,0",
+      "baselineMaskCells": 4,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,2,1,0.2,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,2,1,0.2,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,2,1,0.7,0",
+      "baselineMaskCells": 4,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,3,0,0.2,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,3,0,0.2,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,3,0,0.7,0",
+      "baselineMaskCells": 4,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,3,1,0.2,0",
+      "baselineMaskCells": 3,
+      "candidateMaskCells": 4
+    },
+    {
+      "case": "3,3,1,0.2,2",
+      "baselineMaskCells": 0,
+      "candidateMaskCells": 2
+    },
+    {
+      "case": "3,3,1,0.7,0",
+      "baselineMaskCells": 4,
+      "candidateMaskCells": 4
+    }
+  ],
+  "actualFrozenFixtures": [
+    {
+      "fixture": "frame102",
+      "pixelsWitnessDepthRadiusExact": true,
+      "newMaskCells": 0,
+      "changedMaskCells": 1
+    },
+    {
+      "fixture": "frame140",
+      "pixelsWitnessDepthRadiusExact": true,
+      "newMaskCells": 0,
+      "changedMaskCells": 0
+    },
+    {
+      "fixture": "frame148",
+      "pixelsWitnessDepthRadiusExact": true,
+      "newMaskCells": 1,
+      "changedMaskCells": 1
+    },
+    {
+      "fixture": "frame149",
+      "pixelsWitnessDepthRadiusExact": true,
+      "newMaskCells": 1,
+      "changedMaskCells": 1
+    }
+  ],
+  "generalOpacitySolved": false,
+  "adopted": false
+}

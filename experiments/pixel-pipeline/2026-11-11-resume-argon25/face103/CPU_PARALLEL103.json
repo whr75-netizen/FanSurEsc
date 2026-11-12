@@ -1,0 +1,43 @@
+{
+  "CPUOnly": true,
+  "UnityOrGPUCalled": false,
+  "parallelism": "one default-scheduler CPU task plus owner-thread disjoint rows; all joined before query leases release",
+  "rows": [
+    {
+      "test": "Oracle",
+      "stdout": "CPU exact visibility states=16192; random/front/behind/unknown/edge/corner; no Unity/GPU"
+    },
+    {
+      "test": "Curve",
+      "stdout": "CPU CurveOpacity98 tests=66; duplicate cells=3; no Unity/GPU"
+    },
+    {
+      "test": "Lifetime",
+      "stdout": "CPU103 lifetime checks=10; owner/read-only/generation/duplicate release/normal join/failure join/source-row partition; no Unity/GPU"
+    },
+    {
+      "fixture": "frame102.bin",
+      "pixelsWitnessRadiusAndCertificateByteExact": true,
+      "ReferenceMsWithIO": 45.4405,
+      "ParallelMsWithIO": 49.8472
+    },
+    {
+      "fixture": "frame140.bin",
+      "pixelsWitnessRadiusAndCertificateByteExact": true,
+      "ReferenceMsWithIO": 45.3346,
+      "ParallelMsWithIO": 48.249300000000005
+    },
+    {
+      "fixture": "frame148.bin",
+      "pixelsWitnessRadiusAndCertificateByteExact": true,
+      "ReferenceMsWithIO": 58.836800000000004,
+      "ParallelMsWithIO": 49.5968
+    },
+    {
+      "fixture": "frame149.bin",
+      "pixelsWitnessRadiusAndCertificateByteExact": true,
+      "ReferenceMsWithIO": 47.7517,
+      "ParallelMsWithIO": 48.7061
+    }
+  ]
+}

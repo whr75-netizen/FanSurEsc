@@ -1,0 +1,16 @@
+// Current source-material metadata only; each observer's private compute clone
+// owns these constants. No global state, material mutation or runtime cache.
+ readonly Vector4[] ink68=new Vector4[16],registry68=new Vector4[16];readonly Arr40 info68=new Arr40();
+ void BindRegistry68(){
+  foreach(var row in registeredTopology60["bindings"]){int ordinal=(int)row["bindingOrdinal"],rr=(int)row["rendererOrdinal"],sm=(int)row["subMesh"],material=(int)row["materialId"],tri=(int)row["triangleCount"];
+   float raw=qOriginals[ordinal].GetFloat("_Auto245Role");int role=Mathf.RoundToInt(raw)+1;
+   if(raw!=role-1||role!=material+1||role<1||role>=16||registry68[role].y!=0||tri<1||tri>=16777216)throw new InvalidOperationException("68 source role/primitive registry mismatch");
+   var m=originals[rr][sm];bool supported=m.HasProperty("_OutlineColor")&&m.HasProperty("_OutlineWidthMode")&&m.HasProperty("_OutlineWidth")&&m.HasProperty("_OutlineLightingMix");
+   float mode=supported?m.GetFloat("_OutlineWidthMode"):-1,width=supported?m.GetFloat("_OutlineWidth"):-1,mix=supported?m.GetFloat("_OutlineLightingMix"):-1;var c=supported?m.GetColor("_OutlineColor").linear:Color.clear;
+   bool enabled=supported&&mode==1&&width>0&&mix==0;
+   if(!float.IsFinite(width)||!float.IsFinite(mode)||!float.IsFinite(mix)||!float.IsFinite(c.r)||!float.IsFinite(c.g)||!float.IsFinite(c.b))throw new InvalidOperationException("68 source outline metadata nonfinite");
+   ink68[role]=new Vector4(c.r,c.g,c.b,enabled?1:0);registry68[role]=new Vector4(tri,role,enabled?1:0,width);
+   info68.Add(new Obj40{["role"]=role,["renderer"]=rr,["subMesh"]=sm,["materialId"]=material,["triangles"]=tri,["sourceEnabled"]=enabled,["sourceWidthMetres"]=width,["sourceOutlineMode"]=mode,["sourceOutlineLightingMix"]=mix,["sourceInkLinear"]=new Arr40(c.r,c.g,c.b),["sourceMaterial"]=AssetDatabase.GetAssetPath(m)});
+  }
+  final41.SetVectorArray("_OutlineInk68",ink68);final41.SetVectorArray("_OutlineRegistry68",registry68);
+ }

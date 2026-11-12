@@ -31,6 +31,41 @@ RWTexture2D<float4> _Atlas41,_NativeAfter42,_OwnerReceipts47;
 int _OwnerScope45;int _OutlineClass66; //0=native material hull reference,1=generic actor-exterior silhouette
 int2 _Size41,_HeadTextureOrigin41,_JoinOffset41,_NativeOrigin42;int _NativeScale42;
 float2 _DeliveredDelta42;float _DepthOffset41;float4 _Ink41;
+// Explicit width1 exterior test. This is a shared-grid band, not an enlarged
+// native hull. Only current visible, registered native source cells can supply
+// colour/depth/primitive/UV. No history RGB, private arrays or iterative search.
+Texture2D<float> _ZeroWidthFlags69;int _ZeroWidthRole69,_ZeroWidthCount69;int2 _ZeroWidthSize69;
+int _IntegerExterior68;
+float4 _OutlineInk68[16],_OutlineRegistry68[16];
+void Source68(int2 origin,int distance2,float4 targetMeta,float4 targetWorld,inout float distanceBest,inout float depthBest,inout float4 keyBest,inout float3 inkBest){
+ int2 oq=origin+_HeadTextureOrigin41+_JoinOffset41;
+ if(any(origin<0)||any(origin>=_Size41)||any(oq<0)||any(oq>=int2(480,272)))return;
+ int2 p=clamp((int2)floor(float2(_NativeOrigin42)+(float2(oq)+.5+_DeliveredDelta42)*_NativeScale42),int2(0,0),int2(959,543));
+ float4 cell=_NativeCell42.Load(int3(p,0)),owner=_NativeOwner47.Load(int3(p,0));
+ float4 selected=_SelectedSource48.Load(int3(oq,0)),uv=_SurfaceUV47.Load(int3(oq,0)),domain=_FeatureDomain49.Load(int3(oq,0));
+ int role=clamp((int)round(owner.x),0,15);float4 reg=_OutlineRegistry68[role],ink=_OutlineInk68[role];
+ bool valid=all(isfinite(cell))&&all(isfinite(owner))&&all(isfinite(selected))&&all(isfinite(uv))&&all(isfinite(domain))&&all(isfinite(ink))&&all(isfinite(reg))&&all(cell.xy==float2(oq))&&cell.z==1&&domain.x<.5&&owner.x==role&&role>0&&reg.y==role&&ink.a==1&&selected.x==owner.z&&selected.y==owner.x&&selected.z==owner.y&&selected.w>=1&&selected.w==round(selected.w)&&selected.w<=reg.x&&owner.z>0;
+ if(role==_ZeroWidthRole69&&valid){int wi69=(int)selected.w-1;if(wi69<0||wi69>=_ZeroWidthCount69)return;int2 wp69=int2(wi69%_ZeroWidthSize69.x,wi69/_ZeroWidthSize69.x);if(_ZeroWidthFlags69.Load(int3(wp69,0))>.5)return;}
+ if(!valid||targetWorld.x<=0||owner.z>targetWorld.x+.0001||(targetMeta.x>0&&owner.z>targetMeta.x+.0001))return;
+ float4 key=float4(role,selected.w,uv.xy);
+ bool lex=key.x<keyBest.x||(key.x==keyBest.x&&(key.y<keyBest.y||(key.y==keyBest.y&&(key.z<keyBest.z||(key.z==keyBest.z&&key.w<keyBest.w)))));
+ if(distance2<distanceBest||(distance2==distanceBest&&(owner.z<depthBest||(owner.z==depthBest&&lex)))){distanceBest=distance2;depthBest=owner.z;keyBest=key;inkBest=ink.rgb;}
+}
+bool IntegerExterior68(int2 local,float4 cell,float4 meta,float4 world,bool valid,out float4 key,out float3 ink){
+ float distanceBest=100,depthBest=0;key=0;ink=0;
+ if(!valid||cell.z==1||any(local<1)||any(local>=_Size41-1))return false;
+ // Eight fixed neighbours, one shared logical cell wide. No dependent loop.
+ Source68(local+int2(-1,0),1,meta,world,distanceBest,depthBest,key,ink);
+ Source68(local+int2(1,0),1,meta,world,distanceBest,depthBest,key,ink);
+ Source68(local+int2(0,-1),1,meta,world,distanceBest,depthBest,key,ink);
+ Source68(local+int2(0,1),1,meta,world,distanceBest,depthBest,key,ink);
+ Source68(local+int2(-1,-1),2,meta,world,distanceBest,depthBest,key,ink);
+ Source68(local+int2(1,-1),2,meta,world,distanceBest,depthBest,key,ink);
+ Source68(local+int2(-1,1),2,meta,world,distanceBest,depthBest,key,ink);
+ Source68(local+int2(1,1),2,meta,world,distanceBest,depthBest,key,ink);
+ return key.x>0&&world.x>0&&depthBest<=world.x+.0001&&(meta.x<=0||depthBest<=meta.x+.0001);
+}
+
 [numthreads(8,8,1)]void SourceNativeHull60(uint3 id:SV_DispatchThreadID){
  int2 local=id.xy;if(any(local>=_Size41))return;
  int2 q=local+_HeadTextureOrigin41+_JoinOffset41;
@@ -62,6 +97,7 @@ float2 _DeliveredDelta42;float _DepthOffset41;float4 _Ink41;
  bool sourceCarrier=!designed49&&ownerReceipt&&nativeVisible&&all(isfinite(selectedSource))&&selectedSource.x==originalOwner.z&&selectedSource.y==originalOwner.x&&selectedSource.z==originalOwner.y&&selectedSource.y==_RegisteredRole48&&selectedSource.w>0&&selectedSource.w<=_RegisteredTriangleCount48&&selectedSource.w==round(selectedSource.w);
  _OwnerReceipts47[local+int2(2*_Size41.x,0)]=selectedSource;
  _OwnerReceipts47[local+int2(3*_Size41.x,0)]=designed49?float4(-4,domain49.yzw):sourceCarrier?float4(4,selectedSource.y,selectedSource.z,selectedSource.w):0;
+ if(_IntegerExterior68==1){float4 key68;float3 ink68;bool selected68=IntegerExterior68(local,cell,meta,world,inside&&finite&&matched,key68,ink68);use=selected68;after=selected68?float4(ink68,1):before;_Atlas41[local+int2(10*_Size41.x,0)]=after;_Atlas41[local+int2(11*_Size41.x,0)]=float4(selected68?1:0,selected68?1:0,selected68?1:0,selected68?1:0);_Atlas41[local+int2(15*_Size41.x,0)]=selected68?float4(100+key68.x,key68.yzw):float4(ownerReceipt?(nativeVisible?(designed49?4:2):3):0,0,_OwnerScope45,0);_OwnerReceipts47[local+int2(4*_Size41.x,0)]=float4(cv62.xyz,0);}
  float4 candidateReceipt67;float3 paletteRGB67;bool candidateColour67=ResolveSourcePalette67(originalUV,paletteRGB67,candidateReceipt67);
  float4 paletteReceipt67=sourceCarrier?candidateReceipt67:float4(0,-1,0,0);
  bool applyColour67=sourceCarrier&&candidateColour67&&!use;

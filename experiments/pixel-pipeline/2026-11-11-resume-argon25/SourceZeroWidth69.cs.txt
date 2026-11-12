@@ -1,0 +1,19 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public sealed class SourceZeroWidth69:IDisposable {
+ readonly Json40 spec;Texture2D flags;readonly int role,count,width,height;bool disposed;public long OwnedBytes=>(long)width*height;
+ static string Hash(byte[] bytes){using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(bytes)).Replace("-","").ToLowerInvariant();}
+ public SourceZeroWidth69(string root,EyeFeature348 eye){
+  spec=Json40.Parse(File.ReadAllText(Path.Combine(root,"ZERO_POLICY69.json")));role=(int)spec["role"];count=(int)spec["count"];width=(int)spec["width"];height=(int)spec["height"];int rr=(int)spec["rendererOrdinal"],sm=(int)spec["subMesh"];
+  var renderer=eye.full.motion.surface.source[rr];var skin=renderer as SkinnedMeshRenderer;var mesh=skin?skin.sharedMesh:renderer.GetComponent<MeshFilter>()?.sharedMesh;if(!mesh)throw new InvalidOperationException("69 registered mesh unavailable");
+  byte[] UV(){using(var m=new MemoryStream())using(var w=new BinaryWriter(m)){foreach(var v in mesh.uv){w.Write(v.x);w.Write(v.y);}return m.ToArray();}}var indices=mesh.GetIndices(sm);var ib=new byte[indices.Length*4];Buffer.BlockCopy(indices,0,ib,0,ib.Length);
+  if(count<1||count>16384||width!=128||width*height>16384||indices.Length!=3*count||Hash(UV())!=(string)spec["uvSHA256"]||Hash(ib)!=(string)spec["indexSHA256"])throw new InvalidOperationException("69 static UV/topology changed");
+  var material=renderer.sharedMaterials[sm];var texture=material.GetTexture("_OutlineWidthTex");var expected=spec["sourceTextureSize"].Values<int>().ToArray();
+  if(!texture||texture.width!=expected[0]||texture.height!=expected[1]||texture.imageContentsHash.ToString()!=(string)spec["liveTextureImageHash"]||texture.wrapModeU!=TextureWrapMode.Repeat||texture.wrapModeV!=TextureWrapMode.Repeat||texture.filterMode!=FilterMode.Bilinear||material.GetTextureScale("_OutlineWidthTex")!=Vector2.one||material.GetTextureOffset("_OutlineWidthTex")!=Vector2.zero||!(material.IsKeywordEnabled("_MTOON_PARAMETERMAP")||Shader.IsKeywordEnabled("_MTOON_PARAMETERMAP")))throw new InvalidOperationException("69 actual width texture/sampler changed");
+  var bytes=File.ReadAllBytes(Path.Combine(root,"ZERO_TRIANGLES69.r8"));if(bytes.Length!=width*height||Hash(bytes)!=(string)spec["flagsSHA256"])throw new InvalidOperationException("69 immutable zero-width flags changed");
+  try{flags=new Texture2D(width,height,TextureFormat.R8,false,true){name="67 owned zero-width source exclusion69",hideFlags=HideFlags.HideAndDontSave,filterMode=FilterMode.Point};flags.SetPixelData(bytes,0);flags.Apply(false,true);}catch{Dispose();throw;}
+ }
+ public void Bind(CommandBuffer cmd,ComputeShader shader,int kernel){if(disposed||!flags)throw new InvalidOperationException("69 flags released before borrowing owner completed");cmd.SetComputeTextureParam(shader,kernel,"_ZeroWidthFlags69",flags);cmd.SetComputeIntParam(shader,"_ZeroWidthRole69",role);cmd.SetComputeIntParam(shader,"_ZeroWidthCount69",count);cmd.SetComputeIntParams(shader,"_ZeroWidthSize69",width,height);}
+ public Obj40 Info()=>new Obj40{["role"]=role,["triangles"]=count,["zeroTriangles"]=(int)spec["zeroTriangles"],["flagsSHA"]=(string)spec["flagsSHA256"],["ownedBytes"]=width*height,["positiveWidthProof"]=false,["nativePhysicalWidthEquality"]=false};
+ public void Dispose(){if(disposed)return;if(flags)UnityEngine.Object.DestroyImmediate(flags);flags=null;disposed=true;}
+}
+}

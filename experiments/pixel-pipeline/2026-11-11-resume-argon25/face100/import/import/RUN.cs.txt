@@ -1,0 +1,448 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering;
+using Unity.Collections;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering.RenderGraphModule;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine.InputSystem;
+using FantasySurvival.Controls;
+using FantasySurvival.SceneFlow;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
+using UnityEngine.Profiling;
+
+
+// Pure source-coordinate math. No Unity/GPU device, cache singleton or RGB data.
+public static class SourceAnchorMath37 {
+ public static double[] World(double[][] triangle,double[] bary,double[] localToWorld){
+  if(triangle==null||triangle.Length!=3||bary==null||bary.Length!=3||localToWorld==null||localToWorld.Length!=16)throw new ArgumentException("source anchor shape");
+  double sum=bary[0]+bary[1]+bary[2];if(Math.Abs(sum-1)>1e-8||Array.Exists(bary,v=>Double.IsNaN(v)||Double.IsInfinity(v)||v<0||v>1))throw new ArgumentException("source barycentric domain");
+  if(Array.Exists(localToWorld,v=>Double.IsNaN(v)||Double.IsInfinity(v))||localToWorld[3]!=0||localToWorld[7]!=0||localToWorld[11]!=0||localToWorld[15]!=1)throw new ArgumentException("affine source transform");
+  var p=new double[3];for(int c=0;c<3;c++){if(triangle[c]==null||triangle[c].Length!=3||Array.Exists(triangle[c],v=>Double.IsNaN(v)||Double.IsInfinity(v)))throw new ArgumentException("source triangle");for(int k=0;k<3;k++)p[k]+=bary[c]*triangle[c][k];}
+  var w=new double[3];for(int k=0;k<3;k++)w[k]=localToWorld[k]*p[0]+localToWorld[4+k]*p[1]+localToWorld[8+k]*p[2]+localToWorld[12+k];return w;
+ }
+}
+
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public static class Contour40 {
+ public sealed class Result {public Vector3[] vertices;public Vector2[] provenance;public int[] indices,sourceVertexIndices;public int openEdges,nonmanifoldEdges,degenerateTriangles,sourceEdges,closedChains,openChains,branchVertices;}
+ sealed class Edge {public int a,b;public List<int> triangles=new List<int>();}
+ sealed class Segment {public int id;public Edge edge;}
+ public static Result Build(Vector3[] local,int[] tri,int[] weld,Matrix4x4 transform,Func<Vector3,Vector2> project){
+  if(local==null||tri==null||weld==null||local.Length!=weld.Length||tri.Length%3!=0||project==null)throw new ArgumentException("40 source topology ABI");
+  var world=local.Select(transform.MultiplyPoint3x4).ToArray();var projected=world.Select(project).ToArray();var representatives=new Dictionary<int,Vector3>();
+  for(int i=0;i<weld.Length;i++){if(!float.IsFinite(world[i].x)||!float.IsFinite(world[i].y)||!float.IsFinite(world[i].z)||!float.IsFinite(projected[i].x)||!float.IsFinite(projected[i].y))throw new ArgumentException("40 finite evaluated source required");if(representatives.TryGetValue(weld[i],out var old)){if(!old.Equals(world[i]))throw new InvalidOperationException("40 registered equivalent source vertices deformed differently");}else representatives.Add(weld[i],world[i]);}
+  var sign=new int[tri.Length/3];var edges=new Dictionary<ulong,Edge>();var r=new Result();
+  for(int t=0;t<sign.Length;t++){
+   int a=tri[t*3],b=tri[t*3+1],c=tri[t*3+2];if(a<0||b<0||c<0||a>=local.Length||b>=local.Length||c>=local.Length)throw new ArgumentException("40 source index out of range");
+   var x=projected[a];var y=projected[b];var z=projected[c];double det=((double)y.x-x.x)*((double)z.y-x.y)-((double)y.y-x.y)*((double)z.x-x.x);sign[t]=Math.Sign(det);if(sign[t]==0)r.degenerateTriangles++;
+   foreach(var p in new[]{new[]{a,b},new[]{b,c},new[]{c,a}}){uint lo=(uint)Math.Min(weld[p[0]],weld[p[1]]),hi=(uint)Math.Max(weld[p[0]],weld[p[1]]);if(lo==hi)continue;ulong key=((ulong)lo<<32)|hi;if(!edges.TryGetValue(key,out var e)){e=new Edge{a=p[0],b=p[1]};edges.Add(key,e);}e.triangles.Add(t);}
+  }
+  var v=new List<Vector3>();var uv=new List<Vector2>();var indices=new List<int>();var sourceVertices=new List<int>();int id=0;var segments=new List<Segment>();
+  foreach(var pair in edges.OrderBy(p=>p.Key)){id++;var e=pair.Value;if(e.triangles.Count==1){r.openEdges++;continue;}if(e.triangles.Count!=2){r.nonmanifoldEdges++;continue;}int a=sign[e.triangles[0]],b=sign[e.triangles[1]];if(a!=b)segments.Add(new Segment{id=id,edge=e});}
+  var nodes=new Dictionary<int,List<int>>();for(int i=0;i<segments.Count;i++){var e=segments[i].edge;foreach(int node in new[]{weld[e.a],weld[e.b]}){if(!nodes.TryGetValue(node,out var list)){list=new List<int>();nodes.Add(node,list);}list.Add(i);}}
+  r.branchVertices=nodes.Count(p=>p.Value.Count>2);var used=new bool[segments.Count];
+  // D3D aliased lines use diamond exit. Orient each actual source chain
+  // coherently so both incident segments never terminate at a degree2 joint.
+  // This changes neither the source edge set nor depth/occlusion testing.
+  void Walk(int first,int initial){int current=first,node=initial;while(!used[current]){used[current]=true;var s=segments[current];var e=s.edge;int a=weld[e.a]==node?e.a:e.b,b=a==e.a?e.b:e.a;int start=v.Count;v.Add(world[a]);v.Add(world[b]);sourceVertices.Add(a);sourceVertices.Add(b);uv.Add(new Vector2(s.id,weld[a]<weld[b]?0:1));uv.Add(new Vector2(s.id,weld[b]<weld[a]?0:1));indices.Add(start);indices.Add(start+1);node=weld[b];if(nodes[node].Count!=2)break;int next=nodes[node][0]==current?nodes[node][1]:nodes[node][0];if(used[next])break;current=next;}if(node==initial)r.closedChains++;else r.openChains++;}
+  foreach(var p in nodes.Where(p=>p.Value.Count!=2).OrderBy(p=>p.Key))foreach(int i in p.Value)if(!used[i])Walk(i,p.Key);
+  for(int i=0;i<segments.Count;i++)if(!used[i])Walk(i,Math.Min(weld[segments[i].edge.a],weld[segments[i].edge.b]));
+  r.vertices=v.ToArray();r.provenance=uv.ToArray();r.indices=indices.ToArray();r.sourceVertexIndices=sourceVertices.ToArray();r.sourceEdges=edges.Count;return r;
+ }
+}
+}
+
+
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public class Json40 : IEnumerable<Json40>
+{
+    protected Dictionary<string,Json40> fields;protected List<Json40> items;protected object value;
+    public Json40 this[string key] {get {Json40 v;return fields!=null&&fields.TryGetValue(key,out v)?v:null;}set {fields[key]=value;}}
+    public Json40 this[int i] {get {return items[i];}}
+    public int Count {get {return items!=null?items.Count:fields!=null?fields.Count:0;}}
+    public void Add(Json40 v) {items.Add(v);}
+    public IEnumerable<T> Values<T>() {return this.Select(v=>(T)Convert.ChangeType(v.value,typeof(T),CultureInfo.InvariantCulture));}
+    public IEnumerator<Json40> GetEnumerator() {return (items??(fields==null?new List<Json40>():fields.Values.ToList())).GetEnumerator();}
+    IEnumerator IEnumerable.GetEnumerator() {return GetEnumerator();}
+    public static implicit operator Json40(string v) {return v==null?null:new Json40{value=v};}
+    public static implicit operator Json40(int v) {return new Json40{value=v};}
+    public static implicit operator Json40(long v) {return new Json40{value=v};}
+    public static implicit operator Json40(float v) {return new Json40{value=(double)v};}
+    public static implicit operator Json40(double v) {return new Json40{value=v};}
+    public static implicit operator Json40(bool v) {return new Json40{value=v};}
+    public static explicit operator string(Json40 v) {return v==null?null:Convert.ToString(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator int(Json40 v) {return Convert.ToInt32(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator long(Json40 v) {return Convert.ToInt64(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator double(Json40 v) {return Convert.ToDouble(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator bool(Json40 v) {return Convert.ToBoolean(v.value,CultureInfo.InvariantCulture);}
+    public static Json40 Wrap(object v) {
+        if(v==null)return null;if(v is Json40)return(Json40)v;if(v is string)return(string)v;if(v is bool)return(bool)v;
+        if(v is double)return(double)v;if(v is float)return(float)v;if(v is int)return(int)v;if(v is long)return(long)v;
+        if(v is IEnumerable){var a=new Arr40();foreach(var x in(IEnumerable)v)a.Add(Wrap(x));return a;}
+        throw new ArgumentException("Unsupported JSON boundary value: "+v.GetType().Name);
+    }
+    static string Quote(string text) {
+        var b=new StringBuilder("\"");foreach(char c in text){switch(c){case '"':b.Append("\\\"");break;case '\\':b.Append("\\\\");break;case '\b':b.Append("\\b");break;case '\f':b.Append("\\f");break;case '\n':b.Append("\\n");break;case '\r':b.Append("\\r");break;case '\t':b.Append("\\t");break;default:if(c<32)b.Append("\\u"+((int)c).ToString("x4"));else b.Append(c);break;}}return b.Append('"').ToString();
+    }
+    public override string ToString() {
+        if(fields!=null)return "{"+string.Join(",",fields.OrderBy(p=>p.Key,StringComparer.Ordinal).Select(p=>Quote(p.Key)+":"+(p.Value==null?"null":p.Value.ToString())))+"}";
+        if(items!=null)return "["+string.Join(",",items.Select(v=>v==null?"null":v.ToString()))+"]";
+        if(value==null)return "null";if(value is string)return Quote((string)value);if(value is bool)return(bool)value?"true":"false";
+        if(value is double){double x=(double)value;if(double.IsNaN(x)||double.IsInfinity(x))throw new ArgumentException("Nonfinite JSON number");return x.ToString("R",CultureInfo.InvariantCulture);}
+        return Convert.ToString(value,CultureInfo.InvariantCulture);
+    }
+    public static bool DeepEquals(Json40 a,Json40 b) {return a==null?b==null:b!=null&&a.ToString()==b.ToString();}
+    public const int MaxInputChars66=65536;
+    public static Json40 Parse(string text) {if(text.Length>MaxInputChars66)throw new ArgumentException("Small JSON budget exceeded; use streaming verification");int p=0;var result=ParseValue(text,ref p,0);Space(text,ref p);if(p!=text.Length)throw new ArgumentException("Trailing JSON data");return result;}
+    static void Space(string s,ref int p) {while(p<s.Length&&char.IsWhiteSpace(s[p]))p++;}
+    static string ParseString(string s,ref int p) {
+        if(s[p++]!='"')throw new ArgumentException("JSON string expected");var b=new StringBuilder();
+        while(p<s.Length){char c=s[p++];if(c=='"')return b.ToString();if(c=='\\'){char e=s[p++];switch(e){case '"':case '\\':case '/':b.Append(e);break;case 'b':b.Append('\b');break;case 'f':b.Append('\f');break;case 'n':b.Append('\n');break;case 'r':b.Append('\r');break;case 't':b.Append('\t');break;case 'u':b.Append((char)int.Parse(s.Substring(p,4),NumberStyles.HexNumber,CultureInfo.InvariantCulture));p+=4;break;default:throw new ArgumentException("JSON escape");}}else{if(c<32)throw new ArgumentException("JSON control character");b.Append(c);}}
+        throw new ArgumentException("Unterminated JSON string");
+    }
+    static Json40 ParseValue(string s,ref int p,int depth) {
+        if(depth>128)throw new ArgumentException("JSON nesting limit");Space(s,ref p);if(p>=s.Length)throw new ArgumentException("JSON value expected");char c=s[p];
+        if(c=='"')return ParseString(s,ref p);
+        if(c=='{'||c=='['){bool obj=c=='{';p++;Json40 result=obj?(Json40)new Obj40():new Arr40();Space(s,ref p);if(p<s.Length&&s[p]==(obj?'}':']')){p++;return result;}
+            while(true){Space(s,ref p);string key=null;if(obj){key=ParseString(s,ref p);if(result.fields.ContainsKey(key))throw new ArgumentException("Duplicate JSON member");Space(s,ref p);if(s[p++]!=':')throw new ArgumentException("JSON colon");}var v=ParseValue(s,ref p,depth+1);if(obj)result[key]=v;else result.Add(v);Space(s,ref p);char end=s[p++];if(end==(obj?'}':']'))break;if(end!=',')throw new ArgumentException("JSON separator");}return result;}
+        foreach(string word in new[]{"true","false","null"})if(p+word.Length<=s.Length&&string.CompareOrdinal(s,p,word,0,word.Length)==0){p+=word.Length;return word=="null"?null:(Json40)(word=="true");}
+        int start=p;while(p<s.Length&&"-+0123456789.eE".IndexOf(s[p])>=0)p++;if(start==p)throw new ArgumentException("JSON token");return double.Parse(s.Substring(start,p-start),CultureInfo.InvariantCulture);
+    }
+}
+public sealed class Obj40 : Json40 {public Obj40(){fields=new Dictionary<string,Json40>(StringComparer.Ordinal);}public new static Obj40 Parse(string text){return(Obj40)Json40.Parse(text);}}
+public sealed class Arr40 : Json40 {public Arr40(params object[] values){items=new List<Json40>();if(values.Length==1&&values[0] is IEnumerable&&!(values[0] is string)&&!(values[0] is Json40)){foreach(var v in(IEnumerable)values[0])Add(Wrap(v));}else foreach(var v in values)Add(Wrap(v));}}
+
+// Offline66 candidate: no Unity/API/thread/process/GC actions.
+
+public static class SerializedContent40
+{
+ public const int SmallSemanticBudgetBytes=65536;
+ public const int CharChunk=8192,ByteChunk=32768;
+ public sealed class Comparison
+ {
+  public string Status,BeforeSHA256,AfterSHA256,Reason;
+  public long BeforeBytes,AfterBytes,HashInputBytes;
+  public bool? Equivalent;
+ }
+ static string Finish(SHA256 h)
+ {
+  h.TransformFinalBlock(new byte[0],0,0);
+  return BitConverter.ToString(h.Hash).Replace("-","").ToLowerInvariant();
+ }
+ static string HashFile(string path,out long length)
+ {
+  length=0;
+  using(var h=SHA256.Create())using(var f=File.OpenRead(path))
+  {
+   var buffer=new byte[ByteChunk];int n;
+   while((n=f.Read(buffer,0,buffer.Length))>0){h.TransformBlock(buffer,0,n,buffer,0);length+=n;}
+   return Finish(h);
+  }
+ }
+ static string HashText(string text,out long length)
+ {
+  length=0;var chars=new char[CharChunk];var bytes=new byte[ByteChunk];
+  var encoder=new UTF8Encoding(false,true).GetEncoder();
+  using(var h=SHA256.Create())
+  {
+   int position=0;bool completed=false;
+   do
+   {
+    int count=Math.Min(chars.Length,text.Length-position);
+    text.CopyTo(position,chars,0,count);
+    int charsUsed,bytesUsed;
+    encoder.Convert(chars,0,count,bytes,0,bytes.Length,position+count==text.Length,out charsUsed,out bytesUsed,out completed);
+    if(charsUsed==0&&bytesUsed==0&&!completed)throw new InvalidOperationException("UTF8 encoder made no progress");
+    position+=charsUsed;
+    if(bytesUsed>0){h.TransformBlock(bytes,0,bytesUsed,bytes,0);length+=bytesUsed;}
+   }while(position<text.Length||!completed);
+   return Finish(h);
+  }
+ }
+ static bool RequiresExactNumericReview(string text)
+ {
+  int i=0;
+  while(i<text.Length)
+  {
+   if(text[i]=='"')
+   {i++;while(i<text.Length){char c=text[i++];if(c=='\\'){if(i<text.Length)i++;}else if(c=='"')break;}continue;}
+   char first=text[i];
+   if(first=='-'||(first>='0'&&first<='9'))
+   {
+    int j=i;if(text[j]=='-')j++;int significant=0;bool started=false;
+    while(j<text.Length)
+    {
+     char c=text[j];if(c=='.'){j++;continue;}
+     if(c<'0'||c>'9')break;if(c!='0')started=true;if(started)significant++;j++;
+    }
+    if(significant>15)return true;
+    if(j<text.Length&&(text[j]=='e'||text[j]=='E')){j++;if(j<text.Length&&(text[j]=='+'||text[j]=='-'))j++;while(j<text.Length&&text[j]>='0'&&text[j]<='9')j++;}
+    i=Math.Max(i+1,j);continue;
+   }
+   i++;
+  }
+  return false;
+ }
+ public static Comparison Verify(string beforePath,string currentSerialized)
+ {
+  if(currentSerialized==null)throw new ArgumentNullException("currentSerialized");
+  var r=new Comparison();long before,after;
+  r.BeforeSHA256=HashFile(beforePath,out before);r.AfterSHA256=HashText(currentSerialized,out after);
+  r.BeforeBytes=before;r.AfterBytes=after;r.HashInputBytes=before+after;
+  if(before==after&&r.BeforeSHA256==r.AfterSHA256)
+  {r.Status="ExactUTF8";r.Equivalent=true;r.Reason="Same serialized UTF8 fingerprint; no JSON parse/re-serialization.";return r;}
+  if(before>SmallSemanticBudgetBytes||after>SmallSemanticBudgetBytes)
+  {r.Status="UnverifiedRepresentationChange";r.Equivalent=null;r.Reason="Large nonidentical input exceeds bounded semantic fallback; not declared changed or equivalent.";return r;}
+  string previous=File.ReadAllText(beforePath,new UTF8Encoding(false,true));
+  if(RequiresExactNumericReview(previous)||RequiresExactNumericReview(currentSerialized))
+  {r.Status="UnverifiedNumericPrecision";r.Equivalent=null;r.Reason="No double-rounding equivalence for >15 significant digits.";return r;}
+  try
+  {
+   r.Equivalent=Json40.DeepEquals(Json40.Parse(previous),Json40.Parse(currentSerialized));
+   r.Status=r.Equivalent.Value?"SmallSemanticEquivalent":"SmallSemanticDifferent";
+   r.Reason="Fallback <=64KiB; no suffix copying. High-precision numbers/duplicate keys are not accepted as equivalent.";
+  }
+  catch(Exception e)
+  {
+   if(!(e is ArgumentException)&&!(e is FormatException)&&!(e is OverflowException)&&!(e is IndexOutOfRangeException))throw;
+   r.Status="UnverifiedInvalidOrUnsupportedJSON";r.Equivalent=null;r.Reason=e.GetType().Name+": "+e.Message;
+  }
+  return r;
+ }
+}
+
+public static class CreateOnly40
+{
+ public static void Text(string path,string text)
+ {using(var f=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read))using(var w=new StreamWriter(f,new UTF8Encoding(false))){w.Write(text);w.Flush();f.Flush(true);}}
+}
+
+public static class NativeSnapshot40
+{
+ public static Arr40 Backup(string root)
+ {
+  var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var rows=new Arr40();bool player=false;int i=0;
+  foreach(var o in all.Where(x=>x&&EditorUtility.IsPersistent(x)).OrderBy(x=>AssetDatabase.GetAssetPath(x)))
+  {
+   string path=AssetDatabase.GetAssetPath(o);if(!path.StartsWith("Assets/")&&!path.StartsWith("ProjectSettings/"))continue;
+   if(!EditorUtility.IsDirty(o)&&!path.StartsWith("ProjectSettings/"))continue;
+   bool dirty=EditorUtility.IsDirty(o);string name="native-before-"+(i++)+".json";string file=Path.Combine(root,name);if(File.Exists(file))throw new IOException("Snapshot already exists");
+   string text=EditorJsonUtility.ToJson(o);CreateOnly40.Text(file,text);var c=SerializedContent40.Verify(file,text);if(c.Equivalent!=true)throw new IOException("Native backup failed: "+path);
+   rows.Add(new Obj40{["path"]=path,["type"]=o.GetType().FullName,["entityId"]=o.GetEntityId().ToString(),["snapshot"]=name,["sha256"]=c.BeforeSHA256,["bytes"]=c.BeforeBytes,["dirtyBefore"]=dirty,["dirtyAfter"]=EditorUtility.IsDirty(o)});
+   if(o is PlayerSettings)player=true;
+  }
+  if(!player)throw new InvalidOperationException("Full loaded PlayerSettings snapshot unavailable; no Play");
+  CreateOnly40.Text(Path.Combine(root,"NATIVE_BEFORE73.json"),rows.ToString());return rows;
+ }
+ public static Arr40 Compare(string root,Arr40 rows)
+ {
+  var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var checks=new Arr40();
+  foreach(Obj40 row in rows)
+  {
+   string path=(string)row["path"],type=(string)row["type"];var o=all.FirstOrDefault(x=>x&&AssetDatabase.GetAssetPath(x)==path&&x.GetType().FullName==type);
+   if(!o){checks.Add(new Obj40{["path"]=path,["type"]=type,["status"]="Unavailable",["equal"]=null});continue;}
+   var c=SerializedContent40.Verify(Path.Combine(root,(string)row["snapshot"]),EditorJsonUtility.ToJson(o));checks.Add(new Obj40{["path"]=path,["type"]=type,["status"]=c.Status,["equal"]=c.Equivalent.HasValue?(Json40)c.Equivalent.Value:null,["beforeSHA"]=c.BeforeSHA256,["afterSHA"]=c.AfterSHA256,["dirty"]=EditorUtility.IsDirty(o)});
+  }
+  return checks;
+ }
+}
+
+// Prepared only; not imported, compiled in Unity, or executed in task64.
+// Public journal + externally hashed binary backup, never private-instance-only.
+
+public sealed class GlobalJournal40
+{
+    public enum Kind { Float,LegacyInt,Integer,Vector,Matrix,Texture,FloatArray,VectorArray,MatrixArray,Buffer,ConstantBuffer }
+    public sealed class Spec {public string name;public Kind kind;}
+    public sealed class Entry
+    {
+        public Spec spec;public float scalar;public int integer;public Vector4 vector;public Matrix4x4 matrix;
+        public float[] floats;public Vector4[] vectors;public Matrix4x4[] matrices;
+        public Texture originalTexture;public string textureKind,assetGUID;public long localId;
+        public bool restorable,mutated;public string reason;
+    }
+    public static GlobalJournal40 Active;
+    public readonly List<Entry> entries=new List<Entry>();
+    public string sourceId,externalPath,backupSHA256;
+    public bool externalVerified;
+
+    public static GlobalJournal40 Snapshot(string sourceId,string path,IEnumerable<Spec> specs)
+    {
+        if(Active!=null)throw new InvalidOperationException("existing journal requires inspection, not replacement");
+        var j=new GlobalJournal40{sourceId=sourceId,externalPath=path};
+        foreach(var s in specs)
+        {
+            if(j.entries.Any(e=>e.spec.name==s.name))throw new ArgumentException("duplicate global name");
+            var e=new Entry{spec=s,restorable=true};
+            switch(s.kind)
+            {
+                case Kind.Float:e.scalar=Shader.GetGlobalFloat(s.name);break;
+                // Legacy SetGlobalInt uses float storage in Unity6000.5. Keep
+                // the full original float, not only its integer truncation.
+                case Kind.LegacyInt:e.scalar=Shader.GetGlobalFloat(s.name);e.integer=Shader.GetGlobalInt(s.name);break;
+                case Kind.Integer:e.integer=Shader.GetGlobalInteger(s.name);break;
+                case Kind.Vector:e.vector=Shader.GetGlobalVector(s.name);break;
+                case Kind.Matrix:e.matrix=Shader.GetGlobalMatrix(s.name);break;
+                case Kind.FloatArray:e.floats=Shader.GetGlobalFloatArray(s.name);e.restorable=e.floats!=null&&e.floats.Length>0;break;
+                case Kind.VectorArray:e.vectors=Shader.GetGlobalVectorArray(s.name);e.restorable=e.vectors!=null&&e.vectors.Length>0;break;
+                case Kind.MatrixArray:e.matrices=Shader.GetGlobalMatrixArray(s.name);e.restorable=e.matrices!=null&&e.matrices.Length>0;break;
+                case Kind.Texture:
+                    e.originalTexture=Shader.GetGlobalTexture(s.name);
+                    if(!e.originalTexture)e.textureKind="null";
+                    else if(e.originalTexture==Texture2D.blackTexture)e.textureKind="builtin-black";
+                    else if(e.originalTexture==Texture2D.whiteTexture)e.textureKind="builtin-white";
+                    else if(e.originalTexture==Texture2D.grayTexture)e.textureKind="builtin-gray";
+                    else {e.restorable=EditorUtility.IsPersistent(e.originalTexture)&&AssetDatabase.TryGetGUIDAndLocalFileIdentifier(e.originalTexture,out e.assetGUID,out e.localId);e.textureKind=e.restorable?"persistent-asset":"runtime-unrecoverable";}
+                    break;
+                case Kind.Buffer:case Kind.ConstantBuffer:e.restorable=false;e.reason="No public Shader global binding getter; do not mutate";break;
+            }
+            if(!e.restorable&&string.IsNullOrEmpty(e.reason))e.reason="absent/zero array or runtime-only texture; do not mutate";
+            j.entries.Add(e);
+        }
+        j.WriteExternal();Active=j;return j;
+    }
+
+    static void Matrix(BinaryWriter w,Matrix4x4 m){for(int c=0;c<4;c++)for(int r=0;r<4;r++)w.Write(m[r,c]);}
+    static void Vector(BinaryWriter w,Vector4 v){w.Write(v.x);w.Write(v.y);w.Write(v.z);w.Write(v.w);}
+    void WriteExternal()
+    {
+        using(var stream=new FileStream(externalPath,FileMode.CreateNew,FileAccess.Write,FileShare.Read))
+        using(var w=new BinaryWriter(stream))
+        {
+            w.Write(0x34364a47);w.Write(1);w.Write(sourceId);w.Write(entries.Count);
+            foreach(var e in entries)
+            {
+                w.Write(e.spec.name);w.Write((int)e.spec.kind);w.Write(e.restorable);w.Write(e.reason??"");
+                w.Write(e.scalar);w.Write(e.integer);Vector(w,e.vector);Matrix(w,e.matrix);
+                w.Write(e.textureKind??"");w.Write(e.assetGUID??"");w.Write(e.localId);
+                w.Write(e.floats?.Length??0);if(e.floats!=null)foreach(var v in e.floats)w.Write(v);
+                w.Write(e.vectors?.Length??0);if(e.vectors!=null)foreach(var v in e.vectors)Vector(w,v);
+                w.Write(e.matrices?.Length??0);if(e.matrices!=null)foreach(var v in e.matrices)Matrix(w,v);
+            }
+            w.Flush();stream.Flush(true);
+        }
+        using(var h=SHA256.Create())using(var f=File.OpenRead(externalPath))backupSHA256=BitConverter.ToString(h.ComputeHash(f)).Replace("-","").ToLowerInvariant();
+        externalVerified=VerifyExternal();
+        if(!externalVerified)throw new IOException("external backup verification failed");
+    }
+
+    static bool Bits(float a,float b){return BitConverter.SingleToInt32Bits(a)==BitConverter.SingleToInt32Bits(b);}
+    static bool VectorBits(Vector4 a,Vector4 b){for(int i=0;i<4;i++)if(!Bits(a[i],b[i]))return false;return true;}
+    static bool MatrixBits(Matrix4x4 a,Matrix4x4 b){for(int i=0;i<16;i++)if(!Bits(a[i],b[i]))return false;return true;}
+    static bool ReadVector(BinaryReader r,Vector4 expected){for(int i=0;i<4;i++)if(!Bits(r.ReadSingle(),expected[i]))return false;return true;}
+    static bool ReadMatrix(BinaryReader r,Matrix4x4 expected){for(int c=0;c<4;c++)for(int row=0;row<4;row++)if(!Bits(r.ReadSingle(),expected[row,c]))return false;return true;}
+    bool VerifyExternal()
+    {
+        using(var r=new BinaryReader(File.OpenRead(externalPath)))
+        {
+            if(r.ReadInt32()!=0x34364a47||r.ReadInt32()!=1||r.ReadString()!=sourceId||r.ReadInt32()!=entries.Count)return false;
+            foreach(var e in entries)
+            {
+                if(r.ReadString()!=e.spec.name||r.ReadInt32()!=(int)e.spec.kind||r.ReadBoolean()!=e.restorable||r.ReadString()!=(e.reason??""))return false;
+                if(!Bits(r.ReadSingle(),e.scalar)||r.ReadInt32()!=e.integer||!ReadVector(r,e.vector)||!ReadMatrix(r,e.matrix))return false;
+                if(r.ReadString()!=(e.textureKind??"")||r.ReadString()!=(e.assetGUID??"")||r.ReadInt64()!=e.localId)return false;
+                if(r.ReadInt32()!=(e.floats?.Length??0))return false;if(e.floats!=null)foreach(float v in e.floats)if(!Bits(r.ReadSingle(),v))return false;
+                if(r.ReadInt32()!=(e.vectors?.Length??0))return false;if(e.vectors!=null)foreach(var v in e.vectors)if(!ReadVector(r,v))return false;
+                if(r.ReadInt32()!=(e.matrices?.Length??0))return false;if(e.matrices!=null)foreach(var v in e.matrices)if(!ReadMatrix(r,v))return false;
+            }
+            return r.BaseStream.Position==r.BaseStream.Length;
+        }
+    }
+
+    // Call on the ENTIRE renderer mutation inventory before normal Play/render.
+    // This does not intercept or excuse untracked setters inside product passes.
+    public void RequireRecoverable(IEnumerable<string> mutationNames)
+    {
+        if(!externalVerified)throw new InvalidOperationException("external backup not verified");
+        foreach(string name in mutationNames)
+        {var e=entries.SingleOrDefault(x=>x.spec.name==name);if(e==null||!e.restorable)throw new InvalidOperationException("unbacked global mutation: "+name);}
+    }
+    public void BeforeMutation(string name,int newArrayLength=-1)
+    {
+        RequireRecoverable(new[]{name});var e=entries.Single(x=>x.spec.name==name);
+        int old=e.floats?.Length??e.vectors?.Length??e.matrices?.Length??-1;
+        if(newArrayLength>=0&&newArrayLength!=old)throw new InvalidOperationException("global array length change forbidden");
+        e.mutated=true;
+    }
+    public void RestoreMarked()
+    {
+        // No buffer setters. Assets and built-ins are retained references, never
+        // destroyed/recreated from a guessed EntityId or surrounding colours.
+        foreach(var e in entries.Where(x=>x.mutated))
+        {
+            if(!e.restorable)throw new InvalidOperationException("unrestorable global: "+e.spec.name);
+            string n=e.spec.name;
+            switch(e.spec.kind)
+            {
+                case Kind.Float:Shader.SetGlobalFloat(n,e.scalar);break;
+                case Kind.LegacyInt:Shader.SetGlobalFloat(n,e.scalar);break;
+                case Kind.Integer:Shader.SetGlobalInteger(n,e.integer);break;
+                case Kind.Vector:Shader.SetGlobalVector(n,e.vector);break;
+                case Kind.Matrix:Shader.SetGlobalMatrix(n,e.matrix);break;
+                case Kind.Texture:
+                    if(e.textureKind!="null"&&!e.originalTexture)throw new InvalidOperationException("original texture lifetime lost");
+                    Shader.SetGlobalTexture(n,e.originalTexture);break;
+                case Kind.FloatArray:Shader.SetGlobalFloatArray(n,e.floats);break;
+                case Kind.VectorArray:Shader.SetGlobalVectorArray(n,e.vectors);break;
+                case Kind.MatrixArray:Shader.SetGlobalMatrixArray(n,e.matrices);break;
+                default:throw new InvalidOperationException("unsupported restore type");
+            }
+        }
+        // Getter-by-getter equality verification is a required caller step before
+        // clearing Active; this helper does not clear the only recovery handle.
+    }
+    public string[] VerifyMarked()
+    {
+        var errors=new List<string>();
+        foreach(var e in entries.Where(x=>x.mutated))
+        {
+            string n=e.spec.name;bool same=false;
+            switch(e.spec.kind)
+            {
+                case Kind.Float:case Kind.LegacyInt:same=Bits(Shader.GetGlobalFloat(n),e.scalar);break;
+                case Kind.Integer:same=Shader.GetGlobalInteger(n)==e.integer;break;
+                case Kind.Vector:same=VectorBits(Shader.GetGlobalVector(n),e.vector);break;
+                case Kind.Matrix:same=MatrixBits(Shader.GetGlobalMatrix(n),e.matrix);break;
+                case Kind.Texture:same=Shader.GetGlobalTexture(n)==e.originalTexture;break;
+                case Kind.FloatArray:var a=Shader.GetGlobalFloatArray(n);same=a!=null&&a.Length==e.floats.Length&&a.Zip(e.floats,Bits).All(v=>v);break;
+                case Kind.VectorArray:var b=Shader.GetGlobalVectorArray(n);same=b!=null&&b.Length==e.vectors.Length&&b.Zip(e.vectors,VectorBits).All(v=>v);break;
+                case Kind.MatrixArray:var c=Shader.GetGlobalMatrixArray(n);same=c!=null&&c.Length==e.matrices.Length&&c.Zip(e.matrices,MatrixBits).All(v=>v);break;
+            }
+            if(!same)errors.Add(n);
+        }
+        return errors.ToArray();
+    }
+    public void ReleaseHandleAfterVerified()
+    {
+        if(!externalVerified||VerifyMarked().Length!=0)throw new InvalidOperationException("restore not verified; preserve recovery handle");
+        // Drop only journal references, never Dispose/Destroy original textures
+        // or user buffers. No forced GC. External backup stays on disk.
+        entries.Clear();if(Active==this)Active=null;
+    }
+}
+
+internal class CommandScript:IRunCommand {
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\face100\import\import";const string Source=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\resume-20261111\SourceFootprint100.shader";const string Target="Assets/EUnityValidation01/SourceFootprint100/SourceFootprint100.shader";
+ public void Execute(ExecutionResult result){CreateOnly40.Text(Path.Combine(Root,"STARTED.json"),DateTime.UtcNow.ToString("O"));var report=new Obj40();try{
+ if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating||Enumerable.Range(0,SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Any(s=>s.isDirty))throw new InvalidOperationException("81 stable clean Edit required");
+ if(File.Exists(Target)||File.Exists(Target+".meta")||AssetDatabase.IsValidFolder("Assets/EUnityValidation01/SourceFootprint100"))throw new InvalidOperationException("81 create-only destination already exists; do not overwrite");
+ var expected=Json40.Parse(File.ReadAllText(Path.Combine(Root,"EXPECTED.json")));string guid=null;
+ Func<byte[],string> hash=b=>{using(var d=SHA256.Create())return BitConverter.ToString(d.ComputeHash(b)).Replace("-","").ToLowerInvariant();};byte[] bytes=File.ReadAllBytes(Source);if(hash(bytes)!=(string)expected["shaderSHA256"])throw new InvalidOperationException("81 prepared shader differs");
+ var before=NativeSnapshot40.Backup(Root);var input=InputSystem.settings;string json=JsonUtility.ToJson(input);bool options=EditorSettings.enterPlayModeOptionsEnabled;var flags=EditorSettings.enterPlayModeOptions;
+ string folder=AssetDatabase.CreateFolder("Assets/EUnityValidation01","SourceFootprint100");if(String.IsNullOrEmpty(folder))throw new IOException("81 folder create failed");using(var f=new FileStream(Target,FileMode.CreateNew,FileAccess.Write,FileShare.Read)){f.Write(bytes,0,bytes.Length);f.Flush(true);}AssetDatabase.ImportAsset(Target,ImportAssetOptions.ForceSynchronousImport);
+ guid=AssetDatabase.AssetPathToGUID(Target);if(String.IsNullOrEmpty(guid)||AssetDatabase.GUIDToAssetPath(guid)!=Target)throw new InvalidOperationException("89 Unity-generated asset identity invalid");var shader=AssetDatabase.LoadAssetAtPath<Shader>(Target);if(!shader||ShaderUtil.ShaderHasError(shader)||hash(File.ReadAllBytes(Target))!=hash(bytes)||AssetDatabase.AssetPathToGUID(Target)!=guid)throw new InvalidOperationException("81 shader/import/GUID validation failed");var messages=ShaderUtil.GetShaderMessages(shader);if(messages.Any(m=>m.severity.ToString()=="Error"))throw new InvalidOperationException("81 new shader error");
+ var checks=NativeSnapshot40.Compare(Root,before);if(checks.Any(c=>c["equal"]!=null&&!(bool)c["equal"]))throw new InvalidOperationException("81 existing native content changed");if(!System.Object.ReferenceEquals(input,InputSystem.settings)||JsonUtility.ToJson(input)!=json||options!=EditorSettings.enterPlayModeOptionsEnabled||flags!=EditorSettings.enterPlayModeOptions||EditorApplication.isCompiling)throw new InvalidOperationException("81 input/options/compiler changed");
+ report["utc"]=DateTime.UtcNow.ToString("O");report["shaderSHA256"]=hash(bytes);report["guid"]=guid;report["nativeChecks"]=checks;report["inputOptionsSame"]=true;report["CSharpImport"]=false;report["renderDispatchPlay"]=0;report["shaderMessages"]=new Arr40(messages.Select(m=>new Obj40{["severity"]=m.severity.ToString(),["message"]=m.message}));CreateOnly40.Text(Path.Combine(Root,"COMPLETE.json"),report.ToString());result.Log("81 create-only tiny raster shader imported; existing native/input/options preserved; no Play/GPU submission");
+ }catch(Exception e){report["error"]=e.ToString();CreateOnly40.Text(Path.Combine(Root,"FAILED.json"),report.ToString());result.Log("81 import stopped: "+e.Message);}}
+ }
+}

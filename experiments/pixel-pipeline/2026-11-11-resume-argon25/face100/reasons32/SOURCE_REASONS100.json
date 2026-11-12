@@ -1,0 +1,362 @@
+{
+  "actualFrames": 32,
+  "sourceReasonsMatchUnchangedKnownGateEveryCell": true,
+  "knownLUTValidEveryCell": true,
+  "unknownControlAnd98BOutputExact": true,
+  "counts": {
+    "nativeVisibleFace": 584,
+    "knownLUT": 480,
+    "unknown": 104,
+    "unknownEyeDomain": 81,
+    "unknownOrdinaryDomain": 23
+  },
+  "countMaskUsesRawFaceRoleAndVisibleActorNotFinalFaceOwner": true,
+  "countsAreNotProofOfMissingVisibleFacePalette": true,
+  "finalOwnerRoleNotInThisPacket": true,
+  "unknownExactFlagGroups": {
+    "9": 20,
+    "289": 4,
+    "385": 33,
+    "416": 23,
+    "417": 24
+  },
+  "cooccurringReasonsNotDisjoint": {
+    "eyeDomain": 81,
+    "nativeCellNotActor": 0,
+    "nativeCellCoordinate": 0,
+    "mainSourceVsNativeOwner": 20,
+    "selectedRole": 0,
+    "selectedVsHeadUV": 51,
+    "headVsMainUV": 0,
+    "headVsSelectedShade": 80,
+    "mainVsSelectedRoleOwnerPrimitive": 84
+  },
+  "firstExamples": [
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        8,
+        7
+      ],
+      "flags": 417,
+      "reasons": [
+        "eyeDomain",
+        "selectedVsHeadUV",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 2056,
+      "uv": [
+        0.35336974263191223,
+        0.39361336827278137
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        9,
+        7
+      ],
+      "flags": 417,
+      "reasons": [
+        "eyeDomain",
+        "selectedVsHeadUV",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 2150,
+      "uv": [
+        0.39204180240631104,
+        0.40071797370910645
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        15,
+        7
+      ],
+      "flags": 417,
+      "reasons": [
+        "eyeDomain",
+        "selectedVsHeadUV",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 1151,
+      "uv": [
+        0.6141869425773621,
+        0.40708351135253906
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        16,
+        7
+      ],
+      "flags": 417,
+      "reasons": [
+        "eyeDomain",
+        "selectedVsHeadUV",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 1087,
+      "uv": [
+        0.6525247693061829,
+        0.4016392230987549
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        17,
+        7
+      ],
+      "flags": 385,
+      "reasons": [
+        "eyeDomain",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 1071,
+      "uv": [
+        0.6845445036888123,
+        0.38146793842315674
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        7,
+        8
+      ],
+      "flags": 9,
+      "reasons": [
+        "eyeDomain",
+        "mainSourceVsNativeOwner"
+      ],
+      "domainX": 1.0,
+      "primitive": 2058,
+      "uv": [
+        0.3063583970069885,
+        0.4125177562236786
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        10,
+        8
+      ],
+      "flags": 385,
+      "reasons": [
+        "eyeDomain",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 2178,
+      "uv": [
+        0.42449983954429626,
+        0.4466145932674408
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        14,
+        8
+      ],
+      "flags": 9,
+      "reasons": [
+        "eyeDomain",
+        "mainSourceVsNativeOwner"
+      ],
+      "domainX": 1.0,
+      "primitive": 3169,
+      "uv": [
+        0.5814608931541443,
+        0.45528295636177063
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        17,
+        8
+      ],
+      "flags": 9,
+      "reasons": [
+        "eyeDomain",
+        "mainSourceVsNativeOwner"
+      ],
+      "domainX": 1.0,
+      "primitive": 1108,
+      "uv": [
+        0.6945299506187439,
+        0.4263719916343689
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        14,
+        9
+      ],
+      "flags": 385,
+      "reasons": [
+        "eyeDomain",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 2737,
+      "uv": [
+        0.5847936272621155,
+        0.5108828544616699
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        7,
+        10
+      ],
+      "flags": 9,
+      "reasons": [
+        "eyeDomain",
+        "mainSourceVsNativeOwner"
+      ],
+      "domainX": 1.0,
+      "primitive": 2239,
+      "uv": [
+        0.30550310015678406,
+        0.514599621295929
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        8,
+        10
+      ],
+      "flags": 385,
+      "reasons": [
+        "eyeDomain",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 2251,
+      "uv": [
+        0.34493488073349,
+        0.5330302119255066
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot0/frame102/generation2",
+      "frame": 102,
+      "xy": [
+        17,
+        10
+      ],
+      "flags": 385,
+      "reasons": [
+        "eyeDomain",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 2788,
+      "uv": [
+        0.6955825686454773,
+        0.5291279554367065
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot1/frame103/generation2",
+      "frame": 103,
+      "xy": [
+        8,
+        8
+      ],
+      "flags": 417,
+      "reasons": [
+        "eyeDomain",
+        "selectedVsHeadUV",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 2056,
+      "uv": [
+        0.35195648670196533,
+        0.39445123076438904
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot1/frame103/generation2",
+      "frame": 103,
+      "xy": [
+        9,
+        8
+      ],
+      "flags": 417,
+      "reasons": [
+        "eyeDomain",
+        "selectedVsHeadUV",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 2150,
+      "uv": [
+        0.39077645540237427,
+        0.40174609422683716
+      ]
+    },
+    {
+      "sourceId": "face100-reasons-20261112T152205529Z-0df6790a/slot1/frame103/generation2",
+      "frame": 103,
+      "xy": [
+        15,
+        8
+      ],
+      "flags": 417,
+      "reasons": [
+        "eyeDomain",
+        "selectedVsHeadUV",
+        "headVsSelectedShade",
+        "mainVsSelectedRoleOwnerPrimitive"
+      ],
+      "domainX": 1.0,
+      "primitive": 1151,
+      "uv": [
+        0.6134570837020874,
+        0.408427894115448
+      ]
+    }
+  ],
+  "reasonsExplainThisNewSourceOnlyNotOld960Frames": true,
+  "selectionGateRelaxed": false,
+  "artOrSegmentationCompleted": false
+}

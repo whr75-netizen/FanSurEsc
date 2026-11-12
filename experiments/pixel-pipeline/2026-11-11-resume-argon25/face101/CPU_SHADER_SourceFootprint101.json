@@ -1,0 +1,32 @@
+{
+  "CPUOnly": true,
+  "GPUDeviceCreated": false,
+  "shaderSHA256": "c0a5bec4d77813771c47567dc6c02108bc9eb3645b3e53301f0b007e8233884e",
+  "readbackBytes": 259584,
+  "newPasses": 0,
+  "replacesExistingSourceOrPacketPass": true,
+  "newSourceReasonPlaneOnly": 14,
+  "runtimeCompiled": true,
+  "rows": [
+    {
+      "entry": "Full96",
+      "audit": {
+        "instructions": 9,
+        "loops": 0,
+        "privateArrays": 0,
+        "threadGroups": 0
+      },
+      "warnings": ""
+    },
+    {
+      "entry": "Read96",
+      "audit": {
+        "instructions": 264,
+        "loops": 0,
+        "privateArrays": 0,
+        "threadGroups": 0
+      },
+      "warnings": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint101.shader(12,36-45): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint101.shader(12,47-56): warning X3556: integer divides may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint101.shader(13,56-61): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint101.shader(13,63-68): warning X3556: integer divides may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint101.shader(14,27-51): warning X3556: integer divides may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint101.shader(14,60-84): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint101.shader(14,98-108): warning X3556: integer modulus may be much slower, try using uints if possible.\nC:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\SourceFootprint101.shader(14,110-120): warning X3556: integer divides may be much slower, try using uints if possible.\n\u0000"
+    }
+  ]
+}

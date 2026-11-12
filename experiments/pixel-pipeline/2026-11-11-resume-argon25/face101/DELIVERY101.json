@@ -1,0 +1,29 @@
+{
+  "localPath": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face101\\source32\\SOURCE_VIEW101.png",
+  "result": {
+    "operation": "create_library_file",
+    "status": "succeeded",
+    "path": "/SOURCE_VIEW101.png",
+    "file_id": "file_00000000f4bc81f585f2cdcfb85c8f1b",
+    "library_file_id": "libfile_fde3_f-4fa2ca160648819183d93ca3c2423f14_63ba02b4784c8191890f3a4c58eb6764",
+    "file_name": "SOURCE_VIEW101.png",
+    "current_version_number": 0,
+    "restored_from_version_number": null,
+    "xattrs": [
+      {
+        "name": "user.library-file-version",
+        "value": "0"
+      }
+    ],
+    "directory_id": "personal-root:v1",
+    "mime_type": "image/png",
+    "library_artifact_type": "image",
+    "file_size_bytes": 27287,
+    "external_connectors_accessed": false
+  },
+  "metadataResult": {
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face96\\library-current96\\library_file_transfer.py\", line 419, in <module>\n    raise SystemExit(main(sys.argv[1:]))\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face96\\library-current96\\library_file_transfer.py\", line 406, in main\n    materializer.apply_xattrs(\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face96\\library-current96\\library_file_transfer.py\", line 335, in apply_xattrs\n    xattr.apply(path)\n  File \"C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\resume-20261111\\face96\\library-current96\\library_file_transfer.py\", line 152, in apply\n    os.setxattr(path, self.name, encoded_value)\nAttributeError: module 'os' has no attribute 'setxattr'\n"
+  }
+}

@@ -1,0 +1,44 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public sealed partial class SourceOutline40 {
+ void ExportActor96(){
+  string materialFile=Path.Combine(root77,"ACTOR_MATERIALS96.json");
+  if(!File.Exists(materialFile)){
+   var textures=new List<Texture2D>();var entries=new Arr40();long totalTexels=0;
+   for(int r=0;r<originals.Length;r++)for(int s=0;s<originals[r].Length;s++){
+    var m=originals[r][s];var t=m.GetTexture("_MainTex")as Texture2D;int index=-1;
+    if(t){index=textures.IndexOf(t);if(index<0){index=textures.Count;textures.Add(t);totalTexels+=(long)t.width*t.height;}}
+    var scale=m.GetTextureScale("_MainTex");var offset=m.GetTextureOffset("_MainTex");var color=m.GetColor("_Color");
+    float F(string name)=>m.HasProperty(name)?m.GetFloat(name):0;
+    entries.Add(new Obj40{["renderer"]=r,["submesh"]=s,["materialAsset"]=AssetDatabase.GetAssetPath(m),["materialName"]=m.name,["texture"]=index,["color"]=new Arr40(color.r,color.g,color.b,color.a),["scale"]=new Arr40(scale.x,scale.y),["offset"]=new Arr40(offset.x,offset.y),["cutoff"]=F("_Cutoff"),["alphaMode"]=F("_AlphaMode"),["cull"]=F("_M_CullMode"),["zWrite"]=F("_M_ZWrite"),["alphaTest"]=m.IsKeywordEnabled("_ALPHATEST_ON"),["alphaBlend"]=m.IsKeywordEnabled("_ALPHABLEND_ON"),["scroll"]=new Arr40(F("_UvAnimScrollXSpeed"),F("_UvAnimScrollYSpeed"),F("_UvAnimRotationSpeed"))});
+   }
+   if(textures.Count>16||totalTexels>16777216)throw new InvalidOperationException("96 bounded source texture metadata before copy");
+   var images=new Arr40();int ti=0;
+   foreach(var t in textures){
+    var info=new Obj40{["index"]=ti,["name"]=t.name,["asset"]=AssetDatabase.GetAssetPath(t),["width"]=t.width,["height"]=t.height,["format"]=t.format.ToString(),["readable"]=t.isReadable,["mipCount"]=t.mipmapCount,["filter"]=t.filterMode.ToString(),["wrapU"]=t.wrapModeU.ToString(),["wrapV"]=t.wrapModeV.ToString(),["imageHash"]=t.imageContentsHash.ToString(),["updateCount"]=t.updateCount};
+    bool format=t.format==TextureFormat.RGBA32||t.format==TextureFormat.BGRA32||t.format==TextureFormat.ARGB32||t.format==TextureFormat.RGB24;
+    if(t.isReadable&&format){
+     var pixels=t.GetPixelData<byte>(0);int stride=t.format==TextureFormat.RGB24?3:4;int alpha=AlphaChannel96.Find(t,pixels,stride);int n=checked(t.width*t.height);if(pixels.Length<n*stride)throw new InvalidOperationException("96 source texture CPU storage ABI");info["alphaChannelVerified"]=true;info["alphaByteOffset"]=alpha;
+     string name="source-alpha96-"+ti+".a8";using(var f=new FileStream(Path.Combine(root77,name),FileMode.CreateNew,FileAccess.Write,FileShare.Read)){var chunk=new byte[32768];for(int at=0;at<n;){int count=Math.Min(chunk.Length,n-at);for(int k=0;k<count;k++)chunk[k]=stride==3?(byte)255:pixels[stride*(at+k)+alpha];f.Write(chunk,0,count);at+=count;}f.Flush(true);}info["alphaFile"]=name;info["alphaBytes"]=n;
+     // GetPixelData is a borrowed CPU view; never Dispose it or the texture.
+    }else info["alphaFile"]=null;
+    images.Add(info);ti++;
+   }
+   CreateOnly40.Text(materialFile,new Obj40{["sourceId"]=FrameKey,["materials"]=entries,["textures"]=images,["newGPUReadback"]=false,["borrowedTexturesReleased"]=false,["alphaTestGlobal"]=Shader.IsKeywordEnabled("_ALPHATEST_ON"),["alphaBlendGlobal"]=Shader.IsKeywordEnabled("_ALPHABLEND_ON")}.ToString());
+  }
+  if(ordinal77!=0&&ordinal77!=38&&ordinal77!=46&&ordinal77!=47)return;
+  long budget=1024;int triangles=0;
+  foreach(var mesh in meshes){budget+=mesh.vertexCount*28L;for(int s=0;s<mesh.subMeshCount;s++){long n=mesh.GetIndexCount(s);budget+=n*4L;triangles+=checked((int)n/3);}}
+  if(budget>4194304||triangles>65536||meshes.Length>16)throw new InvalidOperationException("96 evaluated source export budget");
+  string file="actor-frame"+frame+".s96";
+  using(var b=new BinaryWriter(new FileStream(Path.Combine(root77,file),FileMode.CreateNew,FileAccess.Write,FileShare.Read))){
+   b.Write("actor-source96/v1");b.Write(FrameKey);b.Write(frame);for(int i=0;i<16;i++)b.Write(view[i]);b.Write(meshes.Length);
+   for(int r=0;r<meshes.Length;r++){
+    var m=meshes[r];var v=m.vertices;var uv=m.uv;if(v.Length!=uv.Length)throw new InvalidOperationException("96 source UV absent");b.Write(r);b.Write(v.Length);b.Write(m.subMeshCount);
+    for(int i=0;i<v.Length;i++){var p=matrices[r].MultiplyPoint3x4(v[i]);var q=eye.full.Project(p);foreach(float n in new[]{p.x,p.y,p.z,uv[i].x,uv[i].y,q.x,q.y}){if(!float.IsFinite(n))throw new InvalidOperationException("96 nonfinite source");b.Write(n);}}
+    for(int s=0;s<m.subMeshCount;s++){var ix=m.GetIndices(s);b.Write(s);b.Write(ix.Length);foreach(int i in ix)b.Write(i);}
+   }
+  }
+  FrameInfo40["actorSource96"]=new Obj40{["file"]=file,["sourceId"]=FrameKey,["frame"]=frame,["bytes"]=new FileInfo(Path.Combine(root77,file)).Length,["triangles"]=triangles,["allActorMeshes"]=true,["CPUOnlyExport"]=true};
+ }
+}
+}

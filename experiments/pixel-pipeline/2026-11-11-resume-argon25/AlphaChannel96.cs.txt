@@ -1,0 +1,20 @@
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor {
+public static class AlphaChannel96 {
+ // Format names do not define byte order on every host. Resolve against the
+ // public logical alpha getter; never write or dispose the borrowed CPU view.
+ public static int Find(Texture2D t,NativeArray<byte> data,int stride){
+  if(stride==3)return -1;
+  int options=15,pixels=checked(t.width*t.height);
+  for(int i=0;i<pixels&&(options&(options-1))!=0;i++){
+   int first=-1;bool different=false;
+   for(int c=0;c<4;c++)if((options&(1<<c))!=0){int value=data[stride*i+c];if(first<0)first=value;else if(value!=first)different=true;}
+   if(!different)continue;int alpha=Mathf.RoundToInt(t.GetPixel(i%t.width,i/t.width,0).a*255);
+   for(int c=0;c<4;c++)if((options&(1<<c))!=0&&data[stride*i+c]!=alpha)options&=~(1<<c);
+   if(options==0)throw new InvalidOperationException("96 CPU alpha channel not representable by native8bit byte");
+  }
+  int channel=0;while((options&(1<<channel))==0)channel++;
+  for(int k=0;k<17;k++){int i=(int)((long)k*(pixels-1)/16);if(data[stride*i+channel]!=Mathf.RoundToInt(t.GetPixel(i%t.width,i/t.width,0).a*255))throw new InvalidOperationException("96 public alpha calibration differs");}
+  return channel;
+ }
+}
+}

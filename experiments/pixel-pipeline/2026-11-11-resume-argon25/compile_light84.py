@@ -2,9 +2,9 @@
 import ctypes as C,hashlib,json,re,sys
 from pathlib import Path
 from compile_curve81 import api,graphics_tokens
-H=Path(__file__).resolve().parent;G=H/('face85'if '--85'in sys.argv else'face84')
+H=Path(__file__).resolve().parent;G=H/('face91'if '--91'in sys.argv else'face89'if '--89'in sys.argv else'face85'if '--85'in sys.argv else'face84')
 def main():
- source=(H/('ShadeHistory85.shader'if '--85'in sys.argv else'SelectedLight84.shader')).read_text();block=re.findall('HLSLPROGRAM(.*?)ENDHLSL',source,re.S);assert len(block)==1;data=re.sub(r'(?m)^\s*#pragma[^\r\n]*','',block[0]).encode();dll=C.WinDLL(str(api.DLL),winmode=0x800);f=dll.D3DCompile;f.argtypes=[C.c_void_p,C.c_size_t,C.c_char_p,C.c_void_p,C.c_void_p,C.c_char_p,C.c_char_p,C.c_uint,C.c_uint,C.POINTER(C.c_void_p),C.POINTER(C.c_void_p)];f.restype=C.c_long;buf=C.create_string_buffer(data);rows=[]
+ source=(H/('SourceValue91.shader'if '--91'in sys.argv else'SourceValue89.shader'if '--89'in sys.argv else'ShadeHistory85.shader'if '--85'in sys.argv else'SelectedLight84.shader')).read_text();block=re.findall('HLSLPROGRAM(.*?)ENDHLSL',source,re.S);assert len(block)==1;data=re.sub(r'(?m)^\s*#pragma[^\r\n]*','',block[0]).encode();dll=C.WinDLL(str(api.DLL),winmode=0x800);f=dll.D3DCompile;f.argtypes=[C.c_void_p,C.c_size_t,C.c_char_p,C.c_void_p,C.c_void_p,C.c_char_p,C.c_char_p,C.c_uint,C.c_uint,C.POINTER(C.c_void_p),C.POINTER(C.c_void_p)];f.restype=C.c_long;buf=C.create_string_buffer(data);rows=[]
  for entry,profile in [('V84','vs_5_0'),('F84','ps_5_0')]:
   obj=C.c_void_p();err=C.c_void_p()
   try:

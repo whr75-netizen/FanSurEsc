@@ -1,0 +1,272 @@
+{
+  "sources": {
+    "T3_APERTURE_TRIAL.cs.txt": "20d71d980dd35246238427c62096fdc9db33df09d4d2cdd5030c10ff0f6a6cd3",
+    "T3_NativeAperture154.compute.txt": "83daea5824976e6fa908034a39d77986e8cb60115e1efd395212d31197d62037",
+    "NativeWorldFeature395.cs.txt": "3f6914705daf3b47bac668aabb761f08c62511b1e0f9ee2a7d94893861a202ab",
+    "EyeRenderer367.cs.txt": "0317025b1bf5bd81242afa68c563f069e55cc85d18c1523c99766d421bc39832",
+    "NativeOwnerGraph154.cs.txt": "f9323cb20091fec64f42eca0430ee8f9a3f5fab3ff98f8ca21822fd8b395d2cd",
+    "NativeOwnerOrder154.cs.txt": "762c5916cfad577caba26dd8f95a374bc2dd47fa8df520e7540402787c09389d",
+    "CommonCellProducer.shader.txt": "a665acd5858b46ca64a9a26127a4caa40a1d653d453808e0052a14637b5f8c9a"
+  },
+  "compiler": {
+    "UnityReferences": {
+      "code": 0,
+      "diagnostics": [
+        "T3_APERTURE_TRIAL.cs(2726,10): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+        "warning CS1701: Assuming assembly reference 'netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51' used by 'Newtonsoft.Json' matches identity 'netstandard, Version=2.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51' of 'netstandard', you may need to supply runtime policy",
+        "T3_APERTURE_TRIAL.cs(2768,9): warning CS8321: The local function 'MidCanthus' is declared but never used",
+        "T3_APERTURE_TRIAL.cs(996,82): warning CS0414: The field 'NativeCarrier113.controlConvention' is assigned but its value is never used",
+        "T3_APERTURE_TRIAL.cs(871,82): warning CS0414: The field 'NativeRetarget96.controlConvention' is assigned but its value is never used",
+        "T3_APERTURE_TRIAL.cs(933,82): warning CS0414: The field 'NativeDense107.controlConvention' is assigned but its value is never used"
+      ]
+    },
+    "SelectConnectedOwners154": {
+      "code": 0,
+      "diagnostics": [
+        "R25Trial.fx.hlsl(306,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(315,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(482,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(496,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(792,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(798,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(800,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(814,27): warning X3078: 'j': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(848,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(868,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(873,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(992,20-41): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(992,44-65): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(1012,27-29): warning X3078: 'ray': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(988,21-41): warning X3577: value cannot be infinity, isfinite() may not be necessary.  /Gis may force isfinite() to be performed",
+        "R25Trial.fx.hlsl(988,21-41): warning X3577: value cannot be infinity, isfinite() may not be necessary.  /Gis may force isfinite() to be performed",
+        "R25Trial.fx.hlsl(988,21-41): warning X3577: value cannot be infinity, isfinite() may not be necessary.  /Gis may force isfinite() to be performed",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(850,18-41): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(850,18-41): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(859,22-54): warning X3557: loop doesn't seem to do anything, consider removing [loop]",
+        "R25Trial.fx.hlsl(859,22-54): warning X3551: infinite loop detected - loop writes no values",
+        "R25Trial.fx.hlsl(207,56): warning X4000: use of potentially uninitialized variable (CellPaletteInput154)"
+      ]
+    },
+    "PrepareNativeOwnerRays154": {
+      "code": 0,
+      "diagnostics": [
+        "R25Trial.fx.hlsl(306,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(315,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(482,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(496,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(792,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(798,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(800,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(814,27): warning X3078: 'j': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(848,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(868,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(873,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(992,20-41): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(992,44-65): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(1012,27-29): warning X3078: 'ray': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used"
+      ]
+    },
+    "PresentNativeCommon154": {
+      "code": 0,
+      "diagnostics": [
+        "R25Trial.fx.hlsl(306,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(315,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(482,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(496,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(792,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(798,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(800,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(814,27): warning X3078: 'j': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(848,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(868,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(873,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(992,20-41): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(992,44-65): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(1012,27-29): warning X3078: 'ray': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(207,56): warning X4000: use of potentially uninitialized variable (CellPaletteInput154)"
+      ]
+    },
+    "CaptureWorldStamped154": {
+      "code": 0,
+      "diagnostics": [
+        "R25Trial.fx.hlsl(306,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(315,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(482,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(496,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(792,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(798,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(800,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(814,27): warning X3078: 'j': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(848,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(868,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(873,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(992,20-41): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(992,44-65): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(1012,27-29): warning X3078: 'ray': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used"
+      ]
+    },
+    "Present": {
+      "code": 0,
+      "diagnostics": [
+        "R25Trial.fx.hlsl(306,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(315,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(482,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(496,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(792,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(798,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(800,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(814,27): warning X3078: 'j': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(848,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(868,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(873,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(992,20-41): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(992,44-65): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(1012,27-29): warning X3078: 'ray': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(207,56): warning X4000: use of potentially uninitialized variable (CellPaletteInput154)"
+      ]
+    },
+    "CaptureWorld": {
+      "code": 0,
+      "diagnostics": [
+        "R25Trial.fx.hlsl(306,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(315,31): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(482,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(496,23): warning X3078: 'k': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(792,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(798,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(800,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(814,27): warning X3078: 'j': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(848,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(868,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(873,23): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used",
+        "R25Trial.fx.hlsl(992,20-41): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(992,44-65): warning X3203: signed/unsigned mismatch, unsigned assumed",
+        "R25Trial.fx.hlsl(1012,27-29): warning X3078: 'ray': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used"
+      ]
+    }
+  },
+  "fullArchiveDomain": {
+    "front": {
+      "all": 448,
+      "directNonEye": 366,
+      "solver": 82,
+      "independentSizes": [
+        41,
+        41
+      ]
+    },
+    "quarter": {
+      "all": 498,
+      "directNonEye": 452,
+      "solver": 46,
+      "independentSizes": [
+        23,
+        23
+      ]
+    }
+  },
+  "fullOracle": [
+    "front full reference 448 score 0,0,0,0,126.96053743362427,-75",
+    "quarter full reference 498 score 0,0,0,0,188.0131435394287,-38"
+  ],
+  "exactParity": [
+    "front matched owner, source and palette 448; connected 82; direct 366",
+    "quarter matched owner, source and palette 498; connected 46; direct 452",
+    "cell capacity 256; overflow, duplicate and evaluation cutoff rejected"
+  ],
+  "originalIdentityChecks": [
+    "front identical sample addresses 152",
+    "quarter identical sample addresses 124",
+    "rejected invalid inputs 32"
+  ],
+  "originalParity": [
+    "front matched owner, source and palette 152; connected 82; direct 70",
+    "quarter matched owner, source and palette 124; connected 46; direct 78",
+    "cell capacity 256; overflow, duplicate and evaluation cutoff rejected"
+  ],
+  "runtime": {
+    "unitySubmissions": 0,
+    "actualImages": 0,
+    "productActivated": false,
+    "projectWrite": false
+  },
+  "staticEntryGuards": [
+    "exact opt-in stage before changes",
+    "current owner armed before original Present",
+    "native crop and receipt ABI",
+    "ordered producer and consumer",
+    "failure before PNG"
+  ],
+  "standaloneReplay": {
+    "front": 448,
+    "quarter": 498,
+    "paletteAndOwner": true,
+    "deviceExecuted": false
+  },
+  "whitespaceOnlyUnchangedCompilerTokens": {
+    "CommonCellProducer.shader.txt": [
+      71,
+      115
+    ],
+    "T3_APERTURE_TRIAL.cs.txt": [
+      1194,
+      3517
+    ]
+  }
+}

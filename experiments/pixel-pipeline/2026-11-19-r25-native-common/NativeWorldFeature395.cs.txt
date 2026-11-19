@@ -1,0 +1,126 @@
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering.RenderGraphModule;
+
+// Original world passes remain unchanged. This feature reads their native result.
+public sealed class NativeWorldFeature395:ScriptableRendererFeature
+{
+ Capture capture;Present present;
+ public static NativeOwnerGraph154 GraphOwner154;
+ public static GraphicsBuffer CommonGridReceipt154;
+ // The trial owner provides actual same-frame decisions. Null preserves R24.
+ public sealed class NativeInput154 {
+  public readonly RectInt crop;
+  public readonly GraphicsBuffer owners;
+  public readonly int ticket;
+  public NativeInput154(RectInt crop,GraphicsBuffer owners,int ticket){
+   this.crop=crop;this.owners=owners;this.ticket=ticket;
+  }
+ }
+ public static System.Func<NativeInput154> NativeInputProvider154;
+ public static System.Action<Vector2,Vector2Int,int> BeforeCommonGridDispatch154;
+ public static System.Func<RenderGraph,ContextContainer,RTHandle[]> IntegratedPresentation154;
+ public static System.Func<bool> TryReleaseIntegrated154;
+ public static System.Action<CommandBuffer,RenderTexture> QueueCompletion154;
+ public override void Create(){capture=new Capture{renderPassEvent=(RenderPassEvent)901};present=new Present{renderPassEvent=(RenderPassEvent)601};}
+ public override void AddRenderPasses(ScriptableRenderer renderer,ref RenderingData data){var v=NativePlayer395.Active;if(!v||!v.compute||(!v.gameCamera&&!v.baselineCamera))return;if(data.cameraData.camera==v.gameCamera||data.cameraData.camera==v.baselineCamera){capture.ConfigureInput(ScriptableRenderPassInput.Depth);renderer.EnqueuePass(capture);}else if(v.ready&&data.cameraData.camera==v.localCamera)renderer.EnqueuePass(present);}
+ sealed class Data{public NativeOwnerGraph154 graphOwner;public NativeInput154 nativeInput;public RTHandle[] integrated;public GraphicsBuffer receipt;public bool usesIntegratedShader,trialFinalUse;public NativePlayer395 view;public TextureHandle colour,depth;public Camera camera;}
+ sealed class Capture:ScriptableRenderPass{
+  public override void RecordRenderGraph(RenderGraph graph,ContextContainer frame){
+   var v=NativePlayer395.Active;v.EnsureWorld();var resources=frame.Get<UniversalResourceData>();var camera=frame.Get<UniversalCameraData>();
+   var desc=graph.GetTextureDesc(resources.activeColorTexture);if(desc.width!=960||desc.height!=544)throw new System.Exception("395 native world descriptor changed:"+desc.width+"x"+desc.height);
+   using var builder=graph.AddUnsafePass<Data>("395 retain original native960 world and depth",out var data);
+   data.graphOwner=GraphOwner154;
+   if(data.graphOwner!=null){
+    if(data.graphOwner.View!=v||!data.graphOwner.ForWorldCapture(camera.camera))
+     throw new System.InvalidOperationException("154 unexpected world camera for the same-frame trial");
+    builder.UseBuffer(graph.ImportBuffer(data.graphOwner.WorldProof),AccessFlags.Write);
+    builder.AllowGlobalStateModification(true);
+   }
+   data.view=v;data.colour=resources.activeColorTexture;data.depth=resources.cameraDepthTexture.IsValid()?resources.cameraDepthTexture:resources.activeDepthTexture;data.camera=camera.camera;
+   builder.UseTexture(data.colour);builder.UseTexture(data.depth);builder.UseTexture(graph.ImportTexture(v.world),AccessFlags.Write);builder.UseTexture(graph.ImportTexture(v.worldDepth),AccessFlags.Write);builder.AllowPassCulling(false);
+   builder.SetRenderFunc(static(Data d,UnsafeGraphContext context)=>{var v=d.view;var cmd=CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);var cs=v.compute;int kernel=d.graphOwner==null?cs.FindKernel("CaptureWorld"):d.graphOwner.BindStampedCapture(cmd);RTHandle source=d.colour,depth=d.depth;cmd.SetComputeTextureParam(cs,kernel,"_MainSource395",source.rt);cmd.SetComputeTextureParam(cs,kernel,"_MainDepth395",depth.rt);cmd.SetComputeTextureParam(cs,kernel,"_WorldRW395",v.world.rt);cmd.SetComputeTextureParam(cs,kernel,"_WorldDepthRW395",v.worldDepth.rt);cmd.DispatchCompute(cs,kernel,120,68,1);v.worldView=d.camera.worldToCameraMatrix;v.worldProjection=d.camera.projectionMatrix;v.worldSerial++;});
+  }
+ }
+ sealed class Present:ScriptableRenderPass{
+  public override void RecordRenderGraph(RenderGraph graph,ContextContainer frame){
+   var v=NativePlayer395.Active;var full=v.host.main;var motion=full.motion;var resources=frame.Get<UniversalResourceData>();
+   // The optional observer records its producer here so dependencies
+   // and lifetime precede the one existing Native395 present dispatch.
+   var producer=IntegratedPresentation154;
+   var trial=GraphOwner154;
+   if(trial!=null&&(trial.View!=v||!full.contourReady||NativeInputProvider154!=null))
+    throw new System.InvalidOperationException("154 graph owner and CPU provider cannot share the trial");
+   var provider=full.contourReady&&trial==null?NativeInputProvider154:null;
+   var request=trial==null?provider?.Invoke():new NativeInput154(trial.Crop,trial.Owners,trial.Ticket);
+   if(provider!=null&&request==null)
+    throw new System.InvalidOperationException("154 connected owner has not supplied the same-frame native input");
+   if(request!=null){
+    var c=request.crop;
+    if(producer==null||request.ticket<=0||request.ticket!=v.presentSerial+1||
+        request.owners==null||request.owners.stride!=16||c.x<0||c.y<0||c.width<1||c.height<1||
+        c.xMax>960||c.yMax>544||(long)c.width*c.height>480L*272||
+        request.owners.count!=c.width*c.height||
+        CommonGridReceipt154==null||CommonGridReceipt154.stride!=16||
+        CommonGridReceipt154.count!=3*c.width*c.height||
+        !v.showCharacter||v.nativePixelsPerCell!=2||EyeRenderer367.CommonGridEye154==null)
+     throw new System.InvalidOperationException("154 native input has no matching live owner, bounded targets, or receipt");
+   }
+   var integrated=full.contourReady?producer?.Invoke(graph,frame):null;
+   if(request!=null&&(integrated==null||integrated.Length!=4||
+      System.Array.Exists(integrated,t=>t==null||!t.rt||t.rt.width!=request.crop.width||t.rt.height!=request.crop.height)))
+     throw new System.InvalidOperationException("154 native input is missing the cropped pre-quantization producer");
+
+   if(trial!=null)trial.Record(graph,integrated[1],integrated[2]);
+   using(var builder=graph.AddUnsafePass<Data>("395 existing E cells at original world native samples",out var data)){
+    data.integrated=integrated;data.usesIntegratedShader=producer!=null;
+    data.nativeInput=request;data.graphOwner=trial;
+    if(request!=null)builder.UseBuffer(graph.ImportBuffer(request.owners),AccessFlags.Read);
+    data.trialFinalUse=producer!=null&&full.contourReady;
+    if(integrated!=null)foreach(var texture in integrated)builder.UseTexture(graph.ImportTexture(texture),AccessFlags.Read);
+    data.view=v;
+    data.receipt=CommonGridReceipt154;
+    if(data.receipt!=null){
+     builder.UseBuffer(graph.ImportBuffer(data.receipt),AccessFlags.ReadWrite);
+     var eye=EyeRenderer367.CommonGridEye154;
+     if(eye!=null&&data.integrated!=null)for(int i=0;i<5;i++){
+      builder.UseTexture(graph.ImportTexture(eye.samples[i].meta),AccessFlags.Read);
+      builder.UseTexture(graph.ImportTexture(eye.samples[i].shade),AccessFlags.Read);
+     }
+    }
+    foreach(var texture in new[]{v.world,v.worldDepth,full.colour,full.resolvedMeta,full.resolvedUV,full.domain,full.audit,motion.historyColour,motion.historyMeta,motion.historyUV})builder.UseTexture(graph.ImportTexture(texture));
+    foreach(var texture in new[]{v.output,v.owner,v.cellID,v.depthAudit})builder.UseTexture(graph.ImportTexture(texture),AccessFlags.Write);
+    builder.AllowPassCulling(false);builder.AllowGlobalStateModification(true);
+    builder.SetRenderFunc(static(Data d,UnsafeGraphContext context)=>{var v=d.view;var full=v.host.main;var m=full.motion;var cmd=CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);var cs=v.compute;int kernel=cs.FindKernel(d.nativeInput==null?"Present":"PresentNativeCommon154");
+     if(d.nativeInput!=null){
+      d.graphOwner?.ConsumeOnce();
+      var c=d.nativeInput.crop;
+      cmd.SetComputeIntParams(cs,"_NativeCharacterCrop154",c.x,c.y,c.width,c.height);
+      cmd.SetComputeIntParam(cs,"_NativeOwnerTicket154",d.nativeInput.ticket);
+      cmd.SetComputeBufferParam(cs,kernel,"_NativeConnectedOwners154",d.nativeInput.owners);
+     }
+     void T(string name,RTHandle texture)=>cmd.SetComputeTextureParam(cs,kernel,name,texture.rt);
+     if(d.usesIntegratedShader){
+      cmd.SetComputeIntParam(cs,"_UseIntegrated154",d.integrated!=null?1:0);
+      // The shader ABI remains bound for the ordinary early native pass.
+      T("_IntegratedColour154",d.integrated!=null?d.integrated[0]:full.colour);
+      T("_IntegratedMeta154",d.integrated!=null?d.integrated[1]:full.resolvedMeta);
+      T("_IntegratedLight154",d.integrated!=null?d.integrated[2]:full.resolvedMeta);
+      if(d.receipt!=null){
+       T("_IntegratedSource154",d.integrated!=null?d.integrated[3]:full.resolvedUV);
+       cmd.SetComputeBufferParam(cs,kernel,"_CellReceipt154",d.receipt);
+      }
+     }
+     T("_World395",v.world);T("_WorldDepth395",v.worldDepth);T("_Local395",full.colour);T("_Meta395",full.resolvedMeta);T("_UV395",full.resolvedUV);T("_Domain395",full.domain);T("_Line395",full.audit);T("_History395",m.historyColour);T("_HistoryMeta395",m.historyMeta);T("_HistoryUV395",m.historyUV);T("_Output395",v.output);T("_Owner395",v.owner);T("_CellID395",v.cellID);T("_DepthAudit395",v.depthAudit);
+     v.deliveredDelta=v.manualDelta?v.delta:m.composeDelta;
+     if(d.integrated!=null&&d.receipt!=null)BeforeCommonGridDispatch154?.Invoke(v.deliveredDelta,v.origin,v.nativePixelsPerCell);
+     cmd.SetComputeVectorParam(cs,"_Delta395",new Vector4(v.deliveredDelta.x,v.deliveredDelta.y,0,0));cmd.SetComputeIntParams(cs,"_Origin395",v.origin.x,v.origin.y);cmd.SetComputeIntParam(cs,"_CellScale395",v.nativePixelsPerCell);cmd.SetComputeIntParam(cs,"_Show395",v.showCharacter?1:0);cmd.SetComputeIntParam(cs,"_Capture395",full.capturePending&&full.contourReady?1:0);
+     cmd.SetComputeVectorParam(cs,"_NearFar395",new Vector4(v.gameCamera.nearClipPlane,v.gameCamera.farClipPlane,SystemInfo.usesReversedZBuffer?1:0,0));cmd.SetComputeVectorArrayParam(cs,"_Texel395",m.texelSizes);cmd.SetComputeFloatParam(cs,"_UVTolerance395",m.uvToleranceTexels);cmd.DispatchCompute(cs,kernel,120,68,1);v.presentSerial++;
+     if(d.trialFinalUse)QueueCompletion154?.Invoke(cmd,v.output.rt);
+    });
+   }
+   resources.cameraColor=graph.ImportTexture(v.output);
+  }
+ }
+}

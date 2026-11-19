@@ -1,0 +1,117 @@
+using UnityEngine;using UnityEngine.Rendering;using UnityEngine.Rendering.Universal;using UnityEngine.Rendering.RenderGraphModule;
+public sealed class EyeRenderer367:ScriptableRendererFeature{
+ public static EyeFeature348 CommonGridEye154;
+ public static Material[] CommonGridMaterials154;
+ Samples sample;Candidate resolve;public override void Create(){sample=new Samples{renderPassEvent=(RenderPassEvent)550};resolve=new Candidate{renderPassEvent=(RenderPassEvent)551};}
+ public override void AddRenderPasses(ScriptableRenderer r,ref RenderingData d){var e=HeadLocal367.EyesForCamera(d.cameraData.camera);if(!e||!e.full||e.full.motion.camera!=d.cameraData.camera||(!e.candidateEnabled&&!e.samplesOnly))return;e.Prepare();r.EnqueuePass(sample);if(e.candidateEnabled&&!e.samplesOnly)r.EnqueuePass(resolve);}
+ sealed class Data{public EyeFeature348 e;public int layer;}
+ sealed class Samples:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var e=EyeFeature348.Active;for(int i=0;i<7;i++){using var b=g.AddRasterRenderPass<Data>("348 same-main-grid actual4x4 eye surface "+i,out var d);d.e=e;d.layer=i;var s=e.samples[i];b.SetRenderAttachment(g.ImportTexture(s.rgba),0,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.meta),1,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.point),2,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.uv),3,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.shade),4,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(s.depth),AccessFlags.Write);b.UseAllGlobalTextures(true);var res=f.Get<UniversalResourceData>();if(res.mainShadowsTexture.IsValid())b.UseTexture(res.mainShadowsTexture);if(res.additionalShadowsTexture.IsValid())b.UseTexture(res.additionalShadowsTexture);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);b.SetRenderFunc(static(Data d,RasterGraphContext c)=>{var e=d.e;var v=e.full;var cam=v.motion.camera;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalMatrix("_WorldToHead348",e.headMatrix.inverse);c.cmd.SetGlobalInt("_SupportKind348",d.layer);c.cmd.SetGlobalVector("_ClipShift333",Vector4.zero);c.cmd.SetGlobalVector("_Profile333",v.motion.animation.shadeProfile);c.cmd.SetGlobalVector("_SurfaceInvRaster335",new Vector4(1f/480,1f/272,0,0));c.cmd.SetGlobalFloat("_SurfaceOwnShade335",v.motion.animation.shadeProfile.x);c.cmd.SetGlobalFloat("_ShadeLayer335",v.shadeLayer?1:0);c.cmd.SetGlobalFloat("_SurfaceShadeSteps335",v.surfaceShadeSteps);
+  int tileCount=e.pairedSampling348?7:1;
+  int tileWidth=e.roi.width*4,tileHeight=e.roi.height*4;
+  for(int eye=0;eye<tileCount;eye++){
+   bool backing=e.pairedSampling348&&eye>=4;
+   bool independent=e.pairedSampling348&&((eye>=2&&!backing)||eye==6);
+   if(e.pairedSampling348&&eye==5&&d.layer!=0)continue;
+   Vector2 phase=e.pairedSampling348?e.pairedPhase348[eye&1]:Vector2.zero;
+   if(independent){
+    Vector2 anchor=e.projectedReference348[eye&1];
+    phase=new Vector2(anchor.x-Mathf.Floor(anchor.x)-.5f,anchor.y-Mathf.Floor(anchor.y)-.5f);
+   }
+   if(backing){
+    float flip=GL.GetGPUProjectionMatrix(cam.projectionMatrix,true)[1,1]/cam.projectionMatrix[1,1];
+    Vector4 shift=v.nativeShift-v.motion.clipShift;
+    phase=new Vector2(.125f-240*shift.x,.125f-136*shift.y/flip);
+   }
+   var projection=e.cropProjection;
+   // Shift geometry opposite the desired shift of actual ray locations.
+   projection.SetRow(0,projection.GetRow(0)-projection.GetRow(3)*(2*phase.x/e.roi.width));
+   projection.SetRow(1,projection.GetRow(1)-projection.GetRow(3)*(2*phase.y/e.roi.height));
+   int atlasX=eye*tileWidth;
+   if(e.pairedSampling348)c.cmd.SetViewport(new Rect(atlasX,0,tileWidth,tileHeight));
+   c.cmd.SetViewProjectionMatrices(cam.worldToCameraMatrix,projection);
+   c.cmd.SetGlobalVector("_ROI348",new Vector4(e.roi.x+phase.x-atlasX*.25f,272-e.roi.y-e.roi.height+phase.y,e.roi.width,e.roi.height));
+
+   if(CommonGridEye154==e&&CommonGridMaterials154!=null&&eye==4){
+    if(d.layer<4){
+     int slot=d.layer==0?3:d.layer==1?4:d.layer==2?1:6;
+     c.cmd.DrawMesh(e.sampleFace,v.motion.surface.outputs[1].transform.localToWorldMatrix,
+                    CommonGridMaterials154[d.layer],slot,0);
+     continue;
+    }
+    if(d.layer==4){
+     c.cmd.DrawMesh(e.sampleFace,v.motion.surface.outputs[1].transform.localToWorldMatrix,CommonGridMaterials154[4],5,0);
+     var hair=v.motion.surface.outputs[2];
+     for(int slot=0;slot<4;slot++)c.cmd.DrawMesh(hair.sharedMesh,hair.transform.localToWorldMatrix,CommonGridMaterials154[5+slot],slot,0);
+     continue;
+    }
+   }
+   if(e.pairedSampling348&&d.layer==4&&!HeadRegion502.Ready)continue;
+   if(e.pairedSampling348&&(d.layer==5||d.layer==6))continue;
+   if(d.layer<=3||d.layer==5){int sm=d.layer==0?3:d.layer==1?4:d.layer==2?1:d.layer==3?6:5;var mat=d.layer==0?e.skinMaterial:e.materials[4+sm];var mesh=independent?e.pairedReference348:e.sampleFace;
+    Matrix4x4 transform=independent?e.pairedReferenceDraw348:v.motion.surface.outputs[1].transform.localToWorldMatrix;
+    if(backing&&eye==5){
+     var phaseMesh=v.phases[v.phaseIndex].backing;
+     if(phaseMesh)c.cmd.DrawMesh(phaseMesh,v.providerMatrix,mat,0,0);
+    }else c.cmd.DrawMesh(mesh,transform,mat,sm,0);}else if(d.layer==4&&!HeadRegion502.Ready){var mf=v.motion.surface.outputs[2];for(int sm=0;sm<4;sm++)c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,e.materials[11+sm],sm,0);}else if(d.layer==6){var mf=v.motion.surface.outputs[0];for(int sm=0;sm<4;sm++)c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,e.materials[sm],sm,0);}
+  }
+  if(e.pairedSampling348&&CommonGridEye154==e&&CommonGridMaterials154!=null)
+    NativeWorldFeature395.GraphOwner154?.OnEyeLayerIssued(e,d.layer);
+   if(e.pairedSampling348)c.cmd.SetViewport(new Rect(0,0,tileWidth*7,tileHeight));
+  c.cmd.SetViewProjectionMatrices(cam.worldToCameraMatrix,cam.projectionMatrix);c.cmd.SetGlobalVector("_ClipShift333",v.motion.clipShift);
+ });}}}
+ sealed class Candidate:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var e=EyeFeature348.Active;var v=e.full;using var b=g.AddUnsafePass<Data>("348 source-supported normalized eye features and metadata",out var d);d.e=e;foreach(var s in e.samples)foreach(var t in new[]{s.rgba,s.meta,s.point,s.uv,s.shade})b.UseTexture(g.ImportTexture(t));foreach(var t in new[]{v.layers[8].rgba,v.layers[8].meta,v.layers[10].rgba,v.layers[10].meta,v.layers[6].rgba,v.layers[6].meta,v.layers[7].rgba,v.layers[7].meta,v.motion.raw[5],v.motion.raw[6],v.postLine,v.eyeOwner,v.intrinsic})b.UseTexture(g.ImportTexture(t));foreach(var t in new[]{v.before,v.colour,v.owner,v.preparedMeta,v.preparedUV,v.resolvedMeta,v.resolvedUV,v.domain,e.output,e.owner,e.intrinsic,e.visible,e.histA,e.histB,e.surface,e.pigment,e.audit,e.domain,e.bary,e.supportMeta})b.UseTexture(g.ImportTexture(t),AccessFlags.ReadWrite);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);b.SetRenderFunc(static(Data d,UnsafeGraphContext c)=>Dispatch(d.e,CommandBufferHelpers.GetNativeCommandBuffer(c.cmd)));}}
+ public static void Dispatch(EyeFeature348 e,CommandBuffer cmd){
+  if(e.pairedSampling348){DispatchPaired348(e,cmd);return;}
+  var v=e.full;var cs=e.candidateShader;int k=0;void T(string n,RTHandle t)=>cmd.SetComputeTextureParam(cs,k,n,t.rt);for(int stage19=0;stage19<2;stage19++){if(stage19==0&&(EyeFeature348.UseIrisSurface582||EyeFeature348.UseLashRegion583))continue;k=cs.FindKernel(stage19==0?"CountFeatures19":"Evaluate");cmd.SetComputeBufferParam(cs,k,"_FeatureCounts19",e.featureCounts19);cmd.SetComputeIntParam(cs,"_UseHairRegion502",HeadRegion502.Ready?1:0);cmd.SetComputeIntParam(cs,"_UseIrisSurface582",EyeFeature348.UseIrisSurface582?1:0);cmd.SetComputeIntParam(cs,"_UseLashRegion583",EyeFeature348.UseLashRegion583?1:0);cmd.SetComputeIntParam(cs,"_UseClosedLash590",EyeFeature348.UseClosedLash590?1:0);for(int i=0;i<7;i++){var s=e.samples[i];T("_S"+i+"RGBA",s.rgba);T("_S"+i+"META",s.meta);T("_S"+i+"POINT",s.point);T("_S"+i+"UV",s.uv);}T("_S3Shade",e.samples[3].shade);cmd.SetComputeIntParam(cs,"_EyeLayerView348",v.surfaceLayerView);T("_BaseRGBA",v.layers[8].rgba);T("_BaseMETA",v.layers[8].meta);T("_BackingRGBA",v.layers[10].rgba);T("_BackingMETA",v.layers[10].meta);T("_HairRGBA",v.layers[6].rgba);T("_HairMETA",v.layers[6].meta);T("_BrowRGBA",v.layers[7].rgba);T("_BrowMETA",v.layers[7].meta);T("_RawMETA",v.motion.raw[5]);T("_RawUV",v.motion.raw[6]);T("_PostLine",v.postLine);T("_BaselineColour348",v.colour);T("_BaselineOwner348",v.owner);T("_BaselineMeta348",v.preparedMeta);T("_BaselineUV348",v.preparedUV);T("_BaselineDomain348",v.domain);cmd.SetComputeBufferParam(cs,k,"_RecordsWrite348",e.records);cmd.SetComputeBufferParam(cs,k,"_LashGeometry590",e.lashGeometry590);
+  T("_OldEyeOwner",v.eyeOwner);T("_OldIntrinsic",v.intrinsic);cmd.SetComputeMatrixParam(cs,"_WorldToHead348",e.headMatrix.inverse);cmd.SetComputeIntParams(cs,"_ROI348",e.roi.x,272-e.roi.y-e.roi.height,e.roi.width,e.roi.height);cmd.SetComputeVectorArrayParam(cs,"_Centres348",e.centres);cmd.SetComputeVectorArrayParam(cs,"_AxesX348",e.axesX);cmd.SetComputeVectorArrayParam(cs,"_AxesY348",e.axesY);cmd.SetComputeVectorParam(cs,"_UpperLower348",new Vector4(e.style.upper.x,e.style.upper.y,e.style.lower.x,e.style.lower.y));cmd.SetComputeVectorParam(cs,"_Iris348",new Vector4(e.style.irisRadii.x,e.style.irisRadii.y,e.style.irisOffset,e.style.irisPower));cmd.SetComputeVectorParam(cs,"_Catch348",new Vector4(e.style.catchU.x,e.style.catchU.y,e.style.catchV.x,e.style.catchV.y));cmd.SetComputeVectorParam(cs,"_FaceLidShade348",e.faceLidShadeEndpoint);cmd.SetComputeBufferParam(cs,k,"_RestTriangles348",e.restTriangles);cmd.SetComputeVectorArrayParam(cs,"_TriangleRanges348",e.triangleRanges);cmd.SetComputeTextureParam(cs,k,"_TemplateRGBA",v.templateRGBA);cmd.SetComputeTextureParam(cs,k,"_TemplateRole",v.templateRole);
+  for(int i=0;i<2;i++){cmd.SetComputeMatrixParam(cs,"_Inverse348_"+i,v.eyeInverse[i]);cmd.SetComputeVectorParam(cs,"_Plane348_"+i,v.eyePlanes[i]);var b=v.calibration.eyes[i].referenceBounds;cmd.SetComputeIntParams(cs,"_ColourBounds348_"+i,Mathf.FloorToInt(b.x)-1,Mathf.FloorToInt(b.y)-1,Mathf.CeilToInt(b.z)+1,Mathf.CeilToInt(b.w)+1);}cmd.SetComputeVectorParam(cs,"_RayBase348",v.rayBase);cmd.SetComputeVectorParam(cs,"_RayX348",v.rayX);cmd.SetComputeVectorParam(cs,"_RayY348",v.rayY);cmd.SetComputeVectorParam(cs,"_RayDepth348",v.rayDepth);if(stage19==0)cmd.DispatchCompute(cs,k,(e.roi.width+7)/8,(e.roi.height+7)/8,2);else cmd.DispatchCompute(cs,k,60,34,1);}
+  k=cs.FindKernel("UnpackA");cmd.SetComputeBufferParam(cs,k,"_RecordsRead348",e.records);T("_Output348",e.output);T("_Owner348",e.owner);T("_Intrinsic348",e.intrinsic);T("_Visible348",e.visible);T("_HistA348",e.histA);T("_HistB348",e.histB);T("_Surface348",e.surface);T("_Pigment348",e.pigment);cmd.DispatchCompute(cs,k,60,34,1);
+  k=cs.FindKernel("UnpackB");cmd.SetComputeBufferParam(cs,k,"_RecordsRead348",e.records);T("_Audit348",e.audit);T("_Domain348",e.domain);T("_Bary348",e.bary);T("_SupportMeta348",e.supportMeta);cmd.DispatchCompute(cs,k,60,34,1);
+  k=cs.FindKernel("Merge");cmd.SetComputeBufferParam(cs,k,"_RecordsRead348",e.records);T("_Before",v.before);T("_Colour",v.colour);T("_Owner",v.owner);T("_PreparedMeta",v.preparedMeta);T("_PreparedUV",v.preparedUV);T("_ResolvedMeta",v.resolvedMeta);T("_ResolvedUV",v.resolvedUV);T("_OldDomain",v.domain);cmd.DispatchCompute(cs,k,60,34,1);
+
+ }
+
+ static void DispatchPaired348(EyeFeature348 e,CommandBuffer cmd){
+  var cs=e.candidateShader;
+  int k=cs.FindKernel("EvaluatePaired348");
+  void Bind(string name,RTHandle handle)=>cmd.SetComputeTextureParam(cs,k,name,handle.rt);
+  for(int layer=0;layer<4;layer++){
+   var s=e.samples[layer];
+   Bind("_S"+layer+"META",s.meta);
+   if(layer>0){Bind("_S"+layer+"POINT",s.point);Bind("_S"+layer+"RGBA",s.rgba);}
+  }
+  Bind("_S3Shade",e.samples[3].shade);
+  var n=NativePlayer395.Active;
+  var full=e.full;
+  if(!n||n.nativePixelsPerCell!=2||n.origin!=Vector2Int.zero||!full.motion.camera.orthographic)
+   throw new System.InvalidOperationException("Aperture owner requires original orthographic native2");
+  var cam=full.motion.camera;
+  float flip=GL.GetGPUProjectionMatrix(cam.projectionMatrix,true)[1,1]/cam.projectionMatrix[1,1];
+  Vector4 shift=full.nativeShift-full.motion.clipShift;
+  var residue=new Vector2(480*shift.x,272*shift.y/flip);
+  var skin=full.motion.surface.outputs[1];
+  var vertices=e.sampleFace.vertices;
+  Vector2 WorldAnchor(int first,int second){
+   var point=skin.transform.TransformPoint((vertices[first]+vertices[second])*.5f);
+   var clip=n.worldProjection*n.worldView*new Vector4(point.x,point.y,point.z,1);
+   return new Vector2((clip.x/clip.w*.5f+.5f)*960,(clip.y/clip.w*.5f+.5f)*544);
+  }
+  Vector4 Pair(Vector2 a,Vector2 b)=>new Vector4(a.x,a.y,b.x,b.y);
+  var a0=WorldAnchor(2520,2487);var a1=WorldAnchor(1986,1996);
+  var h0=e.pairedLocalAnchors348[0];var h1=e.pairedLocalAnchors348[1];
+  var r0=e.projectedReference348[0];var r1=e.projectedReference348[1];
+  var mapping=2*h0+residue-a0;
+  if((2*h1+residue-a1-mapping).sqrMagnitude>1e-4f)
+   throw new System.InvalidOperationException("Aperture producer does not match physical head pitch");
+  cmd.SetComputeVectorParam(cs,"_ApertureWorldAnchors348",Pair(a0,a1));
+  cmd.SetComputeVectorParam(cs,"_ApertureLocalAnchors348",Pair(h0,h1));
+  cmd.SetComputeVectorParam(cs,"_ApertureReferenceAnchors348",Pair(r0,r1));
+  cmd.SetComputeVectorParam(cs,"_ApertureRefWorldAnchors348",Pair(a0+2*(r0-h0),a1+2*(r1-h1)));
+  cmd.SetComputeVectorParam(cs,"_ApertureWorldToNative348",new Vector4(mapping.x,mapping.y,0,0));
+  Bind("_Output348",e.output);Bind("_Owner348",e.owner);Bind("_Visible348",e.visible);
+  cmd.SetComputeIntParam(cs,"_EyeLayerView348",e.full.surfaceLayerView);
+  cmd.SetComputeIntParams(cs,"_ROI348",e.roi.x,272-e.roi.y-e.roi.height,e.roi.width,e.roi.height);
+  cmd.SetComputeVectorArrayParam(cs,"_Centres348",e.centres);
+  cmd.DispatchCompute(cs,k,(e.roi.width+7)/8,(e.roi.height+7)/8,4);
+ }
+}

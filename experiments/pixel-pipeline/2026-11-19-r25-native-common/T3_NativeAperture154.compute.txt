@@ -1,0 +1,1072 @@
+#pragma kernel CaptureWorld
+#pragma kernel Present
+#pragma kernel PresentNativeCommon154
+#pragma kernel CaptureWorldStamped154
+#pragma kernel PrepareNativeOwnerRays154
+#pragma kernel SelectConnectedOwners154
+Texture2D<float4> _MainSource395,_World395,_Local395,_Meta395,_UV395,_Domain395,_Line395,_History395,_HistoryMeta395,_HistoryUV395;
+Texture2D<float> _MainDepth395,_WorldDepth395;
+RWTexture2D<float4> _WorldRW395,_Output395,_Owner395,_CellID395,_DepthAudit395;
+RWTexture2D<float> _WorldDepthRW395;
+float2 _Delta395;int2 _Origin395;int _Show395,_Capture395,_CellScale395;float4 _NearFar395,_Texel395[16];float _UVTolerance395;
+Texture2D<float4> _LiveEyeColour;
+Texture2D<float4> _LiveEyeOwner;
+Texture2D<float4> _LiveEyeSelected;
+Texture2D<float4> _LiveNativeHead;
+Texture2D<float4> _LiveNativeHeadColour;
+Texture2D<float4> _LiveBackingColour;
+Texture2D<float4> _LiveBackingMeta;
+Texture2D<float4> _LiveSocketColour;
+Texture2D<float4> _LiveSocketMeta;
+Texture2D<float4> _LivePhysicalSkin348,_LivePhysicalSkinMeta348;
+Texture2D<float4> _LiveTemplateColour;
+Texture2D<float4> _LiveTemplateRole;
+float4 _LivePhysicalAnchors;
+float4 _LiveHeadAnchors;
+float4 _LiveHeadMapping; // screen-to-native-head XY, and head-to-world depth Z
+float4 _LivePalettePivots;
+float4x4 _LiveInverse2;
+float4x4 _LiveInverse1;
+int4 _LivePaletteBox;
+int4 _LiveScreenBox;
+int2 _LiveHeadOffset;
+int4 _LiveEyeAtlas348;
+int _LiveEyeFrame, _DebugOldEyeMarker348;
+int _UseIntegrated154, _T3BypassEye154;
+Texture2D<float4> _IntegratedColour154,_IntegratedMeta154,_IntegratedLight154;
+
+bool LiveEyeRole(float code)
+{
+    return code == 2 || code == 5 || code == 7;
+}
+
+bool LiveLogicalAddress(int2 p)
+{
+    return all(p >= 0) && all(p < int2(480, 272));
+}
+
+void RecordLegacyWrite154(int2 pixel);
+
+bool ResolveEyeAperture(int2 pixel, float4 baseOwner, bool baseIsEye)
+{
+    if (any(pixel < _LiveScreenBox.xy) || any(pixel >= _LiveScreenBox.zw))
+        return false;
+    float device = _WorldDepth395.Load(int3(pixel, 0));
+    float worldZ = lerp(_NearFar395.x, _NearFar395.y, _NearFar395.z > .5 ? 1 - device : device);
+    int2 nativeHead = int2(floor(float2(pixel) + .5 + _LiveHeadMapping.xy));
+    float4 head = all(nativeHead >= 0) && all(nativeHead < int2(960, 544)) ?
+        _LiveNativeHead.Load(int3(nativeHead, 0)) : 0;
+    float headZ = head.x > 0 && (round(head.y) == 6 || round(head.y) >= 12) && head.w > 0 ?
+        head.x + _LiveHeadMapping.z : 0;
+    float4 best = 0;
+    float4 owner = 0;
+    int2 localWinner = 0;
+    for (int eye = 2; eye >= 1; eye--)
+    {
+        float2 anchor = eye == 2 ? _LivePhysicalAnchors.xy : _LivePhysicalAnchors.zw;
+        float2 headAnchor = eye == 2 ? _LiveHeadAnchors.xy : _LiveHeadAnchors.zw;
+        int2 local = int2(floor((float2(pixel) + .5 - anchor) / _CellScale395 + .5));
+        if (any(abs(local) > int2(8, 5)))
+            continue;
+        int2 p = int2(floor(headAnchor)) + local;
+        p -= _LiveEyeAtlas348.xy;
+        if (any(p < 0) || any(p >= _LiveEyeAtlas348.zw))
+            continue;
+        p.x += (eye == 2 ? 0 : _LiveEyeAtlas348.z);
+        float4 c = _LiveEyeColour.Load(int3(p, 0));
+        float4 o = _LiveEyeOwner.Load(int3(p, 0));
+        float4 selection = _LiveEyeSelected.Load(int3(p, 0));
+        int role = (int)round(o.x);
+        float z = o.z + _LiveHeadMapping.z;
+        if (c.a <= .5 || !LiveEyeRole(role) || round(o.y) != eye || selection.z <= 0)
+            continue;
+        if (o.w >= 16)
+        {
+            int2 first = int2(ceil(anchor + local * _CellScale395 - 1.5));
+            int2 rel = pixel - first;
+            if (any(rel < 0) || any(rel > 1) ||
+                (((uint)round(o.w) - 16u) & (1u << (rel.x + 2 * rel.y))) == 0)
+                continue;
+        }
+        if (o.w >= 16 && head.x > 0 && LiveEyeRole(round(head.y)))
+            z = head.x + _LiveHeadMapping.z;
+        if (z <= 0 || z > worldZ + .0001 || (headZ > 0 && headZ < z) ||
+            (baseOwner.x >= 8 && baseOwner.x <= 11 && baseOwner.z > 0 && baseOwner.z < z))
+            continue;
+        if (owner.x == 0 || z < owner.z)
+        {
+            best = float4(c.rgb, 1);
+            owner = float4(role, eye, z, selection.w);
+            localWinner = local;
+        }
+    }
+    if (owner.x > 0)
+    {
+        RecordLegacyWrite154(pixel);
+        _Output395[pixel] = best;
+        _Owner395[pixel] = owner;
+        _CellID395[pixel] = float4(localWinner, owner.y, _LiveEyeFrame);
+        _DepthAudit395[pixel] = float4(worldZ, owner.z, 1, 1);
+        return true;
+    }
+    else if (baseIsEye)
+    {
+        int2 q = nativeHead - _LiveEyeAtlas348.xy * 2;
+        float4 m = 0, c = 0;
+        bool phaseBacking = false;
+        if (all(q >= 0) && all(q < _LiveEyeAtlas348.zw * 2))
+        {
+            int2 source = q * 2 + int2(_LiveEyeAtlas348.z * 16, 0);
+            float4 skin = _LivePhysicalSkinMeta348.Load(int3(source, 0));
+            float4 pigment = _LivePhysicalSkin348.Load(int3(source, 0));
+            if (round(skin.y) == 4 && skin.x > 0 && skin.w > .5 && pigment.a > .5)
+            {
+                m = skin;
+                c = pigment;
+            }
+        }
+        if (m.x <= 0 && all(q >= 0) && all(q < _LiveEyeAtlas348.zw * 2))
+        {
+            int2 source = q * 2 + int2(_LiveEyeAtlas348.z * 20, 0);
+            float4 skin = _LivePhysicalSkinMeta348.Load(int3(source, 0));
+            float4 pigment = _LivePhysicalSkin348.Load(int3(source, 0));
+            if (round(skin.y) == 4 && skin.x > 0 && skin.w > .5 && pigment.a > .5)
+            {
+                m = skin;
+                c = pigment;
+                phaseBacking = true;
+            }
+        }
+        bool nonEyeFront = head.x > 0 && (round(head.y) == 4 || round(head.y) == 6 || round(head.y) >= 12);
+        if (nonEyeFront && (m.x <= 0 || head.x < m.x))
+        {
+            float4 native = _LiveNativeHeadColour.Load(int3(nativeHead, 0));
+            if (native.a > .5)
+            {
+                m = head;
+                c = native;
+                phaseBacking = false;
+            }
+        }
+        if (m.x <= 0)
+        {
+            // There is no legal face colour at this ray. Keep actual world,
+            // record the unresolved backing, and never emit the old face eye.
+            RecordLegacyWrite154(pixel);
+        _Output395[pixel] = _World395.Load(int3(pixel, 0));
+            _Owner395[pixel] = 0;
+            _CellID395[pixel] = float4(nativeHead.xy, head.x > 0 && worldZ + .0001 < head.x + _LiveHeadMapping.z ? -9 : -8, _LiveEyeFrame);
+            _DepthAudit395[pixel] = float4(worldZ, 0, 0, 0);
+            return true;
+        }
+        float z = m.x + _LiveHeadMapping.z;
+        bool visible = z <= worldZ + .0001;
+        RecordLegacyWrite154(pixel);
+        _Output395[pixel] = visible ? float4(c.rgb, 1) : _World395.Load(int3(pixel, 0));
+        _Owner395[pixel] = visible ? float4(m.yz, z, 0) : 0;
+        _CellID395[pixel] = float4(nativeHead.xy, visible ? (phaseBacking ? -6 : -4) : -1, _LiveEyeFrame);
+        _DepthAudit395[pixel] = float4(worldZ, z, 1, visible ? 1 : 0);
+        return true;
+    }
+    return false;
+}
+
+// R23 replacement inside the existing Present kernel. No extra output pass.
+int _CommonGrid154;
+Texture2D<float4> _CellWhiteMeta154, _CellIrisMeta154, _CellLashMeta154, _CellHairMeta154;
+Texture2D<float4> _CellSkinInput154, _CellWhiteInput154, _CellIrisInput154, _CellLashInput154, _CellHairInput154;
+Texture2D<float4> _CellPalette154, _IntegratedSource154;
+float4 _CellCutsA154[9], _CellCutsB154[9];
+int _CellPaletteRows154;
+RWStructuredBuffer<uint4> _CellReceipt154;
+static const uint CellPacketStride154 = 3;
+
+struct CellSurface154
+{
+    float4 meta;
+    int2 address;
+    int source;
+    float support;
+};
+
+float Coverage154(float4 m)
+{
+    return m.x > 0 && m.y > .5 ? saturate(m.w) : 0;
+}
+
+float Transmitted154(float4 m, float z)
+{
+    return m.x < z ? 1 - Coverage154(m) : 1;
+}
+
+float4 EyeSampleMeta154(int source, int2 address)
+{
+    if (source == 0) return _LivePhysicalSkinMeta348.Load(int3(address, 0));
+    if (source == 1) return _CellWhiteMeta154.Load(int3(address, 0));
+    if (source == 2) return _CellIrisMeta154.Load(int3(address, 0));
+    return _CellLashMeta154.Load(int3(address, 0));
+}
+
+float4 CellPaletteInput154(CellSurface154 s)
+{
+    int3 p = int3(s.address, 0);
+    if (s.source == 0) return _CellSkinInput154.Load(p);
+    if (s.source == 1) return _CellWhiteInput154.Load(p);
+    if (s.source == 2) return _CellIrisInput154.Load(p);
+    if (s.source == 3) return _CellLashInput154.Load(p);
+    return _CellHairInput154.Load(p);
+}
+
+bool ResolveCellPalette154(float4 input, out int2 rq, out float4 colour)
+{
+    // The producer records unquantized light, the UV region of this very
+    // sample, and its own levels. This is the sole quantization and lookup.
+    int r = (int)input.y;
+    int levels = (int)input.z;
+    rq = 0;
+    colour = 0;
+    if (r <= 0 || r >= _CellPaletteRows154 || levels < 2 || levels > 8 ||
+        input.y != r || input.z != levels || input.w <= 0 || !isfinite(input.x)) return false;
+    int q = 0;
+    float g = saturate(input.x);
+    [unroll] for (int cut = 0; cut < 7; cut++)
+        if (cut < levels - 1)
+            q += g >= (cut < 4 ? _CellCutsA154[levels][min(cut, 3)] :
+                                 _CellCutsB154[levels][max(cut - 4, 0)]);
+    rq = int2(r, q);
+    colour = _CellPalette154.Load(int3(q, r, 0));
+    return colour.a > .5;
+}
+
+uint ReceiptCell154(int2 q)
+{
+    return ((uint)q.y * 480 + (uint)q.x) * CellPacketStride154;
+}
+
+void CommitCharacter154(int2 q, float4 meta, int2 rq, int source,
+                        int2 address, int primitiveOrBinding, float4 colour, bool failed)
+{
+    uint i = ReceiptCell154(q);
+    InterlockedAdd(_CellReceipt154[i].x, 1);
+    if (failed) InterlockedAdd(_CellReceipt154[i].z, 1);
+    _CellReceipt154[i + 1] = uint4(asuint(meta.x), ((uint)rq.x << 8) | (uint)rq.y,
+        (uint)meta.y | ((uint)source << 8) | ((uint)primitiveOrBinding << 16),
+        (uint)address.x | ((uint)address.y << 16));
+    _CellReceipt154[i + 2] = asuint(colour);
+}
+
+void RecordLegacyWrite154(int2 pixel)
+{
+    if (_CommonGrid154 == 0 || _UseIntegrated154 == 0) return;
+    int2 q = int2(floor((float2(pixel)+.5-_Origin395)/_CellScale395-_Delta395));
+    if (LiveLogicalAddress(q))
+        InterlockedAdd(_CellReceipt154[ReceiptCell154(q)].y, 1);
+}
+
+// Store only enough information to choose a representative. Colour is read
+// once from that sample after the cell and its depth have been decided.
+void AccumulateCell154(float4 meta, int2 address, int source, float weight,
+                       inout float total, inout CellSurface154 representative)
+{
+    total += weight;
+    if (weight <= 0) return;
+    if (weight > representative.support ||
+        (weight == representative.support && meta.x < representative.meta.x))
+    {
+        representative.meta = meta;
+        representative.address = address;
+        representative.source = source;
+        representative.support = weight;
+    }
+}
+
+bool CellAperture154(int2 first, out CellSurface154 winner)
+{
+    winner = (CellSurface154)0;
+    float support[5] = { 0, 0, 0, 0, 0 };
+    CellSurface154 sample[5];
+    [unroll] for (int layer = 0; layer < 5; layer++) sample[layer] = (CellSurface154)0;
+    bool hasEye = false;
+    float nearestFront = 1e20;
+    // Project the original eye anchors into the fixed character cell.
+    // The atlas addresses below remain independent of the eye sprite grid.
+    float2 centre = float2(first) + 1;
+    if (any(abs(centre - _LivePhysicalAnchors.xy) > float2(18, 12)) &&
+        any(abs(centre - _LivePhysicalAnchors.zw) > float2(18, 12)))
+        return false;
+    [unroll] for (int i = 0; i < 4; i++)
+    {
+        int2 pixel = first + int2(i & 1, i >> 1);
+        int2 head = int2(floor(float2(pixel) + .5 + _LiveHeadMapping.xy));
+        int2 local = head - _LiveEyeAtlas348.xy * 2;
+        if (any(local < 0) || any(local >= 2 * _LiveEyeAtlas348.zw)) continue;
+        int2 physical = 2 * local + int2(_LiveEyeAtlas348.z * 16, 0);
+        [unroll] for (int j = 0; j < 4; j++)
+        {
+            int2 at = physical + int2(j & 1, j >> 1);
+            float4 nearHead = _CellHairMeta154.Load(int3(at, 0));
+            bool hair = Coverage154(nearHead) > .5 && (nearHead.y == 6 || nearHead.y >= 12);
+            float4 hits[4];
+            [unroll] for (int k = 0; k < 4; k++) hits[k] = EyeSampleMeta154(k, at);
+            float eyeZ = 1e20;
+            [unroll] for (int k = 1; k < 4; k++)
+                if (Coverage154(hits[k]) > .5) eyeZ = min(eyeZ, hits[k].x);
+            hasEye = hasEye || eyeZ < 1e20;
+            if (hair && nearHead.x < eyeZ && (Coverage154(hits[0]) == 0 || nearHead.x < hits[0].x))
+            {
+                AccumulateCell154(nearHead, at, 4, Coverage154(nearHead), support[4], sample[4]);
+                nearestFront = min(nearestFront, nearHead.x);
+                continue;
+            }
+            [unroll] for (int k = 0; k < 4; k++)
+            {
+                float weight = Coverage154(hits[k]);
+                [unroll] for (int l = 0; l < 4; l++)
+                    if (l != k) weight *= Transmitted154(hits[l], hits[k].x);
+                if (hair && nearHead.x < hits[k].x) weight = 0;
+                // An almost fully hidden surface cannot reserve the cell.
+                if (weight <= .5) continue;
+                if (k == 0 && hits[k].x < eyeZ) nearestFront = min(nearestFront, hits[k].x);
+                AccumulateCell154(hits[k], at, k, weight, support[k], sample[k]);
+            }
+        }
+    }
+    if (!hasEye) return false;
+    // The character's hair is resolved here, inside the same cell decision.
+    if (support[4] > 0 && (support[0] == 0 || sample[4].meta.x < sample[0].meta.x))
+    {
+        winner = sample[4];
+        return true;
+    }
+    float best = 0;
+    [unroll] for (int k = 0; k < 5; k++)
+    {
+        // At this pitch a mixed cell cannot show an iris through a genuine
+        // closer foreground without breaking its uniform footprint.
+        if (k >= 1 && k <= 3 && sample[k].meta.x > nearestFront) continue;
+        if (support[k] > best || (support[k] == best && best > 0 && sample[k].meta.x < winner.meta.x))
+        {
+            best = support[k];
+            winner = sample[k];
+        }
+    }
+    return best > 0;
+}
+
+void WriteCommonCell154(int2 first, int2 q, int2 worldSample, float4 baseColour, float4 baseMeta, float4 baseLight, bool baseIsEye)
+{
+    CellSurface154 winner;
+    bool aperture = all(first<_LiveScreenBox.zw) && all(first+1>=_LiveScreenBox.xy);
+    bool picked = false;
+    if (aperture) picked = CellAperture154(first, winner);
+    else winner = (CellSurface154)0;
+    bool bodyAhead = baseMeta.y >= 8 && baseMeta.y <= 11 &&
+        baseMeta.x > 0 && baseMeta.x < winner.meta.x + _LiveHeadMapping.z;
+    int2 rq = int2(baseLight.zy);
+    int source = 5;
+    int2 address = q;
+    int primitiveOrBinding = (int)_IntegratedSource154.Load(int3(q, 0)).z;
+    bool badPalette = false;
+    if (picked && !bodyAhead)
+    {
+        float4 input = CellPaletteInput154(winner);
+        badPalette = !ResolveCellPalette154(input, rq, baseColour);
+        source = winner.source;
+        address = winner.address;
+        primitiveOrBinding = (int)input.w;
+        baseMeta = winner.meta;
+        baseMeta.x += _LiveHeadMapping.z;
+    }
+    else if (aperture && baseIsEye)
+    {
+        baseColour = 0;
+        baseMeta = 0;
+    }
+    bool covered = baseMeta.x > 0 && (baseColour.a > .5 || badPalette);
+    if (!covered) rq = 0;
+    if (covered && (rq.x <= 0 || rq.x >= _CellPaletteRows154 || rq.y < 0 || rq.y > 7))
+        badPalette = true;
+    CommitCharacter154(q, baseMeta, rq, source, address, primitiveOrBinding, baseColour, badPalette);
+    float4 world = _World395.Load(int3(worldSample, 0));
+    [unroll] for (int i = 0; i < 4; i++)
+    {
+        int2 pixel = first + int2(i & 1, i >> 1);
+        if (any(pixel < 0) || any(pixel >= int2(960,544))) continue;
+        float device = _WorldDepth395.Load(int3(pixel, 0));
+        float z = lerp(_NearFar395.x, _NearFar395.y, _NearFar395.z > .5 ? 1 - device : device);
+        bool seen = covered && !badPalette && baseMeta.x <= z + .0001;
+        _Output395[pixel] = seen ? float4(baseColour.rgb, 1) : world;
+        _Owner395[pixel] = seen ? float4(baseMeta.y, baseMeta.z, baseMeta.x, baseMeta.w) : 0;
+        _CellID395[pixel] = float4(q, seen ? 1 : 0, seen ? ((uint)rq.x << 8) | (uint)rq.y : 0);
+        _DepthAudit395[pixel] = float4(z, baseMeta.x, covered ? 1 : 0, seen ? 1 : 0);
+    }
+}
+
+[numthreads(8,8,1)]void CaptureWorld(uint3 t:SV_DispatchThreadID){int2 p=t.xy;if(any(p>=int2(960,544)))return;_WorldRW395[p]=_MainSource395.Load(int3(p,0));_WorldDepthRW395[p]=_MainDepth395.Load(int3(p,0));}
+[numthreads(8,8,1)]void Present(uint3 t:SV_DispatchThreadID){
+ int2 p=t.xy;if(any(p>=int2(960,544)))return;
+ int2 q=(int2)floor((float2(p)+.5-float2(_Origin395))/_CellScale395-_Delta395);
+ // Share the character cell and phase for world colour AND its occlusion depth.
+ // One integer texel load: no camera/model/RT resize, palette mixing or filtering.
+ int2 worldSample=clamp((int2)floor(float2(_Origin395)+(float2(q)+.5+_Delta395)*_CellScale395),int2(0,0),int2(959,543));
+ float4 world=_World395.Load(int3(worldSample,0));float device=_WorldDepth395.Load(int3(worldSample,0));float wd=lerp(_NearFar395.x,_NearFar395.y,_NearFar395.z>.5?1-device:device);
+ bool localValid=_Show395!=0&&LiveLogicalAddress(q);
+ float4 colour=_Local395.Load(int3(q,0)),meta=_Meta395.Load(int3(q,0)),uv=_UV395.Load(int3(q,0));
+ bool integrated=_UseIntegrated154!=0;
+ bool baseIsEye=LiveEyeRole(round(meta.y));
+ float4 light=0;
+ if(integrated&&localValid){
+  static const int sourceRole[15]={8,9,10,11,1,2,3,4,5,6,7,12,13,14,15};
+  float4 m=_IntegratedMeta154.Load(int3(q,0));
+  light=_IntegratedLight154.Load(int3(q,0));
+  int slot=(int)m.y-1;
+  colour=_IntegratedColour154.Load(int3(q,0));
+  // Only the aperture resolver may emit an eye from this region. Its
+  // no-eye branch keeps a real same-ray foreground or socket witness.
+  baseIsEye=(int)light.w==8;
+  meta=float4(m.x,slot>=0&&slot<15?sourceRole[clamp(slot,0,14)]:0,m.z,m.w);
+ }
+
+ if(_CommonGrid154!=0&&integrated){
+  if(all(p==0))_CellReceipt154[480*272*CellPacketStride154]=
+    uint4(asuint(_Delta395.x),asuint(_Delta395.y), (uint)_CellScale395,1);
+  // Only the first physical thread of each q writes its footprint. The eye
+  // resolve never runs from a physical output thread in this mode.
+  if(localValid&&_CellScale395==2){
+   int2 first=int2(ceil(float2(_Origin395)+(float2(q)+_Delta395)*2-.5));
+   if(all(p==max(first,0)))WriteCommonCell154(first,q,worldSample,colour,meta,light,baseIsEye);
+  }else{
+   _Output395[p]=world;_Owner395[p]=0;_CellID395[p]=float4(q,0,0);_DepthAudit395[p]=float4(wd,0,0,0);
+  }
+  return;
+ }
+ _Output395[p]=world;_Owner395[p]=0;_CellID395[p]=float4(q,0,0);_DepthAudit395[p]=float4(wd,0,0,0);
+
+ if(!localValid)return;
+ bool covered=colour.a>.5&&meta.x>0;bool visible=covered&&meta.x<=wd+.0001;
+ if(_DebugOldEyeMarker348!=0 && covered && baseIsEye)
+  colour.rgb=float3(1,0,1);
+ if(_T3BypassEye154==0 && ResolveEyeAperture(p,covered?float4(meta.y,meta.z,meta.x,meta.w):0,covered&&baseIsEye)){
+  if(_DebugOldEyeMarker348!=0 && covered && baseIsEye){
+   float4 receipt=_DepthAudit395[p];receipt.z+=2;_DepthAudit395[p]=receipt;
+  }
+  return;
+ }
+ if(!integrated&&_Capture395==0&&visible){float domain=_Domain395.Load(int3(q,0)).x,reason=_Line395.Load(int3(q,0)).x;float4 old=_HistoryMeta395.Load(int3(q,0));float4 key=float4(meta.y,meta.w,uv.z+4*reason+32*domain,1);int role=clamp((int)round(meta.y)-1,0,15);float2 distance=abs(uv.xy-_HistoryUV395.Load(int3(q,0)).xy)/max(_Texel395[role].xy,1e-8);if(domain<.5&&old.w>.5&&old.x==key.x&&old.y==key.y&&old.z==key.z&&all(distance<=_UVTolerance395))colour=_History395.Load(int3(q,0));}
+ if(visible)RecordLegacyWrite154(p);
+ _Output395[p]=visible?float4(colour.rgb,1):world;_Owner395[p]=visible?float4(meta.y,meta.z,meta.x,meta.w):0;_CellID395[p]=float4(q,visible?1:0,covered?1:0);_DepthAudit395[p]=float4(wd,meta.x,covered?1:0,visible?1:0);
+}
+
+
+// Added to the existing trial compute shader. The old Present kernel is unchanged.
+int4 _NativeCharacterCrop154; // x, y, width, height in projected 960-space
+uint _NativeOwnerTicket154;
+StructuredBuffer<uint4> _NativeConnectedOwners154;
+// (action, packed atlas x/y, source, frame ticket). Every crop cell needs a
+// current decision: 1 = projected source, 2 = same-ray connected choice, 3 = empty.
+// The connected ownership producer is authoritative and must run before this kernel.
+
+bool LoadVisibleNativeChoice154(int2 pixel, uint4 record, out CellSurface154 hit)
+{
+    hit = (CellSurface154)0;
+    int2 head = int2(floor(float2(pixel) + .5 + _LiveHeadMapping.xy));
+    int2 local = head - _LiveEyeAtlas348.xy * 2;
+    if (any(local < 0) || any(local >= 2 * _LiveEyeAtlas348.zw) || record.z > 4)
+        return false;
+
+    int2 at = int2(record.y & 65535, record.y >> 16);
+    int2 first = 2 * local + int2(_LiveEyeAtlas348.z * 16, 0);
+    if (any(at < first) || any(at >= first + 2)) return false;
+
+    // Validate the committed witness by the existing same-ray mask. This never
+    // re-scores roles, applies a depth minimum across rays, or selects a fallback.
+    float4 hits[4];
+    [unroll] for (int k = 0; k < 4; k++) hits[k] = EyeSampleMeta154(k, at);
+    float4 headHit = _CellHairMeta154.Load(int3(at, 0));
+    bool hair = Coverage154(headHit) > .5 && (headHit.y == 6 || headHit.y >= 12);
+    float eyeZ = 1e20;
+    [unroll] for (int k = 1; k < 4; k++)
+        if (Coverage154(hits[k]) > .5) eyeZ = min(eyeZ, hits[k].x);
+    bool headFirst = hair && headHit.x < eyeZ && (Coverage154(hits[0]) == 0 || headHit.x < hits[0].x);
+    hit.address = at;
+    hit.source = int(record.z);
+    if (record.z == 4)
+    {
+        hit.meta = headHit;
+        hit.support = Coverage154(headHit);
+        return headFirst;
+    }
+    if (headFirst) return false;
+    hit.meta = hits[record.z];
+    precise float visible = Coverage154(hit.meta);
+    [unroll] for (int k = 0; k < 4; k++)
+        if (k != int(record.z)) visible *= Transmitted154(hits[k], hit.meta.x);
+    hit.support = visible;
+    return visible > .5 && (!hair || headHit.x >= hit.meta.x);
+}
+
+void NativeInputReceipt154(uint index, float4 meta, int2 rq, uint source, int2 address,
+                           uint binding, float4 colour, bool failed)
+{
+    uint base = index * CellPacketStride154;
+    InterlockedAdd(_CellReceipt154[base].x, 1);
+    if (failed) InterlockedAdd(_CellReceipt154[base].z, 1);
+    _CellReceipt154[base + 1] = uint4(asuint(meta.x), ((uint)rq.x << 8) | (uint)rq.y,
+        (uint)meta.y | (source << 8) | (binding << 16), address.x | ((uint)address.y << 16));
+    _CellReceipt154[base + 2] = asuint(colour);
+}
+
+[numthreads(8,8,1)] void PresentNativeCommon154(uint3 dispatch : SV_DispatchThreadID)
+{
+    int2 p = int2(dispatch.xy);
+    if (any(p >= int2(960,544))) return;
+
+    // Keep the original world colour cell and the physical world depth lookup.
+    // Native character coordinates are derived separately at pitch 1.
+    int2 worldCell = int2(floor((float2(p)+.5-float2(_Origin395)) * .5 - _Delta395));
+    int2 worldSample = clamp(int2(floor(float2(_Origin395) +
+                            (float2(worldCell)+.5+_Delta395)*2)), int2(0,0), int2(959,543));
+    float4 world = _World395.Load(int3(worldSample,0));
+    float deviceDepth = _WorldDepth395.Load(int3(p,0));
+    float worldDepth = lerp(_NearFar395.x,_NearFar395.y,_NearFar395.z > .5 ? 1-deviceDepth : deviceDepth);
+    int2 q = int2(floor(float2(p)+.5-float2(_Origin395)-2*_Delta395));
+    int2 local = q - _NativeCharacterCrop154.xy;
+    float4 colour = 0, meta = 0;
+    int2 rq = 0;
+    bool invalid = false;
+    if (all(local >= 0) && all(local < _NativeCharacterCrop154.zw))
+    {
+        uint index = local.y * _NativeCharacterCrop154.z + local.x;
+        uint4 packet = _NativeConnectedOwners154[index];
+        uint source = 5, binding = 0;
+        int2 address = q;
+        invalid = _NativeOwnerTicket154 == 0 || packet.w != _NativeOwnerTicket154 || packet.x < 1 || packet.x > 4;
+        uint action = packet.x;
+        if (!invalid && action == 4)
+        {
+            float4 physical = _IntegratedMeta154.Load(int3(local,0));
+            float4 light = _IntegratedLight154.Load(int3(local,0));
+            // Outside the eye decisions, keep original native geometry or
+            // its empty/world-occluded pixel. Never revive mesh eye paint.
+            action = physical.x > 0 && physical.w > .5 && physical.x <= worldDepth + .0001 ? 1 : 3;
+            invalid = action == 1 && (int)light.w == 8;
+        }
+        if (!invalid && action != 1)
+        {
+            float4 physicalMeta = _IntegratedMeta154.Load(int3(local,0));
+            float4 physicalLight = _IntegratedLight154.Load(int3(local,0));
+            bool protectedBody = (int)physicalLight.z == 71 ||
+                                 ((int)physicalLight.w >= 2 && (int)physicalLight.w <= 6);
+            invalid = protectedBody && physicalMeta.x > 0 && physicalMeta.w > .5 && physicalMeta.x <= worldDepth + .0001;
+        }
+        if (!invalid && action == 1)
+        {
+            // These fields were rasterized at native pitch from the same original
+            // meshes, material addresses and depths. No read of the old 480x272 canvas.
+            float4 material = _IntegratedMeta154.Load(int3(local,0));
+            float4 light = _IntegratedLight154.Load(int3(local,0));
+            float4 uv = _IntegratedSource154.Load(int3(local,0));
+            static const int sourceRole[15] = {8,9,10,11,1,2,3,4,5,6,7,12,13,14,15};
+            int slot = (int)material.y-1;
+            // Legacy mesh eyes must be handled by a live explicit connected decision.
+            invalid = material.x <= 0 || material.w <= .5 || slot < 0 || slot >= 15 || (int)light.w == 8;
+            if (!invalid)
+            {
+                colour = _IntegratedColour154.Load(int3(local,0));
+                meta = float4(material.x,sourceRole[clamp(slot,0,14)],material.z,material.w);
+                rq = int2(light.zy);
+                binding = (uint)uv.z;
+            }
+        }
+        if (!invalid && action == 2)
+        {
+            CellSurface154 winner = (CellSurface154)0;
+            invalid = !LoadVisibleNativeChoice154(p, packet, winner);
+            if (!invalid)
+            {
+                float4 input = CellPaletteInput154(winner);
+                invalid = !ResolveCellPalette154(input, rq, colour);
+                source = winner.source;
+                address = winner.address;
+                binding = (uint)input.w;
+                meta = winner.meta;
+                meta.x += _LiveHeadMapping.z;
+            }
+        }
+        if (meta.x > 0)
+            invalid = invalid || rq.x <= 0 || rq.x >= _CellPaletteRows154 || rq.y < 0 || rq.y > 7;
+        if (invalid)
+        {
+            rq = 0;
+            meta = 0;
+            colour = 0;
+        }
+        NativeInputReceipt154(index, meta, rq, source, address, binding, colour, invalid);
+    }
+    bool covered = !invalid && meta.x > 0 && colour.a > .5;
+    bool seen = covered && meta.x <= worldDepth + .0001;
+    _Output395[p] = seen ? float4(colour.rgb,1) : world;
+    _Owner395[p] = seen ? float4(meta.y,meta.z,meta.x,meta.w) : 0;
+    _CellID395[p] = float4(q, seen ? 1 : 0, seen ? ((uint)rq.x << 8) | (uint)rq.y : 0);
+    _DepthAudit395[p] = float4(worldDepth,meta.x,covered ? 1 : 0,seen ? 1 : 0);
+}
+
+int4 _R25EyeWindow154; // physical x, y, width, height
+int _R25EngineFrame154;
+uint _R25ProducerTicket154;
+RWStructuredBuffer<uint4> _R25WorldIssued154;
+StructuredBuffer<uint4> _R25WorldProof154;
+RWStructuredBuffer<uint4> _R25CandidatesWrite154;
+
+// Identical world colour and depth copies, with an opt-in per-trial GPU stamp.
+[numthreads(8,8,1)] void CaptureWorldStamped154(uint3 t : SV_DispatchThreadID)
+{
+    if (any(t.xy >= uint2(960,544))) return;
+    _WorldRW395[t.xy] = _MainSource395.Load(int3(t.xy,0));
+    _WorldDepthRW395[t.xy] = _MainDepth395.Load(int3(t.xy,0));
+    if (all(t.xy == 0))
+        _R25WorldIssued154[0] = uint4(_R25ProducerTicket154, uint(_R25EngineFrame154), 0, 1);
+}
+
+// Keep source identity per ray. This stage neither labels connected
+// components nor decides owners. The exact selector is the next GPU entry.
+[numthreads(8,8,1)] void PrepareNativeOwnerRays154(uint3 t : SV_DispatchThreadID)
+{
+    if (any(t.xy >= (uint2)_R25EyeWindow154.zw)) return;
+    int2 p = int2(t.xy) + _R25EyeWindow154.xy;
+    uint index = (t.y * _R25EyeWindow154.z + t.x) * 4;
+    uint4 proof = _R25WorldProof154[0];
+    bool currentWorld = _R25ProducerTicket154 != 0 && proof.x == _R25ProducerTicket154 &&
+                        proof.y == uint(_R25EngineFrame154) && proof.w == 1;
+    float deviceDepth = _WorldDepth395.Load(int3(p,0));
+    float z = lerp(_NearFar395.x,_NearFar395.y,_NearFar395.z > .5 ? 1-deviceDepth : deviceDepth);
+    int2 head = int2(floor(float2(p) + .5 + _LiveHeadMapping.xy));
+    int2 local = head - _LiveEyeAtlas348.xy * 2;
+    bool inAtlas = all(local >= 0) && all(local < 2 * _LiveEyeAtlas348.zw);
+    int2 first = 2 * local + int2(_LiveEyeAtlas348.z * 16, 0);
+    [unroll] for (uint ray = 0; ray < 4; ray++)
+    {
+        int2 at = first + int2(ray & 1, ray >> 1);
+        uint xy = uint(at.x) | (uint(at.y) << 16);
+        uint mask = 0;
+        if (currentWorld && inAtlas)
+        {
+            [unroll] for (uint layer = 0; layer < 5; layer++)
+            {
+                CellSurface154 h;
+                if (LoadVisibleNativeChoice154(p, uint4(2,xy,layer,_R25ProducerTicket154), h) &&
+                    h.meta.x + _LiveHeadMapping.z <= z + .0001)
+                    mask |= 1u << layer;
+            }
+        }
+        // A zero ticket means stale input, not an empty valid observation.
+        // The exact selector must reject the entire job on any stale packet.
+        _R25CandidatesWrite154[index + ray] = uint4(currentWorld ? _R25ProducerTicket154 : 0, xy, mask, asuint(z));
+    }
+}
+
+// Shared deterministic core for SelectConnectedOwners154 and offline parity.
+// Only admitted same-ray witnesses enter this core. A weight is binary32
+// in (0.5,1], so units of 2^-24 preserve every admitted value exactly.
+#ifndef R25_SHARED
+#define R25_SHARED groupshared
+#define R25_LOOP [loop]
+#endif
+#define R25_CELLS 256
+#define R25_WINDOW 2048
+#define R25_RAYS 1024
+#define R25_EVAL_MAX 2048
+#define R25_ONE 16777216u
+#define R25_FOUR 67108864u
+#define R25_OPAQUE 16609444u
+#define R25_NONE 0xffffffffu
+#define R25_MARK 0x80000000u
+#define R25_DIRECT 0x80000000u
+
+// 31 KiB. Maps physical window offsets to bounded, x-major domains.
+R25_SHARED uint r25Map[R25_WINDOW];
+R25_SHARED uint r25Codes[R25_RAYS];
+R25_SHARED uint r25Weight[R25_RAYS];
+R25_SHARED uint r25Component[R25_RAYS];
+R25_SHARED uint r25Parent[R25_RAYS];
+R25_SHARED uint r25RunArea[R25_RAYS];
+R25_SHARED uint r25Cell[R25_CELLS];
+R25_SHARED uint r25Pick[R25_CELLS];
+R25_SHARED uint r25Strong[R25_CELLS];
+R25_SHARED uint r25N, r25W, r25H, r25Required;
+
+struct R25Score { uint roles,runs,strong,fragments,areaHi,areaLo,links; };
+
+uint R25Key(uint tap) { return r25Codes[tap] & 63u; }
+bool R25Eye(uint key) {
+    uint role=key&15u;
+    return role==2||role==5||role==7;
+}
+uint R25EyeBit(uint key) {
+    uint role=key&15u;
+    return 1u << (((key>>4)-1u)*3u + (role==2?0u:role==5?1u:2u));
+}
+uint R25Sat4(uint a,uint b) { uint s=a+b; return s<R25_FOUR?s:R25_FOUR; }
+
+void R25Reset(uint w,uint h) {
+    r25N=0;r25W=w;r25H=h;r25Required=0;
+    R25_LOOP for(uint i=0;i<w*h;i++)r25Map[i]=0;
+}
+bool R25Add(uint physicalIndex) {
+    if(r25N>=R25_CELLS||physicalIndex>=r25W*r25H||r25Map[physicalIndex]!=0)return false;
+    r25Cell[r25N]=physicalIndex;
+    r25Map[physicalIndex]=++r25N;
+    return true;
+}
+uint R25Neighbor(uint tap,uint axis) {
+    uint bit=1u<<axis;
+    if((tap&bit)==0)return tap|bit;
+    uint p=r25Cell[tap>>2];
+    if(axis==0){if(p%r25W+1u>=r25W)return R25_NONE;p++;}
+    else {p+=r25W;if(p>=r25W*r25H)return R25_NONE;}
+    uint cell=r25Map[p];
+    if(cell==0||(cell&R25_DIRECT)!=0)return R25_NONE;
+    return 4u*(cell-1u)+(tap&3u)-bit;
+}
+uint R25Root(uint i, bool chosen) {
+    R25_LOOP for(uint guard=0;guard<R25_RAYS;guard++) {
+        uint parent=chosen?r25Parent[i]:r25Component[i];
+        if(parent==i)return i;
+        if(parent==R25_NONE)return R25_NONE;
+        uint grand=chosen?r25Parent[parent]:r25Component[parent];
+        if(chosen)r25Parent[i]=grand;else r25Component[i]=grand;
+        i=grand;
+    }
+    return R25_NONE;
+}
+void R25Join(uint a,uint b,bool chosen) {
+    uint x=R25Root(a,chosen),y=R25Root(b,chosen);
+    if(x==y||x==R25_NONE||y==R25_NONE)return;
+    uint lo=x<y?x:y,hi=x<y?y:x;
+    if(chosen) r25Parent[hi]=lo; else r25Component[hi]=lo;
+}
+
+uint R25Area(uint cell,uint key) {
+    uint sum=0;
+    R25_LOOP for(uint j=0;j<4;j++)if(R25Key(4u*cell+j)==key)sum+=r25Weight[4u*cell+j];
+    return sum;
+}
+bool R25LegalRepresentative(uint tap) {
+    uint key=R25Key(tap),base=tap&~3u;
+    uint protect=r25Strong[tap>>2];
+    if(key==0||(protect!=0&&!R25Eye(protect)&&protect!=key))return false;
+    R25_LOOP for(uint j=base;j<base+4;j++)
+        if(R25Key(j)==key&&(r25Weight[j]>r25Weight[tap]||(j<tap&&r25Weight[j]==r25Weight[tap])))
+            return false;
+    return true;
+}
+uint R25OrderedTap(uint cell,uint offset) {
+    return cell*4u+((offset&1u)<<1)+((offset&2u)>>1); // atlas x then y
+}
+// Foreground-only cells contribute no role or connected-run terms.
+ // Their initial exact local winner cannot improve during global solving.
+uint R25FixedForeground(uint4 code,uint4 weight) {
+    uint best=0,pick=R25_NONE;
+    R25_LOOP for(uint ray=0;ray<4;ray++)if(R25Eye(code[ray]&63u))return R25_NONE;
+    R25_LOOP for(uint j=0;j<4;j++) {
+        uint ray=((j&1u)<<1)+((j&2u)>>1),key=code[ray]&63u;
+        if(key==0)continue;
+        uint sum=0;
+        bool representative=true;
+        R25_LOOP for(uint k=0;k<4;k++)if((code[k]&63u)==key) {
+            sum+=weight[k];
+            if(weight[k]>weight[ray]||(k<ray&&weight[k]==weight[ray]))representative=false;
+        }
+        if(representative&&sum>best){best=sum;pick=ray;}
+    }
+    return pick;
+}
+bool R25Initialize() {
+    uint byRole[6]={0,0,0,0,0,0};
+    uint count=r25N*4u;
+    R25_LOOP for(uint i=0;i<count;i++) {
+        uint key=R25Key(i);
+        r25Component[i]=R25Eye(key)?i:R25_NONE;
+        r25RunArea[i]=0;
+        if(R25Eye(key)) {
+            uint mask=R25EyeBit(key);
+            R25_LOOP for(uint bit=0;bit<6;bit++)
+                if(mask==(1u<<bit))byRole[bit]=R25Sat4(byRole[bit],r25Weight[i]);
+        }
+    }
+    R25_LOOP for(uint bit=0;bit<6;bit++)if(byRole[bit]>=R25_FOUR)r25Required|=1u<<bit;
+    R25_LOOP for(uint i=0;i<count;i++) if(r25Component[i]!=R25_NONE)
+        R25_LOOP for(uint axis=0;axis<2;axis++) {
+            uint j=R25Neighbor(i,axis);
+            if(j==R25_NONE)continue;
+            if(R25Key(i)==R25Key(j))R25Join(i,j,false);
+        }
+    R25_LOOP for(uint i=0;i<count;i++)if(r25Component[i]!=R25_NONE)
+        r25Component[i]=R25Root(i,false);
+    R25_LOOP for(uint i=0;i<count;i++) {
+        uint r=r25Component[i];
+        if(r!=R25_NONE)r25RunArea[r]=R25Sat4(r25RunArea[r],r25Weight[i]);
+    }
+    R25_LOOP for(uint cell=0;cell<r25N;cell++) {
+        uint first=cell*4u,key=R25Key(first),smallest=R25_ONE;
+        bool same=key!=0;
+        R25_LOOP for(uint j=first;j<first+4;j++) {
+            same=same&&R25Key(j)==key;
+            if(r25Weight[j]<smallest)smallest=r25Weight[j];
+        }
+        r25Strong[cell]=same&&
+            (R25Eye(key)?R25Area(cell,key)>=3u*R25_ONE:smallest>=R25_OPAQUE)?key:0;
+        uint best=0,slot=R25_NONE;
+        R25_LOOP for(uint j=0;j<4;j++) {
+            uint tap=R25OrderedTap(cell,j);
+            if(!R25LegalRepresentative(tap))continue;
+            uint area=R25Area(cell,R25Key(tap));
+            if(area>best){best=area;slot=tap;}
+        }
+        if(slot==R25_NONE)return false;
+        r25Pick[cell]=slot;
+    }
+    return true;
+}
+
+R25Score R25Measure() {
+    R25Score s;
+    s.roles=0;s.runs=0;s.strong=0;s.fragments=0;s.areaHi=0;s.areaLo=0;s.links=0;
+    uint roles=0,count=r25N*4u;
+    R25_LOOP for(uint cell=0;cell<r25N;cell++) {
+        uint key=R25Key(r25Pick[cell]),strong=r25Strong[cell];
+        if(R25Eye(key))roles|=R25EyeBit(key);
+        if(R25Eye(strong)&&strong!=key)s.strong++;
+        R25_LOOP for(uint j=cell*4u;j<cell*4u+4u;j++) {
+            uint root=r25Component[j];
+            uint own=R25Key(j);
+            if(own!=key) {
+                uint old=s.areaLo;
+                s.areaLo+=r25Weight[j];
+                if(s.areaLo<old)s.areaHi++;
+            }
+            bool kept=own==key&&root!=R25_NONE;
+            if(kept)kept=r25RunArea[root]>=R25_FOUR;
+            r25Parent[j]=kept?j:R25_NONE;
+        }
+    }
+    R25_LOOP for(uint i=0;i<6;i++)if(((r25Required&~roles)>>i)&1u)s.roles++;
+    R25_LOOP for(uint i=0;i<count;i++)if(r25Parent[i]!=R25_NONE) {
+        uint group=r25Component[i],base=i&~3u;
+        R25_LOOP for(uint j=base;j<i;j++)
+            if(r25Parent[j]!=R25_NONE&&r25Component[j]==group)R25Join(i,j,true);
+        R25_LOOP for(uint axis=0;axis<2;axis++) {
+            uint j=R25Neighbor(i,axis);
+            if(j==R25_NONE)continue;
+            if(r25Parent[j]==R25_NONE||r25Component[j]!=group)continue;
+            R25Join(i,j,true);
+            if((j>>2)==(i>>2))continue;
+            bool earlier=false;
+            R25_LOOP for(uint prev=base;prev<i;prev++)if(r25Parent[prev]!=R25_NONE&&r25Component[prev]==group) {
+                uint other=R25Neighbor(prev,axis);
+                if(other==R25_NONE)continue;
+                if((other>>2)==(j>>2)&&r25Parent[other]!=R25_NONE&&r25Component[other]==group)
+                    earlier=true;
+            }
+            if(!earlier)s.links++;
+        }
+    }
+    R25_LOOP for(uint i=0;i<count;i++)if(r25Parent[i]==i) {
+        uint root=r25Component[i];
+        if((r25RunArea[root]&R25_MARK)!=0)s.fragments++;
+        else r25RunArea[root]|=R25_MARK;
+    }
+    R25_LOOP for(uint i=0;i<count;i++)if(r25RunArea[i]>=R25_FOUR) {
+        if((r25RunArea[i]&R25_MARK)==0)s.runs++;
+        else r25RunArea[i]&=~R25_MARK;
+    }
+    return s;
+}
+bool R25Better(R25Score a,R25Score b) {
+    if(a.roles!=b.roles)return a.roles<b.roles;
+    if(a.runs!=b.runs)return a.runs<b.runs;
+    if(a.strong!=b.strong)return a.strong<b.strong;
+    if(a.fragments!=b.fragments)return a.fragments<b.fragments;
+    if(a.areaHi!=b.areaHi)return a.areaHi<b.areaHi;
+    if(a.areaLo!=b.areaLo)return a.areaLo<b.areaLo;
+    return a.links>b.links;
+}
+uint R25Solve(uint budget) {
+    if(r25N==0||!R25Initialize())return 4; // no legal domain
+    R25Score best=R25Measure();
+    uint evaluations=1;
+    R25_LOOP for(uint sweep=0;sweep<8;sweep++) {
+        bool moved=false;
+        R25_LOOP for(uint cell=0;cell<r25N;cell++) {
+            uint before=r25Pick[cell],winner=before;
+            R25_LOOP for(uint j=0;j<4;j++) {
+                uint tap=R25OrderedTap(cell,j);
+                if(tap==before||!R25LegalRepresentative(tap))continue;
+                if(evaluations>=budget||evaluations>=R25_EVAL_MAX)return 5;
+                r25Pick[cell]=tap;
+                R25Score trial=R25Measure();
+                evaluations++;
+                if(R25Better(trial,best)){best=trial;winner=tap;}
+            }
+            r25Pick[cell]=winner;
+            moved=moved||winner!=before;
+        }
+        if(!moved)break;
+    }
+    if(best.roles!=0||best.runs!=0||best.strong!=0||best.fragments!=0)return 6;
+    return 0;
+}
+
+StructuredBuffer<uint4> _R25CandidatesRead154;
+RWStructuredBuffer<uint4> _R25OwnersWrite154;
+groupshared uint r25Status;
+groupshared int2 r25Shift;
+groupshared uint r25OwnerCount;
+
+// 1 stale; 2 capacity; 3 bad source/material; 4 no legal domain;
+// 5 evaluation budget; 6 connected contract; 7 invalid layout; 8 phase.
+uint R25LoadDomain(uint2 window, uint2 crop)
+{
+    uint rayCount,stride;
+    _R25CandidatesRead154.GetDimensions(rayCount,stride);
+    uint4 proof=_R25WorldProof154[0];
+    if(_R25ProducerTicket154==0||proof.x!=_R25ProducerTicket154||
+       proof.y!=uint(_R25EngineFrame154)||proof.w!=1)return 1;
+    if(window.x==0||window.y==0||window.x>R25_WINDOW||window.y>R25_WINDOW||
+       window.x*window.y>R25_WINDOW||rayCount!=window.x*window.y*4u||stride!=16||
+       any(_R25EyeWindow154.xy<0)||any(_R25EyeWindow154.xy+int2(window)>int2(960,544)))return 7;
+    int2 origin=_NativeCharacterCrop154.xy;
+    r25Shift=int2(floor(.5-float2(_Origin395)-2*_Delta395));
+    int2 headShift=int2(floor(.5+_LiveHeadMapping.xy));
+    R25Reset(window.x,window.y);
+    [loop] for(uint x=0;x<window.x;x++)
+    [loop] for(uint y=0;y<window.y;y++)
+    {
+        uint physical=y*window.x+x;
+        uint base=physical*4u;
+        int2 p=int2(x,y)+_R25EyeWindow154.xy;
+        int2 q=int2(floor(float2(p)+.5-float2(_Origin395)-2*_Delta395));
+        uint4 first=_R25CandidatesRead154[base];
+        float worldZ=asfloat(first.w);
+        float deviceZ=_WorldDepth395.Load(int3(p,0));
+        if(first.x!=_R25ProducerTicket154||!isfinite(worldZ)||worldZ<=0||!isfinite(deviceZ))return 1;
+        if(any(q<origin)||any(q>=origin+int2(crop)))continue;
+        int2 loc=q-origin;
+        float4 body=_IntegratedMeta154.Load(int3(loc,0));
+        float4 light=_IntegratedLight154.Load(int3(loc,0));
+        if(!all(isfinite(body))||!all(isfinite(light)))return 3;
+        uint group=uint(light.w);
+        // Current-frame body witness supplies positive visibility; saved
+        // baseline presence and display RGB are not inputs.
+        if(body.x<=0||body.w<=.5||body.x>worldZ+.0001||group==0||
+           (group>=2&&group<=6)||uint(light.z)==71)continue;
+        if(any(q!=p+r25Shift)||any(int2(floor(float2(p)+.5+_LiveHeadMapping.xy))!=p+headShift))return 8;
+        int2 headLocal=p+headShift-_LiveEyeAtlas348.xy*2;
+        bool atEye=all(headLocal>=0)&&all(headLocal<_LiveEyeAtlas348.zw*2);
+        if(!atEye)
+        {
+            if(group==8)return 3;
+            continue;
+        }
+        uint code[4]={0,0,0,0};
+        uint weights[4]={0,0,0,0};
+        uint admitted=0;
+        [loop] for(uint ray=0;ray<4;ray++)
+        {
+            uint4 packet=_R25CandidatesRead154[base+ray];
+            if(packet.x!=_R25ProducerTicket154||packet.w!=first.w)return 1;
+            int2 at=headLocal*2+int2(_LiveEyeAtlas348.z*16,0)+int2(ray&1u,ray>>1u);
+            uint xy=uint(at.x)|(uint(at.y)<<16);
+            if(packet.y!=xy)return 8;
+            uint seen=0,raw=0;
+            [loop] for(uint layer=0;layer<5;layer++)
+            {
+                CellSurface154 hit=(CellSurface154)0;
+                if(!LoadVisibleNativeChoice154(p,uint4(2,xy,layer,_R25ProducerTicket154),hit))continue;
+                raw++;
+                if(raw>1)return 3;
+                if(hit.meta.x+_LiveHeadMapping.z>worldZ+.0001)continue;
+                seen=1u<<layer;
+                uint role=uint(hit.meta.y),eye=uint(hit.meta.z);
+                bool expected=layer==0?role==4:layer==1?role==5:layer==2?role==2:
+                              layer==3?role==7:(role==6||(role>=12&&role<=15));
+                if(!expected||(R25Eye(role)&&(eye<1||eye>2))||
+                   !isfinite(hit.support)||hit.support<=.5||hit.support>1)return 3;
+                float4 shade=CellPaletteInput154(hit);
+                if(!all(isfinite(shade))||shade.y<=0||shade.y>=_CellPaletteRows154||
+                   shade.z<2||shade.z>8||shade.w<=0||
+                   shade.y!=uint(shade.y)||shade.z!=uint(shade.z))return 3;
+                code[ray]=(layer<<8)|(R25Eye(role)?(eye<<4):0u)|role;
+                weights[ray]=uint(hit.support*float(R25_ONE));
+                admitted++;
+            }
+            if(seen!=packet.z)return 3;
+        }
+        if(admitted==0)
+        {
+            if(group==8)return 4;
+            continue;
+        }
+        uint fixedRay=R25FixedForeground(uint4(code[0],code[1],code[2],code[3]),
+                                         uint4(weights[0],weights[1],weights[2],weights[3]));
+        if(fixedRay!=R25_NONE)
+        {
+            r25Map[physical]=R25_DIRECT|((code[fixedRay]>>8)<<2)|fixedRay;
+            continue;
+        }
+        if(!R25Add(physical))return 2;
+        [unroll] for(uint ray=0;ray<4;ray++)
+        {
+            r25Codes[(r25N-1u)*4u+ray]=code[ray];
+            r25Weight[(r25N-1u)*4u+ray]=weights[ray];
+        }
+    }
+    return r25N==0?0:R25Solve(R25_EVAL_MAX);
+}
+
+[numthreads(64,1,1)] void SelectConnectedOwners154(uint thread : SV_GroupIndex)
+{
+    uint2 crop=(uint2)_NativeCharacterCrop154.zw;
+    uint2 window=(uint2)_R25EyeWindow154.zw;
+    if(thread==0)
+    {
+        uint count,stride;
+        _R25OwnersWrite154.GetDimensions(count,stride);
+        r25OwnerCount=min(count,130560u);
+        r25Status=7;
+        if(crop.x>0&&crop.x<=960&&crop.y>0&&crop.y<=544&&crop.x*crop.y==count&&count<=130560&&stride==16&&
+           all(_NativeCharacterCrop154.xy>=0)&&all(_NativeCharacterCrop154.xy+int2(crop)<=int2(960,544))&&
+           all(isfinite(_Delta395))&&all(isfinite(_LiveHeadMapping.xyz)))
+            r25Status=R25LoadDomain(window,crop);
+    }
+    GroupMemoryBarrierWithGroupSync();
+    [loop] for(uint i=thread;i<r25OwnerCount;i+=64u)
+    {
+        // Failure stamps every slot invalid and exposes its reason in y.
+        // Only a completely solved frame publishes the current ticket.
+        uint4 outOwner=uint4(0,r25Status,0,0);
+        if(r25Status==0)
+        {
+            int2 q=int2(i%crop.x,i/crop.x)+_NativeCharacterCrop154.xy;
+            int2 p=q-r25Shift-_R25EyeWindow154.xy;
+            outOwner=uint4(4,0,0,_R25ProducerTicket154);
+            if(all(p>=0)&&all(p<int2(window)))
+            {
+                uint physical=uint(p.y)*window.x+uint(p.x);
+                uint domain=r25Map[physical];
+                if((domain&R25_DIRECT)!=0)
+                {
+                    uint xy=_R25CandidatesRead154[physical*4u+(domain&3u)].y;
+                    outOwner=uint4(2,xy,(domain>>2)&7u,_R25ProducerTicket154);
+                }
+                else if(domain!=0)
+                {
+                    uint tap=r25Pick[domain-1u];
+                    uint xy=_R25CandidatesRead154[physical*4u+(tap&3u)].y;
+                    outOwner=uint4(2,xy,r25Codes[tap]>>8,_R25ProducerTicket154);
+                }
+            }
+        }
+        _R25OwnersWrite154[i]=outOwner;
+    }
+}

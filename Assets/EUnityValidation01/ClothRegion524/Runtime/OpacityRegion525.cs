@@ -148,6 +148,14 @@ public sealed class OpacityRegion525
     {
         return ProjectHighPrecision94(original,fitOpacity).ConvertAll(e=>(new ClosedRegion524.P(e.Item1.x,e.Item1.y),new ClosedRegion524.P(e.Item2.x,e.Item2.y)));
     }
+    internal List<Vector2[]> BuildGridBoundary94(Vector2[] original,bool fitOpacity)
+    {
+        // The packed-key path avoids temporary managed rational values. Keep the
+        // existing path when P itself is already a pair of inline integers.
+        if(!System.Runtime.CompilerServices.RuntimeHelpers.IsReferenceOrContainsReferences<ClosedRegion524.P>())
+            return ClosedRegion524.BuildSegments(ProjectExact94(original,fitOpacity));
+        return ClosedRegion524.BuildGridWeights94(ProjectHighPrecision94(original,fitOpacity),p=>(p.x,p.y));
+    }
     List<(D,D)> ProjectHighPrecision94(Vector2[] original,bool fitOpacity)
     {
         var exact=new D[Anchors.Count];var p=new Vector2[exact.Length];

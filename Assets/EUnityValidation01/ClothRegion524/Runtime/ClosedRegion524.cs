@@ -128,6 +128,44 @@ public static class ClosedRegion524
         foreach(var edge in segments)Count(counts,edge.Item1,edge.Item2);
         return BuildCounts(counts);
     }
+    // Translate each original double once to the same input grid as P. Narrow
+    // integer keys cancel incidences before building the exact weighted table.
+    internal static List<Vector2[]> BuildGridWeights94<T>(List<(T,T)> segments,Func<T,(double x,double y)> read)
+    {
+        var slots=new Dictionary<(long,long,long,long),int>();
+        var weights=new List<GridWeight94>();
+        foreach(var segment in segments){
+            var a=read(segment.Item1);var b=read(segment.Item2);
+            var ax=(long)Math.Round(a.x*ArithmeticGrid);var ay=(long)Math.Round(a.y*ArithmeticGrid);
+            var bx=(long)Math.Round(b.x*ArithmeticGrid);var by=(long)Math.Round(b.y*ArithmeticGrid);
+            if(ax==bx&&ay==by)continue;
+            bool forward=ax<bx||ax==bx&&ay<by;
+            var key=forward?(ax,ay,bx,by):(bx,by,ax,ay);
+            if(slots.TryGetValue(key,out int index)){
+                var w=weights[index];
+                w.weight+=forward?1:-1;
+                weights[index]=w;
+            }else{
+                slots.Add(key,weights.Count);
+                weights.Add(new GridWeight94{
+                    a=forward?a:b,b=forward?b:a,weight=forward?1:-1
+                });
+            }
+        }
+        // Keep the first-encounter order and zero-weight keys, matching Count
+        // and the subsequent BuildCounts scratch dictionary behaviour.
+        var counts=new Dictionary<(P,P),int>();
+        foreach(var w in weights)
+            counts.Add((new P(w.a.x,w.a.y),new P(w.b.x,w.b.y)),w.weight);
+        return BuildCounts(counts);
+    }
+
+    struct GridWeight94
+    {
+        public (double x,double y) a,b;
+        public int weight;
+    }
+
     static List<Vector2[]> BuildCounts(Dictionary<(P,P),int> counts,Dictionary<(P,P),List<Origin579>> origins579=null,List<Node579[]> anchored579=null)
     {
         var edges=new List<Edge>();foreach(var row in counts)if(row.Value!=0)edges.Add(row.Value>0?new Edge{a=row.Key.Item1,b=row.Key.Item2,weight=row.Value}:new Edge{a=row.Key.Item2,b=row.Key.Item1,weight=-row.Value});WeightedEdges=edges.Count;

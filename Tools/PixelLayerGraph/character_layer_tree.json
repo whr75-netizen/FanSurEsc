@@ -1,0 +1,545 @@
+{
+  "schema_version": "4.0",
+  "tree_id": "CHARACTER_PIXEL_LAYER_TREE_V4",
+  "constitution": "C:/Users/15352/Desktop/목표.md",
+  "spec": "C:/Users/15352/Desktop/Argon4.0.md",
+  "clean_room_unity_root": "Assets/Rendering/PixelLayerTree",
+  "supreme_goal": "3D 캐릭터가 움직이고 의상·장비·시점이 바뀌어도 사람이 의도해서 그린 것처럼 자연스럽고 잘 읽히는 2D 픽셀아트를 실시간으로 생성하는 100% 논리적 정방향 변환 파이프라인",
+  "logical_grid": {
+    "width": 480,
+    "height": 272,
+    "display_integer_scale": 2,
+    "zero_mixels_enforced": true
+  },
+  "max_attempts_per_node": 2,
+  "forbidden_patterns": [
+    "_History395",
+    "nativeReserveSupportMask",
+    "Native395.ApertureOwner",
+    "GraphicsFenceType.AsyncQueueSynchronisation",
+    "contourReady",
+    "ContourSelect333",
+    "OwnerLines333",
+    "solve_aperture",
+    "Fixed4x4EyeStampHardcode",
+    "Physical3DMeshPullForward"
+  ],
+  "nodes": [
+    {
+      "id": "1",
+      "parent_id": null,
+      "name": "BackHair",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "BASE",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "뒷머리 메쉬를 캐릭터 루트 위상(-delta_root) 동기화 단일 격자에 1회 래스터화하여 (nodeId, r, q, z) 기록",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2",
+      "parent_id": null,
+      "name": "BodyAndClothingGroup",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "신체와 모든 의상·장비 하위 파츠를 수용하는 루트 컨테이너 노드 (자식 파츠별 의미 ID 분리 보장)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Runtime/PixelLayerTreeSchema.cs"
+      ],
+      "invariants": [
+        "tree_integrity",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2-1",
+      "parent_id": "2",
+      "name": "BodySkin",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "목·몸통·팔·손·다리 신체 피부를 의상과 분리해 루트 추종 단일 격자에 1회 기록 (실제 3D 깊이 z 유지)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2-1-1",
+      "parent_id": "2-1",
+      "name": "FingersDetail",
+      "domain": "LOCAL_GRID",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "CLIP_TO_PARENT",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "TBD_DESIGN",
+      "single_op_contract": "[미정] 저해상도에서 손가락 개별 분리 vs 손 덩어리 추상화 여부 (사용자 디자인 확정 전 AI 임의 구현 금지)",
+      "target_files": [],
+      "invariants": [
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2-2",
+      "parent_id": "2",
+      "name": "Stocking",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "스타킹/레그웨어를 신체 피부와 별도 파츠로 분리하고, 루트 상대 수광 기반 전용 다단계 명암 램프 인덱스 (r_stock, q) 기록",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2-2-1",
+      "parent_id": "2-2",
+      "name": "StockingSeamOrPattern",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "CLIP_TO_PARENT",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "스타킹 파츠 내부로 클리핑되는 무늬·절개선·재질 변조 하위 슬롯 (부모 2-2 외부 누출 원천 차단)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "parent_clip_containment",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2-3",
+      "parent_id": "2",
+      "name": "ClothBottom",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "하의/치마 메쉬를 독립 파츠 ID로 루트 추종 단일 격자에 1회 기록",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2-4",
+      "parent_id": "2",
+      "name": "ClothTop",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "상의 메쉬를 독립 파츠 ID로 루트 추종 단일 격자에 1회 기록",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2-4-1",
+      "parent_id": "2-4",
+      "name": "ClothOuterCardigan",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "아우터/카디건 등 겹쳐 입는 상의 외피를 3D 깊이 비교로 상의 위에 독립 분리 기록",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "2-5",
+      "parent_id": "2",
+      "name": "ShoesAndEquip",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "신발 및 추후 교체 가능한 장비·무기 파츠 확장 슬롯 (동일 루트 격자 + 3D 깊이 가림)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3",
+      "parent_id": null,
+      "name": "FaceHierarchyRoot",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "얼굴 및 중첩 하위 특징(피부·눈·눈썹·코·입) 컨테이너 노드",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Runtime/PixelLayerTreeSchema.cs"
+      ],
+      "invariants": [
+        "tree_integrity",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-1",
+      "parent_id": "3",
+      "name": "FaceSkinBase",
+      "domain": "3D_SOURCE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "순수 얼굴 피부 바탕만 단일 루트 격자에 기록 (실제 3D 턱·볼·콧대 깊이 z_face 유지, 눈 텍스처 혼입 차단)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/RootGBufferPass.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-2",
+      "parent_id": "3",
+      "name": "EyeSubTreeContainer",
+      "domain": "LOCAL_GRID",
+      "grid_space": "LOCAL_EYE_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "양안을 각각 3D 안와 중심 원점의 독립 로컬 픽셀 격자(동일 논리 피치)로 분리하고, 정면 거울 대칭 불변식을 검사(실패 시 3D 전단계 오류로 귀속)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/EyeLocalSubTree.compute"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "local_eye_frontal_symmetry",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-2-1",
+      "parent_id": "3-2",
+      "name": "EyeApertureClipMask",
+      "domain": "LOCAL_GRID",
+      "grid_space": "LOCAL_EYE_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "BASE",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "3D 눈구멍 개폐율(beta) + 콧대/볼 3D 자기가림으로 열린 가시 창 M_eye_visible 확정 (안구 메쉬 여유분 자동 절단 -> 개구리눈 원천 차단)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/EyeLocalSubTree.compute"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "local_eye_frontal_symmetry",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-2-1-1",
+      "parent_id": "3-2-1",
+      "name": "EyeSclera",
+      "domain": "LOCAL_GRID",
+      "grid_space": "LOCAL_EYE_GRID",
+      "clip_mode": "CLIP_TO_PARENT",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "눈 흰자를 3-2-1 가시 창 내부로 엄격히 클리핑하여 독립 로컬 격자에 생성",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/EyeLocalSubTree.compute"
+      ],
+      "invariants": [
+        "parent_clip_containment",
+        "local_eye_frontal_symmetry",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-2-1-1-1",
+      "parent_id": "3-2-1-1",
+      "name": "EyeIris",
+      "domain": "LOCAL_GRID",
+      "grid_space": "LOCAL_EYE_GRID",
+      "clip_mode": "CLIP_TO_PARENT",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "특징 속의 특징: 홍채를 회전·각도(yaw/pitch)에 따라 독립 보정한 뒤 부모 흰자/가시 창(3-2-1-1) 내부로 엄격히 클리핑",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/EyeLocalSubTree.compute"
+      ],
+      "invariants": [
+        "parent_clip_containment",
+        "local_eye_frontal_symmetry",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-2-1-1-1-1",
+      "parent_id": "3-2-1-1-1",
+      "name": "EyePupilAndHighlight",
+      "domain": "LOCAL_GRID",
+      "grid_space": "LOCAL_EYE_GRID",
+      "clip_mode": "CLIP_TO_PARENT",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "홍채(3-2-1-1-1) 내부로 클리핑되는 상·하 명암 키/동공·하이라이트 하위 특징 슬롯",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/EyeLocalSubTree.compute"
+      ],
+      "invariants": [
+        "parent_clip_containment",
+        "local_eye_frontal_symmetry",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-2-2",
+      "parent_id": "3-2",
+      "name": "EyeLidBoundaryGroup",
+      "domain": "LOCAL_GRID",
+      "grid_space": "LOCAL_EYE_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "눈 최상위 경계 레이어 컨테이너: 눈구멍/흰자/홍채(3-2-1 서브트리) 위에 올라와 눈의 경계를 명확히 인지시킴",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/EyeLocalSubTree.compute"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "local_eye_frontal_symmetry",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-2-2-1",
+      "parent_id": "3-2-2",
+      "name": "UpperEyeLidArch",
+      "domain": "LOCAL_GRID",
+      "grid_space": "LOCAL_EYE_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "상안검/아이라인 단일 연결 경계(4-연결 컴포넌트 1개, 고대비 최암부 아이라인 팔레트)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/EyeLocalSubTree.compute"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "local_eye_frontal_symmetry",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-2-2-2",
+      "parent_id": "3-2-2",
+      "name": "LowerEyeLidHint",
+      "domain": "LOCAL_GRID",
+      "grid_space": "LOCAL_EYE_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "하안검 경계 음영 힌트 (눈 밑 경계 가독성 유지, 과도한 밝은 흰자 노출 없이 각도별 자연스러운 마감)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/EyeLocalSubTree.compute"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "local_eye_frontal_symmetry",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-3",
+      "parent_id": "3",
+      "name": "Eyebrow",
+      "domain": "2D_COMPOSE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "TBD_DESIGN",
+      "single_op_contract": "[미정] 눈썹 독립 레이어 (앞머리에 완전히 가릴지 vs 애니식 일부 투과할지 사용자 결정 대기; 기본은 3D 깊이 가림)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/LayerTreeCompose.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "3-4",
+      "parent_id": "3",
+      "name": "NoseAndMouth",
+      "domain": "LOCAL_GRID",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "CLIP_TO_PARENT",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "TBD_DESIGN",
+      "single_op_contract": "[미정] 코·입 저해상도 픽셀 추상화 및 각도별 디자인 보정 슬롯 (사용자 디자인 확정 전 AI 임의 구현 금지)",
+      "target_files": [],
+      "invariants": [
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "4",
+      "parent_id": null,
+      "name": "FrontHair",
+      "domain": "2D_COMPOSE",
+      "grid_space": "ROOT_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "DEPTH_Z_TEST",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "앞머리·옆머리 레이어: 실제 3D 물리 깊이 z_hair < z_face/eye 구간만 3번 얼굴·눈 계층 위를 자연스럽게 가림",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/LayerTreeCompose.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "5",
+      "parent_id": null,
+      "name": "Final2DFinishGroup",
+      "domain": "2D_FINISH",
+      "grid_space": "FINAL_2D_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "FINAL_LUT_RESOLVE",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "모든 레이어가 단일 논리 격자에 조립된 후 단 1회 실행하는 2D 최종 마감 컨테이너",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/Final2DFinish.shader"
+      ],
+      "invariants": [
+        "tree_integrity",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "5-1",
+      "parent_id": "5",
+      "name": "DiscreteCurveAndClusterReg",
+      "domain": "2D_FINISH",
+      "grid_space": "FINAL_2D_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "인덱스 (r, q) 공간 단일 GPU 패스로 1px 실루엣 돌기 및 동일 영역 내 고립 명암 점 정돈 (눈 중첩 영역 보호, RGB 곱셈 금지)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/Final2DFinish.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "5-2",
+      "parent_id": "5",
+      "name": "PhysicalFrontDepthSilhouette",
+      "domain": "2D_FINISH",
+      "grid_space": "FINAL_2D_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "INDEX_ONLY_RQ",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "물리적 앞쪽 좌표(z_front + tau_z < z_back) 기준 단일 1px 외곽선 및 동일 피부 턱-목 겹침 실루엣 부여 (눈 경계 보호; 내부선 앞/뒤 셀 선택은 [미정] 토글 제공)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/Final2DFinish.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "no_forbidden_ops"
+      ]
+    },
+    {
+      "id": "5-3",
+      "parent_id": "5",
+      "name": "FinitePaletteLUTResolve",
+      "domain": "2D_FINISH",
+      "grid_space": "FINAL_2D_GRID",
+      "clip_mode": "NONE",
+      "occlude_mode": "LAYER_OVER_PARENT",
+      "palette_mode": "FINAL_LUT_RESOLVE",
+      "design_status": "CONFIRMED",
+      "single_op_contract": "최종 RGB = P[r, q_final] 단 1회 조회 및 정수배(k x k) 무손실 표시 (2중 RGB 곱셈·2중 외곽선·믹셀 0건)",
+      "target_files": [
+        "Assets/Rendering/PixelLayerTree/Shaders/Final2DFinish.shader"
+      ],
+      "invariants": [
+        "uniform_grid_no_mixels",
+        "finite_palette_exact",
+        "no_forbidden_ops"
+      ]
+    }
+  ]
+}

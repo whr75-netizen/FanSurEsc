@@ -1,25 +1,24 @@
-# GameMap1 R25 전신 1×1 시험
+# GameMap1 R25 시험 보류
 
-`Tools > Pixel Rendering > R25 GameMap1 Front and Quarter`에서 정면과 쿼터뷰를 한 장씩 요청한다. 원본의 `Gameplay397.Present`를 사용한다. 이미 정상적으로 로드된 원본 GameMap1 Play Mode가 필요하다. 메뉴는 Play Mode로 전환하거나 에셋을 저장하지 않는다.
+`Tools > Pixel Rendering > R25 GameMap1 Front and Quarter`는 시험 보류 상태만 콘솔에 표시한다. Edit와 Play 모두에서 셰이더 임포트, 리소스 할당, 캡처, 씬 변경을 시작하지 않는다.
 
-Unity의 공식 Pipeline CLI에서 동일한 메뉴를 호출할 수 있다.
+R25 시험용 C# 구현과 셰이더 5개를 Unity 자동 임포트 범위에서 제거했다. `NativeWorldFeature395`는 시험 연결 추가 전인 `86de44d3`의 소스와 같다. GameMap1, 플레이어, 카메라, 렌더 파이프라인 설정은 건드리지 않았다. 완전한 시험 구현과 에셋은 로컬 커밋 `87862b6c`에 보존돼 있다. 이 작업 트리에서 원래 메뉴를 클릭해도 시험이 다시 켜지지 않는다.
 
-```powershell
-unity command editor invoke_menu --path 'Tools/Pixel Rendering/R25 GameMap1 Front and Quarter'
-```
+## 원인과 증거
 
-## 설정과 결과
+`Logs/Editor.log`에서 R25 컴퓨트 셰이더를 자동 임포트한 뒤 해당 셰이더 경고 818건이 발생했다. 변수 이름 가림 684건, 부호 있는 값과 없는 값 혼용 57건, 초기화 여부 경고 29건, 루프 최적화 경고 36건, 유한값 검사 최적화 경고 12건이다. 기록에 커널 이름이 있고 그래픽 API 변형은 표시되지 않았다.
 
-프로젝트의 Git 제외 경로 `LocalOnly/R25_NATIVE_COMMON_CONFIG.json`에 다음 세 경로를 JSON으로 지정한다. 모두 기존 산출물을 읽는 입력이다.
+| 컴파일 커널 | 경고 |
+| --- | ---: |
+| `SelectConnectedOwners154` | 216 |
+| `PrepareNativeOwnerRays154` | 143 |
+| `CaptureWorldStamped154` | 130 |
+| `PresentNativeCommon154` | 126 |
+| `Present` | 112 |
+| `CaptureWorld` | 91 |
 
-- `cache`에 검증된 `STATIC154.json`과 `static/`이 있는 Integrated154 캐시 디렉터리
-- `registry`에 대응하는 `SOURCE_REGISTRY59.json`
-- `state`에 현재 보호 해시 128개가 기록된 `STATE31.json`
+신규 파일을 임포트한 전체 자산 갱신은 23.594초였다. 이어 Play에 진입할 때 별도 갱신이 17.296초 걸렸고 그 안의 도메인 재로딩은 16.705초였다. 이 수치는 각 구간의 전체 시간이다. R25 셰이더에만 걸린 시간은 로그에 없다. R25 실행 폴더와 메뉴 시작 로그는 생성되지 않았다.
 
-실행 결과는 `LocalOnly/Runtime399/R25NativeCommon/<run-id>/`에 저장한다. 두 화면은 기존 R24의 동일 포즈 스냅샷 조건을 쓴다. 본 변환이 달라지면 두 번째 렌더 전에 중단한다. 유효한 결과는 `front_1X.png`, `quarter_1X.png`와 각 결과 JSON 및 `RESULT.json`이 있어야 한다. 색·역할·깊이 조건 미달과 마지막 사용 미확인은 각각 `FAILURE.txt`와 `OWNER_RETAINED`에 표시한다.
+기존 `Gameplay397.Present`는 게임 카메라를 한 번 렌더한다. 실제 로그는 `Matched397Pipeline`, 머리 로컬 렌더 활성, 캐릭터 배율 2를 기록했다. 같은 프레임의 `HeadLocal367.RenderFrame`은 머리 카메라 한 번과 몸통 로컬 카메라 두 번을 더 렌더하고, 기본 의상 경로에서 `Full319View335.Read`를 10회 호출한다. 이 함수는 각 GPU 읽기 뒤 `WaitForCompletion`을 호출한다. 이런 호출의 현재 프레임 시간은 계측하지 않았다.
 
-## 경계
-
-- `NativeWorldFeature395`의 에디터 전용 옵트인 연결은 평소에 비어 있다. 기존 눈 샘플, 기존 렌더러 설정, GameMap1 및 제품 원본 에셋은 그대로 사용한다.
-- R25는 실제 눈꺼풀·안구·속눈썹·앞머리의 같은 광선 표본과 현재 월드 깊이를 받는다. 고정된 192×352 원본 재투영에서 캐릭터 1×1, 월드 색 2×2와 물리 월드 깊이를 사용한다. 캐릭터 최종 쓰기는 R25 합성 한 곳에서 수행한다. 준비용 원본 패스와 별도다.
-- 정면과 쿼터의 소유권·팔레트·가시 역할·월드 깊이와 자원 회수는 별도 실제 판정이다. 이 소스의 오프라인 검사와 보관 표본 검증은 Native1 실측을 대체하지 않는다. 완료를 확인할 수 없는 자원은 해당 실행만 소유한 채 사용 중인 연결을 해제한다.
+변경된 소스와 메뉴를 오프라인에서 확인했다. 삭제 반영 시 Unity가 한 번 자산 데이터베이스를 갱신할 수 있으며, 이번 작업에는 새 Play·GPU 검증이나 FPS 측정이 없다.

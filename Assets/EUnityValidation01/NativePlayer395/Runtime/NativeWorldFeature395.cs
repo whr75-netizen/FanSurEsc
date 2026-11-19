@@ -6,12 +6,29 @@ using UnityEngine.Rendering.RenderGraphModule;
 // Original world passes remain unchanged. This feature reads their native result.
 public sealed class NativeWorldFeature395:ScriptableRendererFeature
 {
+#if UNITY_EDITOR
+ // Optional validation adapter. The existing renderer and its feature order remain authoritative.
+ public interface IEditorTrial
+ {
+  void EnqueueHeadPass(ScriptableRenderer renderer, Camera camera);
+  bool RecordWorld(RenderGraph graph, ContextContainer frame, NativePlayer395 view);
+  bool RecordFinal(RenderGraph graph, ContextContainer frame, NativePlayer395 view);
+ }
+ public static IEditorTrial EditorTrial { get; set; }
+#endif
  Capture capture;Present present;
  public override void Create(){capture=new Capture{renderPassEvent=(RenderPassEvent)901};present=new Present{renderPassEvent=(RenderPassEvent)601};}
- public override void AddRenderPasses(ScriptableRenderer renderer,ref RenderingData data){var v=NativePlayer395.Active;if(!v||!v.compute||(!v.gameCamera&&!v.baselineCamera))return;if(data.cameraData.camera==v.gameCamera||data.cameraData.camera==v.baselineCamera){capture.ConfigureInput(ScriptableRenderPassInput.Depth);renderer.EnqueuePass(capture);}else if(v.ready&&data.cameraData.camera==v.localCamera)renderer.EnqueuePass(present);}
+ public override void AddRenderPasses(ScriptableRenderer renderer,ref RenderingData data){var v=NativePlayer395.Active;if(!v||!v.compute||(!v.gameCamera&&!v.baselineCamera))return;
+#if UNITY_EDITOR
+  EditorTrial?.EnqueueHeadPass(renderer,data.cameraData.camera);
+#endif
+  if(data.cameraData.camera==v.gameCamera||data.cameraData.camera==v.baselineCamera){capture.ConfigureInput(ScriptableRenderPassInput.Depth);renderer.EnqueuePass(capture);}else if(v.ready&&data.cameraData.camera==v.localCamera)renderer.EnqueuePass(present);}
  sealed class Data{public NativePlayer395 view;public TextureHandle colour,depth;public Camera camera;}
  sealed class Capture:ScriptableRenderPass{
   public override void RecordRenderGraph(RenderGraph graph,ContextContainer frame){
+#if UNITY_EDITOR
+   if(EditorTrial?.RecordWorld(graph,frame,NativePlayer395.Active)==true)return;
+#endif
    var v=NativePlayer395.Active;v.EnsureWorld();var resources=frame.Get<UniversalResourceData>();var camera=frame.Get<UniversalCameraData>();
    var desc=graph.GetTextureDesc(resources.activeColorTexture);if(desc.width!=960||desc.height!=544)throw new System.Exception("395 native world descriptor changed:"+desc.width+"x"+desc.height);
    using var builder=graph.AddUnsafePass<Data>("395 retain original native960 world and depth",out var data);
@@ -22,6 +39,9 @@ public sealed class NativeWorldFeature395:ScriptableRendererFeature
  }
  sealed class Present:ScriptableRenderPass{
   public override void RecordRenderGraph(RenderGraph graph,ContextContainer frame){
+#if UNITY_EDITOR
+   if(EditorTrial?.RecordFinal(graph,frame,NativePlayer395.Active)==true)return;
+#endif
    var v=NativePlayer395.Active;var full=v.host.main;var motion=full.motion;var resources=frame.Get<UniversalResourceData>();
    using(var builder=graph.AddUnsafePass<Data>("395 existing E cells at original world native samples",out var data)){
     data.view=v;

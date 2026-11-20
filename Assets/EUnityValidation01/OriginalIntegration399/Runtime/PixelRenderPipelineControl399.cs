@@ -61,6 +61,26 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
     [Tooltip("Layer 11: Legacy 24-RT 4x4 PostView366 / SourceFeature366 / JoinSource367 candidate path.")]
     public bool enablePost366Candidate = false;
 
+    [Header("Clothing Silhouette & Edge Stabilization (Real-Time GPU / Zero-Shrinkage)")]
+    [Tooltip("Applies non-destructive Taubin zero-shrinkage low-pass smoothing to baked clothing submeshes (skirt/shoes/coat) while keeping original normals for fold shading.")]
+    public bool enableClothMeshSmoothing = true;
+    [Range(1, 10)]
+    public int clothSmoothIterations = 6;
+    [Range(0f, 1f)]
+    public float clothSmoothStrength = 0.90f;
+    [Tooltip("Keep original baked cloth normals so internal wrinkle shading stays rich while the silhouette is smooth.")]
+    public bool clothSmoothKeepOriginalNormals = true;
+    [Tooltip("GPU 1-pass spatial clothing silhouette stabilizer (prunes isolated 1px wrinkle spurs & fills 1px crease notches before outlines).")]
+    public bool enableEdgeStabilizationGPU = true;
+    [Tooltip("Also include body torso/stockings (excluding thin arms/hands and face) in GPU edge stabilization.")]
+    public bool edgeStabilizeIncludeBody = false;
+    [Tooltip("Actor-local 1-frame boundary debounce (Schmitt hysteresis) to stop 0<->1 clothing edge flickering without ghosting.")]
+    public bool enableEdgeHysteresis = true;
+    [Tooltip("Quantizes skeleton animation cadence (e.g. 12 FPS) for crisp pixel-art silhouettes while keeping movement & camera smooth at full FPS.")]
+    public bool enableSteppedPose = true;
+    [Range(6f, 30f)]
+    public float steppedPoseFps = 12f;
+
     [Header("Runtime Debug Overlay (Press F8)")]
     public bool showLayerDebugHUD = false;
 
@@ -108,6 +128,16 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
     public static bool NeedsTwoPassCPU => EnableClothingRegionCPU || EnableOpenContourCPU || EnablePost366Candidate;
     public static bool NeedsNative960 => EnableCharacterPass && ((Active != null && Active.enableNative960Supersample) || EnableClothingRegionCPU || EnableOpenContourCPU);
 
+    public static bool EnableClothMeshSmoothing => Active == null || Active.enableClothMeshSmoothing;
+    public static int ClothSmoothIterations => Active != null ? Mathf.Clamp(Active.clothSmoothIterations, 1, 10) : 6;
+    public static float ClothSmoothStrength => Active != null ? Mathf.Clamp01(Active.clothSmoothStrength) : 0.90f;
+    public static bool ClothSmoothKeepOriginalNormals => Active == null || Active.clothSmoothKeepOriginalNormals;
+    public static bool EnableEdgeStabilizationGPU => EnableCharacterPass && (Active == null || Active.enableEdgeStabilizationGPU);
+    public static bool EdgeStabilizeIncludeBody => Active != null && Active.edgeStabilizeIncludeBody;
+    public static bool EnableEdgeHysteresis => EnableCharacterPass && (Active == null || Active.enableEdgeHysteresis);
+    public static bool EnableSteppedPose => Active == null || Active.enableSteppedPose;
+    public static float SteppedPoseFps => Active != null ? Mathf.Clamp(Active.steppedPoseFps, 6f, 60f) : 12f;
+
     public int ConfigVersion => lastConfigVersion;
 
     public void ApplyFastRealTimePreset()
@@ -128,6 +158,13 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         enableClothingRegionCPU = false;
         enableOpenContourCPU = false;
         enablePost366Candidate = false;
+        enableClothMeshSmoothing = true;
+        clothSmoothIterations = 6;
+        clothSmoothStrength = 0.90f;
+        enableEdgeStabilizationGPU = true;
+        enableEdgeHysteresis = true;
+        enableSteppedPose = true;
+        steppedPoseFps = 12f;
         MarkConfigDirty();
     }
 
@@ -145,6 +182,10 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         enableClothingRegionCPU = false;
         enableOpenContourCPU = false;
         enablePost366Candidate = false;
+        enableClothMeshSmoothing = false;
+        enableEdgeStabilizationGPU = false;
+        enableEdgeHysteresis = false;
+        enableSteppedPose = false;
         MarkConfigDirty();
     }
 
@@ -204,6 +245,15 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
             h = h * 31 + (enableClothingRegionCPU ? 1 : 0);
             h = h * 31 + (enableOpenContourCPU ? 1 : 0);
             h = h * 31 + (enablePost366Candidate ? 1 : 0);
+            h = h * 31 + (enableClothMeshSmoothing ? 1 : 0);
+            h = h * 31 + clothSmoothIterations;
+            h = h * 31 + Mathf.RoundToInt(clothSmoothStrength * 100f);
+            h = h * 31 + (clothSmoothKeepOriginalNormals ? 1 : 0);
+            h = h * 31 + (enableEdgeStabilizationGPU ? 1 : 0);
+            h = h * 31 + (edgeStabilizeIncludeBody ? 1 : 0);
+            h = h * 31 + (enableEdgeHysteresis ? 1 : 0);
+            h = h * 31 + (enableSteppedPose ? 1 : 0);
+            h = h * 31 + Mathf.RoundToInt(steppedPoseFps * 10f);
             return h;
         }
     }
@@ -216,7 +266,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         float ms = smoothedDeltaTime * 1000f;
 
         GUI.depth = -1000;
-        GUILayout.BeginArea(new Rect(12, 12, 360, 470), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(12, 12, 380, 610), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
         GUILayout.Label($"FPS: {fps:F1} ({ms:F1} ms) | Display: {displayScaleMode}");
         GUILayout.Label($"Mode: {(bypassPresentation ? "BYPASSED (Original Camera)" : NeedsTwoPassCPU ? "2-Pass CPU Diagnostic" : "1-Pass Native GPU Loop")}");
         GUILayout.Label($"Outline Dispatches: {lastOutlineDispatches} | Readbacks: {lastFrameReadbacks}");
@@ -242,6 +292,22 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         enableEyeDetail348Pass = GUILayout.Toggle(enableEyeDetail348Pass, "6. 4x4 Subpixel Eye Refinement (348)");
         enableTemporalHistory = GUILayout.Toggle(enableTemporalHistory, "7. Temporal History Lock (_History395)");
         enableNative960Supersample = GUILayout.Toggle(enableNative960Supersample, "8. 960x544 Supersample Passes");
+
+        GUILayout.Space(4);
+        GUILayout.Label("--- Clothing Edge Stabilization (Anti-Flicker) ---");
+        enableClothMeshSmoothing = GUILayout.Toggle(enableClothMeshSmoothing, $"S1. Taubin Cloth Smooth (iter={clothSmoothIterations}, str={clothSmoothStrength:F2})");
+        enableEdgeStabilizationGPU = GUILayout.Toggle(enableEdgeStabilizationGPU, "S2. GPU 1px Spur Prune & Notch Fill");
+        enableEdgeHysteresis = GUILayout.Toggle(enableEdgeHysteresis, "S3. Actor-Local Temporal Edge Hysteresis");
+        enableSteppedPose = GUILayout.Toggle(enableSteppedPose, $"S4. Stepped Pixel Pose ({steppedPoseFps:F0} FPS anim / 60 FPS move)");
+        if (enableSteppedPose)
+        {
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("8 FPS")) steppedPoseFps = 8f;
+            if (GUILayout.Button("12 FPS")) steppedPoseFps = 12f;
+            if (GUILayout.Button("15 FPS")) steppedPoseFps = 15f;
+            if (GUILayout.Button("24 FPS")) steppedPoseFps = 24f;
+            GUILayout.EndHorizontal();
+        }
 
         GUILayout.Space(4);
         GUILayout.Label("--- Optimizations & Heavy CPU Paths ---");

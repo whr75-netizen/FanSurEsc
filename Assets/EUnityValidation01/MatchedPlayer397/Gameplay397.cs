@@ -7,6 +7,8 @@ using System;using System.IO;using System.Linq;using System.Reflection;using Sys
  PixelRenderPipelineControl399 pipelineControl;
  bool wasBypassed;
  int lastSyncedConfigVersion=-1;
+ float stepAccumulatedDt,lastSteppedLocomotion=-1f;
+ bool hasSteppedOnce;
  void OnEnable(){if(Application.isPlaying&&connected&&player&&player.gameCamera&&!PixelRenderPipelineControl399.BypassPresentation)player.gameCamera.GetComponent<CameraZoomController>().SetNativePixelGrid(90.5096664428711f,nativeGridScale,this);}
  public NativePlayer395 player;public RuntimeAnimatorController controller;public bool activateGameplay,connected,testFinished,runInputTest=true;public bool actualInputPassed;public string failure;public Source329WalkView originalSource,sourceProxy;
  public static string ReportFile=>Path.GetFullPath(Path.Combine(Application.dataPath,"..","LocalOnly","Runtime399","GAMEPLAY_LATEST399.json"));
@@ -58,6 +60,8 @@ var map=GameInputBindings.GameplayMap;if(map==null)throw new Exception("397 exis
   var m=player.host&&player.host.main?player.host.main.motion:null;
   var zoom=player.gameCamera.GetComponent<CameraZoomController>();
   if(bypassed){
+   if(animator)animator.speed=1f;
+   hasSteppedOnce=false;stepAccumulatedDt=0f;
    if(player.host)player.host.DisableScheduledNativeLoop();
    if(player.localCamera)player.localCamera.enabled=false;
    if(player.worldRenderTarget&&player.gameCamera.targetTexture==player.worldRenderTarget)player.gameCamera.targetTexture=null;
@@ -74,12 +78,41 @@ var map=GameInputBindings.GameplayMap;if(map==null)throw new Exception("397 exis
    SyncPipelineControl(true);
   }
  }
+ bool AdvanceSteppedAnimator(bool forceStep){
+  if(!animator)return true;
+  bool stepped=PixelRenderPipelineControl399.EnableSteppedPose&&!runInputTest;
+  if(!stepped){
+   if(animator.speed==0f)animator.speed=1f;
+   hasSteppedOnce=false;stepAccumulatedDt=0f;
+   return true;
+  }
+  float interval=1f/PixelRenderPipelineControl399.SteppedPoseFps;
+  float loco=animator.GetFloat(PlayerMovement.LocomotionSpeedParameter);
+  bool transitionChanged=!hasSteppedOnce||Mathf.Abs(loco-lastSteppedLocomotion)>0.08f;
+  stepAccumulatedDt+=Time.deltaTime;
+  if(forceStep||transitionChanged||stepAccumulatedDt>=interval){
+   float advance=Mathf.Min(stepAccumulatedDt,0.25f);
+   stepAccumulatedDt=stepAccumulatedDt>=interval?(stepAccumulatedDt-interval):0f;
+   if(stepAccumulatedDt>interval)stepAccumulatedDt=0f;
+   animator.speed=1f;
+   animator.Update(advance);
+   animator.speed=0f;
+   hasSteppedOnce=true;
+   lastSteppedLocomotion=loco;
+   return true;
+  }
+  animator.speed=0f;
+  return false;
+ }
  void Present(){
   bool bypassed=PixelRenderPipelineControl399.BypassPresentation;
   if(bypassed!=wasBypassed){wasBypassed=bypassed;ApplyBypassState(bypassed);}
   if(bypassed)return;
+  int prevConfigVer=lastSyncedConfigVersion;
   SyncPipelineControl(false);
-  var m=player.host.main.motion;player.avatar.position=player.feet.position;player.avatar.localScale=Vector3.one*(player.bodyHeight/player.sourceHeight);var state=animator.GetCurrentAnimatorStateInfo(0);m.sourceFrame=Mathf.Repeat(state.normalizedTime,1)*40;m.Evaluate();player.bake.Evaluate(true);
+  bool configChanged=prevConfigVer!=lastSyncedConfigVersion;
+  bool poseStepped=AdvanceSteppedAnimator(configChanged);
+  var m=player.host.main.motion;player.avatar.position=player.feet.position;player.avatar.localScale=Vector3.one*(player.bodyHeight/player.sourceHeight);var state=animator.GetCurrentAnimatorStateInfo(0);m.sourceFrame=Mathf.Repeat(state.normalizedTime,1)*40;m.Evaluate();player.bake.Evaluate(true,poseStepped||configChanged);
   bool useNativeSingleLoop=PixelRenderPipelineControl399.AvoidDuplicateWorldRender&&!PixelRenderPipelineControl399.NeedsTwoPassCPU&&!runInputTest;
   if(useNativeSingleLoop){
    player.gameCamera.depth=-2f;
@@ -95,5 +128,5 @@ var map=GameInputBindings.GameplayMap;if(map==null)throw new Exception("397 exis
  void TestInput(){string stage=testFrame<3?"IDLE_BEFORE":testFrame<11?"WALK_W":testFrame<19?"RUN_W_SHIFT":"IDLE_AFTER";var state=animator.GetCurrentAnimatorStateInfo(0);samples.Add(new Sample{keyboardEnabled=testKeyboard!=null&&testKeyboard.enabled,keyW=testKeyboard!=null&&testKeyboard.wKey.isPressed,mapEnabled=GameInputBindings.GameplayMap!=null&&GameInputBindings.GameplayMap.enabled,actionUpEnabled=GameInputBindings.GetAction(GameInputActionId.MoveUp)!=null&&GameInputBindings.GetAction(GameInputActionId.MoveUp).enabled,focused=Application.isFocused,stage=stage,frame=Time.frameCount,serial=renderSerial,input=GameInputBindings.ReadMovement(),runBinding=GameInputBindings.IsPressed(GameInputActionId.Run),position=player.player.position,facing=animator.transform.rotation,deltaTime=Time.deltaTime,speed=movement.CurrentMoveSpeed,running=movement.IsRunning,locomotion=animator.GetFloat(PlayerMovement.LocomotionSpeedParameter),normalisedTime=state.normalizedTime,stateHash=state.fullPathHash,leftFoot=animator.GetBoneTransform(HumanBodyBones.LeftFoot).localToWorldMatrix,rightFoot=animator.GetBoneTransform(HumanBodyBones.RightFoot).localToWorldMatrix,hips=animator.GetBoneTransform(HumanBodyBones.Hips).localToWorldMatrix});testFrame++;if(testFrame==3)Queue(new[]{Key.W});if(testFrame==11)Queue(new[]{Key.W,Key.LeftShift});if(testFrame==19)Queue(Array.Empty<Key>());if(testFrame>=23){Queue(Array.Empty<Key>());testFinished=true;Time.captureDeltaTime=0;WriteReport();if(testKeyboard!=null){InputSystem.RemoveDevice(testKeyboard);testKeyboard=null;}}}
  void WriteReport(){Vector3 delta=player&&player.player?player.player.position-initialPosition:Vector3.zero;delta.y=0;bool graph=false;if(originalSource){var f=typeof(Source329WalkView).GetField("graph",BindingFlags.Instance|BindingFlags.NonPublic);graph=((PlayableGraph)f.GetValue(originalSource)).IsValid();}var r=new Report{status=!string.IsNullOrEmpty(failure)?"FAILED":testFinished?"ACTUAL_INPUT_PATH_CAPTURED_PENDING_REVIEW":"CONNECTED",failure=failure,player=player&&player.player?ActualPlayerAudit391.PathOf(player.player):null,animator=animator?ActualPlayerAudit391.PathOf(animator.transform):null,controller=controller?controller.name:null,sourceClip=sourceProxy&&sourceProxy.clip?sourceProxy.clip.name:null,originalMovementEnabled=movement&&movement.isActiveAndEnabled,manualGraphValid=graph,avatarHuman=animator&&animator.isHuman,feetFollow=player&&player.avatar&&Vector3.Distance(player.avatar.position,player.feet.position)<.0001f,walkObserved=samples.Any(s=>s.input.y>.9f&&!s.runBinding&&s.speed>0&&Mathf.Abs(s.locomotion-1)<.01f),runObserved=samples.Any(s=>s.input.y>.9f&&s.runBinding&&s.running&&Mathf.Abs(s.locomotion-1.3f)<.01f),idleObserved=samples.Any(s=>s.stage=="IDLE_AFTER"&&s.input==Vector2.zero&&s.locomotion==0),horizontalDisplacement=delta.magnitude,samples=samples};actualInputPassed=r.walkObserved&&r.runObserved&&r.idleObserved&&r.horizontalDisplacement>.01f&&!r.manualGraphValid&&r.avatarHuman&&r.feetFollow;r.actualInputPassed=actualInputPassed;if(testFinished)r.status=actualInputPassed?"ACTUAL_INPUT_MOVEMENT_ANIMATOR_PASSED":"ACTUAL_INPUT_MOVEMENT_ANIMATOR_FAILED";Directory.CreateDirectory(Path.GetDirectoryName(ReportFile));File.WriteAllText(ReportFile,JsonUtility.ToJson(r,true));}
  void OnGUI(){if(!showReviewUI)return;if(!connected||!activateGameplay)return;GUI.depth=-21000;GUILayout.Label("WASD 이동 / Shift 달리기");if(Event.current.type==EventType.Repaint){if(!gui)gui=new Material(player.exactGUI);bool prior=GL.sRGBWrite;GL.sRGBWrite=false;Graphics.DrawTexture(new Rect(16,60,960,544),player.localCamera.targetTexture,gui);GL.sRGBWrite=prior;}}
- void OnDisable(){if(player&&player.host)player.host.DisableScheduledNativeLoop();if(player&&player.gameCamera){if(player.worldRenderTarget&&player.gameCamera.targetTexture==player.worldRenderTarget)player.gameCamera.targetTexture=null;player.gameCamera.depth=player.originalGameCameraDepth;var zoom=player.gameCamera.GetComponent<CameraZoomController>();if(zoom&&zoom.NativePixelGridOwner==this){nativeGridScale=zoom.NativeIntegerScale;zoom.ClearNativePixelGrid(this);}}Time.captureDeltaTime=0;if(previousInputSettings)InputSystem.settings=previousInputSettings;if(testKeyboard!=null){InputSystem.RemoveDevice(testKeyboard);testKeyboard=null;}}
+ void OnDisable(){if(animator)animator.speed=1f;if(player&&player.host)player.host.DisableScheduledNativeLoop();if(player&&player.gameCamera){if(player.worldRenderTarget&&player.gameCamera.targetTexture==player.worldRenderTarget)player.gameCamera.targetTexture=null;player.gameCamera.depth=player.originalGameCameraDepth;var zoom=player.gameCamera.GetComponent<CameraZoomController>();if(zoom&&zoom.NativePixelGridOwner==this){nativeGridScale=zoom.NativeIntegerScale;zoom.ClearNativePixelGrid(this);}}Time.captureDeltaTime=0;if(previousInputSettings)InputSystem.settings=previousInputSettings;if(testKeyboard!=null){InputSystem.RemoveDevice(testKeyboard);testKeyboard=null;}}
 }

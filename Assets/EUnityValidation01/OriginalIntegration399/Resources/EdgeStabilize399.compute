@@ -1,0 +1,205 @@
+#pragma kernel Stabilize
+
+// Single-pass GPU clothing silhouette edge stabilizer.
+// Runs BEFORE OwnerLines333 and DeferredEyes so outlines stay unbroken (zero double-pass)
+// and facial/eye/hand features remain strictly untouched.
+Texture2D<float4> _InBefore, _InOwner, _InMeta, _InUV;
+Texture2D<float4> _InSurface480, _InPalette480;
+Texture2D<float4> _EdgeHistoryRead;
+
+RWTexture2D<float4> _OutBefore, _OutColour, _OutOwner, _OutMeta, _OutUV;
+RWTexture2D<float4> _OutGridSurface, _OutGridPalette;
+RWTexture2D<float4> _EdgeHistoryWrite;
+
+int2 _EdgeSize;
+int2 _EdgePivotDelta;
+int _EdgeSpatialEnabled;
+int _EdgeHysteresisEnabled;
+int _EdgeResetHistory;
+int _EdgeIncludeBody;
+
+bool Inside(int2 p)
+{
+    return all(p >= 0) && all(p < _EdgeSize);
+}
+
+bool Covered(int2 p)
+{
+    return Inside(p) && _InBefore.Load(int3(p, 0)).a > 0.5;
+}
+
+bool IsEditableRole(float4 owner)
+{
+    int role = (int)round(owner.x) - 1;
+    int part = (int)round(owner.y);
+    if (role == 8 || role == 9 || role == 10) return true;
+    if (_EdgeIncludeBody != 0 && role == 7 && part != 2 && part != 3) return true;
+    return false;
+}
+
+void WritePruned(int2 p)
+{
+    _OutBefore[p] = 0;
+    _OutColour[p] = 0;
+    _OutOwner[p] = 0;
+    _OutMeta[p] = 0;
+    _OutUV[p] = 0;
+    [unroll] for (int y = 0; y < 2; y++)
+    [unroll] for (int x = 0; x < 2; x++)
+    {
+        int2 q = 2 * p + int2(x, y);
+        _OutGridSurface[q] = 0;
+        _OutGridPalette[q] = 0;
+    }
+}
+
+void WriteFromDonor(int2 p, int2 donor)
+{
+    float4 c = _InBefore.Load(int3(donor, 0));
+    float4 o = _InOwner.Load(int3(donor, 0));
+    float4 m = _InMeta.Load(int3(donor, 0));
+    float4 u = _InUV.Load(int3(donor, 0));
+    float4 s = _InSurface480.Load(int3(donor, 0));
+    float4 pal = _InPalette480.Load(int3(donor, 0));
+    c.a = 1.0;
+    _OutBefore[p] = c;
+    _OutColour[p] = c;
+    _OutOwner[p] = o;
+    _OutMeta[p] = m;
+    _OutUV[p] = u;
+    [unroll] for (int y = 0; y < 2; y++)
+    [unroll] for (int x = 0; x < 2; x++)
+    {
+        int2 q = 2 * p + int2(x, y);
+        _OutGridSurface[q] = s;
+        _OutGridPalette[q] = pal;
+    }
+}
+
+[numthreads(8, 8, 1)]
+void Stabilize(uint3 id : SV_DispatchThreadID)
+{
+    int2 p = int2(id.xy);
+    if (!Inside(p)) return;
+
+    float4 origBefore = _InBefore.Load(int3(p, 0));
+    float4 origOwner = _InOwner.Load(int3(p, 0));
+    bool origCov = origBefore.a > 0.5;
+    bool origEditable = origCov && IsEditableRole(origOwner);
+
+    int2 dirs[4] = { int2(-1, 0), int2(1, 0), int2(0, -1), int2(0, 1) };
+    int cardCov = 0;
+    int editableCardCov = 0;
+    int2 singleBack = int2(0, 0);
+    int2 bestDonor = int2(-1, -1);
+    float bestDonorZ = 1e9;
+    float minEditableZ = 1e9;
+    float maxEditableZ = -1e9;
+    float dominantRole = origOwner.x;
+
+    [unroll]
+    for (int i = 0; i < 4; i++)
+    {
+        int2 n = p + dirs[i];
+        if (!Covered(n)) continue;
+        cardCov++;
+        singleBack = dirs[i];
+        float4 no = _InOwner.Load(int3(n, 0));
+        if (IsEditableRole(no))
+        {
+            editableCardCov++;
+            float nz = no.z;
+            minEditableZ = min(minEditableZ, nz);
+            maxEditableZ = max(maxEditableZ, nz);
+            if (nz > 0.0 && nz < bestDonorZ)
+            {
+                bestDonorZ = nz;
+                bestDonor = n;
+                dominantRole = no.x;
+            }
+        }
+    }
+
+    // 1) Spatial topology stabilization (1px spur pruning & 1px concave notch closing)
+    bool spatialCov = origCov;
+    if (_EdgeSpatialEnabled != 0)
+    {
+        if (origEditable)
+        {
+            if (cardCov == 0)
+            {
+                // Completely detached 1px wrinkle speck
+                spatialCov = false;
+            }
+            else if (cardCov == 1)
+            {
+                // Width-1 protruding pimple backed by a solid >=3px wall (never eats thin limbs/straps)
+                int2 side = int2(-singleBack.y, singleBack.x);
+                bool wallLeft = Covered(p + singleBack + side);
+                bool wallRight = Covered(p + singleBack - side);
+                bool tipSideA = Covered(p - singleBack + side);
+                bool tipSideB = Covered(p - singleBack - side);
+                if (wallLeft && wallRight && !tipSideA && !tipSideB)
+                {
+                    spatialCov = false;
+                }
+            }
+        }
+        else if (!origCov && editableCardCov >= 3 && bestDonor.x >= 0 && (maxEditableZ - minEditableZ) < 0.15)
+        {
+            // 1px concave fold crease surrounded on 3-4 cardinal sides by continuous clothing
+            spatialCov = true;
+        }
+    }
+
+    // 2) Actor-local temporal edge hysteresis (1-frame boundary debounce against 0<->1 chattering)
+    bool finalCov = spatialCov;
+    float nextPending = 0.0;
+
+    if (_EdgeHysteresisEnabled != 0)
+    {
+        int2 prevP = p - _EdgePivotDelta;
+        bool hasHist = (_EdgeResetHistory == 0) && Inside(prevP);
+        float4 hist = hasHist ? _EdgeHistoryRead.Load(int3(prevP, 0)) : 0;
+        bool histValid = hasHist && hist.w > 0.5;
+        bool prevStable = histValid && hist.x > 0.5;
+        bool prevPending = histValid && hist.y > 0.5;
+
+        // Restrict hysteresis strictly to editable clothing silhouette boundaries
+        bool canHoldOff = origEditable && spatialCov && cardCov <= 2;
+        bool canHoldOn = !spatialCov && editableCardCov >= 2 && bestDonor.x >= 0 && (maxEditableZ - minEditableZ) < 0.15;
+
+        if (histValid && spatialCov != prevStable)
+        {
+            if (!prevPending)
+            {
+                if (prevStable && canHoldOn)
+                {
+                    finalCov = true;
+                    nextPending = 1.0;
+                }
+                else if (!prevStable && canHoldOff)
+                {
+                    finalCov = false;
+                    nextPending = 1.0;
+                }
+            }
+            // If prevPending == true (persisted 2 consecutive frames), commit finalCov = spatialCov
+        }
+    }
+
+    _EdgeHistoryWrite[p] = float4(finalCov ? 1.0 : 0.0, nextPending, dominantRole, 1.0);
+
+    // 3) Apply only when edge decision changed relative to original pixel
+    if (finalCov != origCov)
+    {
+        if (!finalCov)
+        {
+            WritePruned(p);
+        }
+        else if (bestDonor.x >= 0)
+        {
+            WriteFromDonor(p, bestDonor);
+        }
+    }
+}

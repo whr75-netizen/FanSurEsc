@@ -4,7 +4,7 @@
 Texture2D<float4> _Raw,_Physical,_Original,_RawMeta,_RawUV,_Surface,_Palette,_Map,_NativeInput,_CentreRaw,_CentrePhysical,_CentreOriginal,_CentreMeta,_CentreUV,_CentreSurface,_CentrePalette;
 RWTexture2D<float4> _Native,_Before,_Colour,_Owner,_Audit,_GridSurface,_GridPalette,_PreparedUV,_PreparedMeta,_ResolvedMeta,_ResolvedUV;
 Texture2D<float4> _EyeDomain;
-float4 _Profile;int _ContourMode;
+float4 _Profile;int _ContourMode;int _HairTip21Enabled;
 Texture2D<float4> _Cloth524Mask;int _Cloth524Enabled,_Cloth524Parts;
 StructuredBuffer<float> _BodyScope551;int _BodyScope551Enabled;
 bool InScope551(int part,float primitive){return _BodyScope551Enabled==0||part!=0||(primitive>0&&_BodyScope551[(int)round(primitive)-1]>.5);}
@@ -12,10 +12,25 @@ bool ActivePart540(int part){return part>=0&&part<4&&(_Cloth524Parts&(1<<part))!
 bool SelectedPart540(int part,int2 p){return ActivePart540(part)&&_Cloth524Mask.Load(int3(p,0))[clamp(part,0,3)]>.5;}
 bool AnySelected540(int2 p){float4 m=_Cloth524Mask.Load(int3(p,0));return ((_Cloth524Parts&1)!=0&&m.r>.5)||((_Cloth524Parts&2)!=0&&m.g>.5)||((_Cloth524Parts&4)!=0&&m.b>.5)||((_Cloth524Parts&8)!=0&&m.a>.5);}
 [numthreads(8,8,1)]void NativeColour(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(960,544)))return;float4 s=_Raw.Load(int3(p,0)),ph=_Physical.Load(int3(p,0)),m=_RawMeta.Load(int3(p,0));int role=round(m.y)-1;float lit=step(_Profile.y,ph.x)*step(_Profile.z,ph.y);_Native[p]=role>=7&&role<=10?float4(s.rgb*((_Profile.w>.5&&lit<.5)?_Profile.x:1),s.a):_Original.Load(int3(p,0));}
+
+bool HairHit21(int2 p){if(any(p<0)||any(p>=int2(480,272)))return false;float4 r=_CentreMeta.Load(int3(p,0));int role=round(r.y)-1;return r.x>0&&role>=11&&role<=14;}
+bool HairTip21(int2 p){
+ if(!HairHit21(p))return false;
+ int2 dirs[4]={int2(-1,0),int2(1,0),int2(0,-1),int2(0,1)};int count=0;int2 back=0;
+ [unroll]for(int k=0;k<4;k++)if(HairHit21(p+dirs[k])){count++;back=dirs[k];}if(count!=1)return false;
+ int2 side=int2(-back.y,back.x);
+ if(!HairHit21(p+back+side)||!HairHit21(p+back-side)||!HairHit21(p+2*back))return false;
+ if(HairHit21(p-back+side)||HairHit21(p-back-side))return false;
+ int hits=0;[unroll]for(int yy=0;yy<2;yy++)[unroll]for(int xx=0;xx<2;xx++){float4 r=_RawMeta.Load(int3(2*p+int2(xx,yy),0));int role=round(r.y)-1;if(r.x>0&&role>=11&&role<=14)hits++;}
+ // E = occupancy disagreement + .25 * cardinal perimeter. Removing this width-one tip reduces perimeter by2; coverage<=3/4 gives nonincreasing E. No interior or long thin lock qualifies.
+ return hits<=3;
+}
+
 [numthreads(8,8,1)]void Prepare(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;int2 n=2*p+1;float4 a=_ContourMode>0?_Map.Load(int3(p,0)):0;if(a.r>.5&&a.a>.5)n=round(a.gb);bool added=a.r>.5&&a.a>.5;float4 m=added?_Surface.Load(int3(n,0)):_CentreSurface.Load(int3(p,0)),f=added?_Palette.Load(int3(n,0)):_CentrePalette.Load(int3(p,0)),r=added?_RawMeta.Load(int3(n,0)):_CentreMeta.Load(int3(p,0)),uv=added?_RawUV.Load(int3(n,0)):_CentreUV.Load(int3(p,0));float4 c;if(added)c=_NativeInput.Load(int3(n,0));else{float4 s=_CentreRaw.Load(int3(p,0)),ph=_CentrePhysical.Load(int3(p,0));int role=round(r.y)-1;float lit=step(_Profile.y,ph.x)*step(_Profile.z,ph.y);c=role>=7&&role<=10?float4(s.rgb*((_Profile.w>.5&&lit<.5)?_Profile.x:1),s.a):_CentreOriginal.Load(int3(p,0));}if(_Cloth524Enabled!=0){bool selected=AnySelected540(p),donated=false,missing=false;
  int ownPart=(int)round(r.y)-8;
  if(ActivePart540(ownPart)&&InScope551(ownPart,r.w)&&!SelectedPart540(ownPart,p)){m=0;f=0;r=0;uv=0;c=0;}
  if(selected&&r.x<=0){int2 best=int2(-1,-1);int score=100;for(int yy=0;yy<2;yy++)for(int xx=0;xx<2;xx++){int2 q=2*p+int2(xx,yy);float4 rm=_RawMeta.Load(int3(q,0)),nc=_NativeInput.Load(int3(q,0));int part=(int)round(rm.y)-8;int d=(xx-1)*(xx-1)+(yy-1)*(yy-1);if(rm.x>0&&InScope551(part,rm.w)&&SelectedPart540(part,p)&&nc.a>.5&&d<score){score=d;best=q;}}if(best.x>=0){n=best;added=true;donated=true;m=_Surface.Load(int3(n,0));f=_Palette.Load(int3(n,0));r=_RawMeta.Load(int3(n,0));uv=_RawUV.Load(int3(n,0));c=_NativeInput.Load(int3(n,0));}else missing=true;}
  _Audit[p]=float4(selected?1:0,donated?1:0,0,missing?1:0);}
+if(_HairTip21Enabled!=0&&HairTip21(p)){m=0;f=0;c=0;r=0;uv=0;}
 if(a.r<-.5&&a.a>.5){m=0;f=0;c=0;r=0;uv=0;}c.a=m.x>0?1:0;_Before[p]=c;_Colour[p]=c;_Owner[p]=float4(m.y,m.z,m.x,m.w);if(_Cloth524Enabled==0)_Audit[p]=0;float4 currentPhysical=added?_Physical.Load(int3(n,0)):_CentrePhysical.Load(int3(p,0));float currentLit=step(_Profile.y,currentPhysical.x)*step(_Profile.z,currentPhysical.y);_PreparedUV[p]=float4(uv.xy,currentLit,1);_PreparedMeta[p]=r;for(int y=0;y<2;y++)for(int x=0;x<2;x++){int2 q=2*p+int2(x,y);_GridSurface[q]=m;_GridPalette[q]=f;}}
 [numthreads(8,8,1)]void Resolve(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;float4 o=_Owner[p],r=_PreparedMeta[p];int part=(int)round(o.x)-8;if(_Cloth524Enabled!=0&&ActivePart540(part)&&InScope551(part,r.w)&&!SelectedPart540(part,p)){float4 a=_Audit[p];a.b=1;_Audit[p]=a;_Before[p]=0;_Colour[p]=0;_Owner[p]=0;_PreparedMeta[p]=0;_PreparedUV[p]=0;o=0;r=0;}_ResolvedMeta[p]=float4(o.z,o.x,r.z,o.w);_ResolvedUV[p]=_PreparedUV[p];}

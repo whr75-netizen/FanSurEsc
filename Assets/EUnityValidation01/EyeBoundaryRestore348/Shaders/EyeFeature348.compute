@@ -1,7 +1,9 @@
 #pragma kernel Evaluate
+#pragma kernel CountFeatures19
 #pragma kernel UnpackA
 #pragma kernel UnpackB
 #pragma kernel Merge
+Texture2D<float4> _S3Shade;int _EyeLayerView348;
 Texture2D<float4> _S0RGBA,_S0META,_S0POINT,_S0UV,_S1RGBA,_S1META,_S1POINT,_S1UV,_S2RGBA,_S2META,_S2POINT,_S2UV,_S3RGBA,_S3META,_S3POINT,_S3UV,_S4RGBA,_S4META,_S4POINT,_S4UV,_S5RGBA,_S5META,_S5POINT,_S5UV,_S6RGBA,_S6META,_S6POINT,_S6UV;
 Texture2D<float4> _BaseRGBA,_BaseMETA,_BackingRGBA,_BackingMETA,_HairRGBA,_HairMETA,_BrowRGBA,_BrowMETA,_RawMETA,_RawUV,_PostLine,_TemplateRGBA,_TemplateRole,_OldEyeOwner,_OldIntrinsic;
 RWTexture2D<float4> _Before,_Colour,_Owner,_PreparedMeta,_PreparedUV,_ResolvedMeta,_ResolvedUV,_OldDomain;
@@ -77,9 +79,204 @@ bool sameFeature(int label,int winner){return winner==7?label==5:winner==2||winn
 float2 reference(float2 screen,int eye){float3 q=mul(eye==0?_Inverse348_0:_Inverse348_1,float4(screen,1,0)).xyz;return q.xy/q.z;}
 float4 Own(float2 ref,int eye,int role,out float4 provenance){int id=(int)round(_Centres348[eye].w);int4 box=eye==0?_ColourBounds348_0:_ColourBounds348_1;float best=1e30;float4 c=0;provenance=0;for(int y=box.y;y<box.w;y++)for(int x=box.x;x<box.z;x++){float4 r=_TemplateRole.Load(int3(x,271-y,0));if(round(r.x)!=role||round(r.y)!=id)continue;float d=dot(float2(x+.75,y+.25)-ref,float2(x+.75,y+.25)-ref);if(d<best){best=d;c=_TemplateRGBA.Load(int3(x,271-y,0));provenance=float4(x,y,role,1);}}return c;}
 float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}
+// Current mesh layers supply geometry/coverage; colour is still selected later.
+struct FeaturePacket19 { float4 a,b,uv; };
+RWStructuredBuffer<FeaturePacket19> _FeatureCounts19;
+bool LayerMode19(){return _UseIrisSurface582==0&&_UseLashRegion583==0;}
+bool ValidLayer19(int s,int2 q,int owner){return cov(M(s,q))&&round(M(s,q).z)==owner&&P(s,q).w>.5;}
+// Use actual coverage at the same ray. A transmitted trace of a rear
+// surface cannot reserve an opaque role against a stronger front contribution.
+float InFront348(float4 m,float z){return cov(m)&&m.x<z?saturate(m.w):0;}
+float SocketRoleWeight348(int source,int2 q,float4 own){
+ float4 skin=M(0,q),opposite=M(source==1?2:1,q),lash=M(3,q);
+ float a=InFront348(skin,own.x),b=InFront348(opposite,own.x),c=InFront348(lash,own.x);
+ float ownWeight=saturate(own.w)*(1-a)*(1-b)*(1-c);
+ float skinWeight=a*(1-InFront348(opposite,skin.x))*(1-InFront348(lash,skin.x));
+ float oppositeWeight=b*(1-InFront348(skin,opposite.x))*(1-InFront348(lash,opposite.x));
+ float lineWeight=c*(1-InFront348(skin,lash.x))*(1-InFront348(opposite,lash.x));
+ return ownWeight>max(skinWeight,max(oppositeWeight,lineWeight))?ownWeight:0;
+}
+FeatureSample583 LayerSample19(int2 p,int eye,int k,int family){
+ FeatureSample583 r=(FeatureSample583)0;r.support=-1;
+ if(family==2){
+ int2 q=(p-_ROI348.xy)*4+int2(k&3,k>>2);int owner=(int)round(_Centres348[eye].w);
+ if(ValidLayer19(3,q,owner)){
+  float4 m=M(3,q);float weight=saturate(m.w);float4 skin=M(0,q);
+  if(ValidLayer19(0,q,owner)&&skin.x<m.x)weight*=1-saturate(skin.w);
+  float4 hair=_UseHairRegion502!=0?_HairMETA.Load(int3(p,0)):_S4META.Load(int3(q,0)),brow=_S5META.Load(int3(q,0)),body=_S6META.Load(int3(q,0));
+  if(cov(hair)&&hair.x<m.x){weight*=1-saturate(hair.w);r.hairBlocked=1;}
+  if(cov(brow)&&brow.x<m.x)weight*=1-saturate(brow.w);
+  if(cov(body)&&body.x<m.x){weight=0;r.bodyBlocked=1;}
+  r.feat=5;r.support=3;r.depth=m.x;r.weight=weight;r.rest=P(3,q).xyz;
+ }else{r=Sample583(p,eye,k);if(r.feat!=6){r.feat=0;r.support=-1;r.weight=0;}}
+}else{
+ int2 q=(p-_ROI348.xy)*4+int2(k%4,k/4);int owner=(int)round(_Centres348[eye].w),s=family==0?2:1;
+ if(ValidLayer19(s,q,owner)){
+ float3 rest=P(s,q).xyz;int feat=Classify(rest,eye);
+ if((family==0&&feat>=2&&feat<=4)||(family==1&&feat>=1&&feat<=4)){
+ if(family==1)feat=1;
+ float4 meta=M(s,q);float weight=SocketRoleWeight348(s,q,meta);
+ float4 hair=_UseHairRegion502!=0?_HairMETA.Load(int3(p,0)):_S4META.Load(int3(q,0)),brow=_S5META.Load(int3(q,0)),body=_S6META.Load(int3(q,0));
+ if(cov(hair)&&hair.x<meta.x){weight*=1-saturate(hair.w);r.hairBlocked=1;}
+ if(cov(brow)&&brow.x<meta.x)weight*=1-saturate(brow.w);
+ if(cov(body)&&body.x<meta.x){weight=0;r.bodyBlocked=1;}
+ r.feat=feat;r.support=s;r.depth=meta.x;r.weight=weight;r.rest=rest;}}}return r;
+}
+int PacketIndex19(int2 p,int eye){int2 c=p-_ROI348.xy;return (eye*_ROI348.w+c.y)*_ROI348.z+c.x;}
+bool InEyeROI19(int2 p){int2 c=p-_ROI348.xy;return all(c>=0)&&all(c<_ROI348.zw);}
+bool NativeSourceReady77();bool IrisAllocated19(int2 p,int eye);
+FeaturePacket19 Packet19(int2 p,int eye){if(!InEyeROI19(p))return (FeaturePacket19)0;FeaturePacket19 r=_FeatureCounts19[PacketIndex19(p,eye)];bool legacy77;
+#ifdef ORIGINAL77
+ legacy77=true;
+#else
+ legacy77=!NativeSourceReady77();
+#endif
+ if(legacy77){r.uv.z=round(r.uv.z)==1?1:0;r.uv.w=0;}return r;}
+
+#include "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/NativeCacheGPU77.hlsl"
+#include "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/NativeSourceSelection77.hlsl"
+FeaturePacket19 CountPacket19(int2 p,int eye){
+ FeaturePacket19 packet=(FeaturePacket19)0;float h[8];for(int i=0;i<8;i++)h[i]=0;float2 mean=0;float total=0;
+ for(int k=0;k<16;k++)for(int f=0;f<3;f++){
+  FeatureSample583 s=LayerSample19(p,eye,k,f);if(s.support<0||s.feat<=0||s.weight<=0)continue;h[s.feat]+=s.weight;
+  if(s.feat>=2&&s.feat<=4){float3 d=s.rest-_Centres348[eye].xyz;mean+=s.weight*float2(dot(d,_AxesX348[eye].xyz)/_AxesX348[eye].w,-dot(d,_AxesY348[eye].xyz)/_AxesY348[eye].w);total+=s.weight;}
+ }
+ if(total>0)mean/=total;packet.a=float4(h[0],h[1],h[2],h[3]);packet.b=float4(h[4],h[5],h[6],h[7]);packet.uv=float4(mean,0,0);return packet;
+}
+bool ComposedSource76(int2 p,float4 old,float4 owner,bool domain,out int eyeId,out int feature,out float weight,out int sampleIndex);
+[numthreads(8,8,1)]void CountFeatures19(uint3 id:SV_DispatchThreadID){
+ if(any(id.xy>=(uint2)_ROI348.zw)||id.z>=2)return;
+ // No other Count thread reads W metadata. The next dispatch consumes it.
+ if(id.x==0&&id.y==0&&id.z==0)NativeInit77();
+ int2 p=_ROI348.xy+(int2)id.xy;FeaturePacket19 packet76=CountPacket19(p,id.z);
+ int eye77,feature77,sample77;float weight77;packet76.uv.zw=0;float4 owner77=_BaselineOwner348.Load(int3(p,0));
+ if(ComposedSource76(p,_BaselineColour348.Load(int3(p,0)),owner77,_BaselineDomain348.Load(int3(p,0)).x>.5,eye77,feature77,weight77,sample77)&&eye77==(int)round(_Centres348[id.z].w)){
+  packet76.uv.z=feature77==5?1:feature77==1?3:2;packet76.uv.w=feature77==5?sample77+1:0;
+ }
+ _FeatureCounts19[PacketIndex19(p,id.z)]=packet76;
+}
+bool BeforeIris19(FeaturePacket19 a,int2 ap,FeaturePacket19 b,int2 bp){
+ float ac=max(max(a.a.y,a.b.y),a.b.z)-IrisCount19(a),bc=max(max(b.a.y,b.b.y),b.b.z)-IrisCount19(b);
+ if(ac!=bc)return ac<bc;if(a.uv.x!=b.uv.x)return a.uv.x<b.uv.x;if(a.uv.y!=b.uv.y)return a.uv.y<b.uv.y;return ap.y!=bp.y?ap.y<bp.y:ap.x<bp.x;
+}
+bool IrisAllocated19(int2 p,int eye){
+ FeaturePacket19 own=Packet19(p,eye);if(IrisCount19(own)<=0)return false;float area=0;int rank=0;
+ for(int y=_ROI348.y;y<_ROI348.y+_ROI348.w;y++)for(int x=_ROI348.x;x<_ROI348.x+_ROI348.z;x++){
+  int2 q=int2(x,y);FeaturePacket19 c=Packet19(q,eye);float a=IrisCount19(c);if(a<=0)continue;area+=a/16;if(BeforeIris19(c,q,own,p))rank++;
+ }return rank<(int)floor(area+.5);
+}
+
+bool SourceWhiteNeighbour19(int2 p,int eye){
+ FeaturePacket19 c=Packet19(p,eye);if(c.a.y<1)return false;
+ return IrisCount19(Packet19(p+int2(-1,0),eye))>0||IrisCount19(Packet19(p+int2(1,0),eye))>0;
+}
+bool LegacyNativeLineAllocated76(int2 p,int eye){
+
+ FeaturePacket19 own=Packet19(p,eye);if(own.b.y<=0||IrisAllocated19(p,eye))return false;
+ int whiteCandidates=0;float area=0;int reserved76=0;
+ for(int sumY=_ROI348.y;sumY<_ROI348.y+_ROI348.w;sumY++)for(int sumX=_ROI348.x;sumX<_ROI348.x+_ROI348.z;sumX++){
+  int2 cell=int2(sumX,sumY);FeaturePacket19 c=Packet19(cell,eye);area+=c.b.y/16;
+#ifndef ORIGINAL76
+  if(c.uv.z>.5)reserved76++;
+#endif
+
+  if(SourceWhiteNeighbour19(cell,eye))whiteCandidates++;
+ }
+ if(whiteCandidates==1&&SourceWhiteNeighbour19(p,eye))return false;
+ float ownCost=max(own.a.y,IrisCount19(own))-own.b.y;int rank=0;
+ for(int rankY=_ROI348.y;rankY<_ROI348.y+_ROI348.w;rankY++)for(int rankX=_ROI348.x;rankX<_ROI348.x+_ROI348.z;rankX++){
+  int2 cell=int2(rankX,rankY);FeaturePacket19 c=Packet19(cell,eye);
+  if(c.b.y<=0||(whiteCandidates==1&&SourceWhiteNeighbour19(cell,eye))||IrisAllocated19(cell,eye))continue;
+  float cost=max(c.a.y,IrisCount19(c))-c.b.y;
+  if(cost<ownCost||(cost==ownCost&&(cell.y<p.y||(cell.y==p.y&&cell.x<p.x))))rank++;
+ }
+ return rank<max(0,(int)floor(area+.5)-reserved76);
+}
+
+bool NativeLineAllocated19(int2 p,int eye){bool selected77=false;
+#ifdef ORIGINAL77
+ selected77=LegacyNativeLineAllocated76(p,eye);
+#else
+ if(NativeSourceReady77())selected77=NativeAllocated77(p,eye);else selected77=LegacyNativeLineAllocated76(p,eye);
+#endif
+ return selected77;
+}
+int ChooseLayers19(float c[8],int2 p,int eye,int curveFeature){
+ if(IrisAllocated19(p,eye)){if(c[4]>=4)return 4;return c[2]>=c[3]?2:3;}
+ if(NativeLineAllocated19(p,eye))return 5;
+ // Keep the approved non-iris curve choice where its own mesh still supports it.
+ // Correcting iris support is not permission to redesign white or lid pixels.
+ if(curveFeature==1&&c[1]>0)return 1;
+ 
+ if(curveFeature==6&&c[6]>0)return 6;
+ float other[8];for(int i=0;i<8;i++)other[i]=c[i];other[2]=other[3]=other[4]=other[5]=other[7]=0;int w=Choose(other);
+ // Approved326 white-neighbour preservation, using semantic coverage, not RGB.
+ if(w<=1&&c[1]>=1&&(IrisAllocated19(p+int2(-1,0),eye)||IrisAllocated19(p+int2(1,0),eye)))return 1;return w;
+}
+
+// The shared parent/iris compositor has already placed these source features.
+// A second independent top-K must not replace a still-visible part with another
+// part. Require current native source support; closed/fully occluded parts are
+// not made visible by their cached identity. Generic skin is not globally ignored.
+bool ComposedSource76(int2 p,float4 old,float4 owner,bool domain,out int eyeId,out int feature,out float weight,out int sampleIndex){
+ eyeId=0;feature=0;weight=0;sampleIndex=-1;if(!LayerMode19()||old.a<=0||owner.z<=0)return false;
+ int role=(int)round(owner.x),source=role==2?2:role==5?1:role==7?3:-1;
+ if(source<0||((role==2||role==5)&&!domain))return false;
+ // Domain.y is colour-support provenance, NOT an eye identity.
+ float4 composedOwner=_OldEyeOwner.Load(int3(p,0));
+ if(role!=7&&round(composedOwner.x)!=role)return false;
+ float wanted=composedOwner.y;float closest=1e30,bestWeight=0;
+ for(uint sample76=0;sample76<16;sample76++){
+  int2 q=(p-_ROI348.xy)*4+int2(sample76&3,sample76>>2);float4 m=M(source,q);
+  if(!cov(m)||P(source,q).w<=.5||m.z<.5||m.z>2.5)continue;
+  if(role!=7&&round(m.z)!=round(wanted))continue;
+  float visible=source==3?saturate(m.w)*(1-InFront348(M(0,q),m.x)):SocketRoleWeight348(source,q,m);
+  float4 hair=_S4META.Load(int3(q,0)),brow=_S5META.Load(int3(q,0)),body=_S6META.Load(int3(q,0));
+  if(cov(hair)&&hair.x<m.x)visible*=1-saturate(hair.w);
+  if(cov(brow)&&brow.x<m.x)visible*=1-saturate(brow.w);
+  if(cov(body)&&body.x<m.x)visible=0;
+  if(visible<=0)continue;weight+=visible;
+  // Transfer the same native support responsible for the role. Pick a
+  // strong ray nearest the cell centre, without ranking by the old plane depth.
+  float2 local=float2(sample76&3,sample76>>2)-1.5;
+  float d=source==3?abs(m.x-owner.z):dot(local,local);
+  if(source==3?d<closest:(visible>bestWeight||(visible==bestWeight&&d<closest))){
+   bestWeight=visible;closest=d;eyeId=(int)round(m.z);sampleIndex=(int)sample76;
+  }
+ }
+ feature=role==2?2:role==5?1:5;return weight>0&&eyeId>0;
+}
+float4 ComposedPigment76(float2 screen,int eye,int role){
+ float2 ref=reference(screen,eye);int2 top=(int2)floor(ref);
+ if(all(top>=0)&&all(top<int2(480,272))){float4 r=_TemplateRole.Load(int3(top.x,271-top.y,0));if(round(r.x)==role&&round(r.y)==round(_Centres348[eye].w))return float4(top,role,1);}
+ float4 provenance=0;float4 sampled76=Own(ref,eye,role,provenance);return provenance;
+}
+
 [numthreads(8,8,1)]void Evaluate(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;float4 old=_BaselineColour348.Load(int3(p,0)),oldOwner=_BaselineOwner348.Load(int3(p,0)),oldMeta=_BaselineMeta348.Load(int3(p,0)),oldUV=_BaselineUV348.Load(int3(p,0));bool oldDomain=_BaselineDomain348.Load(int3(p,0)).x>.5;int2 lc=p-_ROI348.xy;bool inROI=all(lc>=0)&&all(lc<_ROI348.zw);float2 screen=float2(p.x+.5,271.5-p.y);
  Pixel348 record=(Pixel348)0;record.colour=old;record.owner=float4(oldOwner.x,oldMeta.z,oldOwner.z,0);record.globalOwner=oldOwner;record.preparedMeta=oldMeta;record.preparedUV=oldUV;_RecordsWrite348[p.y*480+p.x]=record;
  if(!inROI&&!oldDomain)return;
+ int composedEye76,composedFeature76,composedSample76;float composedWeight76;
+ if(inROI&&ComposedSource76(p,old,oldOwner,oldDomain,composedEye76,composedFeature76,composedWeight76,composedSample76)){
+  record.owner=float4(oldOwner.x,composedEye76,oldOwner.z,0);
+  record.visible=float4(composedFeature76,composedEye76,composedWeight76,composedSample76);
+  int source76=composedFeature76==5?3:composedFeature76==1?1:2;int2 sq76=lc*4+int2(composedSample76&3,composedSample76>>2);float4 uv76=U(source76,sq76),sm76=M(source76,sq76);
+  record.surface=float4(uv76.xyz,source76+1);record.supportMeta=float4(sm76.x,sm76.y,sm76.w,1);
+  int sourceRole76=source76==1?4:source76==2?1:6;record.bary=float4(barycentric(P(source76,sq76).xyz,sourceRole76,(int)round(uv76.z)),sourceRole76+1);
+  int eyeIndex76=round(_Centres348[0].w)==composedEye76?0:1;
+  record.pigment=composedFeature76==5?float4(uv76.xy,6,2):ComposedPigment76(screen,eyeIndex76,composedFeature76==1?4:1);
+  record.domain=_BaselineDomain348.Load(int3(p,0));record.control=float4(0,0,1,0);
+  if(source76==1||source76==2){
+   // Keep the existing role palette. The final depth, primitive and UV come
+   // from the native sample that provided visible support for that role.
+   record.owner.z=sm76.x;
+   record.globalOwner.z=sm76.x;
+   record.preparedMeta=float4(sm76.x,oldOwner.x,composedEye76,uv76.z);
+   record.preparedUV=float4(uv76.xy,0,1);
+   record.control.x=1;
+  }
+  _RecordsWrite348[p.y*480+p.x]=record;return;
+ }
+
  int win=0,eyeWin=-1,repIndex=-1,supportWin=-1;float winCount=0,bestIntrinsicCount=0;int intrinsicWin=0,intrinsicEye=-1;float visibleHist[8],intrinsicHist[8];float4 histVisible=0,histIntrinsic=0;float noSupport=0,hairBlocked=0,bodyBlocked=0;float depthWin=0;float4 uvWin=0,restWin=0;int labels[16],supports[16];float depths[16],weights[16];
  for(int eye=0;eye<2;eye++){
   for(int z=0;z<8;z++){visibleHist[z]=0;intrinsicHist[z]=0;}int owner=(int)round(_Centres348[eye].w);bool closed590=_UseLashRegion583!=0&&_UseClosedLash590!=0;float curveVisible590=0,curveIntrinsic590=0;
@@ -91,31 +288,42 @@ float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=
   }
   if(closed590)intrinsicHist[5]=curveIntrinsic590;
   int iw=Choose(intrinsicHist);float ic=0;for(int k=1;k<8;k++)ic+=intrinsicHist[k];if(ic>bestIntrinsicCount){bestIntrinsicCount=ic;intrinsicWin=iw;intrinsicEye=eye;histIntrinsic=float4(intrinsicHist[5],intrinsicHist[2]+intrinsicHist[3]+intrinsicHist[4],intrinsicHist[1],intrinsicHist[6]);}
-  int w=_UseLashRegion583!=0?ChooseRegion583(visibleHist,p,eye,curveVisible590):Choose(visibleHist);bool curveWinner590=closed590&&(w==5||w==7);float count=curveWinner590?curveVisible590:w>=2&&w<=4?visibleHist[2]+visibleHist[3]+visibleHist[4]:w==7?visibleHist[5]:visibleHist[w];
+  int curveFeature19=Choose(visibleHist);
+  if(LayerMode19()){FeaturePacket19 packet=Packet19(p,eye);visibleHist[0]=packet.a.x;visibleHist[1]=packet.a.y;visibleHist[2]=packet.a.z;visibleHist[3]=packet.a.w;visibleHist[4]=packet.b.x;visibleHist[5]=packet.b.y;visibleHist[6]=packet.b.z;visibleHist[7]=packet.b.w;}
+  int w=LayerMode19()?ChooseLayers19(visibleHist,p,eye,curveFeature19):_UseLashRegion583!=0?ChooseRegion583(visibleHist,p,eye,curveVisible590):Choose(visibleHist);bool curveWinner590=closed590&&(w==5||w==7);float count=curveWinner590?curveVisible590:w>=2&&w<=4?visibleHist[2]+visibleHist[3]+visibleHist[4]:w==7?visibleHist[5]:visibleHist[w];
+  if(NativeSourceReady77()&&w==5){float3 nativeMean77;int nativePart77;count=NativeVisible77(p,eye,nativeMean77,nativePart77);}
   if(w>0&&count>winCount){float nearest=1e20;int idx=-1;for(int k=0;k<16;k++){
-   if(curveWinner590){FeatureSample583 rep=CurveSample590(p,eye,k);if(rep.support<0||rep.weight<=0)continue;}else if(!sameFeature(labels[k],w)||supports[k]<0||weights[k]<=0)continue;
+   if(LayerMode19()){FeatureSample583 rep=LayerSample19(p,eye,k,w==1?1:w>=2&&w<=4?0:2);if(NativeSourceReady77()&&w==5){float intrinsic77;int component77;rep=NativeSample77(p,eye,k,intrinsic77,component77);}if(rep.support<0||rep.weight<=0||!sameFeature(rep.feat,w))continue;supports[k]=rep.support;depths[k]=rep.depth;}else if(curveWinner590){FeatureSample583 rep=CurveSample590(p,eye,k);if(rep.support<0||rep.weight<=0)continue;}else if(!sameFeature(labels[k],w)||supports[k]<0||weights[k]<=0)continue;
    float2 d=(float2(k%4,k/4)+.5)/4-.5;float dd=dot(d,d);if(dd<nearest){nearest=dd;idx=k;}}
    if(idx>=0){win=w;eyeWin=eye;winCount=count;repIndex=idx;supportWin=curveWinner590?4:supports[idx];depthWin=curveWinner590?LashGeometry590(p,eye,idx).y:depths[idx];int2 q=lc*4+int2(idx%4,idx/4);
     if(supportWin==4){float4 g=LashGeometry590(p,eye,idx);uvWin=float4(g.zw,0,0);restWin=float4(_Centres348[eye].xyz+_AxesX348[eye].xyz*(g.z*_AxesX348[eye].w)-_AxesY348[eye].xyz*(g.w*_AxesY348[eye].w),1);}else{uvWin=U(supportWin,q);restWin=P(supportWin,q);}
     histVisible=float4(closed590?curveVisible590:visibleHist[5],visibleHist[2]+visibleHist[3]+visibleHist[4],visibleHist[1],visibleHist[6]);}
   }
  }
- bool domain=oldDomain||bestIntrinsicCount>0;if(!domain)return;int selectedEye=eyeWin>=0?eyeWin:intrinsicEye;float eyeId=selectedEye>=0?_Centres348[selectedEye].w:_OldIntrinsic.Load(int3(p,0)).y;if(eyeId<=0)eyeId=_OldEyeOwner.Load(int3(p,0)).y;
- float4 bm=_BaseMETA.Load(int3(p,0)),bc=_BaseRGBA.Load(int3(p,0)),back=_BackingMETA.Load(int3(p,0));if(cov(back)&&(!cov(bm)||back.x<bm.x)){bm=back;bc=_BackingRGBA.Load(int3(p,0));}float4 c=cov(bm)?float4(bc.rgb,1):0;float4 o=cov(bm)?float4(bm.y,bm.z,bm.x,0):0;
+ bool domain=oldDomain||bestIntrinsicCount>0||(LayerMode19()&&win>0);if(!domain)return;int selectedEye=eyeWin>=0?eyeWin:intrinsicEye;float eyeId=selectedEye>=0?_Centres348[selectedEye].w:_OldIntrinsic.Load(int3(p,0)).y;if(eyeId<=0)eyeId=_OldEyeOwner.Load(int3(p,0)).y;
+ float4 bm=_BaseMETA.Load(int3(p,0)),bc=_BaseRGBA.Load(int3(p,0)),back=_BackingMETA.Load(int3(p,0));if(cov(back)&&(!cov(bm)||back.x<bm.x)){bm=back;bc=_BackingRGBA.Load(int3(p,0));}float4 c=cov(bm)?float4(bc.rgb,1):old;float4 o=cov(bm)?float4(bm.y,bm.z,bm.x,0):float4(oldOwner.x,oldMeta.z,oldOwner.z,0);
  // Same-surface hair fallback must retain the colour composed before eye evaluation.
  if(cov(bm)&&round(bm.y)>=12&&round(oldMeta.y)==round(bm.y)&&oldOwner.z==bm.x)c.rgb=old.rgb;
  float4 pig=0,surfaceSupport=0,baryResult=0;float status=cov(bm)?0:1;int visibleFeature=win;
- if(win>0){float2 st=float2(p.x+(repIndex%4+.5)/4,272-p.y-(repIndex/4+.5)/4);float4 colour=0;if(win==6){colour=_FaceLidShade348;pig=float4(0,0,3,3);}else if(win==5||win==7){float best=1e30;for(int y=0;y<_ROI348.w*4;y++)for(int x=0;x<_ROI348.z*4;x++){float4 m=_S3META.Load(int3(x,y,0));if(!cov(m)||round(m.z)!=(int)round(eyeId))continue;float2 d=float2(x+.5,y+.5)-(float2(lc*4)+float2(repIndex%4+.5,repIndex/4+.5));float dd=dot(d,d);if(dd<best){best=dd;colour=_S3RGBA.Load(int3(x,y,0));float4 uv=_S3UV.Load(int3(x,y,0));pig=float4(uv.xy,6,2);}}if(colour.a<=0&&_UseLashRegion583!=0&&_UseClosedLash590!=0){colour=Own(reference(st,selectedEye),selectedEye,6,pig);pig.w=4;}}else{colour=Own(reference(st,selectedEye),selectedEye,win==1?4:1,pig);}
-  if(colour.a>0){int role=win==1?4:(win==5||win==7)?6:win==6?3:1;c=float4(colour.rgb,1);o=float4(role+1,eyeId,depthWin,1);surfaceSupport=float4(uvWin.xy,uvWin.z,supportWin+1);int sr=supportWin==0?3:supportWin==1?4:supportWin==2?1:6;if(supportWin!=4)baryResult=float4(barycentric(restWin.xyz,sr,(int)round(uvWin.z)),sr+1);status=0;}else{status=2;visibleFeature=0;}
+ if(win>0){float2 st=float2(p.x+(repIndex%4+.5)/4,272-p.y-(repIndex/4+.5)/4);float4 colour=0;float4 shade=float4(0,1,1,1);if(win==6){colour=_FaceLidShade348;pig=float4(0,0,3,3);}else if(win==5||win==7){float bestCell=1e30,bestAlpha=-1,bestDistance=1e30;for(int y=0;y<_ROI348.w*4;y++)for(int x=0;x<_ROI348.z*4;x++){float4 m=_S3META.Load(int3(x,y,0));if(!cov(m)||round(m.z)!=(int)round(eyeId))continue;if(NativeSourceReady77()){int2 repQ77=lc*4+int2(repIndex&3,repIndex>>2);int component77=NativeComponent77((int)round(U(3,repQ77).z));if(component77<=0||NativeComponent77((int)round(_S3UV.Load(int3(x,y,0)).z))!=component77)continue;}float4 candidate=_S3RGBA.Load(int3(x,y,0));float2 cellDelta=float2(int2(x,y)/4-lc);float cellDistance=dot(cellDelta,cellDelta);float2 d=float2(x+.5,y+.5)-(float2(lc*4)+float2(repIndex%4+.5,repIndex/4+.5));float distance=dot(d,d);if(cellDistance<bestCell||(cellDistance==bestCell&&(candidate.a>bestAlpha||(candidate.a==bestAlpha&&distance<bestDistance)))){bestCell=cellDistance;bestAlpha=candidate.a;bestDistance=distance;colour=candidate;shade=_S3Shade.Load(int3(x,y,0));float4 uv=_S3UV.Load(int3(x,y,0));pig=float4(uv.xy,6,2);}}if(colour.a<=0&&_UseLashRegion583!=0&&_UseClosedLash590!=0){colour=Own(reference(st,selectedEye),selectedEye,6,pig);pig.w=4;}}else{colour=Own(reference(st,selectedEye),selectedEye,win==1?4:1,pig);}
+  if(colour.a>0){int role=win==1?4:(win==5||win==7)?6:win==6?3:1;float3 rgb=colour.rgb;if(win==5||win==7){rgb=_EyeLayerView348==1?colour.rgb:_EyeLayerView348==2?shade.xxx:_EyeLayerView348==3?shade.yyy:colour.rgb*shade.z;}c=float4(rgb,1);o=float4(role+1,eyeId,depthWin,1);surfaceSupport=float4(uvWin.xy,uvWin.z,supportWin+1);int sr=supportWin==0?3:supportWin==1?4:supportWin==2?1:6;if(supportWin!=4)baryResult=float4(barycentric(restWin.xyz,sr,(int)round(uvWin.z)),sr+1);status=0;}else{status=2;visibleFeature=0;}
  }
+ bool nativeRayVisible21=LayerMode19()&&win>0&&supportWin==3;
  float4 hair=_HairMETA.Load(int3(p,0)),brow=_BrowMETA.Load(int3(p,0)),raw=_RawMETA.Load(int3(p,0));bool rawBody=cov(raw)&&round(raw.y)>=8&&round(raw.y)<=11;
- if(cov(hair)&&hair.x<o.z){float4 hc=_HairRGBA.Load(int3(p,0));float3 hcRGB=hc.rgb;if(round(oldMeta.y)==round(hair.y)&&oldOwner.z==hair.x)hcRGB=old.rgb;else if(round(raw.y)==round(hair.y))hcRGB=_PostLine.Load(int3(p,0)).rgb;c=float4(lerp(c.rgb,hcRGB,saturate(hair.w)),1);o=float4(hair.y,hair.z,hair.x,3);visibleFeature=0;}
- if(cov(brow)&&brow.x<o.z&&(!cov(hair)||hair.x>=brow.x)){float4 br=_BrowRGBA.Load(int3(p,0));c=float4(lerp(c.rgb,br.rgb,saturate(brow.w)),1);o=float4(brow.y,brow.z,brow.x,4);visibleFeature=0;}
- bool preserveBody=rawBody&&raw.x<o.z;if(preserveBody){c=old;o=float4(oldOwner.x,oldMeta.z,oldOwner.z,5);visibleFeature=0;}
- record.colour=c;record.owner=o;record.intrinsic=float4(intrinsicWin,eyeId,bestIntrinsicCount,1);record.visible=float4(visibleFeature,eyeId,winCount,repIndex);record.histA=histVisible;record.histB=histIntrinsic;record.surface=surfaceSupport;record.pigment=pig;record.audit=float4(status,noSupport,hairBlocked,bodyBlocked);record.domain=float4(1,oldDomain?1:0,bestIntrinsicCount>0?1:0,0);record.bary=baryResult;if(supportWin>=0&&repIndex>=0){int2 sq=lc*4+int2(repIndex%4,repIndex/4);float4 sm=supportWin==4?float4(depthWin,7,1,0):M(supportWin,sq);record.supportMeta=float4(sm.x,sm.y,sm.w,(win==5||win==6||win==7)?0:1);}record.control=float4(1,preserveBody?1:0,0,0);
+ if(!nativeRayVisible21&&cov(hair)&&hair.x<o.z){float4 hc=_HairRGBA.Load(int3(p,0));float3 hcRGB=hc.rgb;if(round(oldMeta.y)==round(hair.y)&&oldOwner.z==hair.x)hcRGB=old.rgb;else if(round(raw.y)==round(hair.y))hcRGB=_PostLine.Load(int3(p,0)).rgb;c=float4(lerp(c.rgb,hcRGB,saturate(hair.w)),1);o=float4(hair.y,hair.z,hair.x,3);visibleFeature=0;}
+ if(!nativeRayVisible21&&cov(brow)&&brow.x<o.z&&(!cov(hair)||hair.x>=brow.x)){float4 br=_BrowRGBA.Load(int3(p,0));c=float4(lerp(c.rgb,br.rgb,saturate(brow.w)),1);o=float4(brow.y,brow.z,brow.x,4);visibleFeature=0;}
+ bool preserveBody=!nativeRayVisible21&&rawBody&&raw.x<o.z;if(preserveBody){c=old;o=float4(oldOwner.x,oldMeta.z,oldOwner.z,5);visibleFeature=0;}
+ record.colour=c;record.owner=o;record.intrinsic=float4(intrinsicWin,eyeId,bestIntrinsicCount,1);record.visible=float4(visibleFeature,eyeId,winCount,repIndex);record.histA=histVisible;record.histB=histIntrinsic;record.surface=surfaceSupport;record.pigment=pig;record.audit=float4(status,noSupport,hairBlocked,bodyBlocked);record.domain=float4(1,oldDomain?1:0,bestIntrinsicCount>0?1:0,0);record.bary=baryResult;if(supportWin>=0&&repIndex>=0){int2 sq=lc*4+int2(repIndex%4,repIndex/4);float4 sm=supportWin==4?float4(depthWin,7,1,0):M(supportWin,sq);record.supportMeta=float4(sm.x,sm.y,sm.w,(win==5||win==6||win==7)?0:1);}record.control=float4(1,preserveBody?1:0,0,NativeSourceReady77()&&visibleFeature==5?77:0);
  if(!preserveBody){int resolvedRole=(int)round(o.x)-1;float part=resolvedRole>=11?7:resolvedRole<=6?6:oldOwner.y;record.globalOwner=float4(o.x,part,o.z,0);record.preparedUV=visibleFeature>0?(supportWin==4?float4(0,0,0,0):float4(uvWin.xy,0,1)):_RawUV.Load(int3(p,0));float primitive=visibleFeature>0?uvWin.z:raw.w;record.preparedMeta=float4(o.z,o.x,o.y,primitive);}_RecordsWrite348[p.y*480+p.x]=record;
 }
 
-[numthreads(8,8,1)]void UnpackA(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];_Output348[p]=r.colour;_Owner348[p]=r.owner;_Intrinsic348[p]=r.intrinsic;_Visible348[p]=r.visible;_HistA348[p]=r.histA;_HistB348[p]=r.histB;_Surface348[p]=r.surface;_Pigment348[p]=r.pigment;}
+// A face colour is also written for skin and occluder fallbacks.
+// Publish an eye only when the resolved role has a matching native support.
+float4 PlacedEyeLayer348(Pixel348 r){
+ int feature=round(r.visible.x);
+ int role=feature==1?5:(feature>=2&&feature<=4)?2:(feature==5||feature==7)?7:0;
+ return role>0&&round(r.owner.x)==role&&r.visible.z>0&&r.visible.w>=0&&r.supportMeta.x>0?r.colour:0;
+}
+[numthreads(8,8,1)]void UnpackA(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];_Output348[p]=PlacedEyeLayer348(r);_Owner348[p]=r.owner;_Intrinsic348[p]=r.intrinsic;_Visible348[p]=r.visible;_HistA348[p]=r.histA;_HistB348[p]=r.histB;_Surface348[p]=r.surface;_Pigment348[p]=r.pigment;}
 [numthreads(8,8,1)]void UnpackB(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];_Audit348[p]=r.audit;_Domain348[p]=r.domain;_Bary348[p]=r.bary;_SupportMeta348[p]=r.supportMeta;}
 [numthreads(8,8,1)]void Merge(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];if(r.control.x<.5)return;_OldDomain[p]=r.domain;if(r.control.y>.5)return;_Before[p]=r.colour;_Colour[p]=r.colour;_Owner[p]=r.globalOwner;_PreparedMeta[p]=r.preparedMeta;_PreparedUV[p]=r.preparedUV;_ResolvedMeta[p]=float4(r.preparedMeta.x,r.preparedMeta.y,r.preparedMeta.z,r.globalOwner.w);_ResolvedUV[p]=r.preparedUV;}

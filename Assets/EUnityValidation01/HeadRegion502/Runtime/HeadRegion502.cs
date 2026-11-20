@@ -226,7 +226,7 @@ public static partial class HeadRegion502
         if(groups!=null)foreach(var group in groups)for(int j=1;j<group.Length;j++)flow.Link(group[0],group[j],100000);
         return flow.Solve(source, sink).Take(areas.Length).ToArray();
     }
- public static bool[] SelectRegionsCompact544(float[] areas,int width,int height,List<int[]> groups)
+ public static bool[] SelectRegionsCompact544(float[] areas,int width,int height,List<int[]> groups,bool requireMajoritySpan=false)
  {
   var held=new bool[areas.Length];if(groups!=null)foreach(var g in groups)foreach(int i in g)held[i]=true;
   var map=new int[areas.Length];var output=new bool[areas.Length];int count=0;
@@ -250,7 +250,16 @@ public static partial class HeadRegion502
    if(y+1<height&&x+1<width)Pair(i,i+width+1,HeadRegion502.BoundaryCost*.29289322f);
    if(y+1<height&&x>0)Pair(i,i+width-1,HeadRegion502.BoundaryCost*.29289322f);
   }
-  if(groups!=null)foreach(var g in groups)for(int j=1;j<g.Length;j++)flow.Link(map[g[0]],map[g[j]],100000);
+  // A leading span is one geometric feature, not permission to promote a weak
+  // endpoint through its neighbours. Keep the existing coupled decision only
+  // when every member has majority area support. Groups are already confined
+  // to the outer edge with two fully occupied inward cells by BoundarySpan543.
+  if(groups!=null)foreach(var g in groups)
+  {
+   bool supported=true;if(requireMajoritySpan)foreach(int i in g)if(areas[i]<.5f){supported=false;break;}
+   if(supported){for(int j=1;j<g.Length;j++)flow.Link(map[g[0]],map[g[j]],100000);}
+   else foreach(int i in g)flow.Add(map[i],sink,100000);
+  }
   var labels=flow.Solve(source,sink);for(int i=0;i<map.Length;i++)if(map[i]>=0)output[i]=labels[map[i]];return output;
  }
     sealed class Cut

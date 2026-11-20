@@ -121,15 +121,19 @@ SubShader{Tags{"RenderPipeline"="UniversalPipeline"}
 #include "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/Attributes348.hlsl"
 #include "Assets/EUnityValidation01/SourceLight329/Shaders/Input329.hlsl"
             #include "Packages/com.vrmc.vrm/MToon10/Shaders/vrmc_materials_mtoon_forward_vertex.hlsl"
-            #include "Packages/com.vrmc.vrm/MToon10/Shaders/vrmc_materials_mtoon_forward_fragment.hlsl"
+            #include "Assets/EUnityValidation01/SkinPalette302/Shaders/BodyPalette302.hlsl"
 
 
 float4 _ClipShift333,_Profile333;float _Eye253Part,_Eye253Tag;float4 _ROI348;float4x4 _WorldToHead348;int _SupportKind348;
 Varyings Eye333Vertex(const Attributes v){Varyings o=MToonVertex(v);o.e202Control=v.apertureControl.xy;o.e202Owner=v.e202SourceOwner.x;o.restHead348=v.texcoord1;return o;}
-struct O333{float4 rgba:SV_Target0;float4 meta:SV_Target1;float4 restPosition:SV_Target2;float4 uv:SV_Target3;};
+struct O333{float4 rgba:SV_Target0;float4 meta:SV_Target1;float4 restPosition:SV_Target2;float4 uv:SV_Target3;float4 shade:SV_Target4;};
 O333 Eye333Fragment(const Varyings input,uint primitiveID:SV_PrimitiveID,bool facing:SV_IsFrontFace){Varyings v=input;v.pos.xy=_ROI348.xy+input.pos.xy/4;FragmentInput f;f.varyings=v;f.facing=facing?1:-1;
- float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;float4 c=MToonFragment(f);int role=(int)round(_Auto245Role);
- O333 o;o.rgba=float4(c.rgb,alpha);o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,round(v.e202Owner),alpha);o.restPosition=float4(v.restHead348,facing?1:-1);o.uv=float4(uv,primitiveID+1,_SupportKind348);return o;}
+ float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;int role=(int)round(_Auto245Role);
+ O333 o;o.shade=0;
+ // Only the eyeline pigment supplier changes. Other surface RGB remains its existing MToon output.
+ if(_SupportKind348==3){MToonInput material;material.uv=uv;material.normalWS=GetMToonGeometry_Normal(v,f.facing,uv);material.viewDirWS=normalize(v.viewDirWS);material.litColor=src.rgb;material.alpha=alpha;float continuous=ContinuousSurfaceLight335(v,material);float level=QuantizedSurfaceLight335(continuous,6);float factor=_ShadeLayer335>.5?lerp(_SurfaceOwnShade335,1,level):1;o.rgba=float4(src.rgb,alpha);o.shade=float4(continuous,level,factor,alpha);}
+ else{o.rgba=float4(Auto245NativeOriginalFragment(f).rgb,alpha);}
+ o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,round(v.e202Owner),alpha);o.restPosition=float4(v.restHead348,facing?1:-1);o.uv=float4(uv,primitiveID+1,_SupportKind348);return o;}
 ENDHLSL
         }
 }

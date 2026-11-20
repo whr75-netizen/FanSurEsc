@@ -27,6 +27,7 @@ public sealed class CameraZoomController : MonoBehaviour
     private float originalTargetOrthographicSize;
     private bool hasOriginalZoomTarget;
     private int requestedNativeInitialScale;
+    private Object nativeGridOwner;
 
     public float MinOrthographicSize => minOrthographicSize;
     public float MaxOrthographicSize => maxOrthographicSize;
@@ -34,14 +35,18 @@ public sealed class CameraZoomController : MonoBehaviour
     public bool NativePixelGridEnabled => nativePixelGrid;
     public float NativePixelsPerUnit => nativePixelsPerUnit;
     public int NativeIntegerScale { get; private set; }
+    public Object NativePixelGridOwner => nativeGridOwner;
     public bool NativeGridFitsZoomLimits { get; private set; } = true;
 
-    public void SetNativePixelGrid(float pixelsPerUnit, int initialIntegerScale = 0)
+    public void SetNativePixelGrid(float pixelsPerUnit, int initialIntegerScale = 0, Object owner = null)
     {
+        // The active presentation owns its grid across building enable/disable.
+        if (nativeGridOwner != null && nativeGridOwner != owner) return;
         if (float.IsNaN(pixelsPerUnit) || float.IsInfinity(pixelsPerUnit) || pixelsPerUnit <= 0f)
             throw new System.ArgumentOutOfRangeException(nameof(pixelsPerUnit));
         if (initialIntegerScale < 0)
             throw new System.ArgumentOutOfRangeException(nameof(initialIntegerScale));
+        nativeGridOwner = owner;
         if (controlledCamera == null) controlledCamera = GetComponent<Camera>();
         if (!hasOriginalZoomTarget)
         {
@@ -60,8 +65,10 @@ public sealed class CameraZoomController : MonoBehaviour
         ApplyZoom();
     }
 
-    public void ClearNativePixelGrid()
+    public void ClearNativePixelGrid(Object owner = null)
     {
+        if (nativeGridOwner != owner && (nativeGridOwner != null || owner != null)) return;
+        nativeGridOwner = null;
         if (!nativePixelGrid && !hasOriginalZoomTarget) return;
         nativePixelGrid = false;
         requestedNativeInitialScale = 0;
@@ -168,6 +175,15 @@ public sealed class CameraZoomController : MonoBehaviour
             return;
         }
 
+        if (nativePixelGrid && NativeIntegerScale > 0)
+        {
+            // Re-enabling the camera must preserve the already selected native zoom.
+            zoomVelocity = 0f;
+            accumulatedScrollDelta = 0f;
+            ApplyZoom();
+            return;
+        }
+
         targetOrthographicSize = Mathf.Clamp(
             controlledCamera.orthographicSize,
             minOrthographicSize,
@@ -175,7 +191,7 @@ public sealed class CameraZoomController : MonoBehaviour
         controlledCamera.orthographicSize = targetOrthographicSize;
         zoomVelocity = 0f;
         accumulatedScrollDelta = 0f;
-        if (nativePixelGrid) SetNativePixelGrid(nativePixelsPerUnit, requestedNativeInitialScale);
+        if (nativePixelGrid) SetNativePixelGrid(nativePixelsPerUnit, requestedNativeInitialScale, nativeGridOwner);
     }
 
     private void ApplyZoom()

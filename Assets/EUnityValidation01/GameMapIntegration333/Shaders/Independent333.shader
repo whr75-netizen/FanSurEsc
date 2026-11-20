@@ -121,7 +121,7 @@ SubShader{Tags{"RenderPipeline"="UniversalPipeline"}
 #include "Assets/EUnityValidation01/EyeContoursLayers202/Shaders/ApertureAttributes162.hlsl"
 #include "Assets/EUnityValidation01/SourceLight329/Shaders/Input329.hlsl"
             #include "Packages/com.vrmc.vrm/MToon10/Shaders/vrmc_materials_mtoon_forward_vertex.hlsl"
-            #include "Packages/com.vrmc.vrm/MToon10/Shaders/vrmc_materials_mtoon_forward_fragment.hlsl"
+            #include "Assets/EUnityValidation01/SkinPalette302/Shaders/BodyPalette302.hlsl"
 
 
 float4 _ClipShift333,_Profile333;float _Eye253Part,_Eye253Tag;
@@ -129,7 +129,7 @@ Varyings Eye333Vertex(const Attributes v){Varyings o=MToonVertex(v);o.e202Contro
 struct O333{float4 rgba:SV_Target0;float4 meta:SV_Target1;float4 uv:SV_Target2;};
 O333 Eye333Fragment(const Varyings v,bool facing:SV_IsFrontFace){FragmentInput f;f.varyings=v;f.facing=facing?1:-1;if(_Eye253Part==5&&max(v.e202Control.x,v.e202Control.y)<=1e-5)discard;
 float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;
-float4 c=MToonFragment(f);int role=(int)round(_Auto245Role);if(role>=7&&role<=10){MToonInput m;m.uv=uv;m.normalWS=GetMToonGeometry_Normal(v,f.facing,uv);m.viewDirWS=normalize(v.viewDirWS);m.litColor=src.rgb;m.alpha=alpha;UnityLighting light=GetUnityLighting(v,m.normalWS);float lit=step(_Profile333.y,GetMToonLighting_DotNL(light,m))*step(_Profile333.z,light.directLightAttenuation.x);c=float4(src.rgb*((_Profile333.w>.5&&lit<.5)?_Profile333.x:1),alpha);}
+int role=(int)round(_Auto245Role);float4 c=Auto245NativeOriginalFragment(f);if(_SurfaceLayers335>.5&&role>=11&&role<=14)c=MToonFragment(f);if(role>=7&&role<=10){MToonInput m;m.uv=uv;m.normalWS=GetMToonGeometry_Normal(v,f.facing,uv);m.viewDirWS=normalize(v.viewDirWS);m.litColor=src.rgb;m.alpha=alpha;UnityLighting light=GetUnityLighting(v,m.normalWS);float lit=step(_Profile333.y,GetMToonLighting_DotNL(light,m))*step(_Profile333.z,light.directLightAttenuation.x);c=float4(src.rgb*((_Profile333.w>.5&&lit<.5)?_Profile333.x:1),alpha);}
 O333 o;o.rgba=c;o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,role<=6?round(v.e202Owner):0,alpha);o.uv=float4(uv,v.e202Control.x,_Eye253Tag);return o;}
 ENDHLSL
         }

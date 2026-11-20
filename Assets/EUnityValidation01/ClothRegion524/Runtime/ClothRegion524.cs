@@ -5,10 +5,21 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-// Default-OFF clothing adapter for the common boundary-first generation contract.
+// Explicit clothing adapter; E399 selects the validated 547 profile at gameplay readiness.
 // Automatic projected vector regions own fill; this replaces the open arm frontier.
 public static class ClothRegion524
 {
+    // Runtime product entry: clothes only. Hair, eyes, Body0 and experimental lines
+    // retain their existing paths. Reapply after each presentation initialization.
+    public static void ConfigureProduct547()
+    {
+        PartBits540=Clothing540;
+        Enabled=UseOpacityCurves527=UseWholeRegions539=UseSpans543=UseCompact544=true;
+        UseAreaCurves532=UseSimplifiedSpanReference546=false;
+        UseBodyScope551=UseDomainBoundary553=false;
+        ClosedRegion524.UseSpatialIndex526=true;
+    }
+
     public static bool Enabled;
     public static bool UseOpacityCurves527;
     public static bool UseAreaCurves532;
@@ -196,7 +207,7 @@ public static class ClothRegion524
             // Only feature correspondence uses Source. The fitted design area still
             // owns eligibility, full inward support, cut costs and the final mask.
             var groups=UseSpans543?BoundarySpan543.Groups(UseSimplifiedSpanReference546?Curves:Source,Areas,Bounds):null;
-            Selected=UseSpans543?(UseCompact544?HeadRegion502.SelectRegionsCompact544(Areas,Bounds.width,Bounds.height,groups):HeadRegion502.SelectRegions543(Areas,Bounds.width,Bounds.height,groups)):HeadRegion502.SelectRegions(Areas,Bounds.width,Bounds.height);SelectionMs=Ms(start);start=Stopwatch.GetTimestamp();
+            Selected=UseSpans543?(UseCompact544?HeadRegion502.SelectRegionsCompact544(Areas,Bounds.width,Bounds.height,groups,(Outerwear540&(1<<buildingPart540))!=0):HeadRegion502.SelectRegions543(Areas,Bounds.width,Bounds.height,groups)):HeadRegion502.SelectRegions(Areas,Bounds.width,Bounds.height);SelectionMs=Ms(start);start=Stopwatch.GetTimestamp();
             if(!Mask)Mask=new Texture2D(480,272,TextureFormat.RGBAFloat,false,true){name="524 authoritative closed clothing region",filterMode=FilterMode.Point,wrapMode=TextureWrapMode.Clamp,hideFlags=HideFlags.DontSave};
             if(Audit==null)Audit=RTHandles.Alloc(480,272,colorFormat:UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat,filterMode:FilterMode.Point,enableRandomWrite:true);
             Array.Clear(colours,0,colours.Length);for(int y=0;y<Bounds.height;y++)for(int x=0;x<Bounds.width;x++){int at=y*Bounds.width+x;colours[(271-y-y0)*480+x+x0]=new Color(Selected[at]?1:0,Areas[at],0,1);}
@@ -216,3 +227,4 @@ public static class ClothRegion524
     }
     public static void Release(){UseBodyScope551=UseDomainBoundary553=false;ReleaseAllScopes551();Enabled=UseOpacityCurves527=UseAreaCurves532=UseWholeRegions539=UseSpans543=UseCompact544=UseSimplifiedSpanReference546=false;PartBits540=Outerwear540;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalInt("_BodyScope551Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);foreach(var p in Parts540){if(p.mask)UnityEngine.Object.DestroyImmediate(p.mask);p.mask=null;p.opacity=null;p.original=null;p.material=null;p.source=null;p.curves=null;p.areas=null;p.selected=null;}if(Atlas540)UnityEngine.Object.DestroyImmediate(Atlas540);Atlas540=null;Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}
 }
+

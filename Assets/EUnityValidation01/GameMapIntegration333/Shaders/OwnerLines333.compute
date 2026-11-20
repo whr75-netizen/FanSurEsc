@@ -1,6 +1,7 @@
 #pragma kernel Seed
 #pragma kernel Flood
 #pragma kernel OwnerLines
+#pragma kernel FloodTile
 Texture2D<float4> _Before,_Owner,_Surface,_Torso,_Arms,_TriangleVertices,_Palette256;
 Texture2D<uint> _FloodRead;RWTexture2D<uint> _FloodWrite;RWTexture2D<float4> _Colour,_Audit,_PaletteAudit256;int2 _Size;float _LineTone;int _UsePalette256;float4 _DeepCream256,_DeepSkin256;
 int _ClosedDomain553,_ClosedParts553,_HeadScope553,_BodyCount553;StructuredBuffer<float> _BodySource553;
@@ -10,6 +11,25 @@ bool closedDomain553(float4 owner){int part=(int)round(owner.x)-8;if(_ClosedDoma
 bool inside(int2 p){return all(p>=0)&&all(p<_Size);}bool covered(int2 p){return inside(p)&&_Before.Load(int3(p,0)).a>0;}uint ext(int2 p){return inside(p)?_FloodRead.Load(int3(p,0)):1;}
 [numthreads(8,8,1)]void Seed(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(!inside(p))return;_FloodWrite[p]=!covered(p)&&(p.x==0||p.y==0||p.x==_Size.x-1||p.y==_Size.y-1)?1:0;}
 [numthreads(8,8,1)]void Flood(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(!inside(p))return;_FloodWrite[p]=covered(p)?0:(ext(p)|ext(p+int2(-1,0))|ext(p+int2(1,0))|ext(p+int2(0,-1))|ext(p+int2(0,1)));}
+groupshared uint _FloodCov[18][18];
+groupshared uint _FloodTileA[18][18];
+groupshared uint _FloodTileB[18][18];
+[numthreads(16,16,1)]void FloodTile(uint3 gtid:SV_GroupThreadID,uint3 dtid:SV_DispatchThreadID){
+ int lx=(int)gtid.x+1,ly=(int)gtid.y+1;int2 p=int2(dtid.xy);
+ bool cov=covered(p);_FloodCov[ly][lx]=cov?1u:0u;_FloodTileA[ly][lx]=cov?0u:ext(p);
+ if(gtid.x==0){int2 h=p+int2(-1,0);bool c=covered(h);_FloodCov[ly][0]=c?1u:0u;_FloodTileA[ly][0]=c?0u:ext(h);_FloodTileB[ly][0]=_FloodTileA[ly][0];}
+ if(gtid.x==15){int2 h=p+int2(1,0);bool c=covered(h);_FloodCov[ly][17]=c?1u:0u;_FloodTileA[ly][17]=c?0u:ext(h);_FloodTileB[ly][17]=_FloodTileA[ly][17];}
+ if(gtid.y==0){int2 h=p+int2(0,-1);bool c=covered(h);_FloodCov[0][lx]=c?1u:0u;_FloodTileA[0][lx]=c?0u:ext(h);_FloodTileB[0][lx]=_FloodTileA[0][lx];}
+ if(gtid.y==15){int2 h=p+int2(0,1);bool c=covered(h);_FloodCov[17][lx]=c?1u:0u;_FloodTileA[17][lx]=c?0u:ext(h);_FloodTileB[17][lx]=_FloodTileA[17][lx];}
+ GroupMemoryBarrierWithGroupSync();
+ [unroll]for(int iter=0;iter<8;iter++){
+  _FloodTileB[ly][lx]=_FloodCov[ly][lx]!=0u?0u:(_FloodTileA[ly][lx]|_FloodTileA[ly][lx-1]|_FloodTileA[ly][lx+1]|_FloodTileA[ly-1][lx]|_FloodTileA[ly+1][lx]);
+  GroupMemoryBarrierWithGroupSync();
+  _FloodTileA[ly][lx]=_FloodCov[ly][lx]!=0u?0u:(_FloodTileB[ly][lx]|_FloodTileB[ly][lx-1]|_FloodTileB[ly][lx+1]|_FloodTileB[ly-1][lx]|_FloodTileB[ly+1][lx]);
+  GroupMemoryBarrierWithGroupSync();
+ }
+ if(inside(p))_FloodWrite[p]=_FloodTileA[ly][lx];
+}
 int partAt(int2 p){return covered(p)?(int)round(_Owner.Load(int3(p,0)).y):0;}
 bool ownCore(int2 p,int2 inward,int part){bool a=covered(p+inward),b=covered(p+inward*2);if(part>=2&&part<=5){a=a&&partAt(p+inward)==part;b=b&&partAt(p+inward*2)==part;}return a&&b;}
 bool hasThreeInAxis(int2 p,int2 d,int part){bool a=partAt(p-d)==part,b=partAt(p+d)==part;return (a&&b)||(a&&partAt(p-d*2)==part)||(b&&partAt(p+d*2)==part);}

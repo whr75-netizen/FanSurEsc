@@ -105,7 +105,7 @@ SubShader{Tags{"RenderPipeline"="UniversalPipeline"}
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
-            #pragma multi_compile _ _FORWARD_PLUS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
             #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
             #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
@@ -127,7 +127,7 @@ SubShader{Tags{"RenderPipeline"="UniversalPipeline"}
 float4 _ClipShift333,_Profile333;float _Eye253Part,_Eye253Tag;
 Varyings Eye333Vertex(const Attributes v){Varyings o=MToonVertex(v);o.e202Control=v.apertureControl.xy;o.e202Owner=v.e202SourceOwner.x;o.pos.xy+=_ClipShift333.xy*o.pos.w;return o;}
 struct O335{half4 colour:SV_Target0;half4 lit:SV_Target1;half4 shade:SV_Target2;float4 classifier:SV_Target3;};
-O335 Eye333Fragment(const Varyings v,bool facing:SV_IsFrontFace){FragmentInput f;f.varyings=v;f.facing=facing?1:-1;float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;MToonInput m;m.uv=uv;m.normalWS=GetMToonGeometry_Normal(v,f.facing,uv);m.viewDirWS=normalize(v.viewDirWS);m.litColor=src.rgb;m.alpha=alpha;half3 lit,shade;Auto245Palette(uv,src.rgb,lit,shade);half shadow=Auto245Shadow(v,m);O335 o;o.colour=MToonFragment(f);o.lit=half4(lit,alpha);o.shade=half4(shade,alpha);o.classifier=float4(shadow>.5?0:1,_Auto245Role+1,-TransformWorldToView(v.positionWS).z,alpha);return o;}
+O335 Eye333Fragment(const Varyings v,bool facing:SV_IsFrontFace){FragmentInput f;f.varyings=v;f.facing=facing?1:-1;float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;MToonInput m;m.uv=uv;m.normalWS=GetMToonGeometry_Normal(v,f.facing,uv);m.viewDirWS=normalize(v.viewDirWS);m.litColor=src.rgb;m.alpha=alpha;half3 lit,shade;Auto245Palette(uv,src.rgb,lit,shade);O335 o;if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){float continuous=ContinuousSurfaceLight335(v,m);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);o.colour=float4(SurfaceLayerOutput335(lit,factor,continuous,level),alpha);o.lit=float4(lit,alpha);o.shade=float4(factor,alpha);o.classifier=float4(level,continuous,-TransformWorldToView(v.positionWS).z,alpha);return o;}half shadow=Auto245Shadow(v,m);o.colour=MToonFragment(f);o.lit=half4(lit,alpha);o.shade=half4(shade,alpha);o.classifier=float4(shadow>.5?0:1,_Auto245Role+1,-TransformWorldToView(v.positionWS).z,alpha);return o;}
 ENDHLSL
         }
 }

@@ -8,6 +8,8 @@ float _Auto245Stage,_Auto245Local,_Auto245MembershipEnabled;
 sampler2D _Auto245CreamMember,_Auto245StockMember,_Auto245FaceSkinMember,_Auto245BodySkinMember;
 float4 _Auto245CreamShade,_Auto245SkinShade,_Auto245StockLit,_Auto245StockShade;
 
+#include "Assets/EUnityValidation01/SkinPalette302/Shaders/FaceSceneLight335.hlsl"
+
 // Reuse installed MToon reflectance. Radiance RGB is never passed to the palette.
 half Auto245Shadow(const Varyings input,const MToonInput material){
  if(_Auto245Local<.5){UnityLighting lighting=GetUnityLighting(input,material.normalWS);if(_Auto249VisibilityOne>.5)lighting.directLightAttenuation=1;half ndotl=GetMToonLighting_DotNL(lighting,material);return GetMToonLighting_Shade(lighting,material,ndotl)>=.5?0:1;}
@@ -36,6 +38,7 @@ void Auto245Palette(float2 uv,half3 ownLit,out half3 lit,out half3 shade){
  lit=ownLit;shade=MTOON_SAMPLE_TEXTURE2D(_ShadeTex,uv).rgb*_ShadeColor.rgb;
  if(_Auto245MembershipEnabled<.5)return;
  int role=(int)round(_Auto245Role);
+ if(role>=11&&role<=14){lit=HairBase335(ownLit,role);shade=lit;}
  if(role==8&&_Restore250Bottom>.5){lit=_Restore250LowerLit.rgb;shade=_Restore250LowerShade.rgb;}
  if(role==10&&tex2D(_Auto245CreamMember,uv).r>.5){shade=_Auto245CreamShade.rgb;}
  if(role==3){shade=ownLit*.72;} // Existing A241 own-pigment shade endpoint, automatic mask replaces its old hand-authored region.
@@ -50,6 +53,7 @@ float4 MToonFragment(const FragmentInput fragmentInput):SV_Target{
  if(_Auto249Probe>.5)return float4(uv,_Auto245Role+1,alpha);
  MToonInput material;material.uv=uv;material.normalWS=GetMToonGeometry_Normal(input,fragmentInput.facing,uv);material.viewDirWS=normalize(input.viewDirWS);material.litColor=source.rgb;material.alpha=alpha;
  if(_Auto245Stage<.5)return half4(source.rgb,alpha);
+ if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){half3 baseColour,shadeEndpoint;Auto245Palette(uv,source.rgb,baseColour,shadeEndpoint);float continuous=ContinuousSurfaceLight335(input,material);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));level=ProviderSurfaceLevel335(level,(int)round(_Auto245Role),input.pos.xy,-TransformWorldToView(input.positionWS).z);float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);return float4(SurfaceLayerOutput335(baseColour,factor,continuous,level),alpha);}
  half shadow=Auto245Shadow(input,material);
  if(_Auto245Stage<1.5)return half4(shadow.xxx,alpha);
  half3 lit,shade;Auto245Palette(uv,source.rgb,lit,shade);

@@ -4,16 +4,19 @@ Texture2D<float4> _MainSource395,_World395,_Local395,_Meta395,_UV395,_Domain395,
 Texture2D<float> _MainDepth395,_WorldDepth395;
 RWTexture2D<float4> _WorldRW395,_Output395,_Owner395,_CellID395,_DepthAudit395;
 RWTexture2D<float> _WorldDepthRW395;
-float2 _Delta395;int2 _Origin395;int _Show395,_Capture395,_CellScale395;float4 _NearFar395,_Texel395[16];float _UVTolerance395;
+float2 _Delta395;int2 _Origin395;int _Show395,_Capture395,_CellScale395,_EnableHistory395;float4 _NearFar395,_Texel395[16];float _UVTolerance395;
 [numthreads(8,8,1)]void CaptureWorld(uint3 t:SV_DispatchThreadID){int2 p=t.xy;if(any(p>=int2(960,544)))return;_WorldRW395[p]=_MainSource395.Load(int3(p,0));_WorldDepthRW395[p]=_MainDepth395.Load(int3(p,0));}
 [numthreads(8,8,1)]void Present(uint3 t:SV_DispatchThreadID){
  int2 p=t.xy;if(any(p>=int2(960,544)))return;
- float4 world=_World395.Load(int3(p,0));float device=_WorldDepth395.Load(int3(p,0));float wd=lerp(_NearFar395.x,_NearFar395.y,_NearFar395.z>.5?1-device:device);
  int2 q=(int2)floor((float2(p)+.5-float2(_Origin395))/_CellScale395-_Delta395);
+ // Share the character cell and phase for world colour AND its occlusion depth.
+ // One integer texel load: no camera/model/RT resize, palette mixing or filtering.
+ int2 worldSample=clamp((int2)floor(float2(_Origin395)+(float2(q)+.5+_Delta395)*_CellScale395),int2(0,0),int2(959,543));
+ float4 world=_World395.Load(int3(worldSample,0));float device=_WorldDepth395.Load(int3(worldSample,0));float wd=lerp(_NearFar395.x,_NearFar395.y,_NearFar395.z>.5?1-device:device);
  _Output395[p]=world;_Owner395[p]=0;_CellID395[p]=float4(q,0,0);_DepthAudit395[p]=float4(wd,0,0,0);
  if(_Show395==0||any(q<0)||any(q>=int2(480,272)))return;
  float4 colour=_Local395.Load(int3(q,0)),meta=_Meta395.Load(int3(q,0)),uv=_UV395.Load(int3(q,0));
  bool covered=colour.a>.5&&meta.x>0;bool visible=covered&&meta.x<=wd+.0001;
- if(_Capture395==0&&visible){float domain=_Domain395.Load(int3(q,0)).x,reason=_Line395.Load(int3(q,0)).x;float4 old=_HistoryMeta395.Load(int3(q,0));float4 key=float4(meta.y,meta.w,uv.z+4*reason+32*domain,1);int role=clamp((int)round(meta.y)-1,0,15);float2 distance=abs(uv.xy-_HistoryUV395.Load(int3(q,0)).xy)/max(_Texel395[role].xy,1e-8);if(domain<.5&&old.w>.5&&old.x==key.x&&old.y==key.y&&old.z==key.z&&all(distance<=_UVTolerance395))colour=_History395.Load(int3(q,0));}
+ if(_EnableHistory395!=0&&_Capture395==0&&visible){float domain=_Domain395.Load(int3(q,0)).x,reason=_Line395.Load(int3(q,0)).x;float4 old=_HistoryMeta395.Load(int3(q,0));float4 key=float4(meta.y,meta.w,uv.z+4*reason+32*domain,1);int role=clamp((int)round(meta.y)-1,0,15);float2 distance=abs(uv.xy-_HistoryUV395.Load(int3(q,0)).xy)/max(_Texel395[role].xy,1e-8);if(domain<.5&&old.w>.5&&old.x==key.x&&old.y==key.y&&old.z==key.z&&all(distance<=_UVTolerance395))colour=_History395.Load(int3(q,0));}
  _Output395[p]=visible?float4(colour.rgb,1):world;_Owner395[p]=visible?float4(meta.y,meta.z,meta.x,meta.w):0;_CellID395[p]=float4(q,visible?1:0,covered?1:0);_DepthAudit395[p]=float4(wd,meta.x,covered?1:0,visible?1:0);
 }

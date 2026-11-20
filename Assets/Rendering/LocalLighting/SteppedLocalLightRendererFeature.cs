@@ -93,7 +93,9 @@ namespace FantasySurvival.Rendering
             if ((!sceneView && (shell == null || shell.PlayerCamera != camera)) ||
                 passMaterial == null)
             {
-                Shader.SetGlobalInteger(LightCountId, 0);
+                // Do not clobber global stepped light state when non-player offscreen cameras render.
+                if (shell == null || passMaterial == null)
+                    Shader.SetGlobalInteger(LightCountId, 0);
                 return;
             }
 

@@ -72,6 +72,25 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
     [Tooltip("Layer 11: Legacy 24-RT 4x4 PostView366 / SourceFeature366 / JoinSource367 candidate path.")]
     public bool enablePost366Candidate = false;
 
+    [Header("Stage 1: 3D Cartoon / Cel Shading (Pre-Pixelization, No 3D Outlines)")]
+    [Tooltip("Enables ordered 3D-first cel/toon shading (albedo simplification + quantized shadows + hue-shifted cel bands + hair specular band) before 2D pixelization and outlines.")]
+    public bool enableToon3DShading = true;
+    [Tooltip("Simplifies noisy 3D texture albedo gradients into clean cel color blocks in 3D before pixel grid sampling (eyes/brows/mouth preserved).")]
+    public bool toonAlbedoSimplify = true;
+    [Range(2, 4)]
+    public int toonShadeSteps = 3;
+    [Range(0f, 1f)]
+    [Tooltip("Hue-shifts cel shadows (warm peach on skin, cool indigo on clothes/hair) instead of muddy gray multiply.")]
+    public float toonShadowTintStrength = 0.65f;
+    [Tooltip("Adds a hard-stepped 3D cel highlight band across hair before pixelization.")]
+    public bool toonHairHighlightBand = true;
+
+    [Header("World / Environment Quantized Pixel Shading (t3ssel8r Style)")]
+    [Tooltip("Quantizes continuous 3D world lighting/shadow gradients into crisp pixel-art cel bands (sky & character untouched).")]
+    public bool enableWorldQuantizedShading = true;
+    [Range(3, 8)]
+    public int worldQuantizeSteps = 5;
+
     [Header("Clothing Silhouette & Edge Stabilization (Real-Time GPU / Zero-Shrinkage)")]
     [Tooltip("Applies non-destructive Taubin zero-shrinkage low-pass smoothing to baked clothing submeshes (skirt/shoes/coat) while keeping original normals for fold shading.")]
     public bool enableClothMeshSmoothing = true;
@@ -142,6 +161,14 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
 
     public static bool NeedsTwoPassCPU => EnableClothingRegionCPU || EnableOpenContourCPU || EnablePost366Candidate;
     public static bool NeedsNative960 => EnableCharacterPass && ((Active != null && Active.enableNative960Supersample) || EnableClothingRegionCPU || EnableOpenContourCPU);
+
+    public static bool EnableToon3DShading => Active == null || Active.enableToon3DShading;
+    public static bool ToonAlbedoSimplify => EnableToon3DShading && (Active == null || Active.toonAlbedoSimplify);
+    public static int ToonShadeSteps => Active != null ? Mathf.Clamp(Active.toonShadeSteps, 2, 4) : 3;
+    public static float ToonShadowTintStrength => EnableToon3DShading ? (Active != null ? Mathf.Clamp01(Active.toonShadowTintStrength) : 0.65f) : 0f;
+    public static bool ToonHairHighlightBand => EnableToon3DShading && (Active == null || Active.toonHairHighlightBand);
+    public static bool EnableWorldQuantizedShading => Active == null || Active.enableWorldQuantizedShading;
+    public static int WorldQuantizeSteps => EnableWorldQuantizedShading ? (Active != null ? Mathf.Clamp(Active.worldQuantizeSteps, 3, 8) : 5) : 0;
 
     public static bool EnableClothMeshSmoothing => Active == null || Active.enableClothMeshSmoothing;
     public static int ClothSmoothIterations => Active != null ? Mathf.Clamp(Active.clothSmoothIterations, 1, 10) : 6;
@@ -264,6 +291,13 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
             h = h * 31 + (enableClothingRegionCPU ? 1 : 0);
             h = h * 31 + (enableOpenContourCPU ? 1 : 0);
             h = h * 31 + (enablePost366Candidate ? 1 : 0);
+            h = h * 31 + (enableToon3DShading ? 1 : 0);
+            h = h * 31 + (toonAlbedoSimplify ? 1 : 0);
+            h = h * 31 + toonShadeSteps;
+            h = h * 31 + Mathf.RoundToInt(toonShadowTintStrength * 100f);
+            h = h * 31 + (toonHairHighlightBand ? 1 : 0);
+            h = h * 31 + (enableWorldQuantizedShading ? 1 : 0);
+            h = h * 31 + worldQuantizeSteps;
             h = h * 31 + (enableClothMeshSmoothing ? 1 : 0);
             h = h * 31 + clothSmoothIterations;
             h = h * 31 + Mathf.RoundToInt(clothSmoothStrength * 100f);
@@ -285,7 +319,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         float ms = smoothedDeltaTime * 1000f;
 
         GUI.depth = -1000;
-        GUILayout.BeginArea(new Rect(12, 12, 390, 720), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(12, 12, 395, 845), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
         GUILayout.Label($"FPS: {fps:F1} ({ms:F1} ms) | Display: {displayScaleMode}");
         GUILayout.Label($"Pixel Res: {pixelResolutionMode} (Char {2 / CharacterCellScale}x / World {2 / WorldCellScale}x)");
         GUILayout.BeginHorizontal();
@@ -345,7 +379,22 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         enableNative960Supersample = GUILayout.Toggle(enableNative960Supersample, "8. 960x544 Supersample Passes");
 
         GUILayout.Space(4);
-        GUILayout.Label("--- Clothing Edge Stabilization (Anti-Flicker) ---");
+        GUILayout.Label("--- Stage 1: 3D Toon/Cel & World Quantized Lighting ---");
+        enableToon3DShading = GUILayout.Toggle(enableToon3DShading, $"T1. 3D Toon Cel Shading ({toonShadeSteps} steps, hue-shift)");
+        if (enableToon3DShading)
+        {
+            GUILayout.BeginHorizontal();
+            toonAlbedoSimplify = GUILayout.Toggle(toonAlbedoSimplify, "3D Albedo Flat");
+            toonHairHighlightBand = GUILayout.Toggle(toonHairHighlightBand, "Hair Ring");
+            if (GUILayout.Button(toonShadeSteps == 2 ? "[2]" : "2")) toonShadeSteps = 2;
+            if (GUILayout.Button(toonShadeSteps == 3 ? "[3]" : "3")) toonShadeSteps = 3;
+            if (GUILayout.Button(toonShadeSteps == 4 ? "[4]" : "4")) toonShadeSteps = 4;
+            GUILayout.EndHorizontal();
+        }
+        enableWorldQuantizedShading = GUILayout.Toggle(enableWorldQuantizedShading, $"E1. World Quantized Cel Tone ({worldQuantizeSteps} bands)");
+
+        GUILayout.Space(4);
+        GUILayout.Label("--- Stage 2: 2D Pixel Edge & Silhouette ---");
         enableClothMeshSmoothing = GUILayout.Toggle(enableClothMeshSmoothing, $"S1. Taubin Cloth Smooth (iter={clothSmoothIterations}, str={clothSmoothStrength:F2})");
         enableEdgeStabilizationGPU = GUILayout.Toggle(enableEdgeStabilizationGPU, "S2. GPU Spur Prune & 1x1/1x2 Dent Fill");
         edgeStabilizeIncludeBody = GUILayout.Toggle(edgeStabilizeIncludeBody, "S2b. Include Legs/Torso/Arms Body Edge");

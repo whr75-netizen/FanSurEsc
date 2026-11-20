@@ -138,11 +138,15 @@ Shader "FantasySurvival/PixelFoliage"
                 return half3(0.0, 0.0, 0.0);
 
             half intervals = max(round(_ShadeSteps) - 1.0h, 1.0h);
-            half diffuse = saturate(dot(normalWS, light.direction)) * intervals;
+            // Quantize cast shadow attenuation together with N.L so pixel leaves
+            // show crisp cel shadow bands instead of blurry URP PCF gray smears.
+            half shadowBand = smoothstep(0.38h, 0.52h, saturate(light.shadowAttenuation));
+            half raw = saturate(dot(normalWS, light.direction)) * shadowBand * saturate(light.distanceAttenuation);
+            half diffuse = raw * intervals;
             half transition = min(max(_ShadeSoftness, 0.001h) * intervals, 0.49h);
             half shade = (floor(diffuse) + smoothstep(0.5h - transition,
                 0.5h + transition, frac(diffuse))) / intervals;
-            return light.color * (shade * light.distanceAttenuation * light.shadowAttenuation);
+            return light.color * shade;
         }
 
         half4 FoliageFragment(Varyings input) : SV_Target

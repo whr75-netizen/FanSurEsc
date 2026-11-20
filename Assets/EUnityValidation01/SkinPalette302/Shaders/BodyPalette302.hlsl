@@ -35,16 +35,16 @@ half Auto245Shadow(const Varyings input,const MToonInput material){
  return 1-anyLit;
 }
 void Auto245Palette(float2 uv,half3 ownLit,out half3 lit,out half3 shade){
- lit=ownLit;shade=MTOON_SAMPLE_TEXTURE2D(_ShadeTex,uv).rgb*_ShadeColor.rgb;
- if(_Auto245MembershipEnabled<.5)return;
  int role=(int)round(_Auto245Role);
+ lit=(half3)CelSimplifyAlbedo399(ownLit,role);shade=MTOON_SAMPLE_TEXTURE2D(_ShadeTex,uv).rgb*_ShadeColor.rgb;
+ if(_Auto245MembershipEnabled<.5)return;
  if(role>=11&&role<=14){lit=HairBase335(ownLit,role);shade=lit;}
  if(role==8&&_Restore250Bottom>.5){lit=_Restore250LowerLit.rgb;shade=_Restore250LowerShade.rgb;}
  if(role==10&&tex2D(_Auto245CreamMember,uv).r>.5){shade=_Auto245CreamShade.rgb;}
- if(role==3){shade=ownLit*.72;} // Existing A241 own-pigment shade endpoint, automatic mask replaces its old hand-authored region.
+ if(role==3){shade=lit*.72;} // Existing A241 own-pigment shade endpoint, automatic mask replaces its old hand-authored region.
  if(role==7){if(tex2D(_Auto245StockMember,uv).r>.5){lit=_Auto245StockLit.rgb;shade=_Auto245StockShade.rgb;}else if(tex2D(_Auto245BodySkinMember,uv).r>.5){shade=_Auto245SkinShade.rgb;
  // 302 changes only true BodySkin shade RGB. Original pigment, lit RGB, masks, visibility and lighting decision stay intact.
- if(_Style297Enabled>.5 && _Style297SkinMode>.5)shade=ownLit*_Style297OwnShade;
+ if(_Style297Enabled>.5 && _Style297SkinMode>.5)shade=lit*_Style297OwnShade;
  }}
 }
 float4 MToonFragment(const FragmentInput fragmentInput):SV_Target{
@@ -53,7 +53,7 @@ float4 MToonFragment(const FragmentInput fragmentInput):SV_Target{
  if(_Auto249Probe>.5)return float4(uv,_Auto245Role+1,alpha);
  MToonInput material;material.uv=uv;material.normalWS=GetMToonGeometry_Normal(input,fragmentInput.facing,uv);material.viewDirWS=normalize(input.viewDirWS);material.litColor=source.rgb;material.alpha=alpha;
  if(_Auto245Stage<.5)return half4(source.rgb,alpha);
- if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){half3 baseColour,shadeEndpoint;Auto245Palette(uv,source.rgb,baseColour,shadeEndpoint);float continuous=ContinuousSurfaceLight335(input,material);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));level=ProviderSurfaceLevel335(level,(int)round(_Auto245Role),input.pos.xy,-TransformWorldToView(input.positionWS).z);float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);return float4(SurfaceLayerOutput335(baseColour,factor,continuous,level),alpha);}
+ if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){int role=(int)round(_Auto245Role);half3 baseColour,shadeEndpoint;Auto245Palette(uv,source.rgb,baseColour,shadeEndpoint);float continuous=ContinuousSurfaceLight335(input,material);float level=QuantizedSurfaceLight335(continuous,role);level=ProviderSurfaceLevel335(level,role,input.pos.xy,-TransformWorldToView(input.positionWS).z);float3 factor=ShadeFactor335(uv,role,level);float3 outRgb=SurfaceLayerOutput335(baseColour,factor,continuous,level);if(_SurfaceLayerView335==0)outRgb+=CelHairHighlight399(input,material,baseColour,role,level);return float4(outRgb,alpha);}
  half shadow=Auto245Shadow(input,material);
  if(_Auto245Stage<1.5)return half4(shadow.xxx,alpha);
  half3 lit,shade;Auto245Palette(uv,source.rgb,lit,shade);

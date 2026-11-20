@@ -59,12 +59,12 @@ float3 ShadeFactor335(float2 uv,int role,float level){
  float3 minimumShade=_SurfaceOwnShade335.xxx;
  // Face semantic profile only. The albedo texture and colour palette are untouched.
  if(role==3&&_FaceShadeTint335>.5)minimumShade*=_FaceShadeChromaticity335.rgb;
- if(role==7&&tex2D(_Auto245StockMember,uv).r>.5){
+ if(_Auto245MembershipEnabled>.5&&role==7&&tex2D(_Auto245StockMember,uv).r>.5){
   // Existing region constants, independent of sampled albedo; no new tint.
   float3 reference=_Auto245StockLit.rgb;
   minimumShade=float3(reference.r>0?_Auto245StockShade.r/reference.r:1,reference.g>0?_Auto245StockShade.g/reference.g:1,reference.b>0?_Auto245StockShade.b/reference.b:1);
  }
- if(role>=11&&role<=14)return _ShadeLayer335>.5?HairAnchor335()*lerp(minimumShade,1,level):1;
+ if(_Auto245MembershipEnabled>.5&&role>=11&&role<=14)return _ShadeLayer335>.5?HairAnchor335()*lerp(minimumShade,1,level):1;
  return _ShadeLayer335>.5?lerp(minimumShade,1,level):1;
 }
 float3 SurfaceLayerOutput335(float3 colour,float3 factor,float continuous,float quantized){

@@ -305,6 +305,20 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
             MarkConfigDirty();
         }
         GUILayout.EndHorizontal();
+        var switcher = CharacterModelSwitcher399.Active;
+        if (switcher != null && switcher.Entries.Count > 1)
+        {
+            GUILayout.BeginHorizontal();
+            GUI.enabled = !switcher.IsLoading;
+            for (int i = 0; i < switcher.Entries.Count; i++)
+            {
+                string shortName = switcher.Entries[i].displayName.Replace("AvatarSample_", "").Replace(" (기본)", "*");
+                if (GUILayout.Button(i == switcher.ActiveIndex ? $"[{shortName}]" : shortName))
+                    switcher.SelectModel(i);
+            }
+            GUI.enabled = true;
+            GUILayout.EndHorizontal();
+        }
         GUILayout.Label($"Mode: {(bypassPresentation ? "BYPASSED (Original Camera)" : NeedsTwoPassCPU ? "2-Pass CPU Diagnostic" : "1-Pass Native GPU Loop")}");
         GUILayout.Label($"Outline Dispatches: {lastOutlineDispatches} | Readbacks: {lastFrameReadbacks}");
 

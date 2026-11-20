@@ -22,6 +22,8 @@ using UnityEditor;
  public bool showReviewUI=false;
  [NonSerialized]public RTHandle[]native,meta,normal;[NonSerialized]public RTHandle[]centreMeta,centreNormal;[NonSerialized]public RTHandle centreFamily;[NonSerialized]public RTHandle family,nativeDepth,colourNative,before,colour,owner,audit,gridSurface,gridPalette,paletteAudit,prepared,preparedOwner,postLine,preparedUV,preparedMeta,resolvedMeta,resolvedUV,eyeOutput,eyeOwner,intrinsic,eyeAudit,domain;
  [NonSerialized]public RTHandle edgeMetaSnap,edgeUVSnap;[NonSerialized]public RTHandle[]edgeHistory;[NonSerialized]public ComputeShader edgeStabilize;
+ [NonSerialized]public bool isGenericModel;[NonSerialized]public int[][]submeshRoles;
+ Material[]originalMetadataAssets,dynamicMetadataMats;
  int edgeHistoryWriteIdx;bool hasPrevEdgePivot;Vector2Int prevEdgePivot;Quaternion prevEdgeActorRot,prevEdgeCamRot;float prevEdgeOrtho;
  public sealed class Layer{public RTHandle rgba,meta,uv,depth;}
  [NonSerialized]public Layer[]layers;[NonSerialized]public RTHandle[]flood;[NonSerialized]public Material[]nativeMats,worldMats,independentMats;[NonSerialized]public Mesh bodyProxy,registeredHair,otherHair;
@@ -43,14 +45,108 @@ using UnityEditor;
   edgeMetaSnap=T();edgeUVSnap=T();edgeHistory=new[]{T(),T()};edgeStabilize=Resources.Load<ComputeShader>("EdgeStabilize399");hasPrevEdgePivot=false;edgeHistoryWriteIdx=0;
   flood=new[]{RTHandles.Alloc(480,272,colorFormat:GraphicsFormat.R32_UInt,enableRandomWrite:true),RTHandles.Alloc(480,272,colorFormat:GraphicsFormat.R32_UInt,enableRandomWrite:true)};
   layers=Enumerable.Range(0,13).Select(_=>new Layer{rgba=T(480,272,false),meta=T(480,272,false),uv=T(480,272,false),depth=RTHandles.Alloc(480,272,depthBufferBits:DepthBits.Depth32)}).ToArray();
-  nativeMats=motion.materials.Select(m=>new Material(m){shader=nativeShader,hideFlags=HideFlags.DontSave}).ToArray();worldMats=nativeMats.Select(m=>new Material(m){shader=Shader.Find("EValidation/GameMap333World"),hideFlags=HideFlags.DontSave}).ToArray();var mats=new List<Material>();int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<motion.surface.source[r].sharedMaterials.Length;sm++){var src=motion.surface.source[r].sharedMaterials[sm];int role=r==0?new[]{7,8,9,10}[sm]:r==1?sm:new[]{11,12,13,14}[sm];var m=new Material(src){shader=independentShader,hideFlags=HideFlags.DontSave};m.SetFloat("_Auto245Role",role);mats.Add(m);k++;}independentMats=mats.ToArray();
   if(!legacySignalsShader||!legacyProviderShader||!restoreStyle||!legacyRole3||!legacyRole7)throw new Exception("335 explicit legacy policy inputs missing");
   style480=Enumerable.Range(0,4).Select(_=>T(480,272,true)).ToArray();style960=Enumerable.Range(0,4).Select(_=>T(960,544,true)).ToArray();shadeMask480=T(480,272,true);shadeMask960=T(960,544,true);styleDepth480=RTHandles.Alloc(480,272,depthBufferBits:DepthBits.Depth32);styleDepth960=Z();beforeStyle=T();
-  legacySignalsMats=motion.materials.Select((src,i)=>{var m=new Material(src){shader=legacySignalsShader,hideFlags=HideFlags.DontSave};int role=i<4?new[]{7,8,9,10}[i]:i<11?i-4:i; m.SetFloat("_Auto245Role",role);if(role==3||role==7)LegacyClass(m,role==3?role3Reflectance:role7Reflectance);return m;}).ToArray();
-  legacyProviderMat=new Material(independentMats[7]){shader=legacyProviderShader,hideFlags=HideFlags.DontSave};legacyProviderMat.SetFloat("_Auto245Role",3);LegacyClass(legacyProviderMat,role3Reflectance);
   actionMap=new Texture2D(480,272,TextureFormat.RGBAFloat,false,true){filterMode=FilterMode.Point,wrapMode=TextureWrapMode.Clamp,hideFlags=HideFlags.DontSave};emptyActionMapColors??=new Color[480*272];actionMap.SetPixels(emptyActionMapColors);actionMap.Apply();actionMapDirty=false;
   geometryCamera=new GameObject("333 CPU effective capture projection"){hideFlags=HideFlags.HideAndDontSave}.AddComponent<Camera>();geometryCamera.enabled=false;geometryCamera.orthographic=true;
-  if(!creamMember||!stockMember||!skinMember||!canonical)throw new Exception("333 original319 membership/canonical input must be explicitly bound");ContourSelect333.TagBytes=bodyParts.bytes;BuildProxy();ready=true;motion.showControls=false;motion.animation.showControls=false;
+  if(!creamMember||!stockMember||!skinMember||!canonical)throw new Exception("333 original319 membership/canonical input must be explicitly bound");ContourSelect333.TagBytes=bodyParts.bytes;
+  if(originalMetadataAssets==null&&metadata!=null)originalMetadataAssets=(Material[])metadata.Clone();
+  RebuildModelMaterialsAndProxy(isGenericModel,submeshRoles);
+  ready=true;motion.showControls=false;motion.animation.showControls=false;
+ }
+ public int RoleFor(int r,int sm){
+  if(submeshRoles!=null&&r>=0&&r<submeshRoles.Length&&submeshRoles[r]!=null&&sm>=0&&sm<submeshRoles[r].Length)return submeshRoles[r][sm];
+  return r==0?(sm<4?new[]{7,8,9,10}[sm]:10):r==1?Mathf.Clamp(sm,0,6):(11+(sm%4));
+ }
+ public void RebuildForModel(bool generic,int[][]roles){
+  isGenericModel=generic;submeshRoles=roles;hasPrevEdgePivot=false;
+  if(!ready)return;
+  RebuildModelMaterialsAndProxy(generic,roles);
+ }
+ void DestroyMatArray(Material[]arr){if(arr!=null)foreach(var m in arr)if(m)DestroyImmediate(m);}
+ void RebuildModelMaterialsAndProxy(bool generic,int[][]roles){
+  DestroyMatArray(nativeMats);DestroyMatArray(worldMats);DestroyMatArray(independentMats);DestroyMatArray(legacySignalsMats);
+  if(legacyProviderMat)DestroyImmediate(legacyProviderMat);
+  DestroyMatArray(dynamicMetadataMats);dynamicMetadataMats=null;
+  if(bodyProxy)DestroyImmediate(bodyProxy);bodyProxy=null;
+  if(registeredHair)DestroyImmediate(registeredHair);registeredHair=null;
+  if(otherHair)DestroyImmediate(otherHair);otherHair=null;
+  sourceTags?.Dispose();sourceTags=null;
+
+  nativeMats=motion.materials.Select(m=>new Material(m){shader=nativeShader,hideFlags=HideFlags.DontSave}).ToArray();
+  worldMats=nativeMats.Select(m=>new Material(m){shader=Shader.Find("EValidation/GameMap333World"),hideFlags=HideFlags.DontSave}).ToArray();
+  var indList=new List<Material>();
+  var legList=new List<Material>();
+  var metaList=new List<Material>();
+  var metaTemplate=originalMetadataAssets!=null&&originalMetadataAssets.Length>0?originalMetadataAssets[0]:(metadata!=null&&metadata.Length>0?metadata[0]:null);
+  var metaShader=metaTemplate?metaTemplate.shader:Shader.Find("EValidation/GameMap333Metadata");
+  int flatIdx=0;
+  for(int r=0;r<3;r++){
+   var skin=motion.surface.source[r];if(!skin||!skin.sharedMesh)continue;
+   var srcMats=skin.sharedMaterials;
+   int subCount=Math.Min(skin.sharedMesh.subMeshCount,srcMats.Length);
+   for(int sm=0;sm<subCount;sm++){
+    var src=srcMats[sm];
+    int role=RoleFor(r,sm);
+    var im=new Material(src){shader=independentShader,hideFlags=HideFlags.DontSave};im.SetFloat("_Auto245Role",role);indList.Add(im);
+    var probeMat=flatIdx<motion.materials.Length?motion.materials[flatIdx]:src;
+    var lm=new Material(probeMat){shader=legacySignalsShader,hideFlags=HideFlags.DontSave};lm.SetFloat("_Auto245Role",role);
+    if(!generic&&(role==3||role==7))LegacyClass(lm,role==3?role3Reflectance:role7Reflectance);
+    legList.Add(lm);
+    if(generic&&metaShader){
+     var mm=new Material(metaShader){hideFlags=HideFlags.DontSave};
+     if(src.HasProperty("_MainTex"))mm.SetTexture("_MainTex",src.GetTexture("_MainTex"));
+     if(src.HasProperty("_Color"))mm.SetColor("_Color",src.GetColor("_Color"));
+     if(src.HasProperty("_Cutoff"))mm.SetFloat("_Cutoff",src.GetFloat("_Cutoff"));
+     if(src.HasProperty("_M_CullMode"))mm.SetFloat("_M_CullMode",src.GetFloat("_M_CullMode"));
+     mm.SetFloat("_Auto245Role",role);
+     mm.SetFloat("_Surface252DefaultPart",r==0?0:(r==1?6:7));
+     foreach(var kw in src.shaderKeywords)if(kw=="_ALPHATEST_ON"||kw=="_ALPHABLEND_ON")mm.EnableKeyword(kw);
+     metaList.Add(mm);
+    }
+    flatIdx++;
+   }
+  }
+  independentMats=indList.ToArray();
+  legacySignalsMats=legList.ToArray();
+  if(generic){dynamicMetadataMats=metaList.ToArray();metadata=dynamicMetadataMats;}
+  else if(originalMetadataAssets!=null){metadata=originalMetadataAssets;}
+  if(!generic&&independentMats.Length>7){legacyProviderMat=new Material(independentMats[7]){shader=legacyProviderShader,hideFlags=HideFlags.DontSave};legacyProviderMat.SetFloat("_Auto245Role",3);LegacyClass(legacyProviderMat,role3Reflectance);}
+  if(!generic)BuildProxy();
+  else BuildGenericProxy();
+ }
+ void BuildGenericProxy(){
+  var skin=motion.surface.source[0];var mesh=motion.surface.outputs[0].sharedMesh;
+  var target=motion.animation?motion.animation.target:null;
+  var lArm=target?target.GetBoneTransform(HumanBodyBones.LeftUpperArm):null;
+  var rArm=target?target.GetBoneTransform(HumanBodyBones.RightUpperArm):null;
+  var lLeg=target?target.GetBoneTransform(HumanBodyBones.LeftUpperLeg):null;
+  var rLeg=target?target.GetBoneTransform(HumanBodyBones.RightUpperLeg):null;
+  var bonePart=skin&&skin.bones!=null?skin.bones.Select(b=>!b?1:(lArm&&(b==lArm||b.IsChildOf(lArm)))?2:(rArm&&(b==rArm||b.IsChildOf(rArm)))?3:(lLeg&&(b==lLeg||b.IsChildOf(lLeg)))?4:(rLeg&&(b==rLeg||b.IsChildOf(rLeg)))?5:1).ToArray():Array.Empty<int>();
+  var weights=skin&&skin.sharedMesh?skin.sharedMesh.boneWeights:Array.Empty<BoneWeight>();
+  int ns=mesh.subMeshCount;var ids=new List<int>();var info=new List<Vector4>();var uv=new List<Vector2>();proxyGroups=new int[ns][];
+  int globalTri=1;
+  for(int sm=0;sm<ns;sm++){
+   var ix=mesh.GetIndices(sm);int nt=ix.Length/3;int start=ids.Count;
+   for(int t=0;t<nt;t++){
+    float w1=0,w2=0,w3=0,w4=0,w5=0;
+    if(weights.Length>0&&bonePart.Length>0){
+     for(int j=0;j<3;j++){
+      var b=weights[ix[3*t+j]];int[]bi={b.boneIndex0,b.boneIndex1,b.boneIndex2,b.boneIndex3};float[]wt={b.weight0,b.weight1,b.weight2,b.weight3};
+      for(int k=0;k<4;k++){int idxB=bi[k];if(idxB<0||idxB>=bonePart.Length)continue;int p=bonePart[idxB];float w=wt[k];if(p==2)w2+=w;else if(p==3)w3+=w;else if(p==4)w4+=w;else if(p==5)w5+=w;else w1+=w;}
+     }
+    }
+    int bestP=1;float bestW=w1;if(w2>bestW){bestW=w2;bestP=2;}if(w3>bestW){bestW=w3;bestP=3;}if(w4>bestW){bestW=w4;bestP=4;}if(w5>bestW){bestW=w5;bestP=5;}
+    var tag=new Vector4(bestP,0,globalTri++,1);
+    for(int z=0;z<3;z++){int vi=ix[3*t+z];ids.Add(vi);info.Add(tag);uv.Add(vi<mesh.uv.Length?mesh.uv[vi]:Vector2.zero);}
+   }
+   proxyGroups[sm]=Enumerable.Range(start,ix.Length).ToArray();
+  }
+  for(int role=0;role<16;role++)roleRanges[role]=new Vector4(role<7?6:(role>=11?7:1),0,0,0);
+  sourceTags=new ComputeBuffer(Math.Max(1,info.Count/3),16);
+  if(info.Count>=3)sourceTags.SetData(info.Where((v,i)=>i%3==0).ToArray());else sourceTags.SetData(new[]{new Vector4(1,0,1,1)});
+  proxyIndices=ids.ToArray();proxyInfo=info.ToArray();proxyUV=uv.ToArray();proxyVertsBuf=new Vector3[proxyIndices.Length];proxyNormsBuf=new Vector3[proxyIndices.Length];proxyTopologyUploaded=false;
+  bodyProxy=new Mesh{name="399 generic body metadata proxy",indexFormat=UnityEngine.Rendering.IndexFormat.UInt32,hideFlags=HideFlags.DontSave};bodyProxy.MarkDynamic();
  }
  void BuildProxy(){var mesh=motion.surface.outputs[0].sharedMesh;using var b=new BinaryReader(new MemoryStream(bodyParts.bytes));b.ReadInt32();int ns=b.ReadInt32();var ids=new List<int>();var info=new List<Vector4>();var uv=new List<Vector2>();proxyGroups=new int[ns][];
   for(int sm=0;sm<ns;sm++){b.ReadInt32();int nt=b.ReadInt32();var ix=new int[nt*3];for(int i=0;i<ix.Length;i++)ix[i]=b.ReadInt32();if(!ix.SequenceEqual(mesh.GetIndices(sm)))throw new Exception("333 source body topology differs from original319 tags");int start=ids.Count;for(int t=0;t<nt;t++){var tag=new Vector4(b.ReadInt32(),b.ReadInt32(),b.ReadInt32(),1);for(int z=0;z<3;z++){ids.Add(ix[3*t+z]);info.Add(tag);uv.Add(mesh.uv[ix[3*t+z]]);}}proxyGroups[sm]=Enumerable.Range(start,ix.Length).ToArray();}
@@ -71,16 +167,18 @@ using UnityEditor;
   readIdx=1-edgeHistoryWriteIdx;writeIdx=edgeHistoryWriteIdx;edgeHistoryWriteIdx=1-edgeHistoryWriteIdx;
  }
  internal void SetActionMap(Color[]map){if(!actionMap||map==null)return;actionMap.SetPixels(map);actionMap.Apply();actionMapDirty=true;}
- internal void UpdateProxyMeshes(){var mesh=motion.surface.outputs[0].sharedMesh;var vp=mesh.vertices;var vn=mesh.normals;if(proxyVertsBuf==null||proxyVertsBuf.Length!=proxyIndices.Length){proxyVertsBuf=new Vector3[proxyIndices.Length];proxyNormsBuf=new Vector3[proxyIndices.Length];}for(int i=0;i<proxyIndices.Length;i++){int idx=proxyIndices[i];proxyVertsBuf[i]=vp[idx];proxyNormsBuf[i]=vn[idx];}bodyProxy.vertices=proxyVertsBuf;bodyProxy.normals=proxyNormsBuf;if(!proxyTopologyUploaded){bodyProxy.uv=proxyUV;bodyProxy.SetUVs(3,proxyInfo);bodyProxy.subMeshCount=proxyGroups.Length;for(int i=0;i<proxyGroups.Length;i++)bodyProxy.SetTriangles(proxyGroups[i],i,false);proxyTopologyUploaded=true;}bodyProxy.bounds=mesh.bounds;var hm=motion.surface.outputs[2].sharedMesh;var hv=hm.vertices;var hn=hm.normals;var ht=hm.tangents;var hb=hm.bounds;registeredHair.vertices=hv;registeredHair.normals=hn;registeredHair.tangents=ht;registeredHair.bounds=hb;otherHair.vertices=hv;otherHair.normals=hn;otherHair.tangents=ht;otherHair.bounds=hb;}
+ internal void UpdateProxyMeshes(){var mesh=motion.surface.outputs[0].sharedMesh;if(mesh&&bodyProxy&&proxyIndices!=null){var vp=mesh.vertices;var vn=mesh.normals;if(proxyVertsBuf==null||proxyVertsBuf.Length!=proxyIndices.Length){proxyVertsBuf=new Vector3[proxyIndices.Length];proxyNormsBuf=new Vector3[proxyIndices.Length];}for(int i=0;i<proxyIndices.Length;i++){int idx=proxyIndices[i];proxyVertsBuf[i]=vp[idx];proxyNormsBuf[i]=vn[idx];}bodyProxy.vertices=proxyVertsBuf;bodyProxy.normals=proxyNormsBuf;if(!proxyTopologyUploaded){bodyProxy.uv=proxyUV;bodyProxy.SetUVs(3,proxyInfo);bodyProxy.subMeshCount=proxyGroups.Length;for(int i=0;i<proxyGroups.Length;i++)bodyProxy.SetTriangles(proxyGroups[i],i,false);proxyTopologyUploaded=true;}bodyProxy.bounds=mesh.bounds;}if(!isGenericModel&&registeredHair&&otherHair){var hm=motion.surface.outputs[2].sharedMesh;if(hm){var hv=hm.vertices;var hn=hm.normals;var ht=hm.tangents;var hb=hm.bounds;registeredHair.vertices=hv;registeredHair.normals=hn;registeredHair.tangents=ht;registeredHair.bounds=hb;otherHair.vertices=hv;otherHair.normals=hn;otherHair.tangents=ht;otherHair.bounds=hb;}}}
  static void LegacyClass(Material target,Vector4 reference){target.SetFloat("_ShadingShiftFactor",reference.x);target.SetFloat("_ShadingToonyFactor",reference.y);target.SetFloat("_ShadingShiftTexScale",reference.z);}
- public void PrepareCurrent(){Initialise();Shader.SetGlobalTexture("_Auto245StockMember",stockMember);Shader.SetGlobalTexture("_Auto245BodySkinMember",skinMember);Shader.SetGlobalTexture("_Auto245CreamMember",creamMember);int styleKey=styleEnabled?(stockMode+8*(faceMain?1:0)+16*(faceProvider?1:0)):0;if(styleKey!=priorStyleKey){motion.resetHistory=true;priorStyleKey=styleKey;}var actorPosition=motion.animation.target.transform.position;var actorRotation=motion.animation.target.transform.rotation;motion.Evaluate();motion.animation.target.transform.SetPositionAndRotation(actorPosition,actorRotation);motion.surface.Evaluate();motion.PrepareCapture();capturePending|=motion.captureNow;if(priorIntegrated!=(integrated?1:0)){capturePending=true;priorIntegrated=integrated?1:0;}
+ public void PrepareCurrent(){Initialise();Shader.SetGlobalTexture("_Auto245StockMember",isGenericModel?Texture2D.blackTexture:stockMember);Shader.SetGlobalTexture("_Auto245BodySkinMember",isGenericModel?Texture2D.blackTexture:skinMember);Shader.SetGlobalTexture("_Auto245CreamMember",isGenericModel?Texture2D.blackTexture:creamMember);int styleKey=styleEnabled?(stockMode+8*(faceMain?1:0)+16*(faceProvider?1:0)+(isGenericModel?32:0)):0;if(styleKey!=priorStyleKey){motion.resetHistory=true;priorStyleKey=styleKey;}var actorPosition=motion.animation.target.transform.position;var actorRotation=motion.animation.target.transform.rotation;motion.Evaluate();motion.animation.target.transform.SetPositionAndRotation(actorPosition,actorRotation);motion.surface.Evaluate();motion.PrepareCapture();capturePending|=motion.captureNow;if(priorIntegrated!=(integrated?1:0)){capturePending=true;priorIntegrated=integrated?1:0;}
   var cam=motion.camera;var gpu=GL.GetGPUProjectionMatrix(cam.projectionMatrix,true);float flip=gpu[1,1]/cam.projectionMatrix[1,1];nativeShift=motion.clipShift+new Vector4(.5f/480,.5f/272*flip,0,0);
   effectiveProjection=cam.projectionMatrix;effectiveProjection.SetRow(0,effectiveProjection.GetRow(0)+motion.clipShift.x*effectiveProjection.GetRow(3));effectiveProjection.SetRow(1,effectiveProjection.GetRow(1)+motion.clipShift.y/flip*effectiveProjection.GetRow(3));geometryCamera.worldToCameraMatrix=cam.worldToCameraMatrix;geometryCamera.projectionMatrix=effectiveProjection;geometryCamera.orthographicSize=cam.orthographicSize;
-  phaseIndex=Mathf.RoundToInt(motion.evaluatedFrame/2.5f)%16;var p=phases[phaseIndex];providerMatrix=motion.animation.target.GetBoneTransform(HumanBodyBones.Head).localToWorldMatrix*p.head.inverse;
+  phaseIndex=Mathf.RoundToInt(motion.evaluatedFrame/2.5f)%16;var p=phases[phaseIndex];var headBone=motion.animation.target.GetBoneTransform(HumanBodyBones.Head);providerMatrix=headBone?(headBone.localToWorldMatrix*p.head.inverse):Matrix4x4.identity;
   UpdateProxyMeshes();
-  var mesh=motion.surface.outputs[0].sharedMesh;var vp=mesh.vertices;
-  Vector3 E(Endpoint e)=>motion.surface.outputs[0].transform.TransformPoint(Vector3.LerpUnclamped(vp[e.a],vp[e.b],e.t));var a=Project(E(p.first));var z=Project(E(p.last));y0=Mathf.Clamp(Mathf.FloorToInt(Mathf.Min(a.y,z.y)),1,270);y1=Mathf.Clamp(Mathf.CeilToInt(Mathf.Max(a.y,z.y))-1,y0+1,270);
-  BindEyes();
+  if(!isGenericModel){
+   var mesh=motion.surface.outputs[0].sharedMesh;var vp=mesh.vertices;
+   Vector3 E(Endpoint e)=>motion.surface.outputs[0].transform.TransformPoint(Vector3.LerpUnclamped(vp[e.a],vp[e.b],e.t));var a=Project(E(p.first));var z=Project(E(p.last));y0=Mathf.Clamp(Mathf.FloorToInt(Mathf.Min(a.y,z.y)),1,270);y1=Mathf.Clamp(Mathf.CeilToInt(Mathf.Max(a.y,z.y))-1,y0+1,270);
+   BindEyes();
+  }
  }
  public Vector2 Project(Vector3 world){var q=effectiveProjection*motion.camera.worldToCameraMatrix*new Vector4(world.x,world.y,world.z,1);return new Vector2((q.x/q.w*.5f+.5f)*480,(.5f-q.y/q.w*.5f)*272);}
  internal void BindEyes(){var p=phases[phaseIndex];if(eyeInverse==null||eyeInverse.Length!=2)eyeInverse=new Matrix4x4[2];if(eyePlanes==null||eyePlanes.Length!=2)eyePlanes=new Vector4[2];if(projectedPivots==null||projectedPivots.Length!=2)projectedPivots=new Vector2[2];if(projectedAnchors==null||projectedAnchors.Length!=2)projectedAnchors=new Vector2[2];var head=providerMatrix*p.head;var headInvT=head.inverse.transpose;
@@ -101,6 +199,6 @@ using UnityEditor;
  EditorApplication.update-=EditorTick;
 #endif
   ClothRegion524.ReleaseScope551(this); // also runs after incomplete Initialise / cancelled capture
-  if(Active==this)Active=null;if(!ready)return;foreach(var m in legacySignalsMats)if(m)DestroyImmediate(m);if(legacyProviderMat)DestroyImmediate(legacyProviderMat);foreach(var t in style480.Concat(style960))t.Release();shadeMask480.Release();shadeMask960.Release();styleDepth480.Release();styleDepth960.Release();beforeStyle.Release();sourceTags?.Dispose();foreach(var m in nativeMats.Concat(worldMats).Concat(independentMats))if(m)DestroyImmediate(m);foreach(var m in new[]{bodyProxy,registeredHair,otherHair})if(m)DestroyImmediate(m);if(geometryCamera)DestroyImmediate(geometryCamera.gameObject);if(actionMap)DestroyImmediate(actionMap);var all=new List<RTHandle>();all.AddRange(native);all.AddRange(meta);all.AddRange(normal);all.AddRange(centreMeta);all.AddRange(centreNormal);all.Add(centreFamily);all.AddRange(flood);foreach(var s in layers)all.AddRange(new[]{s.rgba,s.meta,s.uv,s.depth});all.AddRange(new[]{family,nativeDepth,colourNative,before,colour,owner,audit,gridSurface,gridPalette,paletteAudit,prepared,preparedOwner,postLine,preparedUV,preparedMeta,resolvedMeta,resolvedUV,eyeOutput,eyeOwner,intrinsic,eyeAudit,domain,edgeMetaSnap,edgeUVSnap});if(edgeHistory!=null)all.AddRange(edgeHistory);foreach(var t in all)t?.Release();edgeHistory=null;edgeMetaSnap=edgeUVSnap=null;hasPrevEdgePivot=false;ready=false;}
+  if(Active==this)Active=null;if(!ready)return;DestroyMatArray(legacySignalsMats);if(legacyProviderMat)DestroyImmediate(legacyProviderMat);DestroyMatArray(dynamicMetadataMats);dynamicMetadataMats=null;if(originalMetadataAssets!=null)metadata=originalMetadataAssets;foreach(var t in style480.Concat(style960))t.Release();shadeMask480.Release();shadeMask960.Release();styleDepth480.Release();styleDepth960.Release();beforeStyle.Release();sourceTags?.Dispose();DestroyMatArray(nativeMats);DestroyMatArray(worldMats);DestroyMatArray(independentMats);foreach(var m in new[]{bodyProxy,registeredHair,otherHair})if(m)DestroyImmediate(m);if(geometryCamera)DestroyImmediate(geometryCamera.gameObject);if(actionMap)DestroyImmediate(actionMap);var all=new List<RTHandle>();all.AddRange(native);all.AddRange(meta);all.AddRange(normal);all.AddRange(centreMeta);all.AddRange(centreNormal);all.Add(centreFamily);all.AddRange(flood);foreach(var s in layers)all.AddRange(new[]{s.rgba,s.meta,s.uv,s.depth});all.AddRange(new[]{family,nativeDepth,colourNative,before,colour,owner,audit,gridSurface,gridPalette,paletteAudit,prepared,preparedOwner,postLine,preparedUV,preparedMeta,resolvedMeta,resolvedUV,eyeOutput,eyeOwner,intrinsic,eyeAudit,domain,edgeMetaSnap,edgeUVSnap});if(edgeHistory!=null)all.AddRange(edgeHistory);foreach(var t in all)t?.Release();edgeHistory=null;edgeMetaSnap=edgeUVSnap=null;hasPrevEdgePivot=false;ready=false;}
 }
 public static class Homography335{public static Matrix4x4 Solve(Vector2[]from,Vector2[]to){double[,]a=new double[8,9];for(int k=0;k<4;k++){double x=from[k].x,y=from[k].y,u=to[k].x,v=to[k].y;int i=k*2;a[i,0]=x;a[i,1]=y;a[i,2]=1;a[i,6]=-u*x;a[i,7]=-u*y;a[i,8]=u;a[i+1,3]=x;a[i+1,4]=y;a[i+1,5]=1;a[i+1,6]=-v*x;a[i+1,7]=-v*y;a[i+1,8]=v;}for(int col=0;col<8;col++){int pivot=col;for(int k=col+1;k<8;k++)if(Math.Abs(a[k,col])>Math.Abs(a[pivot,col]))pivot=k;if(Math.Abs(a[pivot,col])<1e-10)throw new Exception("Unsupported edge-on original eye basis");for(int k=col;k<9;k++)(a[col,k],a[pivot,k])=(a[pivot,k],a[col,k]);double value=a[col,col];for(int k=col;k<9;k++)a[col,k]/=value;for(int row=0;row<8;row++)if(row!=col){value=a[row,col];for(int k=col;k<9;k++)a[row,k]-=a[col,k]*value;}}var m=Matrix4x4.zero;m.SetRow(0,new Vector4((float)a[0,8],(float)a[1,8],(float)a[2,8],0));m.SetRow(1,new Vector4((float)a[3,8],(float)a[4,8],(float)a[5,8],0));m.SetRow(2,new Vector4((float)a[6,8],(float)a[7,8],1,0));return m;}}

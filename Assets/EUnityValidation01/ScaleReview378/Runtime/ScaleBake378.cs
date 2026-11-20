@@ -67,7 +67,7 @@ public sealed class ScaleBake378 : MonoBehaviour
         }
 
         if (n > 0 && original.source[0] && original.source[0].sharedMesh)
-            BuildClothSmoother(original.source[0].sharedMesh);
+            BuildClothSmoother(original.source[0]);
 
         foreach (var s in original.source) s.enabled = false;
         previous = host.afterPose;
@@ -77,10 +77,55 @@ public sealed class ScaleBake378 : MonoBehaviour
         Evaluate(true, true);
     }
 
-    void BuildClothSmoother(Mesh sourceMesh)
+    public void RebuildForActiveModel()
+    {
+        if (!ready || !original || original.source == null) return;
+        if (meshes != null)
+            for (int i = 0; i < meshes.Length; i++)
+                if (meshes[i]) DestroyImmediate(meshes[i]);
+
+        int n = original.source.Length;
+        meshes = new Mesh[n];
+        localVertsBuf = new List<Vector3>[n];
+        localNormsBuf = new List<Vector3>[n];
+        localTangentsBuf = new List<Vector4>[n];
+        outVertsBuf = new List<Vector3>[n];
+        outNormsBuf = new List<Vector3>[n];
+        outTangentsBuf = new List<Vector4>[n];
+        hasLocalCache = new bool[n];
+        for (int i = 0; i < n; i++)
+        {
+            meshes[i] = new Mesh
+            {
+                name = "378 scale-compensated current surface " + i,
+                hideFlags = HideFlags.DontSave
+            };
+            localVertsBuf[i] = new List<Vector3>();
+            localNormsBuf[i] = new List<Vector3>();
+            localTangentsBuf[i] = new List<Vector4>();
+            outVertsBuf[i] = new List<Vector3>();
+            outNormsBuf[i] = new List<Vector3>();
+            outTangentsBuf[i] = new List<Vector4>();
+        }
+
+        priorSourceEnabled = original.source.Select(s => s && s.enabled).ToArray();
+        foreach (var s in original.source) if (s) s.enabled = false;
+        if (n > 0 && original.source[0] && original.source[0].sharedMesh)
+            BuildClothSmoother(original.source[0]);
+        else
+            clothSmootherReady = false;
+
+        lastEvaluatedFrame = -1;
+        lastSmoothConfigHash = -1;
+        Evaluate(true, true);
+    }
+
+    void BuildClothSmoother(SkinnedMeshRenderer sourceRenderer)
     {
         clothSmootherReady = false;
+        var sourceMesh = sourceRenderer ? sourceRenderer.sharedMesh : null;
         if (!sourceMesh || sourceMesh.subMeshCount < 2) return;
+        var sharedMats = sourceRenderer.sharedMaterials;
         var restVerts = sourceMesh.vertices;
         int vertCount = restVerts.Length;
         if (vertCount == 0) return;
@@ -90,13 +135,21 @@ public sealed class ScaleBake378 : MonoBehaviour
         var sm0 = sourceMesh.GetIndices(0);
         for (int i = 0; i < sm0.Length; i++) bodyMask[sm0[i]] = true;
 
-        var clothSubIndices = new int[sourceMesh.subMeshCount - 1][];
+        var clothSubList = new List<int[]>(sourceMesh.subMeshCount);
         for (int sm = 1; sm < sourceMesh.subMeshCount; sm++)
         {
+            string matName = (sharedMats != null && sm < sharedMats.Length && sharedMats[sm]) ? sharedMats[sm].name : "";
+            bool isHairSubmesh = matName.IndexOf("HAIR", StringComparison.OrdinalIgnoreCase) >= 0;
             var idx = sourceMesh.GetIndices(sm);
-            clothSubIndices[sm - 1] = idx;
+            if (isHairSubmesh)
+            {
+                for (int i = 0; i < idx.Length; i++) bodyMask[idx[i]] = true;
+                continue;
+            }
+            clothSubList.Add(idx);
             for (int i = 0; i < idx.Length; i++) clothMask[idx[i]] = true;
         }
+        var clothSubIndices = clothSubList.ToArray();
 
         // Weld coincident rest-pose coordinates into canonical spatial IDs so UV seams never crack.
         var posToCanon = new Dictionary<(int, int, int), int>(vertCount);

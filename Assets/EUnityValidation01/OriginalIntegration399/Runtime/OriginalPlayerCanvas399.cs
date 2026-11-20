@@ -25,6 +25,7 @@ public sealed class OriginalPlayerCanvas399 : MonoBehaviour
     private void Awake()
     {
         control = PixelRenderPipelineControl399.Ensure(this);
+        CharacterModelSwitcher399.Ensure(this);
         if (Application.isPlaying && !PixelRenderPipelineControl399.BypassPresentation)
             SetLegacyVisualSuppressed(true);
     }
@@ -218,6 +219,7 @@ public sealed class OriginalPlayerCanvas399 : MonoBehaviour
     private void LateUpdate()
     {
         if (!control) control = PixelRenderPipelineControl399.Ensure(this);
+        CharacterModelSwitcher399.Ensure(this);
         if (!gameplay) gameplay = GetComponent<Gameplay397>();
         if (!player) player = GetComponent<NativePlayer395>();
 

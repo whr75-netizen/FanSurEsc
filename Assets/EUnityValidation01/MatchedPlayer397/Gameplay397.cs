@@ -11,6 +11,17 @@ using System;using System.IO;using System.Linq;using System.Reflection;using Sys
  bool hasSteppedOnce;
  void OnEnable(){if(Application.isPlaying&&connected&&player&&player.gameCamera&&!PixelRenderPipelineControl399.BypassPresentation)player.gameCamera.GetComponent<CameraZoomController>().SetNativePixelGrid(90.5096664428711f,nativeGridScale,this);}
  public NativePlayer395 player;public RuntimeAnimatorController controller;public bool activateGameplay,connected,testFinished,runInputTest=true;public bool actualInputPassed;public string failure;public Source329WalkView originalSource,sourceProxy;
+ internal Animator ActiveAnimator=>animator;
+ internal void BindRuntimeAnimator(Animator newAnimator){
+  if(!newAnimator)return;
+  animator=newAnimator;
+  if(sourceProxy)sourceProxy.target=newAnimator;
+  animator.runtimeAnimatorController=controller;
+  animator.enabled=true;animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
+  animator.speed=1f;animator.Rebind();animator.Update(0);
+  if(movement)typeof(PlayerMovement).GetField("characterAnimator",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(movement,animator);
+  hasSteppedOnce=false;stepAccumulatedDt=0f;lastSteppedLocomotion=-1f;
+ }
  public static string ReportFile=>Path.GetFullPath(Path.Combine(Application.dataPath,"..","LocalOnly","Runtime399","GAMEPLAY_LATEST399.json"));
  Animator animator;PlayerMovement movement;Keyboard testKeyboard;InputSettings previousInputSettings;Material gui;int testFrame,renderSerial;Vector3 initialPosition;Quaternion initialFacing;List<Sample>samples=new();
  [Serializable]class Sample{public bool keyboardEnabled,keyW,mapEnabled,actionUpEnabled,focused;public int frame,serial;public string stage;public Vector2 input;public bool runBinding,running;public Vector3 position;public Quaternion facing;public float deltaTime,speed,locomotion,normalisedTime;public int stateHash;public Matrix4x4 leftFoot,rightFoot,hips;}

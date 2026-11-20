@@ -7,10 +7,10 @@ Texture2D<float4> _Map335,_CurrentMeta335,_CurrentUV335,_CurrentRaw335,_NativeMe
 Texture2D<float4> _LegacyColour480,_LegacyLit480,_LegacyShade480,_LegacyClass480,_LegacyColour960,_LegacyLit960,_LegacyShade960,_LegacyClass960;
 SamplerState sampler_StockMember335;
 RWTexture2D<float4> _Before335,_Colour335,_SelectedUV335;
-int _StockMode335,_FaceMain335,_SurfaceLayers335;float4 _Profile335;
+int _StockMode335,_FaceMain335,_SurfaceLayers335,_GenericModel399;float4 _Profile335;
 [numthreads(8,8,1)]void Restore(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;if(_SurfaceLayers335==0&&_StockMode335==0&&_FaceMain335==0)return;float4 map=_Map335.Load(int3(p,0));bool added=map.r>.5&&map.a>.5;int2 n=added?(int2)round(map.gb):2*p+1;float4 meta=added?_NativeMeta335.Load(int3(n,0)):_CurrentMeta335.Load(int3(p,0));int role=round(meta.y)-1;float4 before=_Before335[p];if(before.a<=0)return;float4 uv=added?_NativeUV335.Load(int3(n,0)):_CurrentUV335.Load(int3(p,0));float4 cls=added?_LegacyClass960.Load(int3(n,0)):_LegacyClass480.Load(int3(p,0));float4 selectedUV=_SelectedUV335[p];
 if(_SurfaceLayers335!=0&&(role==3||(role>=7&&role<=14))){float4 layered=added?_LegacyColour960.Load(int3(n,0)):_LegacyColour480.Load(int3(p,0));before.rgb=layered.rgb;selectedUV.z=cls.x;_Before335[p]=before;_Colour335[p]=before;_SelectedUV335[p]=selectedUV;return;}
-if(role==7&&_StockMode335>0&&_StockMember335.SampleLevel(sampler_StockMember335,uv.xy,0).r>.5){float lit=(_StockMode335==1)?selectedUV.z:cls.x;if(_StockMode335==2){float4 raw=added?_NativeRaw335.Load(int3(n,0)):_CurrentRaw335.Load(int3(p,0));before.rgb=raw.rgb*((_Profile335.w>.5&&lit<.5)?_Profile335.x:1);}else{float4 lc=added?_LegacyLit960.Load(int3(n,0)):_LegacyLit480.Load(int3(p,0));float4 sc=added?_LegacyShade960.Load(int3(n,0)):_LegacyShade480.Load(int3(p,0));before.rgb=lit>.5?lc.rgb:sc.rgb;}selectedUV.z=lit;}
+if(_GenericModel399==0&&role==7&&_StockMode335>0&&_StockMember335.SampleLevel(sampler_StockMember335,uv.xy,0).r>.5){float lit=(_StockMode335==1)?selectedUV.z:cls.x;if(_StockMode335==2){float4 raw=added?_NativeRaw335.Load(int3(n,0)):_CurrentRaw335.Load(int3(p,0));before.rgb=raw.rgb*((_Profile335.w>.5&&lit<.5)?_Profile335.x:1);}else{float4 lc=added?_LegacyLit960.Load(int3(n,0)):_LegacyLit480.Load(int3(p,0));float4 sc=added?_LegacyShade960.Load(int3(n,0)):_LegacyShade480.Load(int3(p,0));before.rgb=lit>.5?lc.rgb:sc.rgb;}selectedUV.z=lit;}
 if(role==3&&_FaceMain335>0){float4 legacy=added?_LegacyColour960.Load(int3(n,0)):_LegacyColour480.Load(int3(p,0));before.rgb=legacy.rgb;selectedUV.z=cls.x;}
 _Before335[p]=before;_Colour335[p]=before;_SelectedUV335[p]=selectedUV;}
 
@@ -23,7 +23,9 @@ float _ShadeWorldPixel335,_ShadeFloor335;float4 _ShadeFaceMinimum335,_ShadeStock
 bool ShadeRole335(float4 m){int r=round(m.y)-1;return m.x>0&&(r==3||(r>=7&&r<=14));}
 // Existing UV membership is semantic input, independent of camera and model coordinates.
 int ShadeRegion335(int2 p,float4 meta){
- int role=round(meta.y)-1;float2 uv=_ShadeUV335.Load(int3(p,0)).xy;
+ int role=round(meta.y)-1;
+ if(_GenericModel399!=0)return role;
+ float2 uv=_ShadeUV335.Load(int3(p,0)).xy;
  int result=role;
  if(role==7){result=70;
   if(_StockMember335.SampleLevel(sampler_StockMember335,uv,0).r>.5)result=71;
@@ -83,11 +85,11 @@ bool ShadeNeighbour335(int2 p,int2 t,float4 m,float3 n,float depth){
  float old=cls.x,q=mask.x;if(abs(old-q)<.01)return;
  int role=round(m.y)-1;float3 minimum=role==3?_ShadeFaceMinimum335.rgb:_ShadeFloor335.xxx;
  float2 uv=_ShadeUV335.Load(int3(p,0)).xy;
- if(role==7&&_StockMember335.SampleLevel(sampler_StockMember335,uv,0).r>.5)minimum=_ShadeStockMinimum335.rgb;
+ if(_GenericModel399==0&&role==7&&_StockMember335.SampleLevel(sampler_StockMember335,uv,0).r>.5)minimum=_ShadeStockMinimum335.rgb;
  float4 factor=float4(_ShadeEnabled335!=0?lerp(minimum,1,q):1,cls.a);
  float4 colour=_ShadeLit335.Load(int3(p,0));cls.x=q;
  float3 result=colour.rgb*factor.rgb;
- if(role>=11&&role<=14){factor.rgb=_ShadeEnabled335!=0?HairAnchor335()*lerp(_ShadeFloor335,1,q):1;result=HairFinal335(colour.rgb,q,_ShadeFloor335,_ShadeEnabled335!=0);}
+ if(_GenericModel399==0&&role>=11&&role<=14){factor.rgb=_ShadeEnabled335!=0?HairAnchor335()*lerp(_ShadeFloor335,1,q):1;result=HairFinal335(colour.rgb,q,_ShadeFloor335,_ShadeEnabled335!=0);}
  if(_ShadeView335==1)result=colour.rgb;
  if(_ShadeView335==2)result=cls.yyy;
  if(_ShadeView335==3)result=q.xxx;

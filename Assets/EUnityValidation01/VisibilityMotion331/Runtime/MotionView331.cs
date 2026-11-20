@@ -28,18 +28,74 @@ using UnityEditor;
 #endif
  }
  public void Initialise(){if(ready||!animation||!surface||!camera||!compose)return;Active=this;animation.playing=false;animation.showControls=false;
-  var shader=Shader.Find("EValidation/VisibilityMotion331Probe");if(!shader)throw new Exception("331 probe shader missing");
-  var mats=new List<Material>();for(int i=0;i<surface.source.Length;i++)for(int sm=0;sm<surface.source[i].sharedMaterials.Length;sm++){
-   var src=surface.source[i].sharedMaterials[sm];var m=new Material(src){shader=shader,hideFlags=HideFlags.DontSave};m.CopyPropertiesFromMaterial(src);m.shaderKeywords=src.shaderKeywords;int role=i==0?new[]{7,8,9,10}[sm]:i==1?new[]{0,1,2,3,4,5,6}[sm]:new[]{11,12,13,14}[sm];var tx=src.GetTexture("_MainTex");texelSizes[role]=new Vector4(tx?1f/tx.width:1,tx?1f/tx.height:1,0,0);
-   var mesh=surface.source[i].sharedMesh;var indices=mesh.GetIndices(sm);var ids=new float[indices.Length/3];
-   if(i==0){var skin=surface.source[i];var weights=mesh.boneWeights;var left=animation.target.GetBoneTransform(HumanBodyBones.LeftUpperLeg);var right=animation.target.GetBoneTransform(HumanBodyBones.RightUpperLeg);var side=skin.bones.Select(b=>b==left||b.IsChildOf(left)?1:b==right||b.IsChildOf(right)?2:0).ToArray();
-    for(int t=0;t<ids.Length;t++){float l=0,r=0;for(int j=0;j<3;j++){var b=weights[indices[3*t+j]];var ix=new[]{b.boneIndex0,b.boneIndex1,b.boneIndex2,b.boneIndex3};var wt=new[]{b.weight0,b.weight1,b.weight2,b.weight3};for(int k=0;k<4;k++){if(side[ix[k]]==1)l+=wt[k];if(side[ix[k]]==2)r+=wt[k];}}ids[t]=Mathf.Max(l,r)>1.5f?(l>=r?1:2):0;}}
-   var cb=new ComputeBuffer(Math.Max(1,ids.Length),4);cb.SetData(ids.Length>0?ids:new float[1]);buffers.Add(cb);m.SetBuffer("_Instance331",cb);mats.Add(m);
-  }materials=mats.ToArray();
+  RebuildMaterialsForModel(false,null);
   RTHandle T(bool rw=true)=>RTHandles.Alloc(480,272,colorFormat:UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat,enableRandomWrite:rw,filterMode:FilterMode.Point);
   raw=Enumerable.Range(0,7).Select(_=>T(false)).ToArray();depth=RTHandles.Alloc(480,272,depthBufferBits:DepthBits.Depth32);output=T();audit=T();owner=T();historyColour=T();historyMeta=T();historyUV=T();worldInfo=T();
   foreach(var f in surface.outputs)f.GetComponent<Renderer>().shadowCastingMode=ShadowCastingMode.ShadowsOnly;
   previousCameraRotation=camera.transform.rotation;ready=true;resetHistory=true;Evaluate();
+ }
+ public void RebuildMaterialsForModel(bool genericModel,int[][]roles){
+  var shader=Shader.Find("EValidation/VisibilityMotion331Probe");if(!shader)throw new Exception("331 probe shader missing");
+  if(materials!=null)foreach(var old in materials)if(old)DestroyImmediate(old);
+  foreach(var b in buffers)b?.Dispose();buffers.Clear();
+  var mats=new List<Material>();
+  var target=animation?animation.target:null;
+  for(int i=0;i<surface.source.Length;i++){
+   var skin=surface.source[i];if(!skin||!skin.sharedMesh)continue;
+   var mesh=skin.sharedMesh;
+   var srcMats=skin.sharedMaterials;
+   int[]bonePart=null;
+   if(i==0&&target){
+    var lLeg=target.GetBoneTransform(HumanBodyBones.LeftUpperLeg);
+    var rLeg=target.GetBoneTransform(HumanBodyBones.RightUpperLeg);
+    if(genericModel){
+     var lArm=target.GetBoneTransform(HumanBodyBones.LeftUpperArm);
+     var rArm=target.GetBoneTransform(HumanBodyBones.RightUpperArm);
+     bonePart=skin.bones.Select(b=>!b?1:(lArm&&(b==lArm||b.IsChildOf(lArm)))?2:(rArm&&(b==rArm||b.IsChildOf(rArm)))?3:(lLeg&&(b==lLeg||b.IsChildOf(lLeg)))?4:(rLeg&&(b==rLeg||b.IsChildOf(rLeg)))?5:1).ToArray();
+    }else{
+     bonePart=skin.bones.Select(b=>!b?0:(lLeg&&(b==lLeg||b.IsChildOf(lLeg)))?1:(rLeg&&(b==rLeg||b.IsChildOf(rLeg)))?2:0).ToArray();
+    }
+   }
+   var weights=i==0?mesh.boneWeights:null;
+   int subCount=Math.Min(mesh.subMeshCount,srcMats.Length);
+   for(int sm=0;sm<subCount;sm++){
+    var src=srcMats[sm];
+    var m=new Material(src){shader=shader,hideFlags=HideFlags.DontSave};
+    m.CopyPropertiesFromMaterial(src);m.shaderKeywords=src.shaderKeywords;
+    int role;
+    if(roles!=null&&i<roles.Length&&roles[i]!=null&&sm<roles[i].Length)role=roles[i][sm];
+    else role=i==0?(sm<4?new[]{7,8,9,10}[sm]:10):i==1?Mathf.Clamp(sm,0,6):(11+(sm%4));
+    var tx=src.HasProperty("_MainTex")?src.GetTexture("_MainTex"):null;
+    if(role>=0&&role<texelSizes.Length)texelSizes[role]=new Vector4(tx?1f/tx.width:1,tx?1f/tx.height:1,0,0);
+    var indices=mesh.GetIndices(sm);
+    var ids=new float[indices.Length/3];
+    if(i==0&&bonePart!=null&&weights!=null&&weights.Length>0){
+     if(genericModel){
+      for(int t=0;t<ids.Length;t++){
+       float w1=0,w2=0,w3=0,w4=0,w5=0;
+       for(int j=0;j<3;j++){
+        var b=weights[indices[3*t+j]];
+        int[]ix={b.boneIndex0,b.boneIndex1,b.boneIndex2,b.boneIndex3};
+        float[]wt={b.weight0,b.weight1,b.weight2,b.weight3};
+        for(int k=0;k<4;k++){
+         int bi=ix[k];if(bi<0||bi>=bonePart.Length)continue;
+         int p=bonePart[bi];float w=wt[k];
+         if(p==2)w2+=w;else if(p==3)w3+=w;else if(p==4)w4+=w;else if(p==5)w5+=w;else w1+=w;
+        }
+       }
+       int bestP=1;float bestW=w1;
+       if(w2>bestW){bestW=w2;bestP=2;}if(w3>bestW){bestW=w3;bestP=3;}if(w4>bestW){bestW=w4;bestP=4;}if(w5>bestW){bestW=w5;bestP=5;}
+       ids[t]=bestP;
+      }
+     }else{
+      for(int t=0;t<ids.Length;t++){float l=0,r=0;for(int j=0;j<3;j++){var b=weights[indices[3*t+j]];var ix=new[]{b.boneIndex0,b.boneIndex1,b.boneIndex2,b.boneIndex3};var wt=new[]{b.weight0,b.weight1,b.weight2,b.weight3};for(int k=0;k<4;k++){if(bonePart[ix[k]]==1)l+=wt[k];if(bonePart[ix[k]]==2)r+=wt[k];}}ids[t]=Mathf.Max(l,r)>1.5f?(l>=r?1:2):0;}
+     }
+    }
+    var cb=new ComputeBuffer(Math.Max(1,ids.Length),4);cb.SetData(ids.Length>0?ids:new float[1]);buffers.Add(cb);m.SetBuffer("_Instance331",cb);mats.Add(m);
+   }
+  }
+  materials=mats.ToArray();
+  ResetActorGrid();
  }
  public Vector2 Pivot(){var q=camera.WorldToViewportPoint(animation.target.transform.position);return new Vector2(q.x*480,q.y*272);}
  int LightingHash(){unchecked{int sceneHandle=UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle.GetHashCode();if(cachedLights==null||cachedSteppedLights==null||sceneHandle!=lightCacheScene||resetHistory||Time.frameCount-lightCacheFrame>=60){cachedLights=FindObjectsByType<Light>();Array.Sort(cachedLights,(a,b)=>a.GetEntityId().GetHashCode().CompareTo(b.GetEntityId().GetHashCode()));cachedSteppedLights=FindObjectsByType<FantasySurvival.WorldLighting.SteppedLocalLight>();Array.Sort(cachedSteppedLights,(a,b)=>a.GetEntityId().GetHashCode().CompareTo(b.GetEntityId().GetHashCode()));lightCacheFrame=Time.frameCount;lightCacheScene=sceneHandle;}int h=17;void A(int x){h=h*31+x;}for(int i=0;i<cachedLights.Length;i++){var l=cachedLights[i];if(!l)continue;A(l.GetEntityId().GetHashCode());A(l.isActiveAndEnabled?1:0);A(l.transform.position.GetHashCode());A(l.transform.rotation.GetHashCode());A(l.color.GetHashCode());A(l.intensity.GetHashCode());A(l.range.GetHashCode());A(l.shadowStrength.GetHashCode());}for(int i=0;i<cachedSteppedLights.Length;i++){var l=cachedSteppedLights[i];if(!l)continue;A(l.transform.position.GetHashCode());A(l.Color.GetHashCode());A(l.Intensity.GetHashCode());A(l.Radius.GetHashCode());}A(RenderSettings.ambientLight.GetHashCode());A(animation.shadeProfile.GetHashCode());return h;}}

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 using FantasySurvival.CharacterPresentation;
 
 // Displays the validated native render texture cleanly across the full viewport
@@ -12,6 +13,7 @@ public sealed class OriginalPlayerCanvas399 : MonoBehaviour
     private NativePlayer395 player;
     private PixelRenderPipelineControl399 control;
     private Canvas canvas;
+    private Camera displayCamera;
     private Image backdrop;
     private RawImage image;
     private int previousWidth, previousHeight, previousTexWidth, previousTexHeight;
@@ -62,18 +64,61 @@ public sealed class OriginalPlayerCanvas399 : MonoBehaviour
 
     private void OnDisable()
     {
+        if (displayCamera) displayCamera.enabled = false;
         if (canvas) canvas.enabled = false;
         if (backdrop) backdrop.enabled = false;
         if (image) image.enabled = false;
     }
 
+    private void OnDestroy()
+    {
+        if (displayCamera)
+        {
+            displayCamera.enabled = false;
+            Destroy(displayCamera.gameObject);
+            displayCamera = null;
+        }
+    }
+
     private void EnsureCanvas()
     {
+        if (!displayCamera)
+        {
+            // Zero-cost Display 0 clear camera eliminates Unity GameView's
+            // "Display 1 No cameras rendering" banner and clears outer framebuffer margins.
+            var camObj = new GameObject("Native viewport display camera");
+            camObj.transform.SetParent(transform, false);
+            displayCamera = camObj.AddComponent<Camera>();
+            displayCamera.tag = "Untagged";
+            displayCamera.targetTexture = null;
+            displayCamera.targetDisplay = 0;
+            displayCamera.depth = -100f;
+            displayCamera.cullingMask = 0;
+            displayCamera.clearFlags = CameraClearFlags.SolidColor;
+            displayCamera.backgroundColor = Color.black;
+            displayCamera.orthographic = true;
+            displayCamera.allowHDR = false;
+            displayCamera.allowMSAA = false;
+            displayCamera.useOcclusionCulling = false;
+            var urp = displayCamera.GetUniversalAdditionalCameraData();
+            if (urp != null)
+            {
+                urp.renderPostProcessing = false;
+                urp.renderShadows = false;
+                urp.requiresDepthOption = CameraOverrideOption.Off;
+                urp.requiresColorOption = CameraOverrideOption.Off;
+                urp.antialiasing = AntialiasingMode.None;
+                urp.stopNaN = false;
+                urp.dithering = false;
+            }
+        }
+
         if (canvas) return;
         if (player)
         {
             foreach (var preview in GetComponentsInChildren<Camera>(true))
                 if (preview != player.gameCamera && preview != player.localCamera &&
+                    preview != displayCamera &&
                     (!player.host || preview != player.host.headCamera))
                     preview.enabled = false;
         }
@@ -179,6 +224,7 @@ public sealed class OriginalPlayerCanvas399 : MonoBehaviour
         if (PixelRenderPipelineControl399.BypassPresentation)
         {
             SetLegacyVisualSuppressed(false);
+            if (displayCamera) displayCamera.enabled = false;
             if (canvas) canvas.enabled = false;
             if (backdrop) backdrop.enabled = false;
             if (image) image.enabled = false;
@@ -193,6 +239,7 @@ public sealed class OriginalPlayerCanvas399 : MonoBehaviour
 
         if (!prepared)
         {
+            if (displayCamera) displayCamera.enabled = false;
             if (canvas) canvas.enabled = false;
             if (backdrop) backdrop.enabled = false;
             if (image) image.enabled = false;
@@ -200,6 +247,7 @@ public sealed class OriginalPlayerCanvas399 : MonoBehaviour
         }
 
         EnsureCanvas();
+        if (displayCamera) displayCamera.enabled = true;
         canvas.enabled = true;
         backdrop.enabled = true;
         image.texture = player.localCamera.targetTexture;

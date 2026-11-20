@@ -46,10 +46,11 @@ bool isOpenEmpty399(int2 q){
  if(covered(p)&&eligible){bool closed=closedDomain553(owner);
   if(_CleanOutline399!=0){
    for(int i=0;i<4;i++){int2 d=dirs[i];if(closed?!covered(p+d):isOpenEmpty399(p+d))outer=true;}
-   // Only suppress outer outline on 1px-thin bare skin strands (fingers/wrists), NEVER on clothing/sleeves/corners.
+   // Only suppress outer outline on 1px-thin bare skin SHAFT pixels (covered on both sides along the shaft),
+   // NEVER on clothing/sleeves/corners or exposed fingertips (which would otherwise poke bright past the outline).
    if(outer&&role==7&&part>=2&&part<=5){
-    bool pinchX=!covered(p+int2(-1,0))&&!covered(p+int2(1,0));
-    bool pinchY=!covered(p+int2(0,-1))&&!covered(p+int2(0,1));
+    bool pinchX=!covered(p+int2(-1,0))&&!covered(p+int2(1,0))&&covered(p+int2(0,-1))&&covered(p+int2(0,1));
+    bool pinchY=!covered(p+int2(0,-1))&&!covered(p+int2(0,1))&&covered(p+int2(-1,0))&&covered(p+int2(1,0));
     if(pinchX||pinchY)thin=true;
    }
   }else{
@@ -71,5 +72,5 @@ bool isOpenEmpty399(int2 q){
  int reason=outer&&!thin&&eligible?1:internal&&!thin?2:0;
  // One colour from the nearest foreground cell, one darker step of the existing .55 linear own-colour ramp.
  // No neighbouring RGB averaging, role-wide fixed ink, normal-only edge or shadow-terminator edge.
- float4 pa=0;if(reason>0){c.rgb=c.rgb*_LineTone;bool scope=(part==2||part==3)||(reason==2&&part==1);float4 family=_Palette256.Load(int3(p*2+1,0));bool own=family.w>0&&round(family.y)==round(owner.x)&&abs(family.z-owner.z)<=.00002;if(_UsePalette256>0&&scope&&own){if(round(family.x)==3){c.rgb=_DeepCream256.rgb;pa=float4(1,3,owner.x,1);}else if(round(family.x)==1){c.rgb=_DeepSkin256.rgb;pa=float4(1,1,owner.x,1);}}} _PaletteAudit256[p]=pa;_Colour[p]=c;_Audit[p]=float4(reason,outer?1:0,thin?1:0,joint?1:0);
+ float4 origC=c;float4 pa=0;if(reason>0){c.rgb=c.rgb*_LineTone;bool scope=_CleanOutline399!=0?(role==10||role==7):((part==2||part==3)||(reason==2&&part==1));float4 family=_Palette256.Load(int3(p*2+1,0));bool own=family.w>0&&round(family.y)==round(owner.x)&&abs(family.z-owner.z)<=.00002;if(_UsePalette256>0&&scope){bool isCream=(own&&round(family.x)==3)||(_CleanOutline399!=0&&role==10&&origC.r>.22&&origC.g>.18&&origC.b>.15&&origC.r>=origC.b);bool isSkin=(own&&round(family.x)==1)||(_CleanOutline399!=0&&role==7&&origC.r>.20&&origC.r>origC.b*1.12);if(isCream){c.rgb=_DeepCream256.rgb;pa=float4(1,3,owner.x,1);}else if(isSkin){c.rgb=_DeepSkin256.rgb;pa=float4(1,1,owner.x,1);}}} _PaletteAudit256[p]=pa;_Colour[p]=c;_Audit[p]=float4(reason,outer?1:0,thin?1:0,joint?1:0);
 }

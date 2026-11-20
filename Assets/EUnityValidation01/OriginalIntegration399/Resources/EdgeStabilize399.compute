@@ -95,6 +95,8 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
     float bestDonorZ = 1e9;
     float minEditableZ = 1e9;
     float maxEditableZ = -1e9;
+    float minAllZ = 1e9;
+    float maxAllZ = -1e9;
     float dominantRole = origOwner.x;
 
     [unroll]
@@ -105,6 +107,11 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
         cardCov++;
         singleBack = dirs[i];
         float4 no = _InOwner.Load(int3(n, 0));
+        if (no.z > 0.0)
+        {
+            minAllZ = min(minAllZ, no.z);
+            maxAllZ = max(maxAllZ, no.z);
+        }
         if (IsEditableRole(no))
         {
             editableCardCov++;
@@ -171,11 +178,33 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
                             spatialCov = false;
                     }
                 }
+                else
+                {
+                    // 1px-deep x 2px-wide flat-wall clothing cuff bump:
+                    // [p] + [p+along] sticking out 1px from a straight >=4px wall [p+back] with empty space on all 3 outer sides.
+                    [unroll]
+                    for (int bi = 0; bi < 4; bi++)
+                    {
+                        int2 back = dirs[bi];
+                        if (!Covered(p + back) || Covered(p - back)) continue;
+                        int2 side0 = int2(-back.y, back.x);
+                        [unroll]
+                        for (int sgn = -1; sgn <= 1; sgn += 2)
+                        {
+                            int2 along = side0 * sgn;
+                            if (!Covered(p + along) || Covered(p - along)) continue;
+                            bool pairOuterEmpty = !Covered(p + along - back) && !Covered(p + along * 2);
+                            bool flatWall = Covered(p + back - along) && Covered(p + back + along) && Covered(p + back + along * 2);
+                            if (pairOuterEmpty && flatWall)
+                                spatialCov = false;
+                        }
+                    }
+                }
             }
         }
-        else if (!origCov && editableCardCov >= 3 && bestDonor.x >= 0 && (maxEditableZ - minEditableZ) < 0.15)
+        else if (!origCov && cardCov >= 3 && editableCardCov >= 2 && bestDonor.x >= 0 && (maxAllZ - minAllZ) < 0.15)
         {
-            // 1px concave fold crease surrounded on 3-4 cardinal sides by continuous clothing
+            // 1px concave fold crease or coat-to-hand wrist notch surrounded on 3-4 sides with continuous depth
             spatialCov = true;
         }
     }

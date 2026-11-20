@@ -28,13 +28,41 @@ bool Covered(int2 p)
     return Inside(p) && _InBefore.Load(int3(p, 0)).a > 0.5;
 }
 
-bool IsEditableRole(float4 owner)
+bool IsClothRole(float4 owner)
+{
+    int role = (int)round(owner.x) - 1;
+    return role == 8 || role == 9 || role == 10;
+}
+
+bool IsBodyLegOrTorsoRole(float4 owner)
 {
     int role = (int)round(owner.x) - 1;
     int part = (int)round(owner.y);
-    if (role == 8 || role == 9 || role == 10) return true;
-    if (_EdgeIncludeBody != 0 && role == 7 && part != 2 && part != 3) return true;
-    return false;
+    return _EdgeIncludeBody != 0 && role == 7 && part != 2 && part != 3;
+}
+
+bool IsArmSkinRole(float4 owner)
+{
+    int role = (int)round(owner.x) - 1;
+    int part = (int)round(owner.y);
+    return _EdgeIncludeBody != 0 && role == 7 && (part == 2 || part == 3);
+}
+
+bool IsEditableRole(float4 owner)
+{
+    return IsClothRole(owner) || IsBodyLegOrTorsoRole(owner);
+}
+
+bool IsConcaveRole(float4 owner)
+{
+    return IsEditableRole(owner) || IsArmSkinRole(owner);
+}
+
+bool SameLimbPart(float4 a, float4 b)
+{
+    int pa = (int)round(a.y);
+    int pb = (int)round(b.y);
+    return pa == pb && pa >= 1 && pa <= 5;
 }
 
 void WritePruned(int2 p)
@@ -86,13 +114,18 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
     float4 origOwner = _InOwner.Load(int3(p, 0));
     bool origCov = origBefore.a > 0.5;
     bool origEditable = origCov && IsEditableRole(origOwner);
+    bool origArmSkin = origCov && IsArmSkinRole(origOwner);
 
     int2 dirs[4] = { int2(-1, 0), int2(1, 0), int2(0, -1), int2(0, 1) };
     int cardCov = 0;
     int editableCardCov = 0;
+    int concaveCardCov = 0;
     int2 singleBack = int2(0, 0);
+    int2 openDir = int2(0, 0);
     int2 bestDonor = int2(-1, -1);
     float bestDonorZ = 1e9;
+    int2 bestConcaveDonor = int2(-1, -1);
+    float bestConcaveZ = 1e9;
     float minEditableZ = 1e9;
     float maxEditableZ = -1e9;
     float minAllZ = 1e9;
@@ -103,19 +136,32 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
     for (int i = 0; i < 4; i++)
     {
         int2 n = p + dirs[i];
-        if (!Covered(n)) continue;
+        if (!Covered(n))
+        {
+            openDir = dirs[i];
+            continue;
+        }
         cardCov++;
         singleBack = dirs[i];
         float4 no = _InOwner.Load(int3(n, 0));
-        if (no.z > 0.0)
+        float nz = no.z;
+        if (nz > 0.0)
         {
-            minAllZ = min(minAllZ, no.z);
-            maxAllZ = max(maxAllZ, no.z);
+            minAllZ = min(minAllZ, nz);
+            maxAllZ = max(maxAllZ, nz);
+        }
+        if (IsConcaveRole(no))
+        {
+            concaveCardCov++;
+            if (nz > 0.0 && nz < bestConcaveZ)
+            {
+                bestConcaveZ = nz;
+                bestConcaveDonor = n;
+            }
         }
         if (IsEditableRole(no))
         {
             editableCardCov++;
-            float nz = no.z;
             minEditableZ = min(minEditableZ, nz);
             maxEditableZ = max(maxEditableZ, nz);
             if (nz > 0.0 && nz < bestDonorZ)
@@ -127,8 +173,9 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
         }
     }
 
-    // 1) Spatial topology stabilization (1px spur pruning & 1px concave notch closing)
+    // 1) Spatial topology stabilization (symmetric convex protrusion pruning & concave inward-dent filling)
     bool spatialCov = origCov;
+    int2 fillDonor = bestConcaveDonor;
     if (_EdgeSpatialEnabled != 0)
     {
         if (origEditable)
@@ -140,7 +187,7 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
             }
             else if (cardCov == 1)
             {
-                // Width-1 protruding wrinkle pimple (length 1 or 2) backed by a solid clothing wall
+                // Width-1 protruding wrinkle pimple (length 1 or 2) backed by a solid wall
                 int2 side = int2(-singleBack.y, singleBack.x);
                 bool wallLeft = Covered(p + singleBack + side);
                 bool wallRight = Covered(p + singleBack - side);
@@ -180,7 +227,7 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
                 }
                 else
                 {
-                    // 1px-deep x 2px-wide flat-wall clothing cuff bump:
+                    // 1px-deep x 2px-wide flat-wall protrusion:
                     // [p] + [p+along] sticking out 1px from a straight >=4px wall [p+back] with empty space on all 3 outer sides.
                     [unroll]
                     for (int bi = 0; bi < 4; bi++)
@@ -202,10 +249,94 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
                 }
             }
         }
-        else if (!origCov && cardCov >= 3 && editableCardCov >= 2 && bestDonor.x >= 0 && (maxAllZ - minAllZ) < 0.15)
+        else if (origArmSkin)
         {
-            // 1px concave fold crease or coat-to-hand wrist notch surrounded on 3-4 sides with continuous depth
-            spatialCov = true;
+            // Bare arms/hands: remove detached specks and 1x2 flat-wall bumps, while strictly protecting 1px fingertips (cardCov == 1).
+            if (cardCov == 0)
+            {
+                spatialCov = false;
+            }
+            else if (cardCov == 2)
+            {
+                [unroll]
+                for (int bi = 0; bi < 4; bi++)
+                {
+                    int2 back = dirs[bi];
+                    if (!Covered(p + back) || Covered(p - back)) continue;
+                    int2 side0 = int2(-back.y, back.x);
+                    [unroll]
+                    for (int sgn = -1; sgn <= 1; sgn += 2)
+                    {
+                        int2 along = side0 * sgn;
+                        if (!Covered(p + along) || Covered(p - along)) continue;
+                        bool pairOuterEmpty = !Covered(p + along - back) && !Covered(p + along * 2);
+                        bool flatWall = Covered(p + back - along) && Covered(p + back + along) && Covered(p + back + along * 2);
+                        if (pairOuterEmpty && flatWall)
+                            spatialCov = false;
+                    }
+                }
+            }
+        }
+        else if (!origCov)
+        {
+            if (cardCov == 4 && concaveCardCov >= 2 && bestConcaveDonor.x >= 0 && (maxAllZ - minAllZ) < 0.15)
+            {
+                // 1x1 interior pinhole completely surrounded on all 4 cardinal sides with continuous depth
+                spatialCov = true;
+            }
+            else if (cardCov == 3 && concaveCardCov >= 2 && bestConcaveDonor.x >= 0 && (maxAllZ - minAllZ) < 0.15)
+            {
+                // 1x1 single-pixel inward dent along an edge (clothes, sleeves, legs, torso, bare arms).
+                // Require the two opposite lips to belong to the SAME limb/part so gaps between legs or arm-torso never bridge.
+                int2 back = -openDir;
+                int2 side = int2(-back.y, back.x);
+                float4 oA = _InOwner.Load(int3(p + side, 0));
+                float4 oB = _InOwner.Load(int3(p - side, 0));
+                float4 oW = _InOwner.Load(int3(p + back, 0));
+                if (SameLimbPart(oA, oB))
+                {
+                    spatialCov = true;
+                    if (IsConcaveRole(oW))
+                        fillDonor = p + back;
+                }
+            }
+            else if (cardCov == 2 && concaveCardCov >= 2 && bestConcaveDonor.x >= 0)
+            {
+                // 1px-deep x 2px-wide flat-wall inward dent (exact mirror dual of 1x2 flat-wall protrusion):
+                // [p] + [p+along] indented 1px into a straight wall [p+back], returning to the same outer edge at [p-along] & [p+2*along].
+                // Strict same-part + continuous-depth + open-outer-side guards prevent bridging leg-to-leg, arm-to-torso, or diagonal steps.
+                [unroll]
+                for (int bi = 0; bi < 4; bi++)
+                {
+                    int2 back = dirs[bi];
+                    if (!Covered(p + back) || Covered(p - back)) continue;
+                    int2 side0 = int2(-back.y, back.x);
+                    [unroll]
+                    for (int sgn = -1; sgn <= 1; sgn += 2)
+                    {
+                        int2 along = side0 * sgn;
+                        if (Covered(p + along) || !Covered(p - along)) continue;
+                        if (!Covered(p + along * 2) || !Covered(p + back + along) || Covered(p + along - back)) continue;
+
+                        float4 oBack = _InOwner.Load(int3(p + back, 0));
+                        float4 oBackQ = _InOwner.Load(int3(p + back + along, 0));
+                        float4 oNear = _InOwner.Load(int3(p - along, 0));
+                        float4 oFar = _InOwner.Load(int3(p + along * 2, 0));
+                        if (!IsConcaveRole(oBack) || !IsConcaveRole(oBackQ) || !IsConcaveRole(oNear) || !IsConcaveRole(oFar))
+                            continue;
+                        if (!SameLimbPart(oNear, oFar) || !SameLimbPart(oNear, oBack) || !SameLimbPart(oNear, oBackQ))
+                            continue;
+
+                        float zMin = min(min(oBack.z, oBackQ.z), min(oNear.z, oFar.z));
+                        float zMax = max(max(oBack.z, oBackQ.z), max(oNear.z, oFar.z));
+                        if (zMin > 0.0 && (zMax - zMin) < 0.15)
+                        {
+                            spatialCov = true;
+                            fillDonor = p + back;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -222,7 +353,7 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
         bool prevStable = histValid && hist.x > 0.5;
         bool prevPending = histValid && hist.y > 0.5;
 
-        // Restrict hysteresis strictly to editable clothing silhouette boundaries
+        // Restrict hysteresis strictly to editable clothing/leg/torso silhouette boundaries
         bool canHoldOff = origEditable && spatialCov && cardCov <= 2;
         bool canHoldOn = !spatialCov && editableCardCov >= 2 && bestDonor.x >= 0 && (maxEditableZ - minEditableZ) < 0.15;
 
@@ -254,9 +385,13 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
         {
             WritePruned(p);
         }
-        else if (bestDonor.x >= 0)
+        else
         {
-            WriteFromDonor(p, bestDonor);
+            int2 donor = (spatialCov && fillDonor.x >= 0) ? fillDonor : bestDonor;
+            if (donor.x >= 0)
+            {
+                WriteFromDonor(p, donor);
+            }
         }
     }
 }

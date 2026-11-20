@@ -72,10 +72,10 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
     public float clothSmoothStrength = 0.90f;
     [Tooltip("Keep original baked cloth normals so internal wrinkle shading stays rich while the silhouette is smooth.")]
     public bool clothSmoothKeepOriginalNormals = true;
-    [Tooltip("GPU 1-pass spatial clothing silhouette stabilizer (prunes isolated 1px wrinkle spurs & fills 1px crease notches before outlines).")]
+    [Tooltip("GPU 1-pass spatial silhouette stabilizer (symmetric 1x1/2x1/1x2 protrusion pruning & 1x1/1x2 inward dent filling before outlines).")]
     public bool enableEdgeStabilizationGPU = true;
-    [Tooltip("Also include body torso/stockings (excluding thin arms/hands and face) in GPU edge stabilization.")]
-    public bool edgeStabilizeIncludeBody = false;
+    [Tooltip("Include legs, torso, and arm concave-dent filling (face, hair, and 1px fingertips stay protected).")]
+    public bool edgeStabilizeIncludeBody = true;
     [Tooltip("Actor-local 1-frame boundary debounce (Schmitt hysteresis) to stop 0<->1 clothing edge flickering without ghosting.")]
     public bool enableEdgeHysteresis = true;
     [Tooltip("Quantizes skeleton animation cadence (e.g. 12 FPS) for crisp pixel-art silhouettes while keeping movement & camera smooth at full FPS.")]
@@ -136,7 +136,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
     public static float ClothSmoothStrength => Active != null ? Mathf.Clamp01(Active.clothSmoothStrength) : 0.90f;
     public static bool ClothSmoothKeepOriginalNormals => Active == null || Active.clothSmoothKeepOriginalNormals;
     public static bool EnableEdgeStabilizationGPU => EnableCharacterPass && (Active == null || Active.enableEdgeStabilizationGPU);
-    public static bool EdgeStabilizeIncludeBody => Active != null && Active.edgeStabilizeIncludeBody;
+    public static bool EdgeStabilizeIncludeBody => Active == null || Active.edgeStabilizeIncludeBody;
     public static bool EnableEdgeHysteresis => EnableCharacterPass && (Active == null || Active.enableEdgeHysteresis);
     public static bool EnableSteppedPose => Active == null || Active.enableSteppedPose;
     public static float SteppedPoseFps => Active != null ? Mathf.Clamp(Active.steppedPoseFps, 6f, 60f) : 12f;
@@ -165,6 +165,8 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         clothSmoothIterations = 6;
         clothSmoothStrength = 0.90f;
         enableEdgeStabilizationGPU = true;
+        edgeStabilizeIncludeBody = true;
+        useCleanOuterOutline = true;
         enableEdgeHysteresis = true;
         enableSteppedPose = true;
         steppedPoseFps = 12f;
@@ -270,7 +272,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         float ms = smoothedDeltaTime * 1000f;
 
         GUI.depth = -1000;
-        GUILayout.BeginArea(new Rect(12, 12, 380, 635), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(12, 12, 380, 660), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
         GUILayout.Label($"FPS: {fps:F1} ({ms:F1} ms) | Display: {displayScaleMode}");
         GUILayout.Label($"Mode: {(bypassPresentation ? "BYPASSED (Original Camera)" : NeedsTwoPassCPU ? "2-Pass CPU Diagnostic" : "1-Pass Native GPU Loop")}");
         GUILayout.Label($"Outline Dispatches: {lastOutlineDispatches} | Readbacks: {lastFrameReadbacks}");
@@ -300,7 +302,8 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         GUILayout.Space(4);
         GUILayout.Label("--- Clothing Edge Stabilization (Anti-Flicker) ---");
         enableClothMeshSmoothing = GUILayout.Toggle(enableClothMeshSmoothing, $"S1. Taubin Cloth Smooth (iter={clothSmoothIterations}, str={clothSmoothStrength:F2})");
-        enableEdgeStabilizationGPU = GUILayout.Toggle(enableEdgeStabilizationGPU, "S2. GPU 1px Spur Prune & Notch Fill");
+        enableEdgeStabilizationGPU = GUILayout.Toggle(enableEdgeStabilizationGPU, "S2. GPU Spur Prune & 1x1/1x2 Dent Fill");
+        edgeStabilizeIncludeBody = GUILayout.Toggle(edgeStabilizeIncludeBody, "S2b. Include Legs/Torso/Arms Body Edge");
         enableEdgeHysteresis = GUILayout.Toggle(enableEdgeHysteresis, "S3. Actor-Local Temporal Edge Hysteresis");
         useCleanOuterOutline = GUILayout.Toggle(useCleanOuterOutline, "S3b. Clean Sleeve/Corner Outer Outlines");
         enableSteppedPose = GUILayout.Toggle(enableSteppedPose, $"S4. Stepped Pixel Pose ({steppedPoseFps:F0} FPS anim / 60 FPS move)");

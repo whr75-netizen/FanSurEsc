@@ -17,6 +17,13 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         StretchFill = 3
     }
 
+    public enum PixelResolutionMode
+    {
+        MatchWorld1x = 0,
+        HiResCharacter2x = 1,
+        HiResBoth2x = 2
+    }
+
     public static PixelRenderPipelineControl399 Active { get; private set; }
 
     [Header("Stage 0: Master Bypass & Display")]
@@ -24,6 +31,8 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
     public bool bypassPresentation = false;
     [Tooltip("SmartFullViewport fills 16:9 screens edge-to-edge (exact 2x on 1920x1080) over a solid backdrop with zero double-rectangle outer camera.")]
     public DisplayScaleMode displayScaleMode = DisplayScaleMode.SmartFullViewport;
+    [Tooltip("MatchWorld1x: world & character both 480x272. HiResCharacter2x: character 2x (960x544 native density) over 480x272 world. HiResBoth2x: both 960x544.")]
+    public PixelResolutionMode pixelResolutionMode = PixelResolutionMode.MatchWorld1x;
     [Tooltip("Initializes immediately once Camera.main and Player are ready instead of waiting 90 warmup frames.")]
     public bool fastStartup = true;
 
@@ -110,6 +119,9 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
 
     public static bool BypassPresentation => Active != null && Active.bypassPresentation;
     public static DisplayScaleMode CurrentDisplayScaleMode => Active != null ? Active.displayScaleMode : DisplayScaleMode.SmartFullViewport;
+    public static PixelResolutionMode CurrentPixelResolutionMode => Active != null ? Active.pixelResolutionMode : PixelResolutionMode.MatchWorld1x;
+    public static int CharacterCellScale => CurrentPixelResolutionMode == PixelResolutionMode.MatchWorld1x ? 2 : 1;
+    public static int WorldCellScale => CurrentPixelResolutionMode == PixelResolutionMode.HiResBoth2x ? 1 : 2;
     public static bool FastStartup => Active == null || Active.fastStartup;
     public static bool AvoidDuplicateWorldRender => Active == null || Active.avoidDuplicateWorldRender;
     public static bool CullWorldOnCharacterCameras => Active == null || Active.cullWorldOnCharacterCameras;
@@ -236,6 +248,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
             int h = 17;
             h = h * 31 + (bypassPresentation ? 1 : 0);
             h = h * 31 + (int)displayScaleMode;
+            h = h * 31 + (int)pixelResolutionMode;
             h = h * 31 + (avoidDuplicateWorldRender ? 1 : 0);
             h = h * 31 + (cullWorldOnCharacterCameras ? 1 : 0);
             h = h * 31 + (useFastTiledFlood ? 1 : 0);
@@ -272,8 +285,26 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         float ms = smoothedDeltaTime * 1000f;
 
         GUI.depth = -1000;
-        GUILayout.BeginArea(new Rect(12, 12, 380, 660), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(12, 12, 390, 720), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
         GUILayout.Label($"FPS: {fps:F1} ({ms:F1} ms) | Display: {displayScaleMode}");
+        GUILayout.Label($"Pixel Res: {pixelResolutionMode} (Char {2 / CharacterCellScale}x / World {2 / WorldCellScale}x)");
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button(pixelResolutionMode == PixelResolutionMode.MatchWorld1x ? "[1x Same]" : "1x Same"))
+        {
+            pixelResolutionMode = PixelResolutionMode.MatchWorld1x;
+            MarkConfigDirty();
+        }
+        if (GUILayout.Button(pixelResolutionMode == PixelResolutionMode.HiResCharacter2x ? "[2x Char Only]" : "2x Char Only"))
+        {
+            pixelResolutionMode = PixelResolutionMode.HiResCharacter2x;
+            MarkConfigDirty();
+        }
+        if (GUILayout.Button(pixelResolutionMode == PixelResolutionMode.HiResBoth2x ? "[2x Both]" : "2x Both"))
+        {
+            pixelResolutionMode = PixelResolutionMode.HiResBoth2x;
+            MarkConfigDirty();
+        }
+        GUILayout.EndHorizontal();
         GUILayout.Label($"Mode: {(bypassPresentation ? "BYPASSED (Original Camera)" : NeedsTwoPassCPU ? "2-Pass CPU Diagnostic" : "1-Pass Native GPU Loop")}");
         GUILayout.Label($"Outline Dispatches: {lastOutlineDispatches} | Readbacks: {lastFrameReadbacks}");
 

@@ -112,9 +112,32 @@ using FantasySurvival.CharacterPresentation;
  void PreBake(){host.main.motion.Evaluate();Follow();bake.Evaluate(true);}
  internal void SetLocalCamera(){
   if(worldSerial==0)throw new Exception("395 native world capture did not execute");
+  int charScale=PixelRenderPipelineControl399.CharacterCellScale;
+  bool gridChanged=nativePixelsPerCell!=charScale;
+  nativePixelsPerCell=charScale;
+  if(charScale>=2){
+   if(origin!=Vector2Int.zero){origin=Vector2Int.zero;gridChanged=true;}
+  }else{
+   int maxOx=Mathf.Max(0,960-480*charScale);
+   int maxOy=Mathf.Max(0,544-272*charScale);
+   Vector3 focus=feet?feet.position+Vector3.up*(bodyHeight*.5f):(player?player.position+Vector3.up*.8f:Vector3.zero);
+   Vector4 clip=worldProjection*(worldView*new Vector4(focus.x,focus.y,focus.z,1f));
+   float px=clip.w>1e-5f?(clip.x/clip.w*.5f+.5f)*960f:480f;
+   float py=clip.w>1e-5f?(clip.y/clip.w*.5f+.5f)*544f:272f;
+   float winW=480f*charScale,winH=272f*charScale;
+   float curCx=origin.x+winW*.5f,curCy=origin.y+winH*.5f;
+   bool needRecenter=gridChanged||Mathf.Abs(px-curCx)>winW*.22f||Mathf.Abs(py-curCy)>winH*.20f;
+   if(needRecenter){
+    int dx=Mathf.Clamp(Mathf.RoundToInt(px-winW*.5f),0,maxOx)&~1;
+    int dy=Mathf.Clamp(Mathf.RoundToInt(py-winH*.5f),0,maxOy)&~1;
+    if(origin.x!=dx||origin.y!=dy){origin=new Vector2Int(dx,dy);gridChanged=true;}
+   }
+  }
+  if(gridChanged&&host&&host.main&&host.main.motion)host.main.motion.ResetActorGrid();
   var inverse=worldView.inverse;localCamera.transform.SetPositionAndRotation(inverse.GetColumn(3),gameCamera.transform.rotation);
   localCamera.orthographicSize=gameCamera.orthographicSize*nativePixelsPerCell*.5f;localCamera.aspect=gameCamera.aspect;localCamera.nearClipPlane=gameCamera.nearClipPlane;localCamera.farClipPlane=gameCamera.farClipPlane;
   localCamera.ResetWorldToCameraMatrix();var projection=worldProjection;float factor=2f/nativePixelsPerCell;projection.SetRow(0,projection.GetRow(0)*factor+(960-480*nativePixelsPerCell-2*origin.x)/(480f*nativePixelsPerCell)*worldProjection.GetRow(3));projection.SetRow(1,projection.GetRow(1)*factor+(544-272*nativePixelsPerCell-2*origin.y)/(272f*nativePixelsPerCell)*worldProjection.GetRow(3));localCamera.projectionMatrix=projection;
+  pixelPitch=2f*localCamera.orthographicSize/272f;
  }
  public void RenderPose(float frame,bool forceCapture=true){var m=host.main.motion;m.sourceFrame=frame;if(forceCapture)m.resetHistory=true;PreBake();gameCamera.Render();SetLocalCamera();host.RenderFrame();}
  [Serializable]class Binding{public string player,avatar,worldCamera,localCamera,pipeline;public bool originalCameraEnabled,headLocal,wholeBody364,T0;public float bodyHeight,scale,worldOrtho,localOrtho,worldPixelPitch,localPixelPitch;public int warmupFrame,worldSerial,nativePixelsPerCell;public float authoredArtWorldPitch;public Vector2Int origin;public Matrix4x4 worldView,worldProjection;}

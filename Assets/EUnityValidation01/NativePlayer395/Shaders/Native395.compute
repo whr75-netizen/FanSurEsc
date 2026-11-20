@@ -4,14 +4,25 @@ Texture2D<float4> _MainSource395,_World395,_Local395,_Meta395,_UV395,_Domain395,
 Texture2D<float> _MainDepth395,_WorldDepth395;
 RWTexture2D<float4> _WorldRW395,_Output395,_Owner395,_CellID395,_DepthAudit395;
 RWTexture2D<float> _WorldDepthRW395;
-float2 _Delta395;int2 _Origin395;int _Show395,_Capture395,_CellScale395,_EnableHistory395;float4 _NearFar395,_Texel395[16];float _UVTolerance395;
+float2 _Delta395;int2 _Origin395;int _Show395,_Capture395,_CellScale395,_WorldCellScale395,_EnableHistory395;float4 _NearFar395,_Texel395[16];float _UVTolerance395;
 [numthreads(8,8,1)]void CaptureWorld(uint3 t:SV_DispatchThreadID){int2 p=t.xy;if(any(p>=int2(960,544)))return;_WorldRW395[p]=_MainSource395.Load(int3(p,0));_WorldDepthRW395[p]=_MainDepth395.Load(int3(p,0));}
 [numthreads(8,8,1)]void Present(uint3 t:SV_DispatchThreadID){
  int2 p=t.xy;if(any(p>=int2(960,544)))return;
- int2 q=(int2)floor((float2(p)+.5-float2(_Origin395))/_CellScale395-_Delta395);
- // Share the character cell and phase for world colour AND its occlusion depth.
- // One integer texel load: no camera/model/RT resize, palette mixing or filtering.
- int2 worldSample=clamp((int2)floor(float2(_Origin395)+(float2(q)+.5+_Delta395)*_CellScale395),int2(0,0),int2(959,543));
+ int charScale=max(1,_CellScale395);
+ int worldScale=max(1,_WorldCellScale395);
+ int2 q=(int2)floor((float2(p)+.5-float2(_Origin395))/charScale-_Delta395);
+ int2 worldSample;
+ if(worldScale==charScale&&worldScale>1){
+  // MatchWorld1x: share character cell phase for world colour and occlusion depth.
+  worldSample=clamp((int2)floor(float2(_Origin395)+(float2(q)+.5+_Delta395)*worldScale),int2(0,0),int2(959,543));
+ }else if(worldScale>1){
+  // HiResCharacter2x: keep world cleanly quantized on its 480x272 grid while character renders 1:1 at 960x544.
+  int2 wCell=p/worldScale;
+  worldSample=clamp(wCell*worldScale+(worldScale/2),int2(0,0),int2(959,543));
+ }else{
+  // HiResBoth2x: native 1:1 960x544 world colour and occlusion depth.
+  worldSample=p;
+ }
  float4 world=_World395.Load(int3(worldSample,0));float device=_WorldDepth395.Load(int3(worldSample,0));float wd=lerp(_NearFar395.x,_NearFar395.y,_NearFar395.z>.5?1-device:device);
  _Output395[p]=world;_Owner395[p]=0;_CellID395[p]=float4(q,0,0);_DepthAudit395[p]=float4(wd,0,0,0);
  if(_Show395==0||any(q<0)||any(q>=int2(480,272)))return;

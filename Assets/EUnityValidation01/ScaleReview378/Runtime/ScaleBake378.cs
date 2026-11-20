@@ -236,8 +236,10 @@ public sealed class ScaleBake378 : MonoBehaviour
         // lambda = +0.50, mu = -0.53 attenuates high-frequency cloth wrinkles while preserving volume.
         const float lambda = 0.50f;
         const float mu = -0.53f;
-        const float bndLambda = 0.40f;
-        const float bndMu = -0.42f;
+        const float bndLambda = 0.35f;
+        const float bndMu = -0.36f;
+        const float maxDisplacement = 0.007f; // 7mm (~0.5px) cap prevents any narrow cuff/lapel over-inflation
+        const float maxDispSqr = maxDisplacement * maxDisplacement;
 
         for (int iter = 0; iter < iterations; iter++)
         {
@@ -296,7 +298,11 @@ public sealed class ScaleBake378 : MonoBehaviour
             int v = clothVertIndices[i];
             int c = vertToCanon[v];
             if (canonKind[c] == KindPinned) continue;
-            localVerts[v] = Vector3.LerpUnclamped(canonOrig[c], canonPos[c], strength);
+            Vector3 delta = (canonPos[c] - canonOrig[c]) * strength;
+            float sqrMag = delta.sqrMagnitude;
+            if (sqrMag > maxDispSqr)
+                delta *= maxDisplacement / Mathf.Sqrt(sqrMag);
+            localVerts[v] = canonOrig[c] + delta;
         }
     }
 

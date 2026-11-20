@@ -34,6 +34,8 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
     public bool cullWorldOnCharacterCameras = true;
     [Tooltip("Replaces 752 sequential 1px flood dispatches (1,504/frame) with 16 groupshared 16x16 tiled flood dispatches.")]
     public bool useFastTiledFlood = true;
+    [Tooltip("Prevents OwnerLines333 from dropping outer silhouette outlines on sleeves, cuffs, corners, and arm-torso gaps.")]
+    public bool useCleanOuterOutline = true;
 
     [Header("Sequential Render Layers (Safe to Toggle in Any Order)")]
     [Tooltip("Layer 1: Character pixel capture & world depth composite (_Show395).")]
@@ -112,6 +114,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
     public static bool AvoidDuplicateWorldRender => Active == null || Active.avoidDuplicateWorldRender;
     public static bool CullWorldOnCharacterCameras => Active == null || Active.cullWorldOnCharacterCameras;
     public static bool UseFastTiledFlood => Active == null || Active.useFastTiledFlood;
+    public static bool UseCleanOuterOutline => Active == null || Active.useCleanOuterOutline;
 
     public static bool EnableCharacterPass => Active == null || (!Active.bypassPresentation && Active.enableCharacterPass);
     public static bool EnableHeadLocalGrid => EnableCharacterPass && (Active == null || Active.enableHeadLocalGrid);
@@ -234,6 +237,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
             h = h * 31 + (avoidDuplicateWorldRender ? 1 : 0);
             h = h * 31 + (cullWorldOnCharacterCameras ? 1 : 0);
             h = h * 31 + (useFastTiledFlood ? 1 : 0);
+            h = h * 31 + (useCleanOuterOutline ? 1 : 0);
             h = h * 31 + (enableCharacterPass ? 1 : 0);
             h = h * 31 + (enableHeadLocalGrid ? 1 : 0);
             h = h * 31 + (enableSurfaceShading ? 1 : 0);
@@ -266,7 +270,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         float ms = smoothedDeltaTime * 1000f;
 
         GUI.depth = -1000;
-        GUILayout.BeginArea(new Rect(12, 12, 380, 610), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(12, 12, 380, 635), "Pixel Render Pipeline Control (F8)", GUI.skin.window);
         GUILayout.Label($"FPS: {fps:F1} ({ms:F1} ms) | Display: {displayScaleMode}");
         GUILayout.Label($"Mode: {(bypassPresentation ? "BYPASSED (Original Camera)" : NeedsTwoPassCPU ? "2-Pass CPU Diagnostic" : "1-Pass Native GPU Loop")}");
         GUILayout.Label($"Outline Dispatches: {lastOutlineDispatches} | Readbacks: {lastFrameReadbacks}");
@@ -298,6 +302,7 @@ public sealed class PixelRenderPipelineControl399 : MonoBehaviour
         enableClothMeshSmoothing = GUILayout.Toggle(enableClothMeshSmoothing, $"S1. Taubin Cloth Smooth (iter={clothSmoothIterations}, str={clothSmoothStrength:F2})");
         enableEdgeStabilizationGPU = GUILayout.Toggle(enableEdgeStabilizationGPU, "S2. GPU 1px Spur Prune & Notch Fill");
         enableEdgeHysteresis = GUILayout.Toggle(enableEdgeHysteresis, "S3. Actor-Local Temporal Edge Hysteresis");
+        useCleanOuterOutline = GUILayout.Toggle(useCleanOuterOutline, "S3b. Clean Sleeve/Corner Outer Outlines");
         enableSteppedPose = GUILayout.Toggle(enableSteppedPose, $"S4. Stepped Pixel Pose ({steppedPoseFps:F0} FPS anim / 60 FPS move)");
         if (enableSteppedPose)
         {

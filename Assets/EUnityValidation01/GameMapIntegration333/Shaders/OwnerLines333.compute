@@ -5,6 +5,7 @@
 Texture2D<float4> _Before,_Owner,_Surface,_Torso,_Arms,_TriangleVertices,_Palette256;
 Texture2D<uint> _FloodRead;RWTexture2D<uint> _FloodWrite;RWTexture2D<float4> _Colour,_Audit,_PaletteAudit256;int2 _Size;float _LineTone;int _UsePalette256;float4 _DeepCream256,_DeepSkin256;
 int _ClosedDomain553,_ClosedParts553,_HeadScope553,_BodyCount553;StructuredBuffer<float> _BodySource553;
+int _CleanOutline399;
 // A managed closed domain has boundaries against every empty component,
 // including an enclosed hole. Connectivity to the canvas is not its boundary.
 bool closedDomain553(float4 owner){int part=(int)round(owner.x)-8;if(_ClosedDomain553==0||part<0||part>3||(_ClosedParts553&(1<<part))==0)return false;if(part==0&&_HeadScope553!=0){int i=(int)round(abs(owner.w))-1;if(i<0||i>=_BodyCount553)return false;return _BodySource553[i]>.5;}return true;}
@@ -35,8 +36,25 @@ bool ownCore(int2 p,int2 inward,int part){bool a=covered(p+inward),b=covered(p+i
 bool hasThreeInAxis(int2 p,int2 d,int part){bool a=partAt(p-d)==part,b=partAt(p+d)==part;return (a&&b)||(a&&partAt(p-d*2)==part)||(b&&partAt(p+d*2)==part);}
 bool sameSourceConnection(float a,float b){int ia=(int)round(abs(a)),ib=(int)round(abs(b));if(ia<1||ib<1)return false;float3 va=_TriangleVertices.Load(int3(ia,0,0)).xyz,vb=_TriangleVertices.Load(int3(ib,0,0)).xyz;return any(va.xxx==vb)||any(va.yyy==vb)||any(va.zzz==vb);}
 bool torsoCore(int2 p,int2 inward){return covered(p+inward)&&covered(p+2*inward)&&partAt(p+inward)==1&&partAt(p+2*inward)==1;}
+bool isOpenEmpty399(int2 q){
+ if(covered(q))return false;
+ if(ext(q)>0)return true;
+ // Enclosed empty gap (e.g. between sleeve and torso): treat as open boundary unless it is an isolated 1px interior pinhole.
+ return !covered(q+int2(-1,0))||!covered(q+int2(1,0))||!covered(q+int2(0,-1))||!covered(q+int2(0,1));
+}
 [numthreads(8,8,1)]void OwnerLines(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(!inside(p))return;float4 c=_Before.Load(int3(p,0)),owner=_Owner.Load(int3(p,0));int role=(int)round(owner.x)-1,part=(int)round(owner.y);bool eligible=role==7||role==8||role==9||role==10||role>=11;int2 dirs[4]={int2(-1,0),int2(1,0),int2(0,-1),int2(0,1)};bool outer=false,internal=false,thin=false,joint=false;
- if(covered(p)&&eligible){bool closed=closedDomain553(owner);for(int i=0;i<4;i++){int2 d=dirs[i];if(closed?!covered(p+d):ext(p+d)>0){outer=true;if(!ownCore(p,-d,part))thin=true;} }
+ if(covered(p)&&eligible){bool closed=closedDomain553(owner);
+  if(_CleanOutline399!=0){
+   for(int i=0;i<4;i++){int2 d=dirs[i];if(closed?!covered(p+d):isOpenEmpty399(p+d))outer=true;}
+   // Only suppress outer outline on 1px-thin bare skin strands (fingers/wrists), NEVER on clothing/sleeves/corners.
+   if(outer&&role==7&&part>=2&&part<=5){
+    bool pinchX=!covered(p+int2(-1,0))&&!covered(p+int2(1,0));
+    bool pinchY=!covered(p+int2(0,-1))&&!covered(p+int2(0,1));
+    if(pinchX||pinchY)thin=true;
+   }
+  }else{
+   for(int i=0;i<4;i++){int2 d=dirs[i];if(closed?!covered(p+d):ext(p+d)>0){outer=true;if(!ownCore(p,-d,part))thin=true;}}
+  }
   if(!outer&&(part==2||part==3)){float4 front=_Surface.Load(int3(p*2+1,0)),under=_Torso.Load(int3(p,0));bool underTorso=under.x>0&&round(under.z)==1&&under.x>front.x;
    if(underTorso)for(int i=0;i<4;i++){int2 d=dirs[i];float4 other=inside(p+d)?_Owner.Load(int3(p+d,0)):0;if(covered(p+d)&&round(other.y)==1&&other.z>front.x){if(front.w<0)joint=true;else if(ownCore(p,-d,part))internal=true;else thin=true;}}
   }
@@ -48,7 +66,8 @@ bool torsoCore(int2 p,int2 inward){return covered(p+inward)&&covered(p+2*inward)
    }
   }
  }
- if(covered(p)&&part>=2&&part<=5&&(!hasThreeInAxis(p,int2(1,0),part)||!hasThreeInAxis(p,int2(0,1),part)))thin=true;
+ if(_CleanOutline399==0&&covered(p)&&part>=2&&part<=5&&(!hasThreeInAxis(p,int2(1,0),part)||!hasThreeInAxis(p,int2(0,1),part)))thin=true;
+ if(_CleanOutline399!=0&&!outer&&covered(p)&&part>=2&&part<=5&&(!hasThreeInAxis(p,int2(1,0),part)||!hasThreeInAxis(p,int2(0,1),part)))thin=true;
  int reason=outer&&!thin&&eligible?1:internal&&!thin?2:0;
  // One colour from the nearest foreground cell, one darker step of the existing .55 linear own-colour ramp.
  // No neighbouring RGB averaging, role-wide fixed ink, normal-only edge or shadow-terminator edge.

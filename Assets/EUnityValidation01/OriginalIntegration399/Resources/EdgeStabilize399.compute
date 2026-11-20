@@ -133,7 +133,7 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
             }
             else if (cardCov == 1)
             {
-                // Width-1 protruding pimple backed by a solid >=3px wall (never eats thin limbs/straps)
+                // Width-1 protruding wrinkle pimple (length 1 or 2) backed by a solid clothing wall
                 int2 side = int2(-singleBack.y, singleBack.x);
                 bool wallLeft = Covered(p + singleBack + side);
                 bool wallRight = Covered(p + singleBack - side);
@@ -142,6 +142,34 @@ void Stabilize(uint3 id : SV_DispatchThreadID)
                 if (wallLeft && wallRight && !tipSideA && !tipSideB)
                 {
                     spatialCov = false;
+                }
+                else if (!wallLeft && !wallRight && !tipSideA && !tipSideB)
+                {
+                    // Length-2 x width-1 cloth whisker tip: p -> p+back -> p+2*back (wall)
+                    int2 p2 = p + singleBack * 2;
+                    if (Covered(p2) && (Covered(p2 + side) || Covered(p2 - side)))
+                        spatialCov = false;
+                }
+            }
+            else if (cardCov == 2)
+            {
+                // Neck of a length-2 x width-1 cloth whisker sticking straight out of a >=3px wall
+                bool oppX = Covered(p + int2(-1, 0)) && Covered(p + int2(1, 0)) && !Covered(p + int2(0, -1)) && !Covered(p + int2(0, 1));
+                bool oppY = Covered(p + int2(0, -1)) && Covered(p + int2(0, 1)) && !Covered(p + int2(-1, 0)) && !Covered(p + int2(1, 0));
+                if (oppX || oppY)
+                {
+                    int2 axis = oppX ? int2(1, 0) : int2(0, 1);
+                    int2 side = oppX ? int2(0, 1) : int2(1, 0);
+                    [unroll]
+                    for (int sgn = -1; sgn <= 1; sgn += 2)
+                    {
+                        int2 tip = p + axis * sgn;
+                        int2 baseCell = p - axis * sgn;
+                        bool tipIsEnd = !Covered(tip + axis * sgn) && !Covered(tip + side) && !Covered(tip - side);
+                        bool baseIsWall = Covered(baseCell + side) && Covered(baseCell - side);
+                        if (tipIsEnd && baseIsWall)
+                            spatialCov = false;
+                    }
                 }
             }
         }

@@ -1,0 +1,34 @@
+#pragma kernel Gather
+
+Texture2D<float4> _Centre;
+Texture2D<float4> _Owner;
+Texture2D<float4> _Selected;
+RWStructuredBuffer<uint> _Words;
+int _LeftWord, _Top, _RowWords, _WordCount;
+
+// Compare the original IEEE bits so zero, subnormals and NaN have the C# predicate's meaning.
+bool NonPositive(float value)
+{
+    uint bits = asuint(value);
+    uint magnitude = bits & 0x7fffffffu;
+    return magnitude <= 0x7f800000u && ((bits & 0x80000000u) != 0 || magnitude == 0);
+}
+
+[numthreads(64,1,1)]
+void Gather(uint3 id : SV_DispatchThreadID)
+{
+    uint index = id.x;
+    if (index >= (uint)_WordCount) return;
+    uint row = index / (uint)_RowWords;
+    uint firstX = 32u * ((uint)_LeftWord + index - row * (uint)_RowWords);
+    int textureY = 271 - (_Top + (int)row);
+    uint word = 0;
+    for (uint bit = 0; bit < 32; bit++)
+    {
+        int3 p = int3(firstX + bit, textureY, 0);
+        float3 selected = _Selected.Load(p).gba;
+        if (any(selected != 0) && NonPositive(_Centre.Load(p).r) && NonPositive(_Owner.Load(p).b))
+            word |= 1u << bit;
+    }
+    _Words[index] = word;
+}

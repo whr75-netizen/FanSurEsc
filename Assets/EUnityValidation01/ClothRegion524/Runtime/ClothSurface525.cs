@@ -79,14 +79,19 @@ public static class ClothSurface525
         if(front==null||front.renderer!=0||!ClothRegion524.Active540(front.submesh)||!ClothRegion524.InScope551(front.submesh,front.primitive)){OccludedCandidates++;return false;}return true;
     }
     public static void BeginFrame(){current=null;Packets.Clear();Requested=Unsupported=OccludedCandidates=UncertainCandidates=0;BuildMs=0;}
-    public static void Prepare(Full319View335 f,Color[] centre,Color[] owner)
+    public static void Prepare(Full319View335 f,Color[] centre,Color[] owner) => PrepareCore(f,centre,owner,default);
+
+    internal static void PreparePacked(Full319View335 f,ClothRequestBits525.Result bits) => PrepareCore(f,null,null,bits);
+
+    static void PrepareCore(Full319View335 f,Color[] centre,Color[] owner,ClothRequestBits525.Result bits)
     {
+        bool packed=bits.Valid;
         if(!ClothRegion524.Ready(f))return;long start=Stopwatch.GetTimestamp();
         var requests=new bool[480*272];var cells=new List<Vector2Int>();
         foreach(var part in ClothRegion524.Parts540)
         {
             if(!ClothRegion524.Active540(part.submesh))continue;var region=part.bounds;
-            for(int y=0;y<region.height;y++)for(int x=0;x<region.width;x++){int at=y*region.width+x,px=x+region.x,py=y+region.y,i=(271-py)*480+px;if(part.selected[at]&&!requests[i]&&centre[i].r<=0&&owner[i].b<=0){requests[i]=true;cells.Add(new Vector2Int(px,py));}}
+            for(int y=0;y<region.height;y++)for(int x=0;x<region.width;x++){int at=y*region.width+x,px=x+region.x,py=y+region.y,i=(271-py)*480+px;if(part.selected[at]&&!requests[i]&&(packed?bits.Wants(px,py):centre[i].r<=0&&owner[i].b<=0)){requests[i]=true;cells.Add(new Vector2Int(px,py));}}
         }
         Requested=cells.Count;if(Requested==0){current=f;BuildMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;return;}
         Geometry(f);var clothing=triangles.Where(t=>t.renderer==0&&ClothRegion524.Active540(t.submesh)&&ClothRegion524.InScope551(t.submesh,t.primitive)).ToArray();

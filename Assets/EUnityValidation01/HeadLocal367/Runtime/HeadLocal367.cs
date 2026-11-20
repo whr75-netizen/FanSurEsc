@@ -28,6 +28,16 @@ using UnityEditor;
  void Refresh(Full319View335 f){var m=f.motion;var p=f.phases[f.phaseIndex];f.providerMatrix=m.animation.target.GetBoneTransform(HumanBodyBones.Head).localToWorldMatrix*p.head.inverse;var mesh=m.surface.outputs[0].sharedMesh;var v=mesh.vertices;var n=mesh.normals;f.bodyProxy.vertices=proxy.Select(i=>v[i]).ToArray();f.bodyProxy.normals=proxy.Select(i=>n[i]).ToArray();f.bodyProxy.bounds=mesh.bounds;var hair=m.surface.outputs[2].sharedMesh;foreach(var h in new[]{f.registeredHair,f.otherHair}){h.vertices=hair.vertices;h.normals=hair.normals;h.tangents=hair.tangents;h.bounds=hair.bounds;}bind.Invoke(f,null);}
  void PrepareHead(){var m=main.motion;head.motion=headMotion;headMotion.sourceFrame=m.sourceFrame;headMotion.evaluatedFrame=m.evaluatedFrame;headMotion.clipShift=anchorShift;headMotion.composeDelta=Vector2.zero;var current=m.animation.target.GetBoneTransform(HumanBodyBones.Head).position;var expected=anchorCamera+(current-anchorHead);headCamera.transform.SetPositionAndRotation(expected,m.camera.transform.rotation);headCamera.orthographicSize=m.camera.orthographicSize;headCamera.aspect=m.camera.aspect;headCamera.ResetWorldToCameraMatrix();headCamera.projectionMatrix=m.camera.projectionMatrix;exactFollowError=Vector3.Distance(headCamera.transform.position,expected);head.phaseIndex=main.phaseIndex;head.contourReady=false;head.effectiveProjection=headCamera.projectionMatrix;float flip=GL.GetGPUProjectionMatrix(headCamera.projectionMatrix,true)[1,1]/headCamera.projectionMatrix[1,1];head.effectiveProjection.SetRow(0,head.effectiveProjection.GetRow(0)+anchorShift.x*head.effectiveProjection.GetRow(3));head.effectiveProjection.SetRow(1,head.effectiveProjection.GetRow(1)+anchorShift.y/flip*head.effectiveProjection.GetRow(3));head.nativeShift=anchorShift+new Vector4(.5f/480,.5f/272*flip,0,0);Refresh(head);headPivot=head.Project(current);mainPivot=main.Project(current);var delta=mainPivot-headPivot;offset=new Vector2Int(Mathf.RoundToInt(delta.x),-Mathf.RoundToInt(delta.y));depthOffset=Vector3.Dot(headCamera.transform.position-m.camera.transform.position,m.camera.transform.forward);}
  ClothRequestBits525 clothRequestBits;
+ PreparedClothDepth525 preparedClothDepth;
+ bool collectingClothDepth;
+
+ internal static void PublishClothDepth(Full319View335 view)
+ {
+  var host = Active;
+  if(host && host.collectingClothDepth && view == host.main && !view.contourReady)
+   host.preparedClothDepth = new PreparedClothDepth525(view);
+ }
+
  bool ReleaseClothRequestBits()
  {
   if(clothRequestBits==null)return true;
@@ -37,22 +47,24 @@ using UnityEditor;
   return true;
  }
 
- void PrepareClothSurface(Full319View335 f)
+ void PrepareClothSurface(Full319View335 f, in PreparedClothDepth525 depth)
  {
+  if(!depth.IsCurrent(f))throw new InvalidOperationException("No prepared body depth for the current clothing request");
   var player=NativePlayer395.Active;
   if(Application.isPlaying && player && player.ready && player.host==this &&
      SystemInfo.supportsAsyncGPUReadback && SystemInfo.graphicsDeviceType==UnityEngine.Rendering.GraphicsDeviceType.Direct3D11)
   {
    clothRequestBits??=new ClothRequestBits525(f);
-   if(clothRequestBits.TryRead(out var bits))
+   if(clothRequestBits.TryRead(depth,out var bits))
    {
     ClothSurface525.PreparePacked(f,bits);
     return;
    }
   }
-  var centre=Full319View335.Read(f.motion.raw[5]);
-  var owner=Full319View335.Read(f.owner);
+  var centre=Full319View335.Read(depth.Centre);
+  var owner=Full319View335.Read(depth.Owner);
   clothRequestBits?.ObserveCompletedFallback();
+  if(!depth.IsCurrent(f))throw new InvalidOperationException("Clothing fallback depth no longer matches its frame");
   ClothSurface525.Prepare(f,centre,owner);
  }
 
@@ -61,9 +73,13 @@ using UnityEditor;
   try{
    mainOutlineDispatches=headOutlineDispatches=joinedOutlineDispatches=0;headReady=false;SetContext(false);main.PrepareCurrent();afterPose?.Invoke();main.motion.surface.Evaluate();Refresh(main);ClothSurface525.BeginFrame();ClothRegion524.Prepare(main);
    if(headEnabled){PrepareHead();SetContext(true);headCamera.Render();headReady=true;SetContext(false);}
-   var f=main;var m=f.motion;f.contourReady=false;m.camera.Render();f.validateRender?.Invoke();
+   var f=main;var m=f.motion;f.contourReady=false;
+   preparedClothDepth=default;
+   collectingClothDepth=ClothRegion524.Ready(f);
+   try{m.camera.Render();}finally{collectingClothDepth=false;}
+   f.validateRender?.Invoke();
    if(ClothRegion524.Ready(f))
-    PrepareClothSurface(f);
+    PrepareClothSurface(f,preparedClothDepth);
    var geometry=(Camera)typeof(Full319View335).GetField("geometryCamera",BindingFlags.NonPublic|BindingFlags.Instance).GetValue(f);
    ContourSelect333.Output selected;
    if(ClothRegion524.Ready(f)){
@@ -85,7 +101,7 @@ using UnityEditor;
     selected=ContourSelect333.Build(new ContourSelect333.Input{phase=f.phaseIndex,y0=f.y0,y1=f.y1,underlayAvailable=true,camera=geometry,renderers=m.surface.outputs.Select(x=>x.GetComponent<Renderer>()).ToArray(),surface=src,palette=pal,centreSurface=Full319View335.Read(f.centreMeta[0]),centrePalette=Full319View335.Read(f.centreFamily),line=Full319View335.Read(f.audit),signals=sig,corr=new[]{corr0,world,own,own},worldCell=Cell,backgroundUniform=false});
    }
    f.receipt=selected.receipt;f.actionMap.SetPixels(selected.map);f.actionMap.Apply();f.contourReady=true;m.camera.Render();f.validateRender?.Invoke();f.capturePending=false;f.renderedSerial335++;f.renderedSource335=m.sourceFrame;f.renderedFrame335=m.evaluatedFrame;
-  }finally{SetContext(false);busy=false;}
+  }finally{preparedClothDepth=default;SetContext(false);busy=false;}
  }
  void Params(CommandBuffer cmd){cmd.SetComputeIntParams(join,"_Offset365",offset.x,offset.y);cmd.SetComputeFloatParam(join,"_DepthOffset365",depthOffset);}
  void BindMain(CommandBuffer cmd,int k){void T(string n,RTHandle t)=>cmd.SetComputeTextureParam(join,k,n,t.rt);T("_MBefore",main.before);T("_MColour",main.colour);T("_MOwner",main.owner);T("_MMeta",main.preparedMeta);T("_MUV",main.preparedUV);T("_MDomain",main.domain);}

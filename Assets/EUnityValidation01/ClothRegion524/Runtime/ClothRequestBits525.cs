@@ -6,7 +6,8 @@ using UnityEngine.Rendering;
 
 internal sealed class ClothRequestBits525 : IDisposable
 {
-    const int Width = 480, Height = 272, WordCapacity = Width * Height / 32;
+    const int Width = PreparedClothDepth525.Width, Height = PreparedClothDepth525.Height;
+    const int WordCapacity = Width * Height / 32;
     internal const string ResourcePath = "ClothRequestBits525";
 
     internal readonly struct Result
@@ -47,16 +48,15 @@ internal sealed class ClothRequestBits525 : IDisposable
         t && t.IsCreated() && t.width == Width && t.height == Height && t.antiAliasing == 1 &&
         t.graphicsFormat == GraphicsFormat.R32G32B32A32_SFloat;
 
-    internal bool TryRead(out Result result)
+    internal bool TryRead(in PreparedClothDepth525 depth, out Result result)
     {
         result = default;
-        if (disabled || submitted || !view || view.contourReady || !ClothRegion524.Ready(view) ||
+        if (disabled || submitted || !depth.IsCurrent(view) ||
             ClothRegion524.PartBits540 != 14)
             return false;
-        int frame = Time.frameCount, serial = view.renderedSerial335;
-        var centre = view.motion.raw[5].rt;
-        var owner = view.owner.rt;
-        var atlas = ClothRegion524.Atlas540;
+        var centre = depth.Centre.rt;
+        var owner = depth.Owner.rt;
+        var atlas = depth.Selection;
         if (!IsInput(centre) || !IsInput(owner) || !atlas || atlas.width != Width || atlas.height != Height ||
             atlas.graphicsFormat != GraphicsFormat.R32G32B32A32_SFloat)
         {
@@ -116,9 +116,7 @@ internal sealed class ClothRequestBits525 : IDisposable
                 throw new InvalidOperationException("Clothing bit readback did not complete successfully");
             submitted = false;
             var data = read.GetData<uint>();
-            if (frame != Time.frameCount || serial != view.renderedSerial335 || view.contourReady ||
-                !ClothRegion524.Ready(view) || view.motion.raw[5].rt != centre || view.owner.rt != owner ||
-                ClothRegion524.Atlas540 != atlas || data.Length != count)
+            if (!depth.IsCurrent(view) || depth.Centre.rt != centre || depth.Owner.rt != owner || data.Length != count)
                 throw new InvalidOperationException("Clothing bit readback no longer matches the prepared frame");
             result = new Result(data, leftWord, top, rowWords, rows);
             return true;
@@ -146,4 +144,48 @@ internal sealed class ClothRequestBits525 : IDisposable
         buffer?.Release();
         buffer = null;
     }
+}
+
+// Published once by the post pass after the current body/deferred-eyes resolve.
+// Both metadata planes use the 480x272 body grid: centre.r and owner.b are
+// linear camera depths on that grid. This handoff carries no colour or line audit.
+internal readonly struct PreparedClothDepth525
+{
+    internal const int Width = 480, Height = 272;
+    readonly Full319View335 source;
+    readonly Camera camera;
+    readonly int frame, serial, parts;
+    readonly Vector4 shift;
+    readonly Matrix4x4 viewMatrix, projection;
+    readonly RenderTexture centreTarget, ownerTarget;
+    internal readonly RTHandle Centre, Owner;
+    internal readonly Texture2D Selection;
+
+    internal PreparedClothDepth525(Full319View335 view)
+    {
+        source = view;
+        camera = view.motion.camera;
+        frame = Time.frameCount;
+        serial = view.renderedSerial335;
+        parts = ClothRegion524.PartBits540;
+        shift = view.motion.clipShift;
+        viewMatrix = camera.worldToCameraMatrix;
+        projection = view.effectiveProjection;
+        Centre = view.motion.raw[5];
+        Owner = view.owner;
+        centreTarget = Centre.rt;
+        ownerTarget = Owner.rt;
+        Selection = ClothRegion524.Atlas540;
+    }
+
+    internal bool IsCurrent(Full319View335 view) =>
+        view && view == source && !view.contourReady &&
+        frame == Time.frameCount && serial == view.renderedSerial335 &&
+        camera == view.motion.camera && shift.Equals(view.motion.clipShift) &&
+        viewMatrix.Equals(camera.worldToCameraMatrix) &&
+        projection.Equals(view.effectiveProjection) &&
+        Centre == view.motion.raw[5] && Owner == view.owner &&
+        centreTarget == Centre.rt && ownerTarget == Owner.rt &&
+        Selection == ClothRegion524.Atlas540 && parts == ClothRegion524.PartBits540 &&
+        ClothRegion524.Ready(view);
 }

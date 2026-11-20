@@ -31,8 +31,8 @@ float3 QuantizeWorldCel395(float3 lin,float deviceDepth){
   worldSample=clamp((int2)floor(float2(_Origin395)+(float2(q)+.5+_Delta395)*worldScale),int2(0,0),int2(959,543));
  }else if(worldScale>1){
   // HiResCharacter2x: keep world cleanly quantized on its 480x272 grid while character renders 1:1 at 960x544.
-  int2 wCell=p/worldScale;
-  worldSample=clamp(wCell*worldScale+(worldScale/2),int2(0,0),int2(959,543));
+  int2 wCell=int2((uint2)p/(uint)worldScale);
+  worldSample=clamp(wCell*worldScale+(worldScale>>1),int2(0,0),int2(959,543));
  }else{
   // HiResBoth2x: native 1:1 960x544 world colour and occlusion depth.
   worldSample=p;

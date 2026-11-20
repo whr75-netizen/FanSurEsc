@@ -99,7 +99,8 @@ float3 CelHairHighlight399(const Varyings input,const MToonInput material,float3
  #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
  shadowCoord=ComputeScreenPos(TransformWorldToHClip(input.positionWS));
  #endif
- Light mainLight=GetMainLight(shadowCoord,input.positionWS,SAMPLE_SHADOWMASK(input.lightmapUV));
+ half4 shadowMask=SAMPLE_SHADOWMASK(input.lightmapUV);
+ Light mainLight=GetMainLight(shadowCoord,input.positionWS,shadowMask);
  float litMask=step(.45,saturate(mainLight.shadowAttenuation))*step(.05,dot(normalize(material.normalWS),mainLight.direction));
  float3 H=normalize(mainLight.direction+material.viewDirWS+float3(0,.22,0));
  float ndh=saturate(dot(normalize(material.normalWS),H));
